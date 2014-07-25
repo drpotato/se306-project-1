@@ -1,4 +1,4 @@
-Team [INSERT GENERIC NAME HERE] -  SE306 Project 1 Repo
+Team Google Ultron Dev Team -  SE306 Project 1 Repo
 ====================================================
 
 ## Contributing
