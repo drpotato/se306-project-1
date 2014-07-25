@@ -9,7 +9,9 @@ I recommend installing it so we can easily collaborate.
 
 ## Code styles:
 http://wiki.ros.org/CppStyleGuide
+
 http://wiki.ros.org/PyStyleGuide
+
 http://wiki.ros.org/StyleGuide
 
 ## TODO:
