@@ -1,5 +1,6 @@
 #!/bin/bash
 
 source /opt/ros/indigo/setup.bash
-rosdep init
+sudo rosdep init
+rosdep update
 $WORKSPACE/build.sh
