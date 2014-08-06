@@ -3,11 +3,11 @@ export ROS_PACKAGE_PATH=`pwd`:$ROS_PACKAGE_PATH
 
 roscore &
 ROSCORE_PID=$!
-rosrun se306_example R0 &
+rosrun se306_p1_package R0 &
 ROBOT1_PID=$!
-rosrun se306_example R1 &
+rosrun se306_p1_package R1 &
 ROBOT2_PID=$!
-rosrun stage_ros stageros se306_example/world/myworld.world
+rosrun stage_ros stageros se306_p1_package/world/myworld.world
 
 kill $ROBOT1_PID
 kill $ROBOT2_PID
