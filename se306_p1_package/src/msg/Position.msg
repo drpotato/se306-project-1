@@ -1,2 +1,0 @@
-double xpos
-double ypos
