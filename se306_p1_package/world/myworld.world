@@ -1,21 +1,7 @@
-define mylaser ranger
-(
-  sensor(
-  range [ 0.0 30.0 ] # range
-  fov 180       # field of vision
-  samples 180   # samples
-  )
-  # generic model properties
-  color "black"
-  size [ 0.05 0.05 0.1 ]
-
-)
-
 define myRobot position
 (
   size [0.35 0.35 0.25]
   drive "diff"
-  mylaser(pose [ 0.050 0.000 0 0.000 ])
 )
 
 define floorplan model
@@ -23,10 +9,7 @@ define floorplan model
   # sombre, sensible, artistic
   color "gray30"
 
-  # most maps will need a bounding box
-  boundary 1
-
-  ranger_return 1
+  obstacle_return 1
 )
 
 define my_block model
@@ -44,8 +27,9 @@ interval_sim 100  # simulation timestep in milliseconds. length of each simulati
 
 window
 (
-  size [ 745.000 448.000 ] #size of the window in pixels
-  scale 30
+  size [ 800.000 600.000 ] #size of the window in pixels
+  rotate [ 45.0 45.0 ]
+  scale 40
 
 )
 
@@ -53,13 +37,15 @@ window
 floorplan
 (
   name "swarm"
-  bitmap "swarm_world.pgm"
-  size [54.0 58.7 0.5]
-  pose [ -29.350 27.000 0 90.000 ]
+  bitmap "worldmaps/worldwalls.bmp"
+  
+  # Tried to keep this roughly in line with a typical NZ house size, and using the same aspect ratio as the bitmap
+  size [15.3985 10.0 0.5]
+  pose [ 0.0 0.0 0.0 0.0 ]
 )
 # throw in a robot
-myRobot( pose [ 5 10 0 0 ] name "r0" color "blue")
-myRobot( pose [ 15 20 0 0 ] name "r1" color "green")
-myRobot( pose [ 10 30 0 0 ] name "r2" color "black")
-myRobot( pose [ 25 16 0 0 ] name "r3" color "yellow")
-myRobot( pose [ 5 28 0 0 ] name "r4" color "brown")
+myRobot( pose [ -6 3 0 0 ] name "r0" color "blue")
+myRobot( pose [ -6 -3 0 0 ] name "r1" color "green")
+myRobot( pose [ -3 -3 0 0 ] name "r2" color "black")
+myRobot( pose [ 3 -3 0 0 ] name "r3" color "yellow")
+myRobot( pose [ 5 -1 0 0 ] name "r4" color "brown")
