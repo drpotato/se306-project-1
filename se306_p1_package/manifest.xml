@@ -2,7 +2,7 @@
   <description brief="se306_p1_package">
      se306_p1_package
   </description>
-  <author>Matthew Dyer</author>
+  <author>Google Ultron Dev Team</author>
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/se306_p1_package</url>
@@ -11,6 +11,7 @@
   <depend package="roscpp"/>
   <depend package="sensor_msgs"/>
   <depend package="geometry_msgs"/>
+  <depend package="navigation"/>
 
 </package>
 
