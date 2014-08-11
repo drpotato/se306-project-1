@@ -12,7 +12,7 @@ double px;
 double py;
 double theta;
 
-class Human : public Actor
+class Visitor : public Human
 {
 public:
   virtual int mainHook(int argc, char **argv)
@@ -23,7 +23,7 @@ public:
 
 int main(int argc, char **argv)
 {
-  Human* human = new Human();
-  human->mainHook(argc, argv);
+  Visitor* visitor = new Visitor();
+  visitor->mainHook(argc, argv);
   return 0;
 }
