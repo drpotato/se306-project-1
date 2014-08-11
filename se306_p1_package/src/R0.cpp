@@ -34,7 +34,7 @@ void StageLaser_callback(sensor_msgs::LaserScan msg)
     //you can access the range data from msg.ranges[i]. i = sample number
 }
 
-virtual void initialSetup(int argc, char **argv) {
+ void initialSetup(int argc, char **argv) {
   //initialize robot parameters
   //Initial pose. This is same as the pose that you used in the world file to set the robot pose.
   theta = M_PI/2.0;
@@ -48,6 +48,6 @@ virtual void initialSetup(int argc, char **argv) {
   ros::NodeHandle n;
 }
 
-virtual void executeInfiniteLoopHook() {
+void executeInfiniteLoopHook() {
   
 }
