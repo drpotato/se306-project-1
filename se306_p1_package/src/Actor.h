@@ -22,10 +22,8 @@ public:
 	//void StageOdom_callback(nav_msgs::Odometry msg);
 	//void StageLaser_callback(sensor_msgs::LaserScan msg);
 	//int main(int argc, char **argv);
-	
-	virtual void init(int argc, char **argv) = 0;
 	virtual void executeInfiniteLoopHook() = 0; 
-	initialSetup(int argc, char **argv) =0;
+	virtual void initialSetup(int argc, char **argv) =0;
 };
 
 
