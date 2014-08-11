@@ -36,6 +36,7 @@ rosbuild_add_library(ActorLibrary
 	src/R1.cpp
 	src/Robot.cpp
 	src/Visitor.cpp
+	src/Resident.cpp
 )
 
 rosbuild_add_executable(ActorSpawner src/ActorSpawner.cpp)
