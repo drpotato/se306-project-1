@@ -5,14 +5,7 @@ class Actor
 {
 
 protected:
-	//velocity of the robot
-	double linear_x;
-	double angular_z;
-
-	//pose of the robot
-	double px;
-	double py;
-	double theta;
+	
 	
 	void executeInfiniteLoop();
 
@@ -24,6 +17,15 @@ public:
 	//int main(int argc, char **argv);
 	virtual void executeInfiniteLoopHook() = 0; 
 	virtual void initialSetup(int argc, char **argv) =0;
+
+	//velocity of the robot
+	double linear_x;
+	double angular_z;
+
+	//pose of the robot
+	double px;
+	double py;
+	double theta;
 };
 
 

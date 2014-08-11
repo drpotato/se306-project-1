@@ -12,7 +12,7 @@
 
 
 
-	Actor::int main(int argc, char **argv)
+	int Actor::main(int argc, char **argv)
 	{
 		//Initial velocity
 	    linear_x = 0;
@@ -33,7 +33,7 @@
 
 		while(ros::ok())
 		{
-			executeInfiniteLoop();
+			Actor::executeInfiniteLoop();
 
 			loop_rate.sleep();
 	     	++count;
@@ -42,17 +42,17 @@
 
 
 
-	Actor::protected void executeInfiniteLoop()
+	protected void Actor::executeInfiniteLoop()
 	{
 		//Any common functionality that should be in a while(ROS:ok) loop should be here, 
 		//uncommon functionality should be in executeHook()
 
 		//messages to stage
-        RobotNode_cmdvel.linear.x = linear_x;
-        RobotNode_cmdvel.angular.z = angular_z;
+        //RobotNode_cmdvel.linear.x = linear_x;
+        //RobotNode_cmdvel.angular.z = angular_z;
         
         //publish the message
-        RobotNode_stage_pub.publish(RobotNode_cmdvel);
+        //RobotNode_stage_pub.publish(RobotNode_cmdvel);
 
 
 		executeInfiniteLoopHook();

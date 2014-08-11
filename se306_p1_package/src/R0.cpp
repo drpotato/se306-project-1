@@ -9,7 +9,7 @@
 
 #include "R0.h"
 
-R0::void StageOdom_callback(nav_msgs::Odometry msg)
+void StageOdom_callback(nav_msgs::Odometry msg)
 {
     //This is the call back function to process odometry messages coming from Stage.
     px = 5 + msg.pose.pose.position.x;
@@ -19,13 +19,13 @@ R0::void StageOdom_callback(nav_msgs::Odometry msg)
 }
 
 
-R0::void StageLaser_callback(sensor_msgs::LaserScan msg)
+void StageLaser_callback(sensor_msgs::LaserScan msg)
 {
     //This is the callback function to process laser scan messages
     //you can access the range data from msg.ranges[i]. i = sample number
 }
 
- R0::void initialSetup(int argc, char **argv) {
+ void R0::initialSetup(int argc, char **argv) {
   //initialize robot parameters
   //Initial pose. This is same as the pose that you used in the world file to set the robot pose.
   theta = M_PI/2.0;
@@ -39,6 +39,6 @@ R0::void StageLaser_callback(sensor_msgs::LaserScan msg)
   ros::NodeHandle n;
 }
 
-R0::void executeInfiniteLoopHook() {
+void R0::executeInfiniteLoopHook() {
   
 }
