@@ -14,12 +14,13 @@ protected:
 	double py;
 	double theta;
 
-	virtual int mainHook(int argc, char **argv);
+	
 
 public:
-	void StageOdom_callback(nav_msgs::Odometry msg);
-	void StageLaser_callback(sensor_msgs::LaserScan msg);
-	int main(int argc, char **argv);
+	//void StageOdom_callback(nav_msgs::Odometry msg);
+	//void StageLaser_callback(sensor_msgs::LaserScan msg);
+	//int main(int argc, char **argv);
+	//virtual int mainHook(int argc, char **argv);
 };
 
 

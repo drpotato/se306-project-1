@@ -7,32 +7,29 @@
 #include <sstream>
 #include "math.h"
 
-#ifndef ACTORMAIN
-#define ACTORMAIN
+#include "Actor.h"
 
-class Actor
-{
 
-	void StageOdom_callback(nav_msgs::Odometry msg)
-	{
+	//void StageOdom_callback(nav_msgs::Odometry msg)
+	//{
     //This is the call back function to process odometry messages coming from Stage.
-    	px = 5 + msg.pose.pose.position.x;
-    	py =10 + msg.pose.pose.position.y;
-    	ROS_INFO("Current x position is: %f", px);
-    	ROS_INFO("Current y position is: %f", py);
-	}
+    	//px = 5 + msg.pose.pose.position.x;
+    	//py =10 + msg.pose.pose.position.y;
+    	//ROS_INFO("Current x position is: %f", px);
+    	//ROS_INFO("Current y position is: %f", py);
+	//}
 
-	void StageLaser_callback(sensor_msgs::LaserScan msg)
-	{
+	//void StageLaser_callback(sensor_msgs::LaserScan msg)
+	//{
     //This is the callback function to process laser scan messages
     //you can access the range data from msg.ranges[i]. i = sample number
     
-	}
+	//}
 
-	virtual int mainHook(int argc, char **argv){}
+	
 
-	int main(int argc, char **argv)
-	{
+	//int main(int argc, char **argv)
+	//{
     	//TODO: Decide whether the following code is needed in the Actor class, or can be implemented in the mainHook method by other classes
 
 
@@ -43,8 +40,8 @@ class Actor
 	    //py = 20;
 	    
 	    //Initial velocity
-	    linear_x = 0;
-	    angular_z = 0;
+	    //linear_x = 0;
+	    //angular_z = 0;
 	    
 	    //You must call ros::init() first of all. ros::init() function needs to see argc and argv. The third argument is the name of the node
 	    //ros::init(argc, argv, "RobotNode0");
@@ -85,16 +82,12 @@ class Actor
 	    //}
 
 	    //Call hook in child classes
-	    mainHook(argc, argv);
+	    //mainHook(argc, argv);
 	    
-	    return 0;
+	    //return 0;
     
-	}
+	//}
 
 
 
 
-};
-
-
-#endif 
