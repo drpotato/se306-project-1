@@ -14,9 +14,20 @@
 
 	int main(int argc, char **argv)
 	{
+		//Initial velocity
+	    linear_x = 0;
+	    angular_z = 0;
+
+	    //You must call ros::init() first of all. ros::init() function needs to see argc and argv. The third argument is the name of the node
+	    //ros::init(argc, argv, "RobotNode0");
+
+	    //This must be implemented in subclasses for all things to be set up. e.g. ros::init(), initial pose, ros::NodeHandle
+	    initialSetup();
+
+
 		while(ros::ok())
 		{
-			execute()
+			execute();
 		}
 	}
 
@@ -27,7 +38,7 @@
 		//Any common functionality that should be in a while(ROS:ok) loop should be here, 
 		//uncommon functionality should be in executeHook()
 
-		executeInfiniteLoopHook()
+		executeInfiniteLoopHook();
 	}
 
 

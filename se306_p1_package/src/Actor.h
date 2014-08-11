@@ -25,6 +25,7 @@ public:
 	
 	virtual void init(int argc, char **argv) = 0;
 	virtual void executeInfiniteLoopHook() = 0; 
+	virtual void initialSetup() = 0;
 };
 
 
