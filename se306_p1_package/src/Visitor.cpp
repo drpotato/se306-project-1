@@ -1,29 +1,9 @@
-#include "ros/ros.h"
+#include "Visitor.h"
 
-#include "Actor.h"
-#include "Human.h"
-
-//velocity of the robot
-double linear_x;
-double angular_z;
-
-//pose of the robot
-double px;
-double py;
-double theta;
-
-class Visitor : public Human
+void Visitor::doInitialSetup()
 {
-public:
-  virtual int mainHook(int argc, char **argv)
-  {    
-    return 0;
-  }
-};
+}
 
-int main(int argc, char **argv)
+void Visitor::doExecuteLoop()
 {
-  Visitor* visitor = new Visitor();
-  visitor->mainHook(argc, argv);
-  return 0;
 }

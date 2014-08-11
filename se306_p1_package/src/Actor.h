@@ -1,33 +1,46 @@
-#ifndef ACTORMAIN
-#define ACTORMAIN
+#ifndef SE306P1_ACTOR_ACTOR_H_DEFINED
+#define SE306P1_ACTOR_ACTOR_H_DEFINED
+
+#include "ros/ros.h"
+#include <string>
 
 class Actor
 {
+public:
+	Actor();
+	virtual ~Actor();
+
+	void initialSetup(unsigned int robotID);
+	bool executeLoop();
+	
+	void initialSetupStage();
+	void executeLoopStageSubscription();
+	void executeLoopStagePublication();
 
 protected:
-	
-	
-	void executeInfiniteLoop();
-
-	
-
-public:
-	//void StageOdom_callback(nav_msgs::Odometry msg);
-	//void StageLaser_callback(sensor_msgs::LaserScan msg);
-	//int main(int argc, char **argv);
-	virtual void executeInfiniteLoopHook() = 0; 
-	virtual void initialSetup(int argc, char **argv) =0;
+	virtual void doInitialSetup() = 0;
+	virtual void doExecuteLoop() = 0;
 
 	//velocity of the robot
-	double linear_x;
-	double angular_z;
+	double velLinear;
+	double velRotational;
 
 	//pose of the robot
 	double px;
 	double py;
 	double theta;
+	
+	// ROS-specific stuff
+	ros::NodeHandle *nodeHandle;
+	ros::Rate *loopRate;
+	ros::Publisher  publisherStageVelocity;
+	ros::Subscriber subscriberStageOdometry;
+	ros::Subscriber subscriberStageLaserScan;
+	
+	std::string rosName;
+	std::string stageName;
 };
 
 
-#endif
+#endif // #ifndef SE306P1_ACTOR_ACTOR_H_DEFINED
 

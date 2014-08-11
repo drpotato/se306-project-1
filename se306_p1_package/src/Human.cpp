@@ -1,29 +1,9 @@
-#include "ros/ros.h"
-
-#include "Actor.h"
 #include "Human.h"
 
-//velocity of the robot
-double linear_x;
-double angular_z;
-
-//pose of the robot
-double px;
-double py;
-double theta;
-
-class Human : public Actor
+void Human::doInitialSetup()
 {
-public:
-  virtual int mainHook(int argc, char **argv)
-  {    
-    return 0;
-  }
-};
+}
 
-int main(int argc, char **argv)
+void Human::doExecuteLoop()
 {
-  Human* human = new Human();
-  human->mainHook(argc, argv);
-  return 0;
 }
