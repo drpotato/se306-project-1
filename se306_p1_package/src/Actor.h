@@ -13,6 +13,8 @@ protected:
 	double px;
 	double py;
 	double theta;
+	
+	void execute();
 
 	
 
@@ -20,7 +22,10 @@ public:
 	//void StageOdom_callback(nav_msgs::Odometry msg);
 	//void StageLaser_callback(sensor_msgs::LaserScan msg);
 	//int main(int argc, char **argv);
-	//virtual int mainHook(int argc, char **argv);
+	//virtual int mainHook(int argc, char **argv) = 0;
+	
+	virtual void init(int argc, char **argv) = 0;
+	virtual void executeHook() = 0; 
 };
 
 
