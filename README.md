@@ -1,5 +1,17 @@
-Team Google Ultron Dev Team -  SE306 Project 1 Repo
+Team Google Ultron Dev Team - SE306 Project 1 Repo
 ====================================================
 
-## TODO:
-Everything minus some stuff.
+## Prerequisites
+1. Ubuntu 14.04
+2. ROS Indigo
+
+## Get the code
+`git clone https://github.com/drpotato/se306-project-1.git`
+
+## Run the program
+1. Navigate to the home directory  
+`cd se306-project-1`
+2. Build the project  
+`./build.sh`
+3. Run the project  
+`./run.sh`
