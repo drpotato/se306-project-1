@@ -36,7 +36,7 @@ void StageLaser_callback(sensor_msgs::LaserScan msg)
 
 virtual void initialSetup(int argc, char **argv) {
   //initialize robot parameters
-  //Initial pose. This is same as the pose that you used in the world file to set	the robot pose.
+  //Initial pose. This is same as the pose that you used in the world file to set the robot pose.
   theta = M_PI/2.0;
   px = 10;
   py = 20;

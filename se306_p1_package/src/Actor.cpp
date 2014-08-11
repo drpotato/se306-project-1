@@ -18,9 +18,6 @@
 	    linear_x = 0;
 	    angular_z = 0;
 
-	    //You must call ros::init() first of all. ros::init() function needs to see argc and argv. The third argument is the name of the node
-	    //ros::init(argc, argv, "RobotNode0");
-
 	    //This must be implemented in subclasses for all things to be set up. e.g. ros::init(), initial pose
 	    initialSetup(argc, argv);
 
@@ -29,7 +26,7 @@
 
 	    //advertise() function will tell ROS that you want to publish on a given topic_
 	    //to stage
-	    ros::Publisher RobotNode_stage_pub = n.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
+	    ros::Publisher RobotNode_stage_pub = n.advertise<msg::Location>("location",1000);
 
 	    ros::Rate loop_rate(10);
 
