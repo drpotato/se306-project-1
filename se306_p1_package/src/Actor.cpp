@@ -10,6 +10,28 @@
 #include "Actor.h"
 
 
+
+
+	int main(int argc, char **argv)
+	{
+		while(ros::ok())
+		{
+			execute()
+		}
+	}
+
+
+
+	protected void executeInfiniteLoop()
+	{
+		//Any common functionality that should be in a while(ROS:ok) loop should be here, 
+		//uncommon functionality should be in executeHook()
+
+		executeInfiniteLoopHook()
+	}
+
+
+
 	//void StageOdom_callback(nav_msgs::Odometry msg)
 	//{
     //This is the call back function to process odometry messages coming from Stage.

@@ -14,7 +14,7 @@ protected:
 	double py;
 	double theta;
 	
-	void execute();
+	void executeInfiniteLoop();
 
 	
 
@@ -24,7 +24,7 @@ public:
 	//int main(int argc, char **argv);
 	
 	virtual void init(int argc, char **argv) = 0;
-	virtual void executeHook() = 0; 
+	virtual void executeInfiniteLoopHook() = 0; 
 };
 
 
