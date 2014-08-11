@@ -22,12 +22,21 @@
 	    //ros::init(argc, argv, "RobotNode0");
 
 	    //This must be implemented in subclasses for all things to be set up. e.g. ros::init(), initial pose, ros::NodeHandle
-	    initialSetup();
+	    initialSetup(int argc, char **argv);
+
+	    //advertise() function will tell ROS that you want to publish on a given topic_
+	    //to stage
+	    ros::Publisher RobotNode_stage_pub = n.advertise<geometry_msgs::Twist>("robot_0/cmd_vel",1000);
+
+	    ros::Rate loop_rate(10);
 
 
 		while(ros::ok())
 		{
-			execute();
+			executeInfiniteLoop();
+
+			loop_rate.sleep();
+	     	++count;
 		}
 	}
 
@@ -38,7 +47,17 @@
 		//Any common functionality that should be in a while(ROS:ok) loop should be here, 
 		//uncommon functionality should be in executeHook()
 
+		//messages to stage
+        RobotNode_cmdvel.linear.x = linear_x;
+        RobotNode_cmdvel.angular.z = angular_z;
+        
+        //publish the message
+        RobotNode_stage_pub.publish(RobotNode_cmdvel);
+
+
 		executeInfiniteLoopHook();
+
+		
 	}
 
 
