@@ -3,7 +3,9 @@
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
-
+#include <move_base_msgs/MoveBaseAction.h>
+#include <actionlib/client/simple_action_client.h>
+#include <tf/transform_broadcaster.h>
 #include <sstream>
 #include "math.h"
 
@@ -32,6 +34,9 @@ void StageLaser_callback(sensor_msgs::LaserScan msg)
     //you can access the range data from msg.ranges[i]. i = sample number
     
 }
+
+typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
+
 
 int main(int argc, char **argv)
 {
@@ -62,6 +67,14 @@ int main(int argc, char **argv)
     
     ros::Rate loop_rate(10);
     
+    tf::TransformBroadcaster broadcaster;
+    broadcaster.sendTransform(
+        tf::StampedTransform(
+            tf::Transform(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0.1, 0.0, 0.2)),
+            ros::Time::now(),"robot_0/base_link", "robo_0/base_laser"));
+
+    
+    
     //a count of howmany messages we have sent
     int count = 0;
     
@@ -69,11 +82,42 @@ int main(int argc, char **argv)
     //velocity of this RobotNode
     geometry_msgs::Twist RobotNode_cmdvel;
     
+    
+     
+    
+    //tell the action client that we want to spin a thread by default
+    MoveBaseClient ac("robot_0/move_base", true);
+    
+    //wait for the action server to come up
+    while(!ac.waitForServer(ros::Duration(5.0))){
+        ROS_INFO("Waiting for the move_base action server to come up");
+    }
+    
+    move_base_msgs::MoveBaseGoal goal;
+    
+    //we'll send a goal to the robot to move 1 meter forward
+    goal.target_pose.header.frame_id = "robot_0/base_link";
+    goal.target_pose.header.stamp = ros::Time::now();
+    
+    goal.target_pose.pose.position.x = 1.0;
+    goal.target_pose.pose.orientation.w = 1.0;
+    
+    ROS_INFO("Sending goal");
+    ac.sendGoal(goal);
+    
+    ac.waitForResult();
+    
+    if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+        ROS_INFO("Hooray, the base moved 1 meter forward");
+    else
+        ROS_INFO("The base failed to move forward 1 meter for some reason");
+    
     while (ros::ok())
     {
+        
         //messages to stage
-        RobotNode_cmdvel.linear.x = linear_x;
-        RobotNode_cmdvel.angular.z = angular_z;
+        //RobotNode_cmdvel.linear.x = linear_x;
+        //RobotNode_cmdvel.angular.z = angular_z;
         
         //publish the message
         RobotNode_stage_pub.publish(RobotNode_cmdvel);

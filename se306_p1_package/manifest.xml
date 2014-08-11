@@ -12,6 +12,12 @@
   <depend package="sensor_msgs"/>
   <depend package="geometry_msgs"/>
   <depend package="navigation"/>
+  <depend package="move_base_msgs"/>
+  <depend package="actionlib"/>
+  <depend package="tf"/>
+  <depend package="map_server"/>
+  <depend package="amcl"/>
+
 
 </package>
 
