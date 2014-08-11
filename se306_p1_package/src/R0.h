@@ -1,5 +1,3 @@
-#include "Robot.h"
-
-class R0 : public Robot
+class R0 : public Actor
 {
 };
