@@ -34,9 +34,10 @@ Actor::~Actor()
 
 void Actor::initialSetup(unsigned int robotID)
 {
+	
 	rosName = generateNodeName(robotID);
 	stageName = generateStageName(robotID);
-
+	
 	// ros::init needs L-values, so we can't just directly pass (0, ...)
 	int fakeArgC = 0;
 	ros::init(fakeArgC, 0, rosName.c_str());
@@ -65,7 +66,6 @@ bool Actor::executeLoop()
 	
 	return false;
 }
-
 
 void Actor::initialSetupStage()
 {

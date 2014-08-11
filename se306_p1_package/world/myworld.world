@@ -1,4 +1,6 @@
-define myRobot position
+include "__autogen__donteditme__actorlist__"
+
+define actor position
 (
   size [0.35 0.35 0.25]
   drive "diff"
@@ -43,9 +45,3 @@ floorplan
   size [15.3985 10.0 0.5]
   pose [ 0.0 0.0 0.0 0.0 ]
 )
-# throw in a robot
-myRobot( pose [ -6 3 0 0 ] name "r0" color "blue")
-myRobot( pose [ -6 -3 0 0 ] name "r1" color "green")
-myRobot( pose [ -3 -3 0 0 ] name "r2" color "black")
-myRobot( pose [ 3 -3 0 0 ] name "r3" color "yellow")
-myRobot( pose [ 5 -1 0 0 ] name "r4" color "brown")

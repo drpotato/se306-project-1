@@ -47,7 +47,7 @@ Actor *ActorSpawner::spawnActor(const char *actorTypeName) const
 
 int main(int argc, char **argv)
 {
-	// This needs to be run as ActorSpawner <robotID> <robotType>
+	// This needs to be run as ActorSpawner <robotID> <robotType> <x> <y> <angle>
 	if (argc < 3) return 0;
 	
 	ActorSpawner &spawner = ActorSpawner::getInstance();
