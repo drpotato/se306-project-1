@@ -21,8 +21,11 @@
 	    //You must call ros::init() first of all. ros::init() function needs to see argc and argv. The third argument is the name of the node
 	    //ros::init(argc, argv, "RobotNode0");
 
-	    //This must be implemented in subclasses for all things to be set up. e.g. ros::init(), initial pose, ros::NodeHandle
-	    initialSetup(int argc, char **argv);
+	    //This must be implemented in subclasses for all things to be set up. e.g. ros::init(), initial pose
+	    initialSetup(argc, argv);
+
+	    //NodeHandle is the main access point to communicate with ros.
+  		ros::NodeHandle n;
 
 	    //advertise() function will tell ROS that you want to publish on a given topic_
 	    //to stage
