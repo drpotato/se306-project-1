@@ -8,6 +8,7 @@
 #include "math.h"
 
 #include "Actor.h"
+#include "Robot.h"
 
 //velocity of the robot
 double linear_x;
@@ -35,7 +36,7 @@ void StageLaser_callback(sensor_msgs::LaserScan msg)
     
 }
 
-class R0 : public Actor
+class R0 : public Robot
 {
 public:
   virtual int mainHook(int argc, char **argv)
