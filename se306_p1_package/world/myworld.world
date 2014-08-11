@@ -1,3 +1,8 @@
+include "models/couch"
+include "models/queenbed"
+include "models/queenbedused"
+include "models/bedsidetable"
+
 define myRobot position
 (
   size [0.35 0.35 0.25]
@@ -44,8 +49,16 @@ floorplan
   pose [ 0.0 0.0 0.0 0.0 ]
 )
 # throw in a robot
-myRobot( pose [ -6 3 0 0 ] name "r0" color "blue")
-myRobot( pose [ -6 -3 0 0 ] name "r1" color "green")
+myRobot( pose [ -3 3 0 0 ] name "r0" color "blue")
+myRobot( pose [ -3 -1 0 0 ] name "r1" color "green")
 myRobot( pose [ -3 -3 0 0 ] name "r2" color "black")
 myRobot( pose [ 3 -3 0 0 ] name "r3" color "yellow")
 myRobot( pose [ 5 -1 0 0 ] name "r4" color "brown")
+
+# Furniture
+couch( pose [-1.25 -2.75 0 0] name "couch0" )
+couch( pose [0.5 -1 0 -90] name "couch1" )
+queenbed( pose [-6.5 3.25 0 0] name "bed0" )
+queenbedused( pose [-6.5 -3 0 0] name "bed1" )
+bedsidetable( pose [-7.25 4.5 0 0] name "bedsidetable0" )
+# bedsidetable( pose [-7.25 2.0 0 0] name "bedsidetable1" )
