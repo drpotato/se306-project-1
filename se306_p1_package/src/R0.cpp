@@ -7,6 +7,9 @@
 #include <sstream>
 #include "math.h"
 
+#include "Actor.h"
+#include "Robot.h"
+
 //velocity of the robot
 double linear_x;
 double angular_z;
@@ -33,9 +36,11 @@ void StageLaser_callback(sensor_msgs::LaserScan msg)
     
 }
 
-int main(int argc, char **argv)
+class R0 : public Robot
 {
-    
+public:
+  virtual int mainHook(int argc, char **argv)
+  {    
     //initialize robot parameters
     //Initial pose. This is same as the pose that you used in the world file to set	the robot pose.
     theta = M_PI/2.0;
@@ -85,5 +90,14 @@ int main(int argc, char **argv)
     }
     
     return 0;
-    
+  }
+};
+
+
+
+int main(int argc, char **argv)
+{
+  R0* robot0 = new R0();
+  robot0->mainHook(argc, argv);
+  return 0;
 }

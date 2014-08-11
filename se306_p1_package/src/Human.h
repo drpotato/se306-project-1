@@ -1,7 +1,7 @@
-#ifndef ACTORMAIN
-#define ACTORMAIN
+#ifndef HUMANMAIN
+#define HUMANMAIN
 
-class Actor
+class Human
 {
 
 protected:

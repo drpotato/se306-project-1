@@ -1,7 +1,7 @@
-#ifndef ACTORMAIN
-#define ACTORMAIN
+#ifndef ROBOTMAIN
+#define ROBOTMAIN
 
-class Actor
+class Robot
 {
 
 protected:
