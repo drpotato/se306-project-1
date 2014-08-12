@@ -160,6 +160,7 @@ add_library(ActorLibrary
   src/Robot.cpp
   src/Visitor.cpp
   src/Human.cpp
+  src/PathPlanner.cpp
 )
 
 ## Declare a cpp executable
