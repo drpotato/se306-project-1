@@ -1,3 +1,3 @@
-double xpos
-double ypos
+float64 xpos
+float64 ypos
 string id
