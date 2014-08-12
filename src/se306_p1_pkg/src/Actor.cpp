@@ -2,6 +2,7 @@
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
+//#include "msg/Location.h"
 
 #include <string>
 
@@ -44,6 +45,8 @@ void Actor::initialSetup(unsigned int robotID)
 	
 	nodeHandle = new ros::NodeHandle();
 	loopRate = new ros::Rate(10);
+
+	//ros::Publisher location_pub = nodeHandle->advertise<msg::Location>("location", 1000);
 	
 	// Put custom init stuff here (or make a method and call it from here)
 	initialSetupStage();

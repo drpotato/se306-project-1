@@ -139,3 +139,5 @@ Session.vim
 ### OSX Files ###
 .DS_Store
 
+### catkin workspace ###
+devel/*
