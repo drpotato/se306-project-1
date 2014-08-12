@@ -8,11 +8,11 @@ rosdep update
 $WORKSPACE/build.sh
 
 # Create a tarball with everything needed to run
-mkdir -p s$WORKSPACE/e306_runnable/src/se306_p1_pkg
+mkdir -p se306_runnable/src/se306_p1_pkg
 
-cp $WORKSPACE/run.sh $WORKSPACE/se306_runnable/run.sh
-cp -r $WORKSPACE/src/se306_p1_pkg/world/ $WORKSPACE/se306_runnable/src/se306_p1_pkg/world/
-cp -r $WORKSPACE/devel/ $WORKSPACE/se306_runnable/devel/
+cp run.sh se306_runnable/run.sh
+cp -r src/se306_p1_pkg/world/ se306_runnable/src/se306_p1_pkg/world/
+cp -r devel/ se306_runnable/devel/
 
-tar -cvf $WORKSPACE/se306_runnable.tar $WORKSPACE/se306_runnable
-rm -rf $WORKSPACE/se306_runnable
+tar -cvf se306_runnable.tar se306_runnable
+rm -rf se306_runnable
