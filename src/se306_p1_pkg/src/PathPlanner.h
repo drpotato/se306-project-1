@@ -16,7 +16,7 @@ private:
     typedef boost::unordered_map<string,string> map;
     map previousNodes;
 public:
-	vector<PathPlannerNode> pathToNode(string,string);
+	vector<PathPlannerNode> pathToNode(PathPlannerNode,PathPlannerNode);
     void addNode(PathPlannerNode);
     PathPlannerNode getNode(string);
 };

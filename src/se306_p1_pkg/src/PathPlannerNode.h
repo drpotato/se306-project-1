@@ -9,8 +9,12 @@ class PathPlannerNode{
     private:
         string name;
         bool visited;
+        //position
+    double px;
+    double py;
+    
     public:
-    PathPlannerNode(string inputName);
+    PathPlannerNode(string inputName,double,double);
     vector<PathPlannerNode> neighbours;
     string getName();
     bool isVisited();

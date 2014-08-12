@@ -61,7 +61,7 @@ bool Actor::executeLoop()
 		// Put custom loop stuff here (or make a method and call it from here)
 		doExecuteLoop();
 		executeLoopStagePublication();
-		
+        ROS_DEBUG("loop");
 		ros::spinOnce();
 		loopRate->sleep();
 		return true;

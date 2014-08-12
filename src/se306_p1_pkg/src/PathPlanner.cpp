@@ -2,9 +2,8 @@
 
 
 
-vector<PathPlannerNode> PathPlanner::pathToNode(string start,string target)
+vector<PathPlannerNode> PathPlanner::pathToNode(PathPlannerNode startNode,PathPlannerNode target)
 {
-    PathPlannerNode startNode = PathPlannerNode(start);
     PathPlannerNode *top;
     
     queue<PathPlannerNode> s;
@@ -13,7 +12,7 @@ vector<PathPlannerNode> PathPlanner::pathToNode(string start,string target)
     while (s.empty() == false){
         top = &s.front();
         s.pop();
-        if (top->getName() == target){
+        if (top->getName() == target.getName()){
             //found it!
             break;
         }
@@ -26,7 +25,7 @@ vector<PathPlannerNode> PathPlanner::pathToNode(string start,string target)
     }
     vector<PathPlannerNode> path;
     PathPlannerNode iter = *top;
-    while (iter.getName() != start){
+    while (iter.getName() != startNode.getName()){
         path.insert(path.begin(),iter);
         iter = this->getNode(this->previousNodes[iter.getName()]);
     }

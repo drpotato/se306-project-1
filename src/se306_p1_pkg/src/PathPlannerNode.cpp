@@ -1,8 +1,10 @@
 #include "PathPlanner.h"
 
 
-PathPlannerNode::PathPlannerNode(string inputName){
+PathPlannerNode::PathPlannerNode(string inputName,double x,double y){
     this->name = inputName;
+    this->px = x;
+    this->py = y;
 }
 
 string PathPlannerNode::getName(){
