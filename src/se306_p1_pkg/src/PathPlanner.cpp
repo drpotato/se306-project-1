@@ -2,7 +2,7 @@
 
 
 
-void PathPlanner::pathToNode(string start,string target)
+vector<PathPlannerNode> PathPlanner::pathToNode(string start,string target)
 {
     PathPlannerNode startNode = PathPlannerNode(start);
     PathPlannerNode *top;
@@ -20,10 +20,17 @@ void PathPlanner::pathToNode(string start,string target)
         for (int i =0;i<top->neighbours.size();i++){
             if (top->neighbours[i].isVisited() == false){
                 s.push(top->neighbours[i]);
+                this->previousNodes[top->neighbours[i].getName()] = top->getName();
             }
         }
     }
-    
+    vector<PathPlannerNode> path;
+    PathPlannerNode iter = *top;
+    while (iter.getName() != start){
+        path.insert(path.begin(),iter);
+        iter = this->getNode(this->previousNodes[iter.getName()]);
+    }
+    return path;
 }
 
 void PathPlanner::addNode(PathPlannerNode p){

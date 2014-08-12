@@ -4,15 +4,19 @@
 #include <vector>
 #include <string>
 #include <queue>
+#include <boost/unordered_map.hpp>
 #include "PathPlannerNode.h"
+
 using namespace std;
 
 class PathPlanner
 {
 private:
     vector<PathPlannerNode> nodes;
+    typedef boost::unordered_map<string,string> map;
+    map previousNodes;
 public:
-	void pathToNode(string,string);
+	vector<PathPlannerNode> pathToNode(string,string);
     void addNode(PathPlannerNode);
     PathPlannerNode getNode(string);
 };
