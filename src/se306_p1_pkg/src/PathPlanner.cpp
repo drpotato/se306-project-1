@@ -23,6 +23,18 @@ void PathPlanner::pathToNode(string start,string target)
             }
         }
     }
-
     
+}
+
+void PathPlanner::addNode(PathPlannerNode p){
+    this->nodes.push_back(p);
+}
+
+PathPlannerNode PathPlanner::getNode(string name){
+    int i =0;
+    for (i=0;i<this->nodes.size();i++){
+        if (this->nodes[i].getName() == name){
+            return nodes[i];
+        }
+    }
 }

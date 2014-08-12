@@ -161,6 +161,7 @@ add_library(ActorLibrary
   src/Visitor.cpp
   src/Human.cpp
   src/PathPlanner.cpp
+  src/PathPlannerNode.cpp
 )
 
 ## Declare a cpp executable
