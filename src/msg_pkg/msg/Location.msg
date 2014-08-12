@@ -1,4 +1,3 @@
-float64 xpos
-float64 ypos
-string name
-int8 id
+double xpos
+double ypos
+string id

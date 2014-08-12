@@ -14,6 +14,8 @@ public:
 	bool executeLoop();
 	
 	void initialSetupStage();
+
+	void Actor::StageOdom_callback();
 	void executeLoopStageSubscription();
 	void executeLoopStagePublication();
 
@@ -29,6 +31,9 @@ protected:
 	double px;
 	double py;
 	double theta;
+
+	//id of the robot
+	string robotidentification;
 	
 	// ROS-specific stuff
 	ros::NodeHandle *nodeHandle;

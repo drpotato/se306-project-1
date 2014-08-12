@@ -59,6 +59,17 @@ bool Actor::executeLoop()
 	{
 		executeLoopStageSubscription();
 		// Put custom loop stuff here (or make a method and call it from here)
+		
+		//Create a location message to publish
+		msg_pkg::Location locationMessage;
+		//Assign current x and y values to message
+		locationMessage.xpos = px;
+		locationMessage.ypos = py;
+		locationMessage.id = robotidentification;
+
+		location_pub.publish(locationMessage);
+
+
 		doExecuteLoop();
 		executeLoopStagePublication();
 		
@@ -74,8 +85,18 @@ void Actor::initialSetupStage()
 {
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
 
-	// subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, StageOdom_callback);
+	subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, StageOdom_callback);
 	// subscriberStageLaserScan = nodeHandle->subscribe<sensor_msgs::LaserScan>((stageName + "/base_scan").c_str(), 1000, StageLaser_callback);
+}
+
+//Call back function to process odometry messages about the
+// robots position
+void Actor::StageOdom_callback(nav_msgs::Odometry msg)
+{
+	//Grab x and y coordinates from the Odometry message and assign to px and py
+	px = msg.pose.pose.position.x;
+	py = msg.pose.pose.position.y;
+	robotidentification = msg.child_frame_id;
 }
 
 void Actor::executeLoopStageSubscription()
