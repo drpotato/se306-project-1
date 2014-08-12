@@ -5,9 +5,17 @@
 
 class Resident : public Human
 {
+public:
+  virtual bool isLocked();
+  virtual void lock();
+  virtual void unlock();
+  
 protected:
-        virtual void doInitialSetup();
-        virtual void doExecuteLoop();
+  virtual void doInitialSetup();
+  virtual void doExecuteLoop();
+  
+private:
+  bool lock_;
 };
 
 
