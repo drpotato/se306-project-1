@@ -36,6 +36,8 @@ protected:
 	ros::Publisher  publisherStageVelocity;
 	ros::Subscriber subscriberStageOdometry;
 	ros::Subscriber subscriberStageLaserScan;
+
+	ros::Publisher location_pub;
 	
 	std::string rosName;
 	std::string stageName;
