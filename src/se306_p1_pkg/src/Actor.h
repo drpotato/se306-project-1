@@ -36,6 +36,7 @@ protected:
 	ros::Publisher  publisherStageVelocity;
 	ros::Subscriber subscriberStageOdometry;
 	ros::Subscriber subscriberStageLaserScan;
+	ros::Subscriber subscriberLocation;
 
 	ros::Publisher location_pub;
 	

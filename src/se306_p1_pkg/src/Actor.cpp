@@ -62,7 +62,7 @@ bool Actor::executeLoop()
 		doExecuteLoop();
 		executeLoopStagePublication();
 		
-		ros::spinOnce();
+		
 		loopRate->sleep();
 		return true;
 	}
@@ -73,14 +73,20 @@ bool Actor::executeLoop()
 void Actor::initialSetupStage()
 {
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
+	subscriberLocation = nodeHandle.subscribe("location", 1000, locationCallback);
 
 	// subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, StageOdom_callback);
 	// subscriberStageLaserScan = nodeHandle->subscribe<sensor_msgs::LaserScan>((stageName + "/base_scan").c_str(), 1000, StageLaser_callback);
 }
 
+void locationCallback(const msg_pkg::Location::ConstPtr& msg)
+{
+   ROS_INFO("I heard: [%s]", msg->data.c_str());
+}
+
 void Actor::executeLoopStageSubscription()
 {
-	
+	ros::spinOnce();
 }
 
 void Actor::executeLoopStagePublication()
