@@ -2,7 +2,7 @@
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
-#include <msg_pkg/Location.h>
+//#include <msg_pkg/Location.h>
 
 #include <string>
 
@@ -46,7 +46,7 @@ void Actor::initialSetup(unsigned int robotID)
 	nodeHandle = new ros::NodeHandle();
 	loopRate = new ros::Rate(10);
 
-	location_pub = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
+	//location_pub = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
 	
 	// Put custom init stuff here (or make a method and call it from here)
 	initialSetupStage();
@@ -61,13 +61,13 @@ bool Actor::executeLoop()
 		// Put custom loop stuff here (or make a method and call it from here)
 		
 		//Create a location message to publish
-		msg_pkg::Location locationMessage;
+		//msg_pkg::Location locationMessage;
 		//Assign current x and y values to message
-		locationMessage.xpos = px;
-		locationMessage.ypos = py;
-		locationMessage.id = robotidentification;
+		//locationMessage.xpos = px;
+		//locationMessage.ypos = py;
+		//locationMessage.id = robotidentification;
 
-		location_pub.publish(locationMessage);
+		//location_pub.publish(locationMessage);
 
 
 		doExecuteLoop();
@@ -84,26 +84,26 @@ bool Actor::executeLoop()
 void Actor::initialSetupStage()
 {
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
-	subscriberLocation = nodeHandle.subscribe("location", 1000, locationCallback);
+	//subscriberLocation = nodeHandle.subscribe("location", 1000, locationCallback);
 
-	subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, StageOdom_callback);
+	//subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, StageOdom_callback);
 	// subscriberStageLaserScan = nodeHandle->subscribe<sensor_msgs::LaserScan>((stageName + "/base_scan").c_str(), 1000, StageLaser_callback);
 }
 
 //Call back function to process odometry messages about the
 // robots position
-void Actor::StageOdom_callback(nav_msgs::Odometry msg)
-{
+//void StageOdom_callback(nav_msgs::Odometry msg)
+//{
 	//Grab x and y coordinates from the Odometry message and assign to px and py
-	px = msg.pose.pose.position.x;
-	py = msg.pose.pose.position.y;
-	robotidentification = msg.child_frame_id;
-}
+//	px = msg.pose.pose.position.x;
+//	py = msg.pose.pose.position.y;
+	//robotidentification = msg.child_frame_id;
+//}
 
-void locationCallback(const msg_pkg::Location::ConstPtr& msg)
-{
-   ROS_INFO("I heard: [%s]", msg->data.c_str());
-}
+//void locationCallback(const msg_pkg::Location::ConstPtr& msg)
+//{
+//  ROS_INFO("I heard: [%s]", msg->data.c_str());
+//}
 
 void Actor::executeLoopStageSubscription()
 {

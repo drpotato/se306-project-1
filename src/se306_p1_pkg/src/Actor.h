@@ -15,7 +15,7 @@ public:
 	
 	void initialSetupStage();
 
-	void Actor::StageOdom_callback();
+	//void StageOdom_callback();
 	void executeLoopStageSubscription();
 	void executeLoopStagePublication();
 
@@ -33,7 +33,7 @@ protected:
 	double theta;
 
 	//id of the robot
-	string robotidentification;
+	//string robotidentification;
 	
 	// ROS-specific stuff
 	ros::NodeHandle *nodeHandle;
