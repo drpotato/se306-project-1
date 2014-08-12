@@ -1,5 +1,5 @@
 #!/bin/bash
 export ROS_PACKAGE_PATH=`pwd`:$ROS_PACKAGE_PATH
 
-rosmake se306_p1_package
-python se306_p1_package/world/updateactors.py
+catkin_make
+python src/se306_p1_pkg/world/updateactors.py
