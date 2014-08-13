@@ -81,6 +81,7 @@ bool Actor::executeLoop()
 		doExecuteLoop();
 		executeLoopStagePublication();
 		
+		ros::spinOnce();
 		loopRate->sleep();
 		return true;
 	}
@@ -116,7 +117,7 @@ void Actor::StageOdom_callback(nav_msgs::Odometry msg)
 
 void Actor::executeLoopStageSubscription()
 {
-	ros::spinOnce();
+	
 }
 
 void Actor::executeLoopStagePublication()
