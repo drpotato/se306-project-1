@@ -1,9 +1,9 @@
-#include "std_msgs/String.h"
+#include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
 #include <sensor_msgs/LaserScan.h>
-//#include <msg_pkg/Location.h>
+#include <msg_pkg/Location.h>
 
-#include <string>
+#include <string.h>
 
 #include "Actor.h"
 #include "ActorSpawner.h"
@@ -33,9 +33,10 @@ Actor::~Actor()
 	delete nodeHandle;
 }
 
+
+
 void Actor::initialSetup(unsigned int robotID)
 {
-	
 	rosName = generateNodeName(robotID);
 	stageName = generateStageName(robotID);
 	
@@ -46,7 +47,9 @@ void Actor::initialSetup(unsigned int robotID)
 	nodeHandle = new ros::NodeHandle();
 	loopRate = new ros::Rate(10);
 
-	//location_pub = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
+	//subscriberLocation = n.subscribe("location", 1000, ((Actor*)this)->Actor::locationCallback);
+	publisherLocation = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
+
 	
 	// Put custom init stuff here (or make a method and call it from here)
 	initialSetupStage();
@@ -59,6 +62,9 @@ bool Actor::executeLoop()
 	{
 		executeLoopStageSubscription();
 		// Put custom loop stuff here (or make a method and call it from here)
+		
+		publishLocation();
+
 		doExecuteLoop();
 		executeLoopStagePublication();
 		
@@ -73,7 +79,7 @@ bool Actor::executeLoop()
 void Actor::initialSetupStage()
 {
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
-
+	subscriberLocation = nodeHandle->subscribe("location", 1000, Actor::locationCallback);	
 	subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, 
 Actor::StageOdom_callback);
 	// subscriberStageLaserScan = nodeHandle->subscribe<sensor_msgs::LaserScan>((stageName + "/base_scan").c_str(), 1000, StageLaser_callback);
@@ -81,7 +87,31 @@ Actor::StageOdom_callback);
 
 void Actor::StageOdom_callback(nav_msgs::Odometry msg)
 {
-  ROS_INFO("StageOdom_callback is actually being called.");
+  //TODO: FIX THIS SHIT
+  //Grab x and y coordinates from the Odometry message and assign to px and py
+  ActorSpawner::getInstance().getActor("kurt fix this shit")->px = msg.pose.pose.position.x;
+  ActorSpawner::getInstance().getActor("kurt fix this shit")->py = msg.pose.pose.position.y;
+  // std::stringstream ss;
+  // ss << ActorSpawner::getInstance().getActor("")->px;
+  // ROS_INFO("%s", ss.str().c_str());
+}
+
+void Actor::locationCallback(msg_pkg::Location msg)
+{
+ 
+}
+
+void Actor::publishLocation()
+{
+	//Create a location message to publish
+	msg_pkg::Location locationMessage;
+	//Assign current x and y values to message
+	locationMessage.xpos = px;
+	locationMessage.ypos = py;
+	//Assign id to rosName
+	locationMessage.id = rosName;
+	//Publish the message
+	publisherLocation.publish(locationMessage);
 }
 
 void Actor::executeLoopStageSubscription()
