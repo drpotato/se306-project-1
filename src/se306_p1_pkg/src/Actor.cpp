@@ -1,6 +1,5 @@
 #include "std_msgs/String.h"
 #include <geometry_msgs/Twist.h>
-#include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
 #include <boost/lexical_cast.hpp>
 #include <ros/console.h>
@@ -11,8 +10,7 @@
 #include "Actor.h"
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
-
-
+#include "ActorSpawner.h"
 namespace
 {
 	std::string generateNodeName(unsigned int ID);
@@ -84,6 +82,11 @@ void Actor::initialSetupStage()
 
 	 //subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, StageOdom_callback);
 	 //subscriberStageLaserScan = nodeHandle->subscribe<sensor_msgs::LaserScan>((stageName + "/base_scan").c_str(), 1000, StageLaser_callback);
+}
+
+void Actor::StageOdom_callback(nav_msgs::Odometry msg)
+{
+  ROS_INFO("StageOdom_callback is actually being called.");
 }
 
 void Actor::executeLoopStageSubscription()
