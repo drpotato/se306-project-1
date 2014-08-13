@@ -42,9 +42,12 @@ protected:
 	
 	std::string rosName;
 	std::string stageName;
+    
+    //Path Planner
     void goToNode(string);
-private:
     PathPlanner pathPlanner;
+private:
+    
     PathPlannerNode *activeNode;
     void faceDirection(double,double);
 };
