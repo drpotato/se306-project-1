@@ -1,7 +1,7 @@
 #include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
 #include <sensor_msgs/LaserScan.h>
-//#include <msg_pkg/Location.h>
+#include <msg_pkg/Location.h>
 
 #include <string.h>
 
@@ -100,18 +100,11 @@ Actor::StageOdom_callback);
 void Actor::StageOdom_callback(nav_msgs::Odometry msg)
 {
   ROS_INFO("StageOdom_callback is actually being called.");
-  //Grab x and y coordinates from the Odometry message and assign to px and py
-//	px = msg.pose.pose.position.x;
-//	py = msg.pose.pose.position.y;
+  	//Grab x and y coordinates from the Odometry message and assign to px and py
+	//px = msg.pose.pose.position.x;
+	//py = msg.pose.pose.position.y;
 	//robotidentification = msg.child_frame_id;
 }
-
-//Call back function to process odometry messages about the
-// robots position
-//void StageOdom_callback(nav_msgs::Odometry msg)
-//{
-	
-//}
 
 
 void Actor::executeLoopStageSubscription()
