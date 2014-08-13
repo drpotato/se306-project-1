@@ -50,9 +50,7 @@ void Actor::initialSetup(unsigned int robotID)
 	nodeHandle = new ros::NodeHandle();
 	loopRate = new ros::Rate(10);
 
-	//publisherLocation = n.advertise<msg_pkg::Location>("location", 1000);
 	//subscriberLocation = n.subscribe("location", 1000, ((Actor*)this)->Actor::locationCallback);
-
 	publisherLocation = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
 
 	
@@ -102,15 +100,11 @@ void Actor::StageOdom_callback(nav_msgs::Odometry msg)
 {
   //Grab x and y coordinates from the Odometry message and assign to px and py
   //TODO: FIX THIS SHIT
-  ActorSpawner::getInstance().getActor("jenna")->px = msg.pose.pose.position.x;
-  ActorSpawner::getInstance().getActor("jenna")->py = msg.pose.pose.position.y;
-  ActorSpawner::getInstance().getActor("j")->robotidentification = msg.child_frame_id;
-  
-
+  ActorSpawner::getInstance().getActor("kurt fix this shit")->px = msg.pose.pose.position.x;
+  ActorSpawner::getInstance().getActor("kurt fix this shit")->py = msg.pose.pose.position.y;
+  ActorSpawner::getInstance().getActor("kurt fix this shit")->robotidentification = msg.child_frame_id;
   // std::stringstream ss;
   // ss << ActorSpawner::getInstance().getActor("")->px;
-
-
   // ROS_INFO("%s", ss.str().c_str());
 }
 
