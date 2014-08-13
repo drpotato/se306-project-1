@@ -4,15 +4,23 @@
 
 vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,PathPlannerNode *target)
 {
+    
+    
     PathPlannerNode *top;
     
     queue<PathPlannerNode*> s;
     s.push(startNode);
+    
+    ROS_INFO_STREAM(*(target->getName()));
+    
     startNode->setVisited(true);
+    
+    
+    
     while (s.empty() == false){
         top = s.front();
         s.pop();
-        if (top->getName()->compare(*(target->getName()))){
+        if (top->getName()->compare(*(target->getName())) == 0){
             //found it!
             break;
         }
@@ -25,7 +33,7 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
     }
     vector<PathPlannerNode*> path;
     PathPlannerNode* iter = top;
-    while (iter->getName()->compare(*(startNode->getName()))){
+    while (iter->getName()->compare(*(startNode->getName())) == 0){
         path.insert(path.begin(),iter);
         iter = this->getNode(&(this->previousNodes[*(iter->getName())]));
     }
@@ -39,10 +47,9 @@ void PathPlanner::addNode(PathPlannerNode* p){
 PathPlannerNode* PathPlanner::getNode(string* name){
     int i =0;
     for (i=0;i<this->nodes.size();i++){
-        ROS_INFO_STREAM(*(this->nodes[i]->getName()));
-        if (this->nodes[i]->getName()->compare(*name)){
-            ROS_INFO_STREAM("Found it");
-            return nodes[i];
+        PathPlannerNode* node = this->nodes[i];
+        if (node->getName()->compare(*name) == 0){
+            return node;
         }
     }
     ROS_INFO_STREAM("Should never get here");

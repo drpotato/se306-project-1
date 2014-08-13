@@ -12,9 +12,11 @@ void R0::doInitialSetup()
     string node2Name = "testnode2";
     string node3Name = "testnode3";
     
-    PathPlannerNode node1 = PathPlannerNode(&node1Name,0,0);
-    PathPlannerNode node2 = PathPlannerNode(&node2Name,1,0);
-    PathPlannerNode node3 = PathPlannerNode(&node3Name,2,0);
+    PathPlannerNode node1(&node1Name,0,0);
+    PathPlannerNode node2(&node2Name,1,0);
+    PathPlannerNode node3(&node3Name,2,0);
+    
+    
     node1.addNeighbour(&node2);
     node2.addNeighbour(&node1);
     node2.addNeighbour(&node3);
@@ -23,12 +25,15 @@ void R0::doInitialSetup()
     this->pathPlanner.addNode(&node1);
     this->pathPlanner.addNode(&node2);
     this->pathPlanner.addNode(&node3);
-    this->activeNode = &node1;
     
+    this->activeNode = &node1;
+    string nodeName = "testnode3";
+    ROS_INFO_STREAM("pathfinding");
+    this->goToNode(&nodeName);
+
 }
 
 void R0::doExecuteLoop()
 {
-    string nodeName = "testnode3";
-    this->goToNode(&nodeName);
+
 }

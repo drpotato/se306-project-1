@@ -8,8 +8,6 @@ PathPlannerNode::PathPlannerNode(string* inputName,double x,double y){
 }
 
 string* PathPlannerNode::getName(){
-    ROS_INFO_STREAM("name");
-    ROS_INFO_STREAM(*(this->name));
     return this->name;
 }
 

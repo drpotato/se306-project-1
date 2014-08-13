@@ -136,8 +136,10 @@ void Actor::faceDirection(double x,double y){
 
 void Actor::goToNode(std::string* name){
     //Get the node
-    ROS_INFO_STREAM("Going to node");
+    
     PathPlannerNode *target = this->pathPlanner.getNode(name);
+
+    ROS_INFO_STREAM("doing bfs");
     vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
     for (int i=0;i<path.size();i++){
         
