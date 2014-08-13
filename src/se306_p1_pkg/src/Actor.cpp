@@ -1,12 +1,12 @@
 #include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
-#include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
-#include <msg_pkg/Location.h>
+//#include <msg_pkg/Location.h>
 
 #include <string.h>
 
 #include "Actor.h"
+#include "ActorSpawner.h"
 
 namespace
 {
@@ -52,6 +52,9 @@ void Actor::initialSetup(unsigned int robotID)
 
 	//publisherLocation = n.advertise<msg_pkg::Location>("location", 1000);
 	//subscriberLocation = n.subscribe("location", 1000, ((Actor*)this)->Actor::locationCallback);
+
+	//location_pub = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
+
 	
 	// Put custom init stuff here (or make a method and call it from here)
 	initialSetupStage();
@@ -88,21 +91,28 @@ bool Actor::executeLoop()
 void Actor::initialSetupStage()
 {
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
-	//subscriberLocation = nodeHandle.subscribe("location", 1000, locationCallback);
-
-	//subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, StageOdom_callback);
+	//subscriberLocation = nodeHandle.subscribe("location", 1000, locationCallback);	
+	subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, 
+Actor::StageOdom_callback);
 	// subscriberStageLaserScan = nodeHandle->subscribe<sensor_msgs::LaserScan>((stageName + "/base_scan").c_str(), 1000, StageLaser_callback);
+}
+
+void Actor::StageOdom_callback(nav_msgs::Odometry msg)
+{
+  ROS_INFO("StageOdom_callback is actually being called.");
+  //Grab x and y coordinates from the Odometry message and assign to px and py
+//	px = msg.pose.pose.position.x;
+//	py = msg.pose.pose.position.y;
+	//robotidentification = msg.child_frame_id;
 }
 
 //Call back function to process odometry messages about the
 // robots position
 //void StageOdom_callback(nav_msgs::Odometry msg)
 //{
-	//Grab x and y coordinates from the Odometry message and assign to px and py
-//	px = msg.pose.pose.position.x;
-//	py = msg.pose.pose.position.y;
-	//robotidentification = msg.child_frame_id;
+	
 //}
+
 
 void Actor::executeLoopStageSubscription()
 {

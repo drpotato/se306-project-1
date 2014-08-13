@@ -1,6 +1,8 @@
 #ifndef SE306P1_ACTOR_ACTOR_H_DEFINED
 #define SE306P1_ACTOR_ACTOR_H_DEFINED
 
+#include <nav_msgs/Odometry.h>
+
 #include "ros/ros.h"
 #include <string>
 #include "std_msgs/String.h"
@@ -8,7 +10,7 @@
 class Actor
 {
 public:
-	Actor();
+        Actor();
 	virtual ~Actor();
 
 	void initialSetup(unsigned int robotID);
@@ -19,6 +21,9 @@ public:
 	//void StageOdom_callback();
 	void executeLoopStageSubscription();
 	void executeLoopStagePublication();
+        
+        static void StageOdom_callback(nav_msgs::Odometry msg);
+       
 
 protected:
 	void locationCallback(const std_msgs::String::ConstPtr& msg);
