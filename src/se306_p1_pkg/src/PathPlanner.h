@@ -18,7 +18,7 @@ private:
 public:
 	vector<PathPlannerNode*> pathToNode(PathPlannerNode*,PathPlannerNode*);
     void addNode(PathPlannerNode*);
-    PathPlannerNode* getNode(string);
+    PathPlannerNode* getNode(string*);
 };
 
 

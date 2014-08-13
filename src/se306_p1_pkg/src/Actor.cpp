@@ -134,9 +134,12 @@ void Actor::faceDirection(double x,double y){
     this->velRotational = (angle - this->theta)*1;
 }
 
-void Actor::goToNode(std::string name){
+void Actor::goToNode(std::string* name){
     //Get the node
+    ROS_INFO_STREAM("Going to node");
     PathPlannerNode *target = this->pathPlanner.getNode(name);
     vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-    
+    for (int i=0;i<path.size();i++){
+        
+    }
 }

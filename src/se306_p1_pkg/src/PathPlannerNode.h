@@ -6,17 +6,19 @@
 using namespace std;
 
 class PathPlannerNode{
+    friend class PathPlanner;
     private:
-        string name;
+        string* name;
         bool visited;
         //position
     double px;
     double py;
-    
+    vector<PathPlannerNode*> neighbours;
     public:
-    PathPlannerNode(string inputName,double,double);
-    vector<PathPlannerNode> neighbours;
-    string getName();
+    PathPlannerNode(string*,double,double);
+    void addNeighbour(PathPlannerNode*);
+    void removeNeighbour(PathPlannerNode*);
+    string* getName();
     bool isVisited();
     void setVisited(bool newVisited);
 };

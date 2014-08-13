@@ -44,11 +44,11 @@ protected:
 	std::string stageName;
     
     //Path Planner
-    void goToNode(string);
+    void goToNode(string*);
     PathPlanner pathPlanner;
+    PathPlannerNode *activeNode;
 private:
     
-    PathPlannerNode *activeNode;
     void faceDirection(double,double);
 };
 
