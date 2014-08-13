@@ -2,11 +2,16 @@
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
+#include <boost/lexical_cast.hpp>
+#include <ros/console.h>
 //#include <msg_pkg/Location.h>
-
+#include <math.h>
 #include <string>
 
 #include "Actor.h"
+#include "PathPlanner.h"
+#include "PathPlannerNode.h"
+
 
 namespace
 {
@@ -24,7 +29,10 @@ Actor::Actor():
 	// Zero out these pointers in case someone accidentally dereferences them too soon
 	nodeHandle(0),
 	loopRate(0)
+
 {
+    //Create path planner and setup nodes
+    this->pathPlanner = PathPlanner();
 }
 
 Actor::~Actor()
@@ -74,8 +82,8 @@ void Actor::initialSetupStage()
 {
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
 
-	// subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, StageOdom_callback);
-	// subscriberStageLaserScan = nodeHandle->subscribe<sensor_msgs::LaserScan>((stageName + "/base_scan").c_str(), 1000, StageLaser_callback);
+	 //subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, StageOdom_callback);
+	 //subscriberStageLaserScan = nodeHandle->subscribe<sensor_msgs::LaserScan>((stageName + "/base_scan").c_str(), 1000, StageLaser_callback);
 }
 
 void Actor::executeLoopStageSubscription()
@@ -115,4 +123,20 @@ namespace
 		
 		return nodeName;
 	}
+}
+
+
+void Actor::faceDirection(double x,double y){
+    //Calculate target angle
+    double angle = atan2(y-this->py,x-this->px);
+    ROS_INFO("Angle: %f",angle - this->theta);
+    //Set velocity to face the angle using PID
+    this->velRotational = (angle - this->theta)*1;
+}
+
+void Actor::goToNode(std::string name){
+    //Get the node
+    PathPlannerNode *target = this->pathPlanner.getNode(name);
+    vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+    
 }

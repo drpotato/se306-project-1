@@ -12,13 +12,13 @@ using namespace std;
 class PathPlanner
 {
 private:
-    vector<PathPlannerNode> nodes;
+    vector<PathPlannerNode*> nodes;
     typedef boost::unordered_map<string,string> map;
     map previousNodes;
 public:
-	vector<PathPlannerNode> pathToNode(PathPlannerNode,PathPlannerNode);
-    void addNode(PathPlannerNode);
-    PathPlannerNode getNode(string);
+	vector<PathPlannerNode*> pathToNode(PathPlannerNode*,PathPlannerNode*);
+    void addNode(PathPlannerNode*);
+    PathPlannerNode* getNode(string);
 };
 
 

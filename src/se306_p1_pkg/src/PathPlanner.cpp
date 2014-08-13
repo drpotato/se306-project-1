@@ -2,44 +2,44 @@
 
 
 
-vector<PathPlannerNode> PathPlanner::pathToNode(PathPlannerNode startNode,PathPlannerNode target)
+vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,PathPlannerNode *target)
 {
     PathPlannerNode *top;
     
-    queue<PathPlannerNode> s;
+    queue<PathPlannerNode*> s;
     s.push(startNode);
-    startNode.setVisited(true);
+    startNode->setVisited(true);
     while (s.empty() == false){
-        top = &s.front();
+        top = s.front();
         s.pop();
-        if (top->getName() == target.getName()){
+        if (top->getName() == target->getName()){
             //found it!
             break;
         }
         for (int i =0;i<top->neighbours.size();i++){
             if (top->neighbours[i].isVisited() == false){
-                s.push(top->neighbours[i]);
+                s.push(&(top->neighbours[i]));
                 this->previousNodes[top->neighbours[i].getName()] = top->getName();
             }
         }
     }
-    vector<PathPlannerNode> path;
-    PathPlannerNode iter = *top;
-    while (iter.getName() != startNode.getName()){
+    vector<PathPlannerNode*> path;
+    PathPlannerNode* iter = top;
+    while (iter->getName() != startNode->getName()){
         path.insert(path.begin(),iter);
-        iter = this->getNode(this->previousNodes[iter.getName()]);
+        iter = this->getNode(this->previousNodes[iter->getName()]);
     }
     return path;
 }
 
-void PathPlanner::addNode(PathPlannerNode p){
+void PathPlanner::addNode(PathPlannerNode* p){
     this->nodes.push_back(p);
 }
 
-PathPlannerNode PathPlanner::getNode(string name){
+PathPlannerNode* PathPlanner::getNode(string name){
     int i =0;
     for (i=0;i<this->nodes.size();i++){
-        if (this->nodes[i].getName() == name){
+        if (this->nodes[i]->getName() == name){
             return nodes[i];
         }
     }

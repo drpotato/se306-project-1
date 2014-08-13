@@ -2,6 +2,7 @@
 #define SE306P1_ACTOR_ACTOR_H_DEFINED
 
 #include "ros/ros.h"
+#include "PathPlanner.h"
 #include <string>
 
 class Actor
@@ -41,6 +42,11 @@ protected:
 	
 	std::string rosName;
 	std::string stageName;
+    void goToNode(string);
+private:
+    PathPlanner pathPlanner;
+    PathPlannerNode *activeNode;
+    void faceDirection(double,double);
 };
 
 
