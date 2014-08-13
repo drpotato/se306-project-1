@@ -67,13 +67,13 @@ bool Actor::executeLoop()
 		
 		//Create a location message to publish
 		
-		msg_pkg::Location location_message;
+		msg_pkg::Location locationMessage;
 		//Assign current x and y values to message
-		location_message.xpos = px;
-		location_message.ypos = py;
-		location_message.id = rosName;
+		locationMessage.xpos = px;
+		locationMessage.ypos = py;
+		locationMessage.id = rosName;
 
-		publisherLocation.publish(location_message);
+		publisherLocation.publish(locationMessage);
 
 		doExecuteLoop();
 		executeLoopStagePublication();
@@ -98,9 +98,17 @@ Actor::StageOdom_callback);
 void Actor::StageOdom_callback(nav_msgs::Odometry msg)
 {
   //Grab x and y coordinates from the Odometry message and assign to px and py
+  //TODO: FIX THIS SHIT
   ActorSpawner::getInstance().getActor("jenna")->px = msg.pose.pose.position.x;
   ActorSpawner::getInstance().getActor("jenna")->py = msg.pose.pose.position.y;
   ActorSpawner::getInstance().getActor("j")->robotidentification = msg.child_frame_id;
+  
+
+  // std::stringstream ss;
+  // ss << ActorSpawner::getInstance().getActor("")->px;
+
+
+  // ROS_INFO("%s", ss.str().c_str());
 }
 
 void Actor::locationCallback(msg_pkg::Location msg)
