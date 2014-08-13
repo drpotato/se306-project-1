@@ -3,6 +3,7 @@
 #include <sensor_msgs/LaserScan.h>
 #include <boost/lexical_cast.hpp>
 #include <ros/console.h>
+#include <tf/tf.h>
 //#include <msg_pkg/Location.h>
 #include <math.h>
 #include <string>
@@ -98,6 +99,7 @@ void Actor::StageOdom_callback(nav_msgs::Odometry msg)
   //Grab x and y coordinates from the Odometry message and assign to px and py
   ActorSpawner::getInstance().getActor("kurt fix this shit")->px = msg.pose.pose.position.x;
   ActorSpawner::getInstance().getActor("kurt fix this shit")->py = msg.pose.pose.position.y;
+ActorSpawner::getInstance().getActor("kurt fix this shit")->theta = tf::getYaw(msg.pose.pose.orientation);
   // std::stringstream ss;
   // ss << ActorSpawner::getInstance().getActor("")->px;
   // ROS_INFO("%s", ss.str().c_str());
@@ -163,10 +165,16 @@ namespace
 
 void Actor::faceDirection(double x,double y){
     //Calculate target angle
-    double angle = atan2(y-this->py,x-this->px);
-    ROS_INFO("Angle: %f",angle - this->theta);
+    ROS_INFO("At position %f %f",this->px,this->py);
+    if (x-this->px == 0){
+        return;
+    }
+    double angle = (atan(y-this->py/x-this->px));
+    
+    
+    ROS_INFO("Angle: %f",(angle));
     //Set velocity to face the angle using PID
-    this->velRotational = (angle - this->theta)*1;
+    this->velRotational = (this->theta- angle)*1;
 }
 
 void Actor::goToNode(std::string* name){

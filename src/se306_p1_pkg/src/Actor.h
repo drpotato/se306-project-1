@@ -61,8 +61,6 @@ protected:
     void goToNode(string*);
     PathPlanner pathPlanner;
     PathPlannerNode *activeNode;
-private:
-    
     void faceDirection(double,double);
 };
 

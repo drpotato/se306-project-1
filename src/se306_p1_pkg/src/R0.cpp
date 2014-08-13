@@ -30,10 +30,13 @@ void R0::doInitialSetup()
     string nodeName = "testnode3";
     ROS_INFO_STREAM("pathfinding");
     this->goToNode(&nodeName);
-
+    
+    this->velRotational = 0.3;
+    this->velLinear = 0.1;
 }
 
 void R0::doExecuteLoop()
 {
+    this->faceDirection(0,0);
 
 }
