@@ -2,10 +2,12 @@
 #define SE306P1_ACTOR_ACTOR_H_DEFINED
 
 #include <nav_msgs/Odometry.h>
+#include <msg_pkg/Location.h>
 
 #include "ros/ros.h"
 #include "PathPlanner.h"
 #include <string>
+#include "std_msgs/String.h"
 
 class Actor
 {
@@ -17,13 +19,18 @@ public:
 	bool executeLoop();
 	
 	void initialSetupStage();
+
+	void publishLocation();
+
 	void executeLoopStageSubscription();
 	void executeLoopStagePublication();
         
         static void StageOdom_callback(nav_msgs::Odometry msg);
+        static void locationCallback(msg_pkg::Location msg);
        
 
 protected:
+	
 	virtual void doInitialSetup() = 0;
 	virtual void doExecuteLoop() = 0;
 
@@ -39,11 +46,13 @@ protected:
 	// ROS-specific stuff
 	ros::NodeHandle *nodeHandle;
 	ros::Rate *loopRate;
+
 	ros::Publisher  publisherStageVelocity;
 	ros::Subscriber subscriberStageOdometry;
 	ros::Subscriber subscriberStageLaserScan;
 
-	ros::Publisher location_pub;
+	ros::Subscriber subscriberLocation;
+	ros::Publisher publisherLocation;
 	
 	std::string rosName;
 	std::string stageName;
