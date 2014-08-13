@@ -1,1 +1,1 @@
-int8 id
+string id
