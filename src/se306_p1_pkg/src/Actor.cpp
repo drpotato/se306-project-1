@@ -53,7 +53,7 @@ void Actor::initialSetup(unsigned int robotID)
 	//publisherLocation = n.advertise<msg_pkg::Location>("location", 1000);
 	//subscriberLocation = n.subscribe("location", 1000, ((Actor*)this)->Actor::locationCallback);
 
-	//location_pub = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
+	publisherLocation = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
 
 	
 	// Put custom init stuff here (or make a method and call it from here)
@@ -70,13 +70,13 @@ bool Actor::executeLoop()
 		
 		//Create a location message to publish
 		
-		//msg_pkg::Location location_message;
+		msg_pkg::Location location_message;
 		//Assign current x and y values to message
-		//location_message.xpos = px;
-		//location_message.ypos = py;
-		//location_message.id = rosName;
+		location_message.xpos = px;
+		location_message.ypos = py;
+		location_message.id = rosName;
 
-		//publisherLocation.publish(location_message);
+		publisherLocation.publish(location_message);
 
 		doExecuteLoop();
 		executeLoopStagePublication();
@@ -99,11 +99,10 @@ Actor::StageOdom_callback);
 
 void Actor::StageOdom_callback(nav_msgs::Odometry msg)
 {
-  ROS_INFO("StageOdom_callback is actually being called.");
-  	//Grab x and y coordinates from the Odometry message and assign to px and py
-	//px = msg.pose.pose.position.x;
-	//py = msg.pose.pose.position.y;
-	//robotidentification = msg.child_frame_id;
+  //Grab x and y coordinates from the Odometry message and assign to px and py
+  ActorSpawner::getInstance().getActor("jenna")->px = msg.pose.pose.position.x;
+  ActorSpawner::getInstance().getActor("jenna")->py = msg.pose.pose.position.y;
+  ActorSpawner::getInstance().getActor("j")->robotidentification = msg.child_frame_id;
 }
 
 

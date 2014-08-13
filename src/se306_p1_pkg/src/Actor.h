@@ -4,7 +4,7 @@
 #include <nav_msgs/Odometry.h>
 
 #include "ros/ros.h"
-#include <string>
+#include <string.h>
 #include "std_msgs/String.h"
 
 class Actor
@@ -40,7 +40,7 @@ protected:
 	double theta;
 
 	//id of the robot
-	//string robotidentification;
+	std::string robotidentification;
 	
 	// ROS-specific stuff
 	ros::NodeHandle *nodeHandle;
