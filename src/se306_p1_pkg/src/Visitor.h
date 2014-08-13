@@ -5,9 +5,12 @@
 
 class Visitor : public Human
 {
+public:
+    virtual void publishLeave();
 protected:
 	virtual void doInitialSetup();
 	virtual void doExecuteLoop();
+	ros::Publisher publisherLeave;
 };
 
 
