@@ -1,12 +1,12 @@
 #include "std_msgs/String.h"
 #include <geometry_msgs/Twist.h>
-#include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
 //#include <msg_pkg/Location.h>
 
 #include <string>
 
 #include "Actor.h"
+#include "ActorSpawner.h"
 
 namespace
 {
@@ -74,8 +74,14 @@ void Actor::initialSetupStage()
 {
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
 
-	// subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, StageOdom_callback);
+	subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, 
+Actor::StageOdom_callback);
 	// subscriberStageLaserScan = nodeHandle->subscribe<sensor_msgs::LaserScan>((stageName + "/base_scan").c_str(), 1000, StageLaser_callback);
+}
+
+void Actor::StageOdom_callback(nav_msgs::Odometry msg)
+{
+  ROS_INFO("StageOdom_callback is actually being called.");
 }
 
 void Actor::executeLoopStageSubscription()
