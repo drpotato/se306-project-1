@@ -33,10 +33,7 @@ Actor::~Actor()
 	delete nodeHandle;
 }
 
-//void locationCallback(const std_msgs::String::ConstPtr& msg)
-//{
-//  ROS_INFO("Received test message from robot: [%s]", msg->data.c_str());
-//}
+
 
 void Actor::initialSetup(unsigned int robotID)
 {
@@ -81,6 +78,7 @@ bool Actor::executeLoop()
 		doExecuteLoop();
 		executeLoopStagePublication();
 		
+		ros::spinOnce();
 		loopRate->sleep();
 		return true;
 	}
@@ -91,7 +89,7 @@ bool Actor::executeLoop()
 void Actor::initialSetupStage()
 {
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
-	//subscriberLocation = nodeHandle.subscribe("location", 1000, locationCallback);	
+	subscriberLocation = nodeHandle->subscribe<msg_pkg::Location>((stageName+ "/location").c_str(), 1000, Actor::locationCallback);	
 	subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, 
 Actor::StageOdom_callback);
 	// subscriberStageLaserScan = nodeHandle->subscribe<sensor_msgs::LaserScan>((stageName + "/base_scan").c_str(), 1000, StageLaser_callback);
@@ -105,10 +103,15 @@ void Actor::StageOdom_callback(nav_msgs::Odometry msg)
   ActorSpawner::getInstance().getActor("j")->robotidentification = msg.child_frame_id;
 }
 
+void Actor::locationCallback(msg_pkg::Location msg)
+{
+ ROS_INFO("Received test message from robot: []");
+}
+
 
 void Actor::executeLoopStageSubscription()
 {
-	ros::spinOnce();
+	
 }
 
 void Actor::executeLoopStagePublication()
