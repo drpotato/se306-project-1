@@ -10,9 +10,10 @@ class PathPlannerNode{
     private:
         string* name;
         bool visited;
+        PathPlannerNode* previous;
         //position
-    double px;
-    double py;
+        double px;
+        double py;
     vector<PathPlannerNode*> neighbours;
     public:
     PathPlannerNode(string*,double,double);

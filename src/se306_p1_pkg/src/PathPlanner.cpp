@@ -1,20 +1,14 @@
 #include "PathPlanner.h"
-#include "ros/ros.h"
 
 
 vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,PathPlannerNode *target)
 {
     
-    
     PathPlannerNode *top;
-    
     queue<PathPlannerNode*> s;
     s.push(startNode);
     
-    ROS_INFO_STREAM(*(target->getName()));
-    
     startNode->setVisited(true);
-    
     
     
     while (s.empty() == false){
@@ -27,16 +21,17 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
         for (int i =0;i<top->neighbours.size();i++){
             if (top->neighbours[i]->isVisited() == false){
                 s.push(top->neighbours[i]);
-                this->previousNodes[*(top->neighbours[i]->getName())] = *(top->getName());
+                top->neighbours[i]->previous = top;
             }
         }
     }
     vector<PathPlannerNode*> path;
     PathPlannerNode* iter = top;
-    while (iter->getName()->compare(*(startNode->getName())) == 0){
+    while (iter->getName()->compare(*(startNode->getName())) != 0){
         path.insert(path.begin(),iter);
-        iter = this->getNode(&(this->previousNodes[*(iter->getName())]));
+        iter = iter->previous;
     }
+    path.insert(path.begin(),startNode);
     return path;
 }
 
@@ -52,5 +47,4 @@ PathPlannerNode* PathPlanner::getNode(string* name){
             return node;
         }
     }
-    ROS_INFO_STREAM("Should never get here");
 }

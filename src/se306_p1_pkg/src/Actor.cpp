@@ -141,7 +141,8 @@ void Actor::goToNode(std::string* name){
 
     ROS_INFO_STREAM("doing bfs");
     vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+    ROS_INFO("complete %d",path.size());
     for (int i=0;i<path.size();i++){
-        
+        ROS_INFO_STREAM(*(path[i]->getName()));
     }
 }

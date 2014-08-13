@@ -14,7 +14,7 @@ class PathPlanner
 private:
     vector<PathPlannerNode*> nodes;
     typedef boost::unordered_map<string,string> map;
-    map previousNodes;
+    
 public:
 	vector<PathPlannerNode*> pathToNode(PathPlannerNode*,PathPlannerNode*);
     void addNode(PathPlannerNode*);
