@@ -1,6 +1,8 @@
 Team Google Ultron Dev Team - SE306 Project 1 Repo
 ====================================================
 
+![](http://ultronbrowser.info/0-Ultron_logo_1.png)
+
 ## Prerequisites
 1. Ubuntu 14.04
 2. ROS Indigo
