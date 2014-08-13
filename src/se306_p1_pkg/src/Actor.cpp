@@ -89,7 +89,7 @@ bool Actor::executeLoop()
 void Actor::initialSetupStage()
 {
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
-	subscriberLocation = nodeHandle->subscribe<msg_pkg::Location>((stageName+ "/location").c_str(), 1000, Actor::locationCallback);	
+	subscriberLocation = nodeHandle->subscribe("location", 1000, Actor::locationCallback);	
 	subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000, 
 Actor::StageOdom_callback);
 	// subscriberStageLaserScan = nodeHandle->subscribe<sensor_msgs::LaserScan>((stageName + "/base_scan").c_str(), 1000, StageLaser_callback);
@@ -113,7 +113,7 @@ void Actor::StageOdom_callback(nav_msgs::Odometry msg)
 
 void Actor::locationCallback(msg_pkg::Location msg)
 {
- ROS_INFO("Received test message from robot: []");
+ 
 }
 
 
