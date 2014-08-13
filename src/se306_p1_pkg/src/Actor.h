@@ -2,6 +2,7 @@
 #define SE306P1_ACTOR_ACTOR_H_DEFINED
 
 #include <nav_msgs/Odometry.h>
+#include <msg_pkg/Location.h>
 
 #include "ros/ros.h"
 #include <string.h>
@@ -23,10 +24,11 @@ public:
 	void executeLoopStagePublication();
         
         static void StageOdom_callback(nav_msgs::Odometry msg);
+        static void locationCallback(msg_pkg::Location msg);
        
 
 protected:
-	void locationCallback(const std_msgs::String::ConstPtr& msg);
+	
 	virtual void doInitialSetup() = 0;
 	virtual void doExecuteLoop() = 0;
 
