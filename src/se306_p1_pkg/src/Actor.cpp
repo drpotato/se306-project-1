@@ -1,10 +1,10 @@
-#include "std_msgs/String.h"
+#include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
-//#include <msg_pkg/Location.h>
+#include <msg_pkg/Location.h>
 
-#include <string>
+#include <string.h>
 
 #include "Actor.h"
 
@@ -33,9 +33,13 @@ Actor::~Actor()
 	delete nodeHandle;
 }
 
+//void locationCallback(const std_msgs::String::ConstPtr& msg)
+//{
+//  ROS_INFO("Received test message from robot: [%s]", msg->data.c_str());
+//}
+
 void Actor::initialSetup(unsigned int robotID)
 {
-	
 	rosName = generateNodeName(robotID);
 	stageName = generateStageName(robotID);
 	
@@ -46,7 +50,8 @@ void Actor::initialSetup(unsigned int robotID)
 	nodeHandle = new ros::NodeHandle();
 	loopRate = new ros::Rate(10);
 
-	//location_pub = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
+	//publisherLocation = n.advertise<msg_pkg::Location>("location", 1000);
+	//subscriberLocation = n.subscribe("location", 1000, ((Actor*)this)->Actor::locationCallback);
 	
 	// Put custom init stuff here (or make a method and call it from here)
 	initialSetupStage();
@@ -61,18 +66,17 @@ bool Actor::executeLoop()
 		// Put custom loop stuff here (or make a method and call it from here)
 		
 		//Create a location message to publish
-		//msg_pkg::Location locationMessage;
+		
+		//msg_pkg::Location location_message;
 		//Assign current x and y values to message
-		//locationMessage.xpos = px;
-		//locationMessage.ypos = py;
-		//locationMessage.id = robotidentification;
+		//location_message.xpos = px;
+		//location_message.ypos = py;
+		//location_message.id = rosName;
 
-		//location_pub.publish(locationMessage);
-
+		//publisherLocation.publish(location_message);
 
 		doExecuteLoop();
 		executeLoopStagePublication();
-		
 		
 		loopRate->sleep();
 		return true;
@@ -98,11 +102,6 @@ void Actor::initialSetupStage()
 //	px = msg.pose.pose.position.x;
 //	py = msg.pose.pose.position.y;
 	//robotidentification = msg.child_frame_id;
-//}
-
-//void locationCallback(const msg_pkg::Location::ConstPtr& msg)
-//{
-//  ROS_INFO("I heard: [%s]", msg->data.c_str());
 //}
 
 void Actor::executeLoopStageSubscription()

@@ -3,6 +3,7 @@
 
 #include "ros/ros.h"
 #include <string>
+#include "std_msgs/String.h"
 
 class Actor
 {
@@ -20,6 +21,7 @@ public:
 	void executeLoopStagePublication();
 
 protected:
+	void locationCallback(const std_msgs::String::ConstPtr& msg);
 	virtual void doInitialSetup() = 0;
 	virtual void doExecuteLoop() = 0;
 
@@ -38,12 +40,13 @@ protected:
 	// ROS-specific stuff
 	ros::NodeHandle *nodeHandle;
 	ros::Rate *loopRate;
+
 	ros::Publisher  publisherStageVelocity;
 	ros::Subscriber subscriberStageOdometry;
 	ros::Subscriber subscriberStageLaserScan;
-	ros::Subscriber subscriberLocation;
 
-	ros::Publisher location_pub;
+	ros::Subscriber subscriberLocation;
+	ros::Publisher publisherLocation;
 	
 	std::string rosName;
 	std::string stageName;
