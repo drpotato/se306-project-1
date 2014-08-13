@@ -63,15 +63,7 @@ bool Actor::executeLoop()
 		executeLoopStageSubscription();
 		// Put custom loop stuff here (or make a method and call it from here)
 		
-		//Create a location message to publish
-		
-		msg_pkg::Location locationMessage;
-		//Assign current x and y values to message
-		locationMessage.xpos = px;
-		locationMessage.ypos = py;
-		locationMessage.id = rosName;
-
-		publisherLocation.publish(locationMessage);
+		publishLocation();
 
 		doExecuteLoop();
 		executeLoopStagePublication();
@@ -95,11 +87,10 @@ Actor::StageOdom_callback);
 
 void Actor::StageOdom_callback(nav_msgs::Odometry msg)
 {
-  //Grab x and y coordinates from the Odometry message and assign to px and py
   //TODO: FIX THIS SHIT
+  //Grab x and y coordinates from the Odometry message and assign to px and py
   ActorSpawner::getInstance().getActor("kurt fix this shit")->px = msg.pose.pose.position.x;
   ActorSpawner::getInstance().getActor("kurt fix this shit")->py = msg.pose.pose.position.y;
-  ActorSpawner::getInstance().getActor("kurt fix this shit")->robotidentification = msg.child_frame_id;
   // std::stringstream ss;
   // ss << ActorSpawner::getInstance().getActor("")->px;
   // ROS_INFO("%s", ss.str().c_str());
@@ -110,6 +101,18 @@ void Actor::locationCallback(msg_pkg::Location msg)
  
 }
 
+void Actor::publishLocation()
+{
+	//Create a location message to publish
+	msg_pkg::Location locationMessage;
+	//Assign current x and y values to message
+	locationMessage.xpos = px;
+	locationMessage.ypos = py;
+	//Assign id to rosName
+	locationMessage.id = rosName;
+	//Publish the message
+	publisherLocation.publish(locationMessage);
+}
 
 void Actor::executeLoopStageSubscription()
 {

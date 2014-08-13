@@ -19,7 +19,8 @@ public:
 	
 	void initialSetupStage();
 
-	//void StageOdom_callback();
+	void publishLocation();
+
 	void executeLoopStageSubscription();
 	void executeLoopStagePublication();
         
@@ -40,9 +41,6 @@ protected:
 	double px;
 	double py;
 	double theta;
-
-	//id of the robot
-	std::string robotidentification;
 	
 	// ROS-specific stuff
 	ros::NodeHandle *nodeHandle;
