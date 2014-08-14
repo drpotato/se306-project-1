@@ -8,6 +8,7 @@ public:
 	static ActorSpawner &getInstance();
 
 	Actor *getActor(const char *actorTypeName);
+	Actor *getActor() const;
 private:
 	ActorSpawner();
         Actor *spawnActor(const char *actorTypeName);

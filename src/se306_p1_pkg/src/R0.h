@@ -9,6 +9,10 @@ class R0 : public Robot
 protected:
 	virtual void doInitialSetup(); 
 	virtual void doExecuteLoop();
+    int status;
+   
+
+
 };
 
 #endif
