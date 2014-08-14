@@ -59,7 +59,7 @@ void EntertainmentRobot::doExecuteLoop()
 		{
 			EntertainmentRobot::doResponse("entertaining");
 		} else {}
-		y=y+1;
+		y++;
 
 	}
 }
