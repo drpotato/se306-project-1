@@ -197,7 +197,7 @@ bool Actor::gotoPosition(double x,double y){
     //Face the node
     if (faceDirection(x,y) < 0.1){
         double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
-        ROS_INFO("Distance is %f",distance);
+        //ROS_INFO("Distance is %f",distance);
         if (distance > 0.01){
             faceDirection(x,y);
             this->velLinear = distance*1;
@@ -207,7 +207,7 @@ bool Actor::gotoPosition(double x,double y){
             return false;
         }
     }else{
-        ROS_INFO("Target: %f",faceDirection(x,y));
+        //ROS_INFO("Target: %f",faceDirection(x,y));
         this->velLinear = 0;
         return true;
     }
@@ -225,7 +225,7 @@ bool Actor::goToNode(vector<PathPlannerNode*> &path){
         //this->activeNode = path[targetNode];
         targetNode++;
     }else{
-        ROS_INFO("current position %f %f",px,py);
+        //ROS_INFO("current position %f %f",px,py);
     }
     return false;
 }

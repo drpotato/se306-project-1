@@ -29,7 +29,7 @@ void EntertainmentRobot::doExecuteLoop()
 	{
 		if (checkEntertainmentLevel())
 		{
-			ROS_INFO("Nothing to do here");
+			//ROS_INFO("Nothing to do here");
 		} else {
 			
 			//Call method to do the entertaining
@@ -37,7 +37,8 @@ void EntertainmentRobot::doExecuteLoop()
 	    	vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
 
 	    	//The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
-	    	if ((this->goToNode(path)) | ((y>=50) && first)){
+	    	if ((this->goToNode(path)) | ((y>=30) && first)){
+	    		//EntertainmentRobot::doResponse("entertaining");
 	    		entertaining=true;
 	    		first = false;
 	    	}
@@ -49,8 +50,9 @@ void EntertainmentRobot::doExecuteLoop()
 		if (entertainednessLevel == 5)
 		{
 			entertaining = false;
-			
-		} else if ((200 % y) == 0)
+			y=0;
+
+		} else if ((50 % y) == 0)
 		{
 			EntertainmentRobot::doResponse("entertaining");
 		} else {}
