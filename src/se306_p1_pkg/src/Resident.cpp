@@ -62,9 +62,6 @@ void Resident::doExecuteLoop()
 	else if (entertainment_count_ < WAIT_TIME && !e_dropped_)
 	{
 		entertainment_count_++;
-		std::stringstream ss;
-  		ss << entertainment_count_;
-  		ROS_INFO("%s", ss.str().c_str());
 	}
 	else if (e_dropped_ && (socialness_count_ > 1000) && !s_dropped_)
 	{
