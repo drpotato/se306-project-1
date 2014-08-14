@@ -67,7 +67,15 @@ void EntertainmentRobot::doExecuteLoop()
 
 		} else 
 		{
-			EntertainmentRobot::doResponse("entertaining");
+			if (y=30){
+				EntertainmentRobot::doResponse("entertaining");
+				y=0;
+			} else 
+			{
+				y++;
+			}
+
+			
 			
 		} 
 		
