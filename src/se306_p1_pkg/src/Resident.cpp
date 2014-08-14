@@ -25,7 +25,7 @@ void Resident::doInitialSetup()
 
 void Resident::doExecuteLoop()
 {
-
+    
 }
 
 /*
@@ -105,4 +105,20 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 
   	//put others in when implemented
   
+}
+
+void Resident::setEntertainedness(int newLevel)
+{
+    entertainedness_level_ = newLevel;
+    //Every time the entertainedness attribute changes, publish a message containing the new level.
+    this->publishEntertainedness();
+    //Spin in a circle?
+}
+
+void Resident::publishEntertainedness()
+{
+    msg_pkg::Entertainedness entertainednessMessage;
+    entertainednessMessage.level = entertainedness_level_;
+    
+    publisherEntertainedness.publish(entertainednessMessage);
 }

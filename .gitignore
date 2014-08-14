@@ -138,6 +138,12 @@ Session.vim
 
 ### OSX Files ###
 .DS_Store
+.AppleDouble
 
 ### catkin workspace ###
 devel/*
+/src/CMakeLists.txt
+
+### Our auto-generated files ###
+/run.sh
+__autogen__*__

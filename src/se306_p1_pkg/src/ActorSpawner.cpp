@@ -58,20 +58,29 @@ Actor *ActorSpawner::getActor(const char *actorTypeName)
     theActor = spawnActor(actorTypeName);
   return theActor;
 }
+
+Actor *ActorSpawner::getActor() const
+{
+  return theActor;
+}
     
 
 int main(int argc, char **argv)
 {
   // This needs to be run as ActorSpawner <robotID> <robotType> <x> <y> <angle>
-  if (argc < 3) return 0;
+  if (argc < 6) return 0;
 
   ActorSpawner &spawner = ActorSpawner::getInstance();
   Actor *actor = spawner.getActor(argv[2]);
 
   unsigned int robotID;
+  double px, py, theta;
   std::sscanf(argv[1], "%u", &robotID);
+  std::sscanf(argv[3], "%lf", &px);
+  std::sscanf(argv[4], "%lf", &py);
+  std::sscanf(argv[5], "%lf", &theta);
 
-  actor->initialSetup(robotID);
+  actor->initialSetup(robotID, px, py, theta);
   while (actor->executeLoop());
 
   return 0;

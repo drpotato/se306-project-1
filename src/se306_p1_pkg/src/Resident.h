@@ -37,6 +37,9 @@ private:
 
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;
+
+  void publishEntertainedness();
+  void setEntertainedness(int);
 };
 
 
