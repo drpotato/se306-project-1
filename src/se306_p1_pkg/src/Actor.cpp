@@ -105,6 +105,7 @@ bool Actor::executeLoop()
 		doExecuteLoop();
 		executeLoopStagePublication();
         ROS_DEBUG("loop");
+		
 		ros::spinOnce();
 		loopRate->sleep();
 		return true;
@@ -174,6 +175,10 @@ void Actor::doResponse(const char *attribute)
 	interaction.attribute = attribute;
 	publisherInteraction.publish(interaction);
 	ROS_INFO("%s (%s) is performing \"%s\"", rosName.c_str(), stageName.c_str(), attribute);
+	
+	// Spin for visual feedback
+	velRotational = 1.0; // fmod(ros::Time::now().toSec(), 1.0) >= 0.5 ? 1.0 : -1.0
+	velLinear = 0.0;
 }
 
 double Actor::faceDirection(double x,double y){
@@ -197,7 +202,7 @@ bool Actor::gotoPosition(double x,double y){
     //Face the node
     if (faceDirection(x,y) < 0.1){
         double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
-        ROS_INFO("Distance is %f",distance);
+        ROS_DEBUG("Distance is %f",distance);
         if (distance > 0.01){
             faceDirection(x,y);
             this->velLinear = distance*1;
@@ -207,7 +212,7 @@ bool Actor::gotoPosition(double x,double y){
             return false;
         }
     }else{
-        ROS_INFO("Target: %f",faceDirection(x,y));
+        ROS_DEBUG("Target: %f",faceDirection(x,y));
         this->velLinear = 0;
         return true;
     }
@@ -225,7 +230,7 @@ bool Actor::goToNode(vector<PathPlannerNode*> &path){
         //this->activeNode = path[targetNode];
         targetNode++;
     }else{
-        ROS_INFO("current position %f %f",px,py);
+        ROS_DEBUG("current position %f %f",px,py);
     }
     return false;
 }
