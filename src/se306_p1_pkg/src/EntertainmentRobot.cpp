@@ -15,23 +15,26 @@ void EntertainmentRobot::doInitialSetup()
 	entertainednessLevel = 5;
 	entertaining = false;
 	residentName = "RobotNode2";
-	subscriberEntertainedness = nodeHandle->subscribe("entertainedness", 1000, EntertainmentRobot::entertainednessCallback);	
+	subscriberEntertainedness = nodeHandle->subscribe("entertainedness", 1000, EntertainmentRobot::entertainednessCallback);
 	y = 0;
 	x = 0;
 	first = true;
+
+    this->activeNode = &node4;
+    this->startMovingToResident();
 
 }
 
 void EntertainmentRobot::doExecuteLoop()
 {
-	
+
 	if (!entertaining)
 	{
 		if (checkEntertainmentLevel())
 		{
 			//ROS_INFO("Nothing to do here");
 		} else {
-			
+
 			//Call method to do the entertaining
 			PathPlannerNode *target = this->pathPlanner.getNode(&node2Name);
 	    	vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
@@ -44,7 +47,7 @@ void EntertainmentRobot::doExecuteLoop()
 	    	}
 	    	y=y+1;
 			//After finished entertaining set entertaining to flase
-			
+
 		}
 	} else {
 		if (entertainednessLevel == 5)
@@ -56,9 +59,10 @@ void EntertainmentRobot::doExecuteLoop()
 		{
 			EntertainmentRobot::doResponse("entertaining");
 		} 
-		else {}
-		y=y+1;
-		
+		else 
+		{
+			y++;
+		}
 	}
 }
 

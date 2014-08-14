@@ -18,22 +18,25 @@ public:
 
 	void initialSetup(unsigned int robotID, double px, double py, double theta);
 	bool executeLoop();
-	
+
 	void initialSetupStage();
 	void publishLocation();
 
 	void executeLoopStageSubscription();
 	void executeLoopStagePublication();
-        
+
 	static void StageOdom_callback(nav_msgs::Odometry msg);
 	static void locationCallback(msg_pkg::Location msg);
-       
+
+    void moveToResident();
+    void startMovingToResident();
+
 
 protected:
-	
+
 	virtual void doInitialSetup() = 0;
 	virtual void doExecuteLoop() = 0;
-	
+
 	void doResponse(const char *attribute);
 
 	//velocity of the robot
@@ -47,7 +50,7 @@ protected:
 	double px;
 	double py;
 	double theta;
-	
+
 	// ROS-specific stuff
 	ros::NodeHandle *nodeHandle;
 	ros::Rate *loopRate;
@@ -58,10 +61,10 @@ protected:
 	ros::Subscriber subscriberStageOdometry;
 	ros::Subscriber subscriberStageLaserScan;
 	ros::Subscriber subscriberLocation;
-	
+
 	std::string rosName;
 	std::string stageName;
-    
+
     //Path Planner
     bool goToNode(vector<PathPlannerNode*>&);
     PathPlanner pathPlanner;
@@ -73,10 +76,14 @@ protected:
     PathPlannerNode node2;
     PathPlannerNode node3;
     PathPlannerNode node4;
+    PathPlannerNode nodeDoor;
     string node1Name;
     string node2Name;
     string node3Name;
     string node4Name;
+    string nodeDoorName;
+
+    bool movingToResident;
 };
 
 
