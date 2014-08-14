@@ -3,7 +3,6 @@
 
 vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,PathPlannerNode *target)
 {
-    
     PathPlannerNode *top;
     queue<PathPlannerNode*> s;
     s.push(startNode);
@@ -28,7 +27,9 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
                 top->neighbours[i]->previous = top;
             }
         }
+        top->setVisited(true);
     }
+    
     vector<PathPlannerNode*> path;
     PathPlannerNode* iter = top;
     while (iter->getName()->compare(*(startNode->getName())) != 0){
@@ -40,8 +41,7 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
     for (int i=0;i<path.size();i++){
         path[i]->visited = false;
     }
-    
-    return path;
+        return path;
 }
 
 void PathPlanner::addNode(PathPlannerNode* p){
