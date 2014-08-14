@@ -20,7 +20,7 @@ TEST(ResidentPublish, testInteractionCallback)
     msg_pkg::Interaction *message = new msg_pkg::Interaction();
     message->attribute="socialness";
     message->amount=1;
-    Resident->interactionCallback(message);
+    resident->interactionCallback(message);
     ASSERT_EQ(resident->socialness_level_, 6);
 }
 
