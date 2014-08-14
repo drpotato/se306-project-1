@@ -8,6 +8,9 @@
 
 void Resident::doInitialSetup()
 {
+  velLinear = 0;
+  velRotational = 0.0;
+
   // Initially the resident is not locked
   lock_ = false;
 
@@ -29,6 +32,10 @@ void Resident::doInitialSetup()
 
 void Resident::doExecuteLoop()
 {
+	PathPlannerNode *target = this->pathPlanner.getNode(&node4Name);
+    vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+    this->goToNode(path);
+    
 	if (entertainment_count_ >= WAIT_TIME && !e_dropped_)
 	{
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor("kurt fix this shit"));
