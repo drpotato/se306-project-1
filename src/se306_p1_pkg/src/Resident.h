@@ -20,6 +20,12 @@ protected:
 private:
   bool lock_;
 
+  // Demo paramters to graduall reduce levels
+  int entertainment_count_;
+  int socialness_count_;
+  bool e_dropped_;
+  bool s_dropped_;
+
   // Level of social fulfillment: 
   // 1 - bad (lonely)
   // 5 - good (not lonely)
