@@ -25,7 +25,21 @@ void Resident::doInitialSetup()
 
 void Resident::doExecuteLoop()
 {
-    
+	Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor("kurt fix this shit"));
+    if (residentInstance->entertainedness_level_ == 5)
+    {
+    	residentInstance->entertainedness_level_ = 1;
+    } 
+    else
+    {
+    	residentInstance->entertainedness_level_ = 5;
+    }
+    //Create a socialness message to publish
+	msg_pkg::Entertainedness entertainednessMessage;
+	//Assign current socialness level to the message
+	entertainednessMessage.level = residentInstance->entertainedness_level_;
+	//Publish the message
+	residentInstance->publisherEntertainedness.publish(entertainednessMessage);
 }
 
 /*
