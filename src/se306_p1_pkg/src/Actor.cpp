@@ -193,6 +193,10 @@ void Actor::doResponse(const char *attribute)
 	velLinear = 0.0;
 }
 
+void Actor::startMovingToResident() {
+    this->movingToResident = true;
+}
+
 void Actor::moveToResident() {
 
     if (this->movingToResident) {

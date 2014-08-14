@@ -3,4 +3,4 @@ include "actors/Resident"
 include "actors/default"
 Resident( name "Resident" pose [ -5 3 0 0 ] color "red")
 default( name "R1" pose [ -6 -3 0 0 ] color "yellow")
-default( name "EntertainmentRobot" pose [ 6 3 0 0 ] color "blue")
+default( name "EntertainmentRobot" pose [ 3 4 0 0 ] color "blue")

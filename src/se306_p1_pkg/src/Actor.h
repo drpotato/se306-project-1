@@ -29,6 +29,7 @@ public:
 	static void locationCallback(msg_pkg::Location msg);
 
     void moveToResident();
+    void startMovingToResident();
 
 
 protected:
