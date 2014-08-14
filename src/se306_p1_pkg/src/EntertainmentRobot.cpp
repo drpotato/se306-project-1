@@ -21,7 +21,7 @@ void EntertainmentRobot::doInitialSetup()
 	first = true;
 	first_call = true;
 
-    //this->activeNode = &node4;
+    //this->activeNode = &node5;
     //this->startMovingToResident();
 
 }
@@ -37,15 +37,15 @@ void EntertainmentRobot::doExecuteLoop()
 		} else {
 			if (first_call)
 			{
-				this->activeNode = &node4;
+				this->activeNode = &node5;
 				this->startMovingToResident();
 				first_call = false;
 			}
 			//Call method to do the entertaining
 			//PathPlannerNode *target = this->pathPlanner.getNode(&node2Name);
 	    	//vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-	    	
-    		
+
+
 
 	    	//The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
 	    	if (!(this->movingToResident) ){
@@ -54,7 +54,7 @@ void EntertainmentRobot::doExecuteLoop()
 	    		entertaining=true;
 	    		first = false;
 	    	}
-	    	
+
 			//After finished entertaining set entertaining to flase
 
 		}
@@ -64,10 +64,11 @@ void EntertainmentRobot::doExecuteLoop()
 			//Add do last desponse call that kurt implimented
 			EntertainmentRobot::stopResponse("entertaining");
 			entertaining = false;
-			
 
-		} else 
+
+		} else
 		{
+
 			//TODO: KURT FIX THIS SHIT
 			if (y=10000){
 				EntertainmentRobot::doResponse("entertaining");
@@ -81,6 +82,7 @@ void EntertainmentRobot::doExecuteLoop()
 			
 		} 
 		
+
 	}
 }
 
