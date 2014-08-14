@@ -23,6 +23,6 @@ Build the project
 
 `make`
 
-clear the project (delete devel and build)
+Clear the project (delete devel and build)
 
 `make clean`
