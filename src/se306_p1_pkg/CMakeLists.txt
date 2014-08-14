@@ -153,13 +153,13 @@ target_link_libraries(
 ## Testing ##
 #############
 
+catkin_add_gtest(navigationtests test/navigationtests.cpp)
+
 ## Add gtest based cpp test target and link libraries
 # catkin_add_gtest(${PROJECT_NAME}-test test/test_beginner_tutorials.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
-
-catkin_add_gtest(messagingtests test/messagingtests.cpp)
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
