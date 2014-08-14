@@ -17,6 +17,7 @@ void EntertainmentRobot::doInitialSetup()
 	residentName = "RobotNode2";
 	subscriberEntertainedness = nodeHandle->subscribe("entertainedness", 1000, EntertainmentRobot::entertainednessCallback);	
 	y = 0;
+	x = 0;
 	first = true;
 
 }
@@ -40,13 +41,21 @@ void EntertainmentRobot::doExecuteLoop()
 	    		entertaining=true;
 	    		first = false;
 	    	}
-	    	ROS_INFO("Y is %i",y);
 	    	y=y+1;
 			//After finished entertaining set entertaining to flase
 			
 		}
 	} else {
-		entertainForPeriod();
+		if (entertainednessLevel == 5)
+		{
+			entertaining = false;
+			
+		} else if ((200 % y) == 0)
+		{
+			EntertainmentRobot::doResponse("entertaining");
+		} else {}
+		y=y+1;
+		
 	}
 }
 

@@ -24,6 +24,7 @@ protected:
 
 	string residentName;
 	int y;
+	int x;
 	bool first;
 };
 
