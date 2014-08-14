@@ -29,7 +29,7 @@ void Resident::doInitialSetup()
 
 void Resident::doExecuteLoop()
 {
-	if (entertainment_count_ >= 150 && !e_dropped_)
+	if (entertainment_count_ >= WAIT_TIME && !e_dropped_)
 	{
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor("kurt fix this shit"));
 		int eLevel = residentInstance->entertainedness_level_;
@@ -52,7 +52,7 @@ void Resident::doExecuteLoop()
 		}
 		entertainment_count_ = 0;
 	}
-	else if (entertainment_count_ < 150 && !e_dropped_)
+	else if (entertainment_count_ < WAIT_TIME && !e_dropped_)
 	{
 		entertainment_count_++;
 		std::stringstream ss;
