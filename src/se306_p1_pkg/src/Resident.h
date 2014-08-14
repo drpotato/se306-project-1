@@ -28,7 +28,7 @@ private:
   // Level of entertainedness:
   // 1 - bad (bored)
   // 5 - good (entertained)	
-  int entertainedness_level_;		//level of entertainedness: 1 - bad (bored), 5 - good (entertained)
+  int entertainedness_level_;
 
   // Publisher for socialness
   ros::Publisher publisherSocialness;
@@ -38,8 +38,7 @@ private:
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;
 
-  void publishEntertainedness();
-  void setEntertainedness(int);
+  static int getNewLevel(int amount, int oldValue);
 };
 
 
