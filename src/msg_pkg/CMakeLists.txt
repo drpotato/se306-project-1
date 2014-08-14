@@ -167,5 +167,7 @@ include_directories(
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
 
+catkin_add_gtest(msgtests test/msgtests.cpp)
+
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
