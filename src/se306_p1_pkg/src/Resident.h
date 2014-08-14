@@ -38,8 +38,6 @@ private:
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;
 
-  void publishEntertainedness();
-  void setEntertainedness(int);
   static int getNewLevel(int amount, int oldValue);
 };
 

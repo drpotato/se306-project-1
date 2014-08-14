@@ -63,10 +63,8 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   {
   	// Get new level
   	int newLevel = getNewLevel(amount, residentInstance->socialness_level_);
-
 	// Update the residents socialness level
 	residentInstance->socialness_level_ = newLevel;
-
 	//Create a socialness message to publish
 	msg_pkg::Socialness socialnessMessage;
 	//Assign current socialness level to the message
@@ -78,10 +76,8 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   {
 	// Get new level
 	int newLevel = getNewLevel(amount, residentInstance->entertainedness_level_);
-
 	// Update the residents socialness level
 	residentInstance->entertainedness_level_ = newLevel;
-
 	//Create a socialness message to publish
 	msg_pkg::Entertainedness entertainednessMessage;
 	//Assign current socialness level to the message
@@ -89,10 +85,7 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 	//Publish the message
 	residentInstance->publisherEntertainedness.publish(entertainednessMessage);
   }
-	
-
-  	//put others in when implemented
-  
+  // TODO: put others in when implemented
 }
 
 int Resident::getNewLevel(int amount, int oldLevel)
@@ -104,20 +97,4 @@ int Resident::getNewLevel(int amount, int oldLevel)
 		newLevel = 1;
 	}
 	return newLevel;
-}
-
-void Resident::setEntertainedness(int newLevel)
-{
-    entertainedness_level_ = newLevel;
-    //Every time the entertainedness attribute changes, publish a message containing the new level.
-    this->publishEntertainedness();
-    //Spin in a circle?
-}
-
-void Resident::publishEntertainedness()
-{
-    msg_pkg::Entertainedness entertainednessMessage;
-    entertainednessMessage.level = entertainedness_level_;
-    
-    publisherEntertainedness.publish(entertainednessMessage);
 }
