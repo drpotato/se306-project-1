@@ -76,11 +76,13 @@ protected:
     PathPlannerNode node2;
     PathPlannerNode node3;
     PathPlannerNode node4;
+    PathPlannerNode node5;
     PathPlannerNode nodeDoor;
     string node1Name;
     string node2Name;
     string node3Name;
     string node4Name;
+    string node5name;
     string nodeDoorName;
 
     bool movingToResident;
