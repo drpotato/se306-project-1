@@ -55,7 +55,8 @@ void EntertainmentRobot::doExecuteLoop()
 		} else if ((50 % y) == 0)
 		{
 			EntertainmentRobot::doResponse("entertaining");
-		} else {}
+		} 
+		else {}
 		y=y+1;
 		
 	}

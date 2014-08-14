@@ -40,10 +40,11 @@ void Resident::doExecuteLoop()
 	{
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor("kurt fix this shit"));
 		int eLevel = residentInstance->entertainedness_level_;
-		if(eLevel == 1)
+		if(residentInstance->entertainedness_level_ <= 1)
 		{
 			// don't drop the value any more, it's being tended to or has been already
 			e_dropped_ = true;
+			ROS_INFO("e_dropped changed");
 		}
 		else 
 		{
@@ -117,12 +118,11 @@ void Resident::unlock()
 
 void Resident::interactionCallback(msg_pkg::Interaction msg)
 {
-  //std::stringstream ss;
-  //ss << ActorSpawner::getInstance().getActor("")->px;
-  //ROS_INFO("%s", ss.str().c_str());
+  //ROS_INFO("callback!");
 
   std::string attribute = msg.attribute;
   int amount = msg.amount;
+
   // Get the class instance
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor("kurt fix this shit"));
 
@@ -139,7 +139,7 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 	//Publish the message
 	residentInstance->publisherSocialness.publish(socialnessMessage);
   } 
-  else if (attribute == "entertainedness")
+  else if (attribute == "entertaining")
   {
 	// Get new level
 	int newLevel = getNewLevel(amount, residentInstance->entertainedness_level_);

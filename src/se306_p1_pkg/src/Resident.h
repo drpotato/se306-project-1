@@ -25,7 +25,7 @@ private:
   int socialness_count_;
   bool e_dropped_;
   bool s_dropped_;
-  const static int WAIT_TIME = 100;
+  const static int WAIT_TIME = 50;
 
   // Level of social fulfillment: 
   // 1 - bad (lonely)
