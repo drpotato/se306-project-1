@@ -1,6 +1,8 @@
 Team Google Ultron Dev Team - SE306 Project 1 Repo
 ====================================================
 
+![](http://ultronbrowser.info/0-Ultron_logo_1.png)
+
 ## Prerequisites
 1. Ubuntu 14.04
 2. ROS Indigo
@@ -15,3 +17,12 @@ Team Google Ultron Dev Team - SE306 Project 1 Repo
 `./build.sh`
 3. Run the project  
 `./run.sh`
+
+## Using make targets
+Build the project
+
+`make`
+
+Clear the project (delete devel and build)
+
+`make clean`
