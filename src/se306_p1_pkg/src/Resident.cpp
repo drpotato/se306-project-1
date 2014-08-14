@@ -118,13 +118,13 @@ void Resident::unlock()
 
 void Resident::interactionCallback(msg_pkg::Interaction msg)
 {
-  //ROS_INFO("callback!");
 
   std::string attribute = msg.attribute;
   int amount = msg.amount;
 
   // Get the class instance
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+  residentInstance->velRotational = 1.0; // Rotate to show is being interacted with
 
   if (attribute == "socialness")
   {
