@@ -41,12 +41,9 @@ Actor::Actor():
     node2Name = "testnode2";
     node3Name = "testnode3";
     
-    
-    node1 = PathPlannerNode(&node1Name,5,1);
-    node2 = PathPlannerNode(&node2Name,-2,-2);
-    node3 = PathPlannerNode(&node3Name,1,5);
-    
-    
+    node1 = PathPlannerNode(&node1Name,-2.5,3);
+    node2 = PathPlannerNode(&node2Name,-2.5,-0);
+    node3 = PathPlannerNode(&node3Name,3,0);
     
     node1.addNeighbour(&node2);
     node2.addNeighbour(&node1);
@@ -56,9 +53,8 @@ Actor::Actor():
     this->pathPlanner.addNode(&node1);
     this->pathPlanner.addNode(&node2);
     this->pathPlanner.addNode(&node3);
-    
-    this->activeNode = &node1;
 
+    this->activeNode = &node1;
 }
 
 Actor::~Actor()
