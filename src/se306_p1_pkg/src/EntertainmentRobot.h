@@ -20,6 +20,8 @@ protected:
 	bool entertaining;
 
 	ros::Subscriber subscriberEntertainedness;
+
+	string residentName;
 };
 
 #endif

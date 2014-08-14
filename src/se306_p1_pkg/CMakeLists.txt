@@ -100,18 +100,7 @@ include_directories(
 
 ## Declare a cpp library
 
-add_library(ActorLibrary
-  src/Actor.cpp
-  src/R0.cpp
-  src/R1.cpp
-  src/Robot.cpp
-  src/Visitor.cpp
-  src/Human.cpp
-  src/PathPlanner.cpp
-  src/PathPlannerNode.cpp
-  src/Resident.cpp
-  src/EntertainmentRobot.cpp
-)
+
 
 include(__autogen__actorbuildlist__)
 

@@ -1,29 +1,39 @@
 #include "EntertainmentRobot.h"
 #include "ActorSpawner.h"
 
+#include "Actor.h"
+#include "PathPlanner.h"
+#include "PathPlannerNode.h"
+#include "ActorSpawner.h"
+
 
 
 void EntertainmentRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
-	entertainednessLevel = 5;
+	entertainednessLevel = 1;
 	entertaining = false;
+	residentName = "RobotNode2";
 	subscriberEntertainedness = nodeHandle->subscribe("entertainedness", 1000, EntertainmentRobot::entertainednessCallback);	
 
 }
 
 void EntertainmentRobot::doExecuteLoop()
 {
-	ROS_INFO("Value %i", entertainednessLevel);
+	
 	if (checkEntertainmentLevel())
 	{
 		ROS_INFO("Nothing to do here");
 	} else {
 		entertaining = true;
 		//Call method to do the entertaining
+		PathPlannerNode *target = this->pathPlanner.getNode(&residentName);
+    	vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+    	this->goToNode(path);
+		EntertainmentRobot::doResponse("entertaining");
 		//After finished entertaining set entertaining to flase
-		ROS_INFO("My master needs me!!");
+		//entertaining = false;;
 	}
 }
 
@@ -38,7 +48,7 @@ void EntertainmentRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
 
 bool EntertainmentRobot::checkEntertainmentLevel()
 {
-	if (entertainednessLevel>2 | entertaining){
+	if (entertainednessLevel>=2 | entertaining){
 		return true;
 	}
 	return false;
