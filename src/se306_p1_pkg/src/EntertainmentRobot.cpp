@@ -62,12 +62,14 @@ void EntertainmentRobot::doExecuteLoop()
 		if (entertainednessLevel == 5)
 		{
 			//Add do last desponse call that kurt implimented
+			EntertainmentRobot::stopResponse("entertaining");
 			entertaining = false;
 			
 
 		} else 
 		{
-			if (y=30){
+			//TODO: KURT FIX THIS SHIT
+			if (y=10000){
 				EntertainmentRobot::doResponse("entertaining");
 				y=0;
 			} else 
