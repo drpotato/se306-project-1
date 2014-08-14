@@ -12,31 +12,54 @@ void EntertainmentRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
-	entertainednessLevel = 1;
+	entertainednessLevel = 5;
 	entertaining = false;
 	residentName = "RobotNode2";
 	subscriberEntertainedness = nodeHandle->subscribe("entertainedness", 1000, EntertainmentRobot::entertainednessCallback);	
+	y = 0;
+	first = true;
 
 }
 
 void EntertainmentRobot::doExecuteLoop()
 {
 	
-	if (checkEntertainmentLevel())
+	if (!entertaining)
 	{
-		ROS_INFO("Nothing to do here");
+		if (checkEntertainmentLevel())
+		{
+			ROS_INFO("Nothing to do here");
+		} else {
+			
+			//Call method to do the entertaining
+			PathPlannerNode *target = this->pathPlanner.getNode(&node2Name);
+	    	vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+
+	    	//The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
+	    	if ((this->goToNode(path)) | ((y>=50) && first)){
+	    		entertaining=true;
+	    		first = false;
+	    	}
+	    	ROS_INFO("Y is %i",y);
+	    	y=y+1;
+			//After finished entertaining set entertaining to flase
+			
+		}
 	} else {
-		entertaining = true;
-		//Call method to do the entertaining
-		PathPlannerNode *target = this->pathPlanner.getNode(&residentName);
-    	vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-    	this->goToNode(path);
-		EntertainmentRobot::doResponse("entertaining");
-		//After finished entertaining set entertaining to flase
-		//entertaining = false;;
+		entertainForPeriod();
 	}
 }
 
+void EntertainmentRobot::entertainForPeriod()
+{
+	int x = 0;
+	while(x<10)
+	{
+		EntertainmentRobot::doResponse("entertaining");
+		x=x+1;
+	}
+	entertaining=false;
+}
 
 void EntertainmentRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
 {
@@ -48,7 +71,7 @@ void EntertainmentRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
 
 bool EntertainmentRobot::checkEntertainmentLevel()
 {
-	if (entertainednessLevel>=2 | entertaining){
+	if (entertainednessLevel>=2 ){
 		return true;
 	}
 	return false;

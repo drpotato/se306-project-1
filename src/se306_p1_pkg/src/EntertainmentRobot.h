@@ -13,6 +13,7 @@ protected:
 	virtual void doExecuteLoop();
 
 	bool checkEntertainmentLevel();
+	void entertainForPeriod();
 
 	static void entertainednessCallback(msg_pkg::Entertainedness msg);
 
@@ -22,6 +23,8 @@ protected:
 	ros::Subscriber subscriberEntertainedness;
 
 	string residentName;
+	int y;
+	bool first;
 };
 
 #endif

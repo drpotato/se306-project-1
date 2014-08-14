@@ -175,7 +175,7 @@ void Actor::doResponse(const char *attribute)
 	msg_pkg::Interaction interaction;
 	interaction.attribute = attribute;
 	publisherInteraction.publish(interaction);
-	ROS_INFO("%s (%s) is performing \"%s\"", rosName.c_str(), stageName.c_str(), attribute);
+	ROS_INFO("%s (%s) is performing \"%s\" ", rosName.c_str(), stageName.c_str(), attribute);
 }
 
 double Actor::faceDirection(double x,double y){
