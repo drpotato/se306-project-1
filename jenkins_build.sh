@@ -6,6 +6,10 @@ sudo rosdep init
 rosdep update
 
 $WORKSPACE/build.sh
+if [ $? -ne 0 ]; then
+ echo "Jenkins could not build this!"
+ exit 1
+fi
 
 # Create a tarball with everything needed to run
 mkdir -p se306_runnable/src/se306_p1_pkg
