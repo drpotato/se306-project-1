@@ -6,12 +6,13 @@ def mapClassToHeader(path):
     chMap = {} # Class --> Header
     fnames = []
     for root, dirs, files in os.walk(path):
+        if root.find("/.") != -1 or root.find("\\.") != -1: continue
         for fname in files:
             fnames.append(os.path.join(root, fname))
 
     for fname in fnames:
-        if os.path.splitext(fname)[-1].lower() not in (".h", ".hpp", ".hxx", ".inc"):
-            continue
+        if os.path.splitext(fname)[-1].lower() not in (".h", ".hpp", ".hxx", ".inc"): continue
+        if fname[0] == ".": continue
 
         f = open(fname, "r")
         fContents = f.read()
@@ -88,12 +89,14 @@ def createBuildInclude(relativePath, searchPath, outputheaderFname):
     pathNamesRaw = []
     pathNames = set()
     for root, dirs, files in os.walk(searchPath):
+        if root.find("/.") != -1 or root.find("\\.") != -1: continue
         for pathName in files:
             pathNamesRaw.append(os.path.join(root, pathName))
             
     for pathName in pathNamesRaw:
-        if os.path.splitext(pathName)[-1].lower() not in (".c", ".cpp", ".cxx"):
-            continue
+        if os.path.splitext(pathName)[-1].lower() not in (".c", ".cpp", ".cxx"): continue
+        if pathName[0] == ".": continue
+        
         pathNames.add(pathName)
 
     outStrings = []
