@@ -61,43 +61,31 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 
   if (attribute == "socialness")
   {
-	// Calculate new socialness level
-	int tmpLevel = std::min(amount + residentInstance->socialness_level_, 5); // Can only have a maximum level of 5
-
-	// Code to check it doesn't go below 1... just incase interactions can reduce levels at some point
-	if (tmpLevel < 1)
-	{
-		tmpLevel = 1;
-	}
+  	// Get new level
+  	int newLevel = getNewLevel(amount, residentInstance->socialness_level_);
 
 	// Update the residents socialness level
-	residentInstance->socialness_level_ = tmpLevel;
+	residentInstance->socialness_level_ = newLevel;
 
 	//Create a socialness message to publish
 	msg_pkg::Socialness socialnessMessage;
 	//Assign current socialness level to the message
-	socialnessMessage.level = tmpLevel;
+	socialnessMessage.level = newLevel;
 	//Publish the message
 	residentInstance->publisherSocialness.publish(socialnessMessage);
   } 
   else if (attribute == "entertainedness")
   {
-  	// Calculate new socialness level
-	int tmpLevel = std::min(amount + residentInstance->entertainedness_level_, 5); // Can only have a maximum level of 5
-
-	// Code to check it doesn't go below 1... just incase interactions can reduce levels at some point
-	if (tmpLevel < 1)
-	{
-		tmpLevel = 1;
-	}
+	// Get new level
+	int newLevel = getNewLevel(amount, residentInstance->entertainedness_level_);
 
 	// Update the residents socialness level
-	residentInstance->entertainedness_level_ = tmpLevel;
+	residentInstance->entertainedness_level_ = newLevel;
 
 	//Create a socialness message to publish
 	msg_pkg::Entertainedness entertainednessMessage;
 	//Assign current socialness level to the message
-	entertainednessMessage.level = tmpLevel;
+	entertainednessMessage.level = newLevel;
 	//Publish the message
 	residentInstance->publisherEntertainedness.publish(entertainednessMessage);
   }
@@ -105,6 +93,17 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 
   	//put others in when implemented
   
+}
+
+int getNewLevel(int amount, int oldLevel)
+{
+	int newLevel = std::min(amount + oldLevel, 5); // Can only have a maximum level of 5
+	// Code to check it doesn't go below 1... just incase interactions can reduce levels at some point
+	if (newLevel < 1)
+	{
+		newLevel = 1;
+	}
+	return newLevel;
 }
 
 void Resident::setEntertainedness(int newLevel)
