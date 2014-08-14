@@ -66,6 +66,8 @@ Actor::Actor():
     this->pathPlanner.addNode(&nodeDoor);
 
     this->activeNode = &node1;
+
+    this->movingToResident = false;
 }
 
 Actor::~Actor()
@@ -107,6 +109,8 @@ bool Actor::executeLoop()
 		// Put custom loop stuff here (or make a method and call it from here)
 
 		publishLocation();
+
+        moveToResident();
 
 		doExecuteLoop();
 		executeLoopStagePublication();
@@ -187,6 +191,15 @@ void Actor::doResponse(const char *attribute)
 	// Spin for visual feedback
 	velRotational = 1.0; // fmod(ros::Time::now().toSec(), 1.0) >= 0.5 ? 1.0 : -1.0
 	velLinear = 0.0;
+}
+
+void Actor::moveToResident() {
+
+    if (this->movingToResident) {
+        PathPlannerNode *target = this->pathPlanner.getNode(&node1Name);
+        vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+        this->goToNode(path);
+    }
 }
 
 double Actor::faceDirection(double x,double y){
