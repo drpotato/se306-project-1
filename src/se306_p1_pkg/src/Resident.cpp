@@ -1,13 +1,35 @@
 #include "Resident.h"
+#include "msg_pkg/Entertainedness.h"
 
 void Resident::doInitialSetup()
 {
   // Initially the resident is not locked
   lock_ = false;
+  entertainedness = 5;
+  publisherEntertainedness = nodeHandle->advertise<msg_pkg::Entertainedness>("entertainedness", 1000);
 }
 
 void Resident::doExecuteLoop()
 {
+    
+}
+
+
+void Resident::publishEntertainedness()
+{
+    msg_pkg::Entertainedness entertainednessMessage;
+    entertainednessMessage.level = entertainedness;
+    
+    publisherEntertainedness.publish(entertainednessMessage);
+}
+
+void Resident::setEntertainedness(int newLevel)
+{
+
+    entertainedness = newLevel;
+    //Every time the entertainedness attribute changes, publish a message containing the new level.
+    this->publishEntertainedness();
+    //Spin in a circle?
 }
 
 /*
