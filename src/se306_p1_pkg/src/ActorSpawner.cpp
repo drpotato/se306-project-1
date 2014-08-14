@@ -48,6 +48,11 @@ Actor *ActorSpawner::spawnActor(const char *actorTypeName)
     return new Resident();
   }
 
+  if (strcmp("Relative", actorTypeName) == 0)
+  {
+    return new Resident();
+  }
+
   // Uh oh, we didn't match anything ... return an R0?
   return new R0();
 }

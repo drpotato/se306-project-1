@@ -3,14 +3,6 @@
 define Relative model
 (
 
-	# Centre pin (temporary)
-	model
-	(	
-		size [0.05 0.05 0.2]
-		pose [0.0 0.0 0.0 0.0]
-		color "burlywood4"
-	)
-
 	# Left Leg
 	model
 	(

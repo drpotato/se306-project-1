@@ -11,9 +11,12 @@ public:
 protected:
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
+  int status;
   
 private:
-
+  // Variable for holding whether or not the relative
+  // is interacting with the Resident actor
+  bool interacting;
 };
 
 
