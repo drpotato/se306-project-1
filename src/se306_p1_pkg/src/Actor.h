@@ -71,9 +71,11 @@ protected:
     PathPlannerNode node1;
     PathPlannerNode node2;
     PathPlannerNode node3;
+    PathPlannerNode node4;
     string node1Name;
     string node2Name;
     string node3Name;
+    string node4Name;
 };
 
 
