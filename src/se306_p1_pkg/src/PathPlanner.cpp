@@ -8,6 +8,10 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
     queue<PathPlannerNode*> s;
     s.push(startNode);
     
+    for (int i=0;i<this->nodes.size();i++){
+        this->nodes[i]->visited = false;
+    }
+    
     startNode->setVisited(true);
     
     
@@ -32,6 +36,11 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
         iter = iter->previous;
     }
     path.insert(path.begin(),startNode);
+    
+    for (int i=0;i<path.size();i++){
+        path[i]->visited = false;
+    }
+    
     return path;
 }
 

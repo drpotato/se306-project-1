@@ -6,7 +6,7 @@ PathPlannerNode::PathPlannerNode(string* inputName,double x,double y){
     this->px = x;
     this->py = y;
 }
-
+PathPlannerNode::PathPlannerNode(){}
 string* PathPlannerNode::getName(){
     return this->name;
 }

@@ -6,6 +6,7 @@
 
 #include "ros/ros.h"
 #include "PathPlanner.h"
+#include <vector>
 #include <string>
 #include "std_msgs/String.h"
 
@@ -58,10 +59,11 @@ protected:
 	std::string stageName;
     
     //Path Planner
-    void goToNode(string*);
+    void goToNode(vector<PathPlannerNode*>&);
     PathPlanner pathPlanner;
     PathPlannerNode *activeNode;
-    void faceDirection(double,double);
+    double faceDirection(double,double);
+    bool gotoPosition(double x,double y);
 };
 
 

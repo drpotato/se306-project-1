@@ -163,29 +163,54 @@ namespace
 }
 
 
-void Actor::faceDirection(double x,double y){
+double Actor::faceDirection(double x,double y){
+    
+    double vx = x-this->px;
+    double vy = x-this->py;
+    
+    double ax = cos(this->theta)*vx + sin(this->theta)*vy;
+    double ay = cos(this->theta)*vy - sin(this->theta)*vx;
+    
+    double angle = atan2(ay,ax);
     //Calculate target angle
-    ROS_INFO("At position %f %f",this->px,this->py);
-    if (x-this->px == 0){
-        return;
-    }
-    double angle = (atan(y-this->py/x-this->px));
     
-    
-    ROS_INFO("Angle: %f",(angle));
     //Set velocity to face the angle using PID
-    this->velRotational = (this->theta- angle)*1;
+    
+    this->velRotational = (angle)*1;
+    return abs(angle);
 }
 
-void Actor::goToNode(std::string* name){
-    //Get the node
+bool Actor::gotoPosition(double x,double y){
+    //Face the node
+    if (faceDirection(x,y) < 0.1){
+        double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
+        if (distance > 0.1){
+            faceDirection(x,y);
+            this->velLinear = distance*1;
+            distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
+            return true;
+        }else{
+            this->velLinear = 0;
+            return false;
+        }
+    }else{
+        this->velLinear = 0;
+        return true;
+    }
     
-    PathPlannerNode *target = this->pathPlanner.getNode(name);
+}
 
-    ROS_INFO_STREAM("doing bfs");
-    vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-    ROS_INFO("complete %d",path.size());
+void Actor::goToNode(vector<PathPlannerNode*> &path){
+    //Get the node
+        ROS_INFO("there are  %d node",path.size());
+    
     for (int i=0;i<path.size();i++){
-        ROS_INFO_STREAM(*(path[i]->getName()));
+        if (!path[i]->visited){
+            if (!this->gotoPosition(path[i]->px,path[i]->py)){
+                path[i]->visited = true;
+            }else{
+                ROS_INFO("Going to node %d",i);
+            }
+        }
     }
 }

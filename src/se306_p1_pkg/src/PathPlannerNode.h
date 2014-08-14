@@ -9,14 +9,17 @@ class PathPlannerNode{
     friend class PathPlanner;
     private:
         string* name;
-        bool visited;
+    
         PathPlannerNode* previous;
         //position
-        double px;
-        double py;
+    
     vector<PathPlannerNode*> neighbours;
     public:
+    bool visited;
+    double px;
+    double py;
     PathPlannerNode(string*,double,double);
+    PathPlannerNode();
     void addNeighbour(PathPlannerNode*);
     void removeNeighbour(PathPlannerNode*);
     string* getName();

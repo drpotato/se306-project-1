@@ -1,7 +1,7 @@
 #include "R0.h"
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
-
+#include <queue>
 
 void R0::doInitialSetup()
 {
@@ -12,9 +12,11 @@ void R0::doInitialSetup()
     string node2Name = "testnode2";
     string node3Name = "testnode3";
     
-    PathPlannerNode node1(&node1Name,0,0);
-    PathPlannerNode node2(&node2Name,1,0);
-    PathPlannerNode node3(&node3Name,2,0);
+    
+    PathPlannerNode node1 = PathPlannerNode(&node1Name,0,0);
+    PathPlannerNode node2 = PathPlannerNode(&node2Name,2,2);
+    PathPlannerNode node3 = PathPlannerNode(&node3Name,5,0);
+
     
     
     node1.addNeighbour(&node2);
@@ -27,16 +29,19 @@ void R0::doInitialSetup()
     this->pathPlanner.addNode(&node3);
     
     this->activeNode = &node1;
-    string nodeName = "testnode3";
-    ROS_INFO_STREAM("pathfinding");
-    this->goToNode(&nodeName);
+   
+    status = 0;
     
-    this->velRotational = 0.3;
-    this->velLinear = 0.1;
 }
 
 void R0::doExecuteLoop()
 {
-    this->faceDirection(0,0);
+    ROS_INFO_STREAM("foo");
+    string node3Name = "testnode3";
+    
+    PathPlannerNode *target = this->pathPlanner.getNode(&node3Name);
+    vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+    
 
+    this->goToNode(path);
 }
