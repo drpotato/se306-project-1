@@ -52,25 +52,50 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 {
   std::string attribute = msg.attribute;
   int amount = msg.amount;
+  // Get the class instance
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor("kurt fix this shit"));
 
   if (attribute == "socialness")
   {
-	// Get the class instance
-	Resident* temp = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor("kurt fix this shit"));
-	// Update the residents socialness level
-	temp->socialness_level_ = std::min(msg.amount + temp->socialness_level_, 5); // Can only have a maximum level of 5
+	// Calculate new socialness level
+	int tmpLevel = std::min(amount + residentInstance->socialness_level_, 5); // Can only have a maximum level of 5
 
+	// Code to check it doesn't go below 1... just incase interactions can reduce levels at some point
+	if (tmpLevel < 1)
+	{
+		tmpLevel = 1;
+	}
+
+	// Update the residents socialness level
+	residentInstance->socialness_level_ = tmpLevel;
 
 	//Create a socialness message to publish
 	msg_pkg::Socialness socialnessMessage;
 	//Assign current socialness level to the message
-	socialnessMessage.level = temp->socialness_level_;
+	socialnessMessage.level = tmpLevel;
 	//Publish the message
-	publisherSocialness.publish(socialnessMessage);
+	residentInstance->publisherSocialness.publish(socialnessMessage);
   } 
   else if (attribute == "entertainedness")
   {
-  	//some stuff
+  	// Calculate new socialness level
+	int tmpLevel = std::min(amount + residentInstance->entertainedness_level_, 5); // Can only have a maximum level of 5
+
+	// Code to check it doesn't go below 1... just incase interactions can reduce levels at some point
+	if (tmpLevel < 1)
+	{
+		tmpLevel = 1;
+	}
+
+	// Update the residents socialness level
+	residentInstance->entertainedness_level_ = tmpLevel;
+
+	//Create a socialness message to publish
+	msg_pkg::Entertainedness entertainednessMessage;
+	//Assign current socialness level to the message
+	entertainednessMessage.level = tmpLevel;
+	//Publish the message
+	residentInstance->publisherEntertainedness.publish(entertainednessMessage);
   }
 	
 
