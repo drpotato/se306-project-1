@@ -9,3 +9,5 @@ if [ $? -ne 0 ]; then
 fi
 
 python build_updateActors.py
+
+chmod 755 ./run.sh
