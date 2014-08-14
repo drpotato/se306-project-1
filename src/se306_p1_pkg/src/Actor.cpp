@@ -173,6 +173,7 @@ void Actor::doResponse(const char *attribute)
 {
 	msg_pkg::Interaction interaction;
 	interaction.attribute = attribute;
+	interaction.amount = 1;
 	publisherInteraction.publish(interaction);
 
 	ROS_INFO("%s (%s) is performing \"%s\"", rosName.c_str(), stageName.c_str(), attribute);
