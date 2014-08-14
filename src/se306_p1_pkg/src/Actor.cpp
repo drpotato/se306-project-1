@@ -68,8 +68,6 @@ Actor::~Actor()
 	delete nodeHandle;
 }
 
-
-
 void Actor::initialSetup(unsigned int robotID, double px, double py, double theta)
 {
 	rosName = generateNodeName(robotID);
@@ -77,6 +75,7 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	pxInitial = px;
 	pyInitial = py;
 	thetaInitial = theta;
+
 	
 	// ros::init needs L-values, so we can't just directly pass (0, ...)
 	int fakeArgC = 0;
@@ -85,10 +84,9 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	nodeHandle = new ros::NodeHandle();
 	loopRate = new ros::Rate(10);
 
-	//subscriberLocation = n.subscribe("location", 1000, ((Actor*)this)->Actor::locationCallback);
 	publisherLocation = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
-	publisherInteraction = nodeHandle->advertise<msg_pkg::Interaction>("interaction", 1000);
 
+	publisherInteraction = nodeHandle->advertise<msg_pkg::Interaction>("interaction", 1000);
 	
 	// Put custom init stuff here (or make a method and call it from here)
 	initialSetupStage();
