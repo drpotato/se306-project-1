@@ -1,5 +1,7 @@
 import os
 
+pathBase = os.path.join(os.path.dirname(__file__), "src/se306_p1_pkg/world")
+
 class ActorListBuilder:
     def __init__(self, pathBase):
         self.actors = []
@@ -41,7 +43,7 @@ class ActorListBuilder:
 
         for i in range(len(self.actors)):
             actor = self.actors[i]
-            outStrList.append("rosrun se306_p1_pkg ActorSpawner %d %s & ROBOT%d_PID=$!\n" % (i, actor[0], i))
+            outStrList.append("rosrun se306_p1_pkg ActorSpawner %d %s %s %s %s & ROBOT%d_PID=$!\n" % (i, actor[0], actor[1], actor[2], actor[3], i))
 
         outStrList.append("\nrosrun stage_ros stageros src/se306_p1_pkg/world/myworld.world\n\n")
 
@@ -52,7 +54,6 @@ class ActorListBuilder:
         return "".join(outStrList)
 
 if __name__ == "__main__":
-    pathBase = os.path.dirname(__file__)
     actorLB = ActorListBuilder(pathBase)
     
     for line in open(os.path.join(pathBase, "actorlist"), "r"):

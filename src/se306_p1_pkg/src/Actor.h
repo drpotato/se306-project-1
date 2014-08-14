@@ -14,7 +14,7 @@ public:
         Actor();
 	virtual ~Actor();
 
-	void initialSetup(unsigned int robotID);
+	void initialSetup(unsigned int robotID, double px, double py, double theta);
 	bool executeLoop();
 	
 	void initialSetupStage();
@@ -38,6 +38,9 @@ protected:
 	double velRotational;
 
 	//pose of the robot
+	double pxInitial;
+	double pyInitial;
+	double thetaInitial;
 	double px;
 	double py;
 	double theta;

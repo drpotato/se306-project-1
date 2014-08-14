@@ -17,6 +17,9 @@ namespace
 Actor::Actor():
 	velLinear(0.0),
 	velRotational(0.0),
+	pxInitial(0.0),
+	pyInitial(0.0),
+	thetaInitial(0.0),
 	px(0.0),
 	py(0.0),
 	theta(0.0),
@@ -35,10 +38,13 @@ Actor::~Actor()
 
 
 
-void Actor::initialSetup(unsigned int robotID)
+void Actor::initialSetup(unsigned int robotID, double px, double py, double theta)
 {
 	rosName = generateNodeName(robotID);
 	stageName = generateStageName(robotID);
+	pxInitial = px;
+	pyInitial = py;
+	thetaInitial = theta;
 	
 	// ros::init needs L-values, so we can't just directly pass (0, ...)
 	int fakeArgC = 0;
@@ -89,8 +95,11 @@ void Actor::StageOdom_callback(nav_msgs::Odometry msg)
 {
   //TODO: FIX THIS SHIT
   //Grab x and y coordinates from the Odometry message and assign to px and py
-  ActorSpawner::getInstance().getActor("kurt fix this shit")->px = msg.pose.pose.position.x;
-  ActorSpawner::getInstance().getActor("kurt fix this shit")->py = msg.pose.pose.position.y;
+  ActorSpawner &actorSpawner = ActorSpawner::getInstance();
+  Actor *actorPtr = ActorSpawner::getInstance().getActor();
+  
+  actorPtr->px = actorPtr->pxInitial + msg.pose.pose.position.x;
+  actorPtr->py = actorPtr->pyInitial + msg.pose.pose.position.y;
   // std::stringstream ss;
   // ss << ActorSpawner::getInstance().getActor("")->px;
   // ROS_INFO("%s", ss.str().c_str());
