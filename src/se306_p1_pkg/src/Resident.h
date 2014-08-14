@@ -16,6 +16,9 @@ protected:
   
 private:
   bool lock_;
+  int entertainedness;
+  void publishEntertainedness();
+  void setEntertainedness(int);
 };
 
 
