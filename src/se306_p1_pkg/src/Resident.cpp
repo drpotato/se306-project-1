@@ -3,6 +3,8 @@
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/Socialness.h>
 #include <msg_pkg/Entertainedness.h>
+#include "Actor.h"
+#include "ActorSpawner.h"
 
 void Resident::doInitialSetup()
 {
@@ -54,9 +56,10 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   if (attribute == "socialness")
   {
 	// Get the class instance
-	Resident* temp = dynamic_cast<Resident*>( ActorSpawner::getInstance().getActor("kurt fix this shit"));
+	Resident* temp = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor("kurt fix this shit"));
 	// Update the residents socialness level
-	temp->socialness_level_ = max(msg.amount + temp->socialness_level_, 5); // Can only have a maximum level of 5
+	temp->socialness_level_ = std::min(msg.amount + temp->socialness_level_, 5); // Can only have a maximum level of 5
+
 
 	//Create a socialness message to publish
 	msg_pkg::Socialness socialnessMessage;

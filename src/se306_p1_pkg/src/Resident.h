@@ -3,6 +3,7 @@
 
 #include "Human.h"
 #include <msg_pkg/Interaction.h>
+#include "ros/ros.h"
 
 class Resident : public Human
 {
