@@ -105,6 +105,7 @@ add_library(ActorLibrary
   src/Visitor.cpp
   src/Human.cpp
   src/Resident.cpp
+  src/EntertainmentRobot.cpp
 )
 
 ## Declare a cpp executable
