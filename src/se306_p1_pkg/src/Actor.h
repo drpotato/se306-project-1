@@ -82,7 +82,7 @@ protected:
     string node2Name;
     string node3Name;
     string node4Name;
-    string node5name;
+    string node5Name;
     string nodeDoorName;
 
     bool movingToResident;
