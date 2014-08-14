@@ -1,3 +1,4 @@
+
 #include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
 #include <sensor_msgs/LaserScan.h>
@@ -46,6 +47,7 @@ Actor::Actor():
     node2 = PathPlannerNode(&node2Name,-2.5,-0);
     node3 = PathPlannerNode(&node3Name,3,0);
     node4 = PathPlannerNode(&node4Name,3,3);
+    nodeDoor = PathPlannerNode(&node4Name,2.8,5);
     
     node1.addNeighbour(&node2);
     node2.addNeighbour(&node1);
@@ -53,11 +55,14 @@ Actor::Actor():
     node3.addNeighbour(&node2);
     node3.addNeighbour(&node4);
     node4.addNeighbour(&node3);
+    node4.addNeighbour(&nodeDoor);
+    nodeDoor.addNeighbour(&node4);
     
     this->pathPlanner.addNode(&node1);
     this->pathPlanner.addNode(&node2);
     this->pathPlanner.addNode(&node3);
     this->pathPlanner.addNode(&node4);
+    this->pathPlanner.addNode(&nodeDoor);
     
     this->activeNode = &node1;
 }
