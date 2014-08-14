@@ -86,7 +86,7 @@ void EntertainmentRobot::entertainForPeriod()
 
 void EntertainmentRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
 {
- 	EntertainmentRobot* temp = dynamic_cast<EntertainmentRobot*>( ActorSpawner::getInstance().getActor("kurt fix this shit"));
+ 	EntertainmentRobot* temp = dynamic_cast<EntertainmentRobot*>( ActorSpawner::getInstance().getActor());
 
  	temp->entertainednessLevel = msg.level;
  	//ROS_INFO("Changed value");

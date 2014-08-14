@@ -38,13 +38,13 @@ void Resident::doExecuteLoop()
     
 	if (entertainment_count_ >= WAIT_TIME && !e_dropped_)
 	{
-		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor("kurt fix this shit"));
+		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
 		int eLevel = residentInstance->entertainedness_level_;
 		if(residentInstance->entertainedness_level_ <= 1)
 		{
 			// don't drop the value any more, it's being tended to or has been already
 			e_dropped_ = true;
-			ROS_INFO("e_dropped changed");
+			//ROS_INFO("e_dropped changed");
 		}
 		else 
 		{
@@ -66,7 +66,7 @@ void Resident::doExecuteLoop()
 	}
 	else if (e_dropped_ && (socialness_count_ > 1000) && !s_dropped_)
 	{
-		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor("kurt fix this shit"));
+		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
 		int sLevel = residentInstance->socialness_level_;
 		if(sLevel == 2)
 		{
@@ -124,7 +124,7 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   int amount = msg.amount;
 
   // Get the class instance
-  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor("kurt fix this shit"));
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
 
   if (attribute == "socialness")
   {
