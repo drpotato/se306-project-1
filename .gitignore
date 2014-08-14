@@ -142,4 +142,8 @@ Session.vim
 
 ### catkin workspace ###
 devel/*
-src/CMakeLists.txt
+/src/CMakeLists.txt
+
+### Our auto-generated files ###
+/run.sh
+__autogen__*__

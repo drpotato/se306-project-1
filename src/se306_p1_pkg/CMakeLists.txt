@@ -9,7 +9,6 @@ project(se306_p1_pkg)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  rospy
   msg_pkg
 )
 
@@ -84,7 +83,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES 
-   CATKIN_DEPENDS roscpp rospy
+   CATKIN_DEPENDS roscpp
 #  DEPENDS system_lib
 )
 
@@ -100,6 +99,7 @@ include_directories(
 )
 
 ## Declare a cpp library
+
 add_library(ActorLibrary
   src/Actor.cpp
   src/R0.cpp
@@ -112,6 +112,9 @@ add_library(ActorLibrary
   src/Resident.cpp
   src/EntertainmentRobot.cpp
 )
+
+include(__autogen__actorbuildlist__)
+
 
 ## Declare a cpp executable
 add_executable(ActorSpawner src/ActorSpawner.cpp)
