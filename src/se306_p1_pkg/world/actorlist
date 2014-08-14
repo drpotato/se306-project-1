@@ -5,6 +5,6 @@
 # Column 4 = Colour
 R0	-5	3	0	red
 R1	-6	-3	0	yellow
-Resident -3	3	0	green
+Resident -3	4	0	green
 EntertainmentRobot 6 3 0 blue
 

@@ -37,7 +37,7 @@ void EntertainmentRobot::doExecuteLoop()
 	    	vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
 
 	    	//The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
-	    	if ((this->goToNode(path)) | ((y>=30) && first)){
+	    	if (!(this->goToNode(path)) | ((y>=30) && first)){
 	    		//EntertainmentRobot::doResponse("entertaining");
 	    		entertaining=true;
 	    		first = false;
