@@ -16,6 +16,9 @@ protected:
 
 	static void entertainednessCallback(msg_pkg::Entertainedness msg);
 
+	int8_t entertainednessLevel;
+	bool entertaining;
+
 	ros::Subscriber subscriberEntertainedness;
 };
 
