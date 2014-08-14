@@ -4,10 +4,11 @@
 #include <boost/lexical_cast.hpp>
 #include <ros/console.h>
 #include <tf/tf.h>
-//#include <msg_pkg/Location.h>
+
 #include <math.h>
 #include <string>
 #include <msg_pkg/Location.h>
+#include <msg_pkg/Interaction.h>
 
 #include "Actor.h"
 #include "PathPlanner.h"
@@ -86,6 +87,7 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 
 	//subscriberLocation = n.subscribe("location", 1000, ((Actor*)this)->Actor::locationCallback);
 	publisherLocation = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
+	publisherInteraction = nodeHandle->advertise<msg_pkg::Interaction>("interaction", 1000);
 
 	
 	// Put custom init stuff here (or make a method and call it from here)
@@ -168,31 +170,13 @@ void Actor::executeLoopStagePublication()
 	publisherStageVelocity.publish(commandVelocity);
 }
 
-namespace
+void Actor::doResponse(const char *attribute)
 {
-	std::string generateNodeName(unsigned int ID)
-	{
-		char *buffer = new char[128];
-		sprintf(buffer, "RobotNode%u", ID);
-		
-		std::string nodeName(buffer);
-		delete[] buffer;
-		
-		return nodeName;
-	}
-	
-	std::string generateStageName(unsigned int ID)
-	{
-		char *buffer = new char[128];
-		sprintf(buffer, "robot_%u", ID);
-		
-		std::string nodeName(buffer);
-		delete[] buffer;
-		
-		return nodeName;
-	}
+	msg_pkg::Interaction interaction;
+	interaction.attribute = attribute;
+	publisherInteraction.publish(interaction);
+	ROS_INFO("%s (%s) is performing \"%s\"", rosName.c_str(), stageName.c_str(), attribute);
 }
-
 
 double Actor::faceDirection(double x,double y){
     
@@ -246,4 +230,29 @@ bool Actor::goToNode(vector<PathPlannerNode*> &path){
         ROS_INFO("current position %f %f",px,py);
     }
     return false;
+}
+
+namespace
+{
+	std::string generateNodeName(unsigned int ID)
+	{
+		char *buffer = new char[128];
+		sprintf(buffer, "RobotNode%u", ID);
+		
+		std::string nodeName(buffer);
+		delete[] buffer;
+		
+		return nodeName;
+	}
+	
+	std::string generateStageName(unsigned int ID)
+	{
+		char *buffer = new char[128];
+		sprintf(buffer, "robot_%u", ID);
+		
+		std::string nodeName(buffer);
+		delete[] buffer;
+		
+		return nodeName;
+	}
 }
