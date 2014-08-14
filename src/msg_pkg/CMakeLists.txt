@@ -54,7 +54,7 @@ add_message_files(
   Interaction.msg
   Leave.msg
   Location.msg
-  Loneliness.msg
+  Socialness.msg
   Thirst.msg
 )
 
