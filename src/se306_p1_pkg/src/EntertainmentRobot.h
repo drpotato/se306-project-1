@@ -26,6 +26,7 @@ protected:
 	int y;
 	int x;
 	bool first;
+	bool first_call;
 };
 
 #endif

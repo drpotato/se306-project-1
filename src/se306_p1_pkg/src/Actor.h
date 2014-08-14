@@ -28,7 +28,7 @@ public:
 	static void StageOdom_callback(nav_msgs::Odometry msg);
 	static void locationCallback(msg_pkg::Location msg);
 
-    void moveToResident();
+    bool moveToResident();
     void startMovingToResident();
 
 

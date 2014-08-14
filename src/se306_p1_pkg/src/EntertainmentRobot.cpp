@@ -19,9 +19,10 @@ void EntertainmentRobot::doInitialSetup()
 	y = 0;
 	x = 0;
 	first = true;
+	first_call = true;
 
-    this->activeNode = &node4;
-    this->startMovingToResident();
+    //this->activeNode = &node4;
+    //this->startMovingToResident();
 
 }
 
@@ -34,18 +35,26 @@ void EntertainmentRobot::doExecuteLoop()
 		{
 			//ROS_INFO("Nothing to do here");
 		} else {
-
+			if (first_call)
+			{
+				this->activeNode = &node4;
+				this->startMovingToResident();
+				first_call = false;
+			}
 			//Call method to do the entertaining
-			PathPlannerNode *target = this->pathPlanner.getNode(&node2Name);
-	    	vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+			//PathPlannerNode *target = this->pathPlanner.getNode(&node2Name);
+	    	//vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+	    	
+    		
 
 	    	//The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
-	    	if (!(this->goToNode(path)) | ((y>=30) && first)){
+	    	if (!(this->movingToResident) ){
 	    		//EntertainmentRobot::doResponse("entertaining");
+	    		ROS_INFO("CHANGED TO ENTERTAINING");
 	    		entertaining=true;
 	    		first = false;
 	    	}
-	    	y=y+1;
+	    	
 			//After finished entertaining set entertaining to flase
 
 		}
@@ -53,16 +62,14 @@ void EntertainmentRobot::doExecuteLoop()
 		if (entertainednessLevel == 5)
 		{
 			entertaining = false;
-			y=0;
+			
 
-		} else if ((50 % y) == 0)
+		} else 
 		{
 			EntertainmentRobot::doResponse("entertaining");
+			
 		} 
-		else 
-		{
-			y++;
-		}
+		
 	}
 }
 

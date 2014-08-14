@@ -197,12 +197,16 @@ void Actor::startMovingToResident() {
     this->movingToResident = true;
 }
 
-void Actor::moveToResident() {
+bool Actor::moveToResident() {
 
     if (this->movingToResident) {
         PathPlannerNode *target = this->pathPlanner.getNode(&node1Name);
         vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-        this->goToNode(path);
+        if ( this->goToNode(path))
+        {
+        	ROS_INFO("CHANGED MOVING TO RESIDENT");
+        	this->movingToResident = false;
+        }
     }
 }
 
