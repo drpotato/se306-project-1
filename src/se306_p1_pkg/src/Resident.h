@@ -12,12 +12,10 @@ public:
   virtual void lock();
   virtual void unlock();
   
-protected:
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg);
   
-private:
   bool lock_;
 
   // Level of social fulfillment: 
