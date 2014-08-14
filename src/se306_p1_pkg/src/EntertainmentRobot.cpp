@@ -61,6 +61,7 @@ void EntertainmentRobot::doExecuteLoop()
 	} else {
 		if (entertainednessLevel == 5)
 		{
+			//Add do last desponse call that kurt implimented
 			entertaining = false;
 			
 
@@ -73,16 +74,6 @@ void EntertainmentRobot::doExecuteLoop()
 	}
 }
 
-void EntertainmentRobot::entertainForPeriod()
-{
-	int x = 0;
-	while(x<10)
-	{
-		EntertainmentRobot::doResponse("entertaining");
-		x=x+1;
-	}
-	entertaining=false;
-}
 
 void EntertainmentRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
 {

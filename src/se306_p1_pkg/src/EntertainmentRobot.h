@@ -13,7 +13,6 @@ protected:
 	virtual void doExecuteLoop();
 
 	bool checkEntertainmentLevel();
-	void entertainForPeriod();
 
 	static void entertainednessCallback(msg_pkg::Entertainedness msg);
 
