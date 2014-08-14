@@ -1,5 +1,5 @@
 #include "PathPlanner.h"
-
+#include "ros/ros.h"
 
 vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,PathPlannerNode *target)
 {
@@ -54,6 +54,7 @@ PathPlannerNode* PathPlanner::getNode(string* name){
         PathPlannerNode* node = this->nodes[i];
         if (node->getName()->compare(*name) == 0){
             return node;
+        }else{
         }
     }
 }

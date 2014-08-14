@@ -33,6 +33,29 @@ Actor::Actor():
 {
     //Create path planner and setup nodes
     this->pathPlanner = PathPlanner();
+    this->targetNode = 0;
+    node1Name = "testnode1";
+    node2Name = "testnode2";
+    node3Name = "testnode3";
+    
+    
+    node1 = PathPlannerNode(&node1Name,5,1);
+    node2 = PathPlannerNode(&node2Name,-2,-2);
+    node3 = PathPlannerNode(&node3Name,1,5);
+    
+    
+    
+    node1.addNeighbour(&node2);
+    node2.addNeighbour(&node1);
+    node2.addNeighbour(&node3);
+    node3.addNeighbour(&node2);
+    
+    this->pathPlanner.addNode(&node1);
+    this->pathPlanner.addNode(&node2);
+    this->pathPlanner.addNode(&node3);
+    
+    this->activeNode = &node1;
+
 }
 
 Actor::~Actor()
@@ -166,7 +189,7 @@ namespace
 double Actor::faceDirection(double x,double y){
     
     double vx = x-this->px;
-    double vy = x-this->py;
+    double vy = y-this->py;
     
     double ax = cos(this->theta)*vx + sin(this->theta)*vy;
     double ay = cos(this->theta)*vy - sin(this->theta)*vx;
@@ -184,33 +207,35 @@ bool Actor::gotoPosition(double x,double y){
     //Face the node
     if (faceDirection(x,y) < 0.1){
         double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
-        if (distance > 0.1){
+        ROS_INFO("Distance is %f",distance);
+        if (distance > 0.01){
             faceDirection(x,y);
             this->velLinear = distance*1;
-            distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
             return true;
         }else{
             this->velLinear = 0;
             return false;
         }
     }else{
+        ROS_INFO("Target: %f",faceDirection(x,y));
         this->velLinear = 0;
         return true;
     }
     
 }
 
-void Actor::goToNode(vector<PathPlannerNode*> &path){
+bool Actor::goToNode(vector<PathPlannerNode*> &path){
     //Get the node
-        ROS_INFO("there are  %d node",path.size());
-    
-    for (int i=0;i<path.size();i++){
-        if (!path[i]->visited){
-            if (!this->gotoPosition(path[i]->px,path[i]->py)){
-                path[i]->visited = true;
-            }else{
-                ROS_INFO("Going to node %d",i);
-            }
-        }
+    if (targetNode >= path.size()){
+        this->velLinear = 0;
+        return true;
     }
+    if (!this->gotoPosition(path[targetNode]->px,path[targetNode]->py)){
+        
+        //this->activeNode = path[targetNode];
+        targetNode++;
+    }else{
+        ROS_INFO("current position %f %f",px,py);
+    }
+    return false;
 }

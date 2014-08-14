@@ -11,9 +11,8 @@ protected:
 	virtual void doExecuteLoop();
     int status;
    
-    PathPlannerNode node1;
-    PathPlannerNode node2;
-    PathPlannerNode node3;
+
+
 };
 
 #endif

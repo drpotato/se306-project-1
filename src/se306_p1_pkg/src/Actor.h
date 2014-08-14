@@ -59,11 +59,18 @@ protected:
 	std::string stageName;
     
     //Path Planner
-    void goToNode(vector<PathPlannerNode*>&);
+    bool goToNode(vector<PathPlannerNode*>&);
     PathPlanner pathPlanner;
     PathPlannerNode *activeNode;
     double faceDirection(double,double);
     bool gotoPosition(double x,double y);
+    int targetNode;
+    PathPlannerNode node1;
+    PathPlannerNode node2;
+    PathPlannerNode node3;
+    string node1Name;
+    string node2Name;
+    string node3Name;
 };
 
 
