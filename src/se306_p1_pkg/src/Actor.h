@@ -5,7 +5,9 @@
 #include <msg_pkg/Location.h>
 
 #include "ros/ros.h"
-#include <string.h>
+#include "PathPlanner.h"
+#include <vector>
+#include <string>
 #include "std_msgs/String.h"
 
 class Actor
@@ -58,6 +60,20 @@ protected:
 	
 	std::string rosName;
 	std::string stageName;
+    
+    //Path Planner
+    bool goToNode(vector<PathPlannerNode*>&);
+    PathPlanner pathPlanner;
+    PathPlannerNode *activeNode;
+    double faceDirection(double,double);
+    bool gotoPosition(double x,double y);
+    int targetNode;
+    PathPlannerNode node1;
+    PathPlannerNode node2;
+    PathPlannerNode node3;
+    string node1Name;
+    string node2Name;
+    string node3Name;
 };
 
 

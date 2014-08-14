@@ -138,6 +138,8 @@ Session.vim
 
 ### OSX Files ###
 .DS_Store
+.AppleDouble
 
 ### catkin workspace ###
 devel/*
+src/CMakeLists.txt
