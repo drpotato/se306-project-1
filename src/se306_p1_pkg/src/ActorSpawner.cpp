@@ -3,6 +3,7 @@
 #include "R0.h"
 #include "R1.h"
 #include "Resident.h"
+#include "EntertainmentRobot.h"
 
 #include <cstdio>
 #include <cstring>
@@ -46,6 +47,11 @@ Actor *ActorSpawner::spawnActor(const char *actorTypeName)
   if (strcmp("Resident", actorTypeName) == 0)
   {
     return new Resident();
+  }
+
+  if (strcmp("EntertainmentRobot", actorTypeName) == 0)
+  {
+    return new EntertainmentRobot();
   }
 
   // Uh oh, we didn't match anything ... return an R0?

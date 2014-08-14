@@ -174,6 +174,7 @@ void Actor::doResponse(const char *attribute)
 	msg_pkg::Interaction interaction;
 	interaction.attribute = attribute;
 	publisherInteraction.publish(interaction);
+
 	ROS_INFO("%s (%s) is performing \"%s\"", rosName.c_str(), stageName.c_str(), attribute);
 	
 	// Spin for visual feedback
@@ -202,7 +203,9 @@ bool Actor::gotoPosition(double x,double y){
     //Face the node
     if (faceDirection(x,y) < 0.1){
         double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
+
         ROS_DEBUG("Distance is %f",distance);
+
         if (distance > 0.01){
             faceDirection(x,y);
             this->velLinear = distance*1;

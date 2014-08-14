@@ -1,4 +1,4 @@
-define R0 position
+define Resident position
 (
   size [0.35 0.35 1.25]
   drive "diff"
