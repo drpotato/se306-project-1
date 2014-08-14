@@ -11,6 +11,10 @@ void Resident::doInitialSetup()
   // Initially the resident is not locked
   lock_ = false;
 
+  // Set levels to maximum initially
+  entertainedness_level_ = 5;
+  socialness_level_ = 5;
+
   // Set up a publishers
   publisherSocialness = nodeHandle->advertise<msg_pkg::Socialness>("socialness", 1000);
   publisherEntertainedness = nodeHandle->advertise<msg_pkg::Entertainedness>("entertainedness", 1000);
