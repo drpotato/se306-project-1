@@ -69,8 +69,7 @@ void EntertainmentRobot::doExecuteLoop()
 		} else
 		{
 
-			//TODO: KURT FIX THIS SHIT
-			if (y=10000){
+			if (y == 40){
 				EntertainmentRobot::doResponse("entertaining");
 				y=0;
 			} else 
