@@ -1,4 +1,3 @@
-
 #include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
 #include <sensor_msgs/LaserScan.h>
@@ -191,6 +190,15 @@ void Actor::doResponse(const char *attribute)
 	// Spin for visual feedback
 	velRotational = 1.0; // fmod(ros::Time::now().toSec(), 1.0) >= 0.5 ? 1.0 : -1.0
 	velLinear = 0.0;
+}
+
+void Actor::stopResponse(const char *attribute)
+{
+  // TODO maybe do something with the attribute
+  
+  // Stop moving TODO Kurt, this could possibly be threaded and be delayed on a new thread
+  velRotational = 0.0;
+  velLinear = 0.0;
 }
 
 void Actor::startMovingToResident() {

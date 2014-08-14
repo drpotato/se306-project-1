@@ -38,6 +38,7 @@ protected:
 	virtual void doExecuteLoop() = 0;
 
 	void doResponse(const char *attribute);
+        void stopResponse(const char *attribute);
 
 	//velocity of the robot
 	double velLinear;
@@ -84,6 +85,7 @@ protected:
     string nodeDoorName;
 
     bool movingToResident;
+   
 };
 
 
