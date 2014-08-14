@@ -12,6 +12,8 @@ protected:
 	virtual void doInitialSetup(); 
 	virtual void doExecuteLoop();
 
+	bool checkEntertainmentLevel();
+
 	static void entertainednessCallback(msg_pkg::Entertainedness msg);
 
 	ros::Subscriber subscriberEntertainedness;

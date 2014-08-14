@@ -13,11 +13,19 @@ void EntertainmentRobot::doInitialSetup()
 
 void EntertainmentRobot::doExecuteLoop()
 {
-	
+	if (checkEntertainmentLevel())
+	{
+
+	}
 }
 
 
 void EntertainmentRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
 {
  
+}
+
+bool EntertainmentRobot::checkEntertainmentLevel()
+{
+	return false;
 }
