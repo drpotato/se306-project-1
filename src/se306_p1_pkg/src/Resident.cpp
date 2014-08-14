@@ -95,7 +95,7 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   
 }
 
-int getNewLevel(int amount, int oldLevel)
+int Resident::getNewLevel(int amount, int oldLevel)
 {
 	int newLevel = std::min(amount + oldLevel, 5); // Can only have a maximum level of 5
 	// Code to check it doesn't go below 1... just incase interactions can reduce levels at some point
