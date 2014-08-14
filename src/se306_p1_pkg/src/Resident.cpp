@@ -32,9 +32,9 @@ void Resident::doInitialSetup()
 
 void Resident::doExecuteLoop()
 {
-	PathPlannerNode *target = this->pathPlanner.getNode(&node4Name);
-    vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-    this->goToNode(path);
+	//PathPlannerNode *target = this->pathPlanner.getNode(&node4Name);
+    //vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+    //this->goToNode(path);
     
 	if (entertainment_count_ >= WAIT_TIME && !e_dropped_)
 	{
@@ -117,6 +117,10 @@ void Resident::unlock()
 
 void Resident::interactionCallback(msg_pkg::Interaction msg)
 {
+  //std::stringstream ss;
+  //ss << ActorSpawner::getInstance().getActor("")->px;
+  //ROS_INFO("%s", ss.str().c_str());
+
   std::string attribute = msg.attribute;
   int amount = msg.amount;
   // Get the class instance

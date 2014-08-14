@@ -1,3 +1,4 @@
+
 #include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
 #include <sensor_msgs/LaserScan.h>
@@ -42,10 +43,12 @@ Actor::Actor():
     node2Name = "testnode2";
     node3Name = "testnode3";
     node4Name = "testnode4";
+    node4Name = "nodeDoor";
     node1 = PathPlannerNode(&node1Name,-2.5,3);
     node2 = PathPlannerNode(&node2Name,-2.5,-0);
     node3 = PathPlannerNode(&node3Name,3,0);
     node4 = PathPlannerNode(&node4Name,3,3);
+    nodeDoor = PathPlannerNode(&nodeDoorName,2.8,5);
     
     node1.addNeighbour(&node2);
     node2.addNeighbour(&node1);
@@ -53,11 +56,14 @@ Actor::Actor():
     node3.addNeighbour(&node2);
     node3.addNeighbour(&node4);
     node4.addNeighbour(&node3);
+    node4.addNeighbour(&nodeDoor);
+    nodeDoor.addNeighbour(&node4);
     
     this->pathPlanner.addNode(&node1);
     this->pathPlanner.addNode(&node2);
     this->pathPlanner.addNode(&node3);
     this->pathPlanner.addNode(&node4);
+    this->pathPlanner.addNode(&nodeDoor);
     
     this->activeNode = &node1;
 }
@@ -173,6 +179,7 @@ void Actor::doResponse(const char *attribute)
 {
 	msg_pkg::Interaction interaction;
 	interaction.attribute = attribute;
+	interaction.amount = 1;
 	publisherInteraction.publish(interaction);
 
 	ROS_INFO("%s (%s) is performing \"%s\"", rosName.c_str(), stageName.c_str(), attribute);
