@@ -28,7 +28,7 @@ public:
 	static void StageOdom_callback(nav_msgs::Odometry msg);
 	static void locationCallback(msg_pkg::Location msg);
 
-    void moveToResident();
+    bool moveToResident();
     void startMovingToResident();
 
 
@@ -77,11 +77,13 @@ protected:
     PathPlannerNode node2;
     PathPlannerNode node3;
     PathPlannerNode node4;
+    PathPlannerNode node5;
     PathPlannerNode nodeDoor;
     string node1Name;
     string node2Name;
     string node3Name;
     string node4Name;
+    string node5Name;
     string nodeDoorName;
 
     bool movingToResident;
