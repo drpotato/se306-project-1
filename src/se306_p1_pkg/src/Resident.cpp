@@ -21,6 +21,7 @@ void Resident::doInitialSetup()
   entertainment_count_ = 0;
   socialness_count_ = 0;
   e_dropped_ = false;
+  e_replenished_ = false;
 
   // Set up a publishers
   publisherSocialness = nodeHandle->advertise<msg_pkg::Socialness>("socialness", 1000);
@@ -39,7 +40,6 @@ void Resident::doExecuteLoop()
 	if (entertainment_count_ >= WAIT_TIME && !e_dropped_)
 	{
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
-		int eLevel = residentInstance->entertainedness_level_;
 		if(residentInstance->entertainedness_level_ <= 1)
 		{
 			// don't drop the value any more, it's being tended to or has been already
@@ -64,11 +64,10 @@ void Resident::doExecuteLoop()
 	{
 		entertainment_count_++;
 	}
-	else if (e_dropped_ && (socialness_count_ > 1000) && !s_dropped_)
+	else if (e_replenished_ && (socialness_count_ >= WAIT_TIME) && !s_dropped_)
 	{
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
-		int sLevel = residentInstance->socialness_level_;
-		if(sLevel == 2)
+		if(residentInstance->socialness_level_ <= 1)
 		{
 			// don't drop the value any more, it's being tended to or has been already
 			s_dropped_ = true;
@@ -86,8 +85,9 @@ void Resident::doExecuteLoop()
 		}
 		socialness_count_ = 0;
 	}
-	else if (e_dropped_ && (socialness_count_ < 1000) && !s_dropped_)
+	else if (e_replenished_ && (socialness_count_ < WAIT_TIME) && !s_dropped_)
 	{
+		ROS_INFO("socialness increased");
 		socialness_count_++;
 	}
 }
@@ -136,6 +136,12 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 	msg_pkg::Socialness socialnessMessage;
 	//Assign current socialness level to the message
 	socialnessMessage.level = newLevel;
+
+	if (newLevel = 5)
+	{
+		residentInstance->stopRobotSpinning();
+	}
+
 	//Publish the message
 	residentInstance->publisherSocialness.publish(socialnessMessage);
   } 
@@ -149,6 +155,13 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 	msg_pkg::Entertainedness entertainednessMessage;
 	//Assign current socialness level to the message
 	entertainednessMessage.level = newLevel;
+
+	if (newLevel = 5)
+	{
+		residentInstance->stopRobotSpinning();
+		residentInstance->e_replenished_ = true;
+	}
+
 	//Publish the message
 	residentInstance->publisherEntertainedness.publish(entertainednessMessage);
   }
@@ -164,4 +177,10 @@ int Resident::getNewLevel(int amount, int oldLevel)
 		newLevel = 1;
 	}
 	return newLevel;
+}
+
+void Resident::stopRobotSpinning()
+{
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+  residentInstance->velRotational = 0.0; // Stop rotation to show interaction finished
 }
