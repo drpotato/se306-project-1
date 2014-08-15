@@ -49,6 +49,11 @@ Actor *ActorSpawner::spawnActor(const char *actorTypeName)
     return new Resident();
   }
 
+  if (strcmp("Relative", actorTypeName) == 0)
+  {
+    return new Relative();
+  }
+
   if (strcmp("EntertainmentRobot", actorTypeName) == 0)
   {
     return new EntertainmentRobot();
