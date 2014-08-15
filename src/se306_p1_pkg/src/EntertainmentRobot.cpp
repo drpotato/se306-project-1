@@ -20,6 +20,8 @@ void EntertainmentRobot::doInitialSetup()
 	x = 0;
 	first = true;
 	first_call = true;
+	returningHome = false;
+	returningHome_first = true;
 
     //this->activeNode = &node5;
     //this->startMovingToResident();
@@ -28,6 +30,25 @@ void EntertainmentRobot::doInitialSetup()
 
 void EntertainmentRobot::doExecuteLoop()
 {
+	if (returningHome){
+		//ROS_INFO("MOVEING TO HOME");
+
+		if (returningHome_first){
+			this->activeNode = &node1;
+			returningHome_first = false;
+			//TODO: Matt fix this shit (Target node reset upon reach destination)
+			targetNode = 0;
+		}
+		PathPlannerNode *target = this->pathPlanner.getNode(&node5Name);
+        vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+        if (this->goToNode(path))
+        {
+        	//ROS_INFO("ARRIVE HOME");
+        	returningHome=false;
+        }
+        return;
+
+	}
 
 	if (!entertaining)
 	{
@@ -69,7 +90,7 @@ void EntertainmentRobot::doExecuteLoop()
 			//Add do last desponse call that kurt implimented
 			EntertainmentRobot::stopResponse("entertaining");
 			entertaining = false;
-
+			returningHome = true;
 
 		} 
 		else
@@ -83,13 +104,8 @@ void EntertainmentRobot::doExecuteLoop()
 			else 
 			{
 				y++;
-			}
-
-			
-			
-		} 
-		
-
+			}	
+		}
 	}
 }
 

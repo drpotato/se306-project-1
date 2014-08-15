@@ -26,6 +26,8 @@ protected:
 	int x;
 	bool first;
 	bool first_call;
+	bool returningHome;
+	bool returningHome_first;
 };
 
 #endif

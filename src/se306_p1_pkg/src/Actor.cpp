@@ -213,6 +213,7 @@ void Actor::startMovingToResident() {
 bool Actor::moveToResident() {
 
     if (this->movingToResident) {
+    	//ROS_INFO("MOVING TO RESIDENT");
         PathPlannerNode *target = this->pathPlanner.getNode(&node1Name);
         vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
         if ( this->goToNode(path))
@@ -267,6 +268,7 @@ bool Actor::goToNode(vector<PathPlannerNode*> &path){
     //Get the node
     if (targetNode >= path.size()){
         this->velLinear = 0;
+
         return true;
     }
     if (!this->gotoPosition(path[targetNode]->px,path[targetNode]->py)){
