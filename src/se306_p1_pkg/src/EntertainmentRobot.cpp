@@ -21,7 +21,7 @@ void EntertainmentRobot::doInitialSetup()
 	first = true;
 	first_call = true;
 
-    //this->activeNode = &node4;
+    //this->activeNode = &node5;
     //this->startMovingToResident();
 
 }
@@ -34,43 +34,62 @@ void EntertainmentRobot::doExecuteLoop()
 		if (checkEntertainmentLevel())
 		{
 			//ROS_INFO("Nothing to do here");
-		} else {
+		} 
+		else 
+		{
 			if (first_call)
 			{
-				this->activeNode = &node4;
+				this->activeNode = &node5;
 				this->startMovingToResident();
 				first_call = false;
 			}
 			//Call method to do the entertaining
 			//PathPlannerNode *target = this->pathPlanner.getNode(&node2Name);
 	    	//vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-	    	
-    		
+
+
 
 	    	//The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
-	    	if (!(this->movingToResident) ){
+	    	if (!(this->movingToResident) )
+	    	{
 	    		//EntertainmentRobot::doResponse("entertaining");
 	    		ROS_INFO("CHANGED TO ENTERTAINING");
 	    		entertaining=true;
 	    		first = false;
 	    	}
-	    	
+
 			//After finished entertaining set entertaining to flase
 
 		}
-	} else {
+	} 
+	else 
+	{
 		if (entertainednessLevel == 5)
 		{
 			//Add do last desponse call that kurt implimented
+			EntertainmentRobot::stopResponse("entertaining");
 			entertaining = false;
-			
 
-		} else 
+
+		} 
+		else
 		{
-			EntertainmentRobot::doResponse("entertaining");
+
+			if (y == 40)
+			{
+				EntertainmentRobot::doResponse("entertaining");
+				y=0;
+			} 
+			else 
+			{
+				y++;
+			}
+
+			
 			
 		} 
 		
+
 	}
 }
 
@@ -85,7 +104,8 @@ void EntertainmentRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
 
 bool EntertainmentRobot::checkEntertainmentLevel()
 {
-	if (entertainednessLevel>=2 ){
+	if (entertainednessLevel>=2 )
+	{
 		return true;
 	}
 	return false;
