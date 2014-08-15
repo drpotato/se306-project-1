@@ -2,9 +2,7 @@
 #define SE306P1_ACTOR_ENTERTAINMENTROBOT_H_DEFINED
 
 #include "Robot.h"
-
 #include <msg_pkg/Entertainedness.h>
-
 
 class EntertainmentRobot : public Robot
 {
