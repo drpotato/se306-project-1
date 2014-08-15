@@ -7,9 +7,6 @@
 
 class Relative : public Visitor
 {
-
-public:
-  
 protected:
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
@@ -18,19 +15,18 @@ protected:
 
   static void socialnessCallback(msg_pkg::Socialness msg);
 
-  bool interacting;
-  bool first;
-  bool first_call;
+  int8_t socialnessLevel;
+  bool socialising;
 
-  //int status;
-  int8_t residentSocialnessLevel;
-  
-private:
-  // Variable for holding whether or not the relative
-  // is interacting with the Resident actor
-  
   ros::Subscriber subscriberSocialness;
 
+  string residentName;
+  int y;
+  int x;
+  bool first;
+  bool first_call;
+  bool returningHome;
+  bool returningHome_first;
 };
 
 

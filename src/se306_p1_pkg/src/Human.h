@@ -12,4 +12,3 @@ protected:
 
 
 #endif // #ifndef SE306P1_ACTOR_HUMAN_H_DEFINED
-

@@ -125,7 +125,7 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
   residentInstance->velRotational = 1.0; // Rotate to show is being interacted with
 
-  if (attribute == "socialness")
+  if (attribute == "socialising")
   {
   	// Get new level
   	int newLevel = getNewLevel(amount, residentInstance->socialness_level_);

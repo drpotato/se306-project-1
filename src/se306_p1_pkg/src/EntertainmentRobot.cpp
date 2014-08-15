@@ -22,10 +22,6 @@ void EntertainmentRobot::doInitialSetup()
 	first_call = true;
 	returningHome = false;
 	returningHome_first = true;
-
-    //this->activeNode = &node5;
-    //this->startMovingToResident();
-
 }
 
 void EntertainmentRobot::doExecuteLoop()
