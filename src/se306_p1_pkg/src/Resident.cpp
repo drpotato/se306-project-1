@@ -137,7 +137,7 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 	//Assign current socialness level to the message
 	socialnessMessage.level = newLevel;
 
-	if (newLevel = 5)
+	if (newLevel == 5)
 	{
 		residentInstance->stopRobotSpinning();
 	}
@@ -156,7 +156,7 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 	//Assign current socialness level to the message
 	entertainednessMessage.level = newLevel;
 
-	if (newLevel = 5)
+	if (newLevel == 5)
 	{
 		residentInstance->stopRobotSpinning();
 		residentInstance->e_replenished_ = true;
