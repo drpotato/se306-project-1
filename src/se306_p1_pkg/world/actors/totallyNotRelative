@@ -1,0 +1,56 @@
+
+
+define Relative model
+(
+
+	# Left Leg
+	model
+	(
+		size [0.1 0.1 0.3]
+		pose [0.0 -0.075 0.0 0.0]
+		color "ivory2"
+	)
+
+	# Right leg
+	model
+	(
+		size [0.1 0.1 0.3]
+		pose [0.0 0.075 0.0 0.0]
+		color "ivory2"
+	)
+
+	# Belt
+	model
+	(
+		size [0.105 0.25 0.015]
+		pose [0.0 0.0 0.3 0.0]
+		color "chocolate2"
+	)
+
+	
+	# Torso
+	model
+	(
+		size [0.1 0.25 0.335]
+		pose [0.0 0.0 0.315 0.0]
+		color "dark slate gray"
+	)
+
+
+	# Head
+	model
+	(
+		size [0.125 0.125 0.1]
+		pose [0.0 0.0 0.65 0.0]
+		color "yellow"
+	)	
+
+
+	
+
+	# Base
+	size [.35 .35 0.02]
+	color "ivory2"
+	stack_children 0
+	gui_nose 0
+)

@@ -1,0 +1,56 @@
+define couch model
+(
+	# Left arm rest
+	model
+	(
+		size [0.8 0.2 0.6]
+		pose [-0.05 1.0 0.0 0.0]
+		color "SteelBlue3"
+	)
+	
+	# Right arm rest
+	model
+	(
+		size [0.8 0.2 0.6]
+		pose [-0.05 -1.0 0.0 0.0]
+		color "SteelBlue3"
+	)
+	
+	# Left back
+	model
+	(
+		size [0.2 0.9 0.75]
+		pose [-0.35 0.45 0.0 0.0]
+		color "SteelBlue3"
+	)
+	
+	# Right back
+	model
+	(
+		size [0.2 0.9 0.75]
+		pose [-0.35 -0.45 0.0 0.0]
+		color "SteelBlue3"
+	)
+	
+	# Left cushion
+	model
+	(
+		size [0.6 0.9 0.2]
+		pose [0.05 0.45 0.2 0.0]
+		color "SteelBlue3"
+	)
+	
+	# Right cushion
+	model
+	(
+		size [0.6 0.9 0.2]
+		pose [0.05 -0.45 0.2 0.0]
+		color "SteelBlue3"
+	)
+	
+	# Base
+	size [0.7 1.8 0.2]
+	color "SteelBlue3"
+	stack_children 0
+	gui_nose 0
+)
