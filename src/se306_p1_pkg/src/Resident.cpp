@@ -87,7 +87,6 @@ void Resident::doExecuteLoop()
 	}
 	else if (e_replenished_ && (socialness_count_ < WAIT_TIME) && !s_dropped_)
 	{
-		ROS_INFO("socialness increased");
 		socialness_count_++;
 	}
 }
