@@ -60,6 +60,12 @@ Actor::Actor():
     node4.addNeighbour(&nodeDoor);
     node2.addNeighbour(&node5);
     node5.addNeighbour(&node2);
+    
+    node1.addNeighbour(&node5);
+    node5.addNeighbour(&node1);
+    
+    nodeDoor.addNeighbour(&node3);
+    node3.addNeighbour(&nodeDoor);
     nodeDoor.addNeighbour(&node4);
 
     this->pathPlanner.addNode(&node1);
