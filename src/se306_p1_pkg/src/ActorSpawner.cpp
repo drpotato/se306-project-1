@@ -3,6 +3,7 @@
 #include "R0.h"
 #include "R1.h"
 #include "Resident.h"
+#include "Relative.h"
 #include "EntertainmentRobot.h"
 
 #include <cstdio>
