@@ -148,3 +148,6 @@ Session.vim
 ### catkin workspace ###
 devel/*
 /src/CMakeLists.txt
+
+### logs ###
+/log/*

@@ -1,0 +1,19 @@
+# Configuration for generating debug.sh
+# One function per line
+# Function names are not case-sensitive
+# 
+# Functions:
+#   LogDirectory(<directory>)         - Select a directory for outputting log files. Defaults to debuglogs.
+#   Topics(<list of topic names>)     - Display and log the specified topics to the logging directory. Comma-separated.
+# 
+# Examples:
+#
+# 1. LogDirectory(debuglog)
+#
+# 2. Topics(socialness, entertainedness)
+#
+# 3. Topics(socialness)
+#    Topics(entertainedness) # This and the line above are together equivalent to Topics(socialness, entertainedness)
+
+LogDirectory(log)
+Topics(entertainedness, interaction, socialness)
