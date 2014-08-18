@@ -1,5 +1,55 @@
 define Resident position
 (
-  size [0.35 0.35 1.25]
-  drive "diff"
+
+	# Left Leg
+	model
+	(
+		size [0.2 0.2 0.678]
+		pose [0.0 -0.15 0.0 0.0]
+		color "ivory2"
+	)
+
+	# Right leg
+	model
+	(
+		size [0.2 0.2 0.678]
+		pose [0.0 0.15 0.0 0.0]
+		color "ivory2"
+	)
+
+	# Belt
+	model
+	(
+		size [0.21 0.5 0.0339]
+		pose [0.0 0.0 0.678 0.0]
+		color "chocolate2"
+	)
+
+	
+	# Torso
+	model
+	(
+		size [0.2 0.5 0.7571]
+		pose [0.0 0.0 0.7119 0.0]
+		color "dark slate gray"
+	)
+
+
+	# Head
+	model
+	(
+		size [0.25 0.25 0.226]
+		pose [0.0 0.0 1.469 0.0]
+		color "yellow"
+	)	
+
+
+	
+
+	# Base
+	size [.5 .5 0.02]
+    drive "diff"
+	color "ivory2"
+	stack_children 0
+	gui_nose 0
 )
