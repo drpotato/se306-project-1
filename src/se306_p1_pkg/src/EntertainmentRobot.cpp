@@ -30,18 +30,20 @@ void EntertainmentRobot::doExecuteLoop()
 		//ROS_INFO("MOVEING TO HOME");
 
 		if (returningHome_first){
-			this->activeNode = &node1;
 			returningHome_first = false;
 			//TODO: Matt fix this shit (Target node reset upon reach destination)
-			targetNode = 0;
+			//targetNode = 0;
 		}
-		PathPlannerNode *target = this->pathPlanner.getNode(&node5Name);
+		/*
+        PathPlannerNode *target = this->pathPlanner.getNode(&node5Name);
         vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
         if (this->goToNode(path))
         {
         	//ROS_INFO("ARRIVE HOME");
         	returningHome=false;
-        }
+        }*/
+        
+        
         return;
 
 	}
@@ -56,7 +58,7 @@ void EntertainmentRobot::doExecuteLoop()
 		{
 			if (first_call)
 			{
-				this->activeNode = &node5;
+				//this->activeNode = &node5;
 				this->startMovingToResident();
 				first_call = false;
 			}

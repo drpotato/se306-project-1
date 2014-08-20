@@ -27,18 +27,18 @@ void Relative::doExecuteLoop()
         //ROS_INFO("MOVEING TO HOME");
 
         if (returningHome_first){
-            this->activeNode = &node1;
+            //this->activeNode = &node1;
             returningHome_first = false;
             //TODO: Matt fix this shit (Target node reset upon reach destination)
-            targetNode = 0;
+            //targetNode = 0;
         }
-        PathPlannerNode *target = this->pathPlanner.getNode(&nodeDoorName);
-        vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+        /*PathPlannerNode *target = this->pathPlanner.getNode(&nodeDoorName);
+        vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);*
         if (this->goToNode(path))
         {
             //ROS_INFO("ARRIVE HOME");
             returningHome=false;
-        }
+        }*/
         return;
 
     }
@@ -53,7 +53,7 @@ void Relative::doExecuteLoop()
         {
             if (first_call)
             {
-                this->activeNode = &nodeDoor;
+                //this->activeNode = &nodeDoor;
                 this->startMovingToResident();
                 first_call = false;
             }

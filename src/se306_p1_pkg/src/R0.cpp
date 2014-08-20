@@ -11,7 +11,5 @@ void R0::doInitialSetup()
 
 void R0::doExecuteLoop()
 {
-    PathPlannerNode *target = this->pathPlanner.getNode(&node4Name);
-    vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-    this->goToNode(path);
+
 }

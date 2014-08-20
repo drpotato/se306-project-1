@@ -67,7 +67,13 @@ protected:
 	std::string stageName;
 
     //Path Planner
-    bool goToNode(vector<PathPlannerNode*>&);
+    bool goToNode(vector<PathPlannerNode*> &path);
+    PathPlannerNode* getActiveNode();
+
+    bool movingToResident;
+
+private:
+    
     PathPlanner pathPlanner;
     PathPlannerNode *activeNode;
     double faceDirection(double,double);
@@ -86,7 +92,6 @@ protected:
     string node5Name;
     string nodeDoorName;
 
-    bool movingToResident;
    
 };
 
