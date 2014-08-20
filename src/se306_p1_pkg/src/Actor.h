@@ -67,7 +67,7 @@ protected:
 	std::string stageName;
 
     //Path Planner
-    bool goToNode(vector<PathPlannerNode*>&);
+    bool goToNode(std::string);
     PathPlannerNode* getActiveNode();
 
     bool movingToResident;
