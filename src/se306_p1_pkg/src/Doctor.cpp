@@ -23,7 +23,7 @@ void Doctor::healthCallback(msg_pkg::Health msg)
 	Doctor* temp = dynamic_cast<Doctor*>( ActorSpawner::getInstance().getActor());
 	temp->healthLevel = msg.level;
 
-	if (msg.level < 1){
+	if (msg.level < 2){
 		temp->emergency();
 	}
 
