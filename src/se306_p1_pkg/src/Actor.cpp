@@ -273,13 +273,13 @@ bool Actor::gotoPosition(double x,double y){
 bool Actor::goToNode(vector<PathPlannerNode*> &path){
     //Get the node
     if (targetNode >= path.size()){
+        //We have arrived at the last node
         this->velLinear = 0;
-
+        
         return true;
     }
     if (!this->gotoPosition(path[targetNode]->px,path[targetNode]->py)){
-
-        //this->activeNode = path[targetNode];
+        this->activeNode = path[targetNode];
         targetNode++;
     }else{
         ROS_DEBUG("current position %f %f",px,py);

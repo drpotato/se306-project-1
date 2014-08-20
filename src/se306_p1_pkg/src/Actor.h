@@ -68,6 +68,12 @@ protected:
 
     //Path Planner
     bool goToNode(vector<PathPlannerNode*>&);
+    PathPlannerNode* getActiveNode();
+
+    bool movingToResident;
+
+private:
+    
     PathPlanner pathPlanner;
     PathPlannerNode *activeNode;
     double faceDirection(double,double);
@@ -86,7 +92,6 @@ protected:
     string node5Name;
     string nodeDoorName;
 
-    bool movingToResident;
    
 };
 
