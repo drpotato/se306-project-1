@@ -14,6 +14,7 @@
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
+
 namespace
 {
 	std::string generateNodeName(unsigned int ID);
@@ -21,6 +22,7 @@ namespace
 }
 
 Actor::Actor():
+    // Zero out these pointers initially in case someone accidentally dereferences them too soon
 	velLinear(0.0),
 	velRotational(0.0),
 	pxInitial(0.0),
@@ -29,21 +31,27 @@ Actor::Actor():
 	px(0.0),
 	py(0.0),
 	theta(0.0),
-
-	// Zero out these pointers in case someone accidentally dereferences them too soon
 	nodeHandle(0),
 	loopRate(0)
 
 {
-    //Create path planner and setup nodes
+    //Create path planner and setup navigation waypoint nodes.
     this->pathPlanner = PathPlanner();
     this->targetNode = 0;
+
+    // Next to the Resident.
     node1Name = "testnode1";
+
     node2Name = "testnode2";
     node3Name = "testnode3";
     node4Name = "testnode4";
+
+    // Next to the Entertainment Robot.
+
     node5Name = "testnode5";
+    // At the door to the house
     nodeDoorName = "nodeDoorName";
+
     node1 = PathPlannerNode(&node1Name,-2.5,3);
     node2 = PathPlannerNode(&node2Name,-2.5,-0);
     node3 = PathPlannerNode(&node3Name,3,0);
@@ -51,23 +59,28 @@ Actor::Actor():
     node5 = PathPlannerNode(&node5Name, -2.5, -3);
     nodeDoor = PathPlannerNode(&nodeDoorName,2.8,5);
 
+    // Specify which nodes have a clear line of sight to each other.
     node1.addNeighbour(&node2);
+    node1.addNeighbour(&node5);
+
     node2.addNeighbour(&node1);
     node2.addNeighbour(&node3);
+    node2.addNeighbour(&node5);
+
     node3.addNeighbour(&node2);
     node3.addNeighbour(&node4);
+    node3.addNeighbour(&nodeDoor);
+
     node4.addNeighbour(&node3);
     node4.addNeighbour(&nodeDoor);
-    node2.addNeighbour(&node5);
+
     node5.addNeighbour(&node2);
-    
-    node1.addNeighbour(&node5);
     node5.addNeighbour(&node1);
     
     nodeDoor.addNeighbour(&node3);
-    node3.addNeighbour(&nodeDoor);
     nodeDoor.addNeighbour(&node4);
 
+    // Add the nodes to the path planner's graph of nodes and connections.
     this->pathPlanner.addNode(&node1);
     this->pathPlanner.addNode(&node2);
     this->pathPlanner.addNode(&node3);
@@ -93,7 +106,6 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	pxInitial = px;
 	pyInitial = py;
 	thetaInitial = theta;
-
 
 	// ros::init needs L-values, so we can't just directly pass (0, ...)
 	int fakeArgC = 0;
@@ -152,34 +164,36 @@ void Actor::StageOdom_callback(nav_msgs::Odometry msg)
   actorPtr->px = actorPtr->pxInitial + msg.pose.pose.position.x;
   actorPtr->py = actorPtr->pyInitial + msg.pose.pose.position.y;
   actorPtr->theta = actorPtr->thetaInitial + tf::getYaw(msg.pose.pose.orientation);
-  // std::stringstream ss;
-  // ss << ActorSpawner::getInstance().getActor("")->px;
-  // ROS_INFO("%s", ss.str().c_str());
 }
 
+// Process messages publish to the 'location' topic.
+// These messages each contain the current location of a single Actor.
 void Actor::locationCallback(msg_pkg::Location msg)
 {
 
 }
 
+// Publish a message containing own x and y coordinates to the 'location' topic.
 void Actor::publishLocation()
 {
-	//Create a location message to publish
+	// Create a location message to publish.
 	msg_pkg::Location locationMessage;
-	//Assign current x and y values to message
+	// Assign current x and y values to message.
 	locationMessage.xpos = px;
 	locationMessage.ypos = py;
-	//Assign id to rosName
+	// Assign id to rosName.
 	locationMessage.id = rosName;
-	//Publish the message
+	// Publish the message.
 	publisherLocation.publish(locationMessage);
 }
 
+// Process messages coming from Stage.
 void Actor::executeLoopStageSubscription()
 {
 
 }
 
+// Publish any changes in linear and rotational velocity to Stage.
 void Actor::executeLoopStagePublication()
 {
 	// Create and publish a velocity command.
@@ -231,7 +245,7 @@ bool Actor::moveToResident() {
 }
 
 double Actor::faceDirection(double x,double y){
-
+    // Calculate target angle.
     double vx = x-this->px;
     double vy = y-this->py;
 
@@ -239,16 +253,15 @@ double Actor::faceDirection(double x,double y){
     double ay = cos(this->theta)*vy - sin(this->theta)*vx;
 
     double angle = atan2(ay,ax);
-    //Calculate target angle
 
-    //Set velocity to face the angle using PID
-
+    // Set velocity to face the angle using PID.
     this->velRotational = (angle)*1;
     return abs(angle);
 }
 
+// Moves the Actor in a straight line towards the given x and y coordinates.
 bool Actor::gotoPosition(double x,double y){
-    //Face the node
+    // Face the node
     if (faceDirection(x,y) < 0.1){
         double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
 

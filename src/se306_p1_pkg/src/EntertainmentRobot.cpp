@@ -6,8 +6,7 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 
-
-
+// A Robot that provides the Resident with entertainment (possibly TV)
 void EntertainmentRobot::doInitialSetup()
 {
 	velLinear = 0.0;
@@ -34,15 +33,6 @@ void EntertainmentRobot::doExecuteLoop()
 			//TODO: Matt fix this shit (Target node reset upon reach destination)
 			//targetNode = 0;
 		}
-		/*
-        PathPlannerNode *target = this->pathPlanner.getNode(&node5Name);
-        vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-        if (this->goToNode(path))
-        {
-        	//ROS_INFO("ARRIVE HOME");
-        	returningHome=false;
-        }*/
-        
         
         return;
 
@@ -50,11 +40,7 @@ void EntertainmentRobot::doExecuteLoop()
 
 	if (!entertaining)
 	{
-		if (checkEntertainmentLevel())
-		{
-			//ROS_INFO("Nothing to do here");
-		} 
-		else 
+		if (!checkEntertainmentLevel())
 		{
 			if (first_call)
 			{
@@ -62,13 +48,7 @@ void EntertainmentRobot::doExecuteLoop()
 				this->startMovingToResident();
 				first_call = false;
 			}
-			//Call method to do the entertaining
-			//PathPlannerNode *target = this->pathPlanner.getNode(&node2Name);
-	    	//vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
 
-
-
-	    	//The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
 	    	if (!(this->movingToResident) )
 	    	{
 	    		//EntertainmentRobot::doResponse("entertaining");
@@ -108,6 +88,7 @@ void EntertainmentRobot::doExecuteLoop()
 }
 
 
+// Upon receiving a message published to the 'entertainedness' topic, respond appropriately.
 void EntertainmentRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
 {
  	EntertainmentRobot* temp = dynamic_cast<EntertainmentRobot*>( ActorSpawner::getInstance().getActor());

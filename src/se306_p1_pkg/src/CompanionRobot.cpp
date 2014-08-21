@@ -6,8 +6,7 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 
-
-
+// A robot who provides the Resident with companionship (could be a robotic dog, a video call system, sex bot)
 void CompanionRobot::doInitialSetup()
 {
 	velLinear = 0.0;
@@ -34,27 +33,13 @@ void CompanionRobot::doExecuteLoop()
 			//TODO: Matt fix this shit (Target node reset upon reach destination)
 			//targetNode = 0;
 		}
-		/*
-        PathPlannerNode *target = this->pathPlanner.getNode(&node5Name);
-        vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-        if (this->goToNode(path))
-        {
-        	//ROS_INFO("ARRIVE HOME");
-        	returningHome=false;
-        }*/
-
 
         return;
-
 	}
 
 	if (!entertaining)
 	{
-		if (checkCompanionLevel())
-		{
-			//ROS_INFO("Nothing to do here");
-		}
-		else
+		if (!checkCompanionLevel())
 		{
 			if (first_call)
 			{
@@ -62,13 +47,6 @@ void CompanionRobot::doExecuteLoop()
 				this->startMovingToResident();
 				first_call = false;
 			}
-			//Call method to do the entertaining
-			//PathPlannerNode *target = this->pathPlanner.getNode(&node2Name);
-	    	//vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-
-
-
-	    	//The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
 	    	if (!(this->movingToResident) )
 	    	{
 	    		//CompanionRobot::doResponse("entertaining");
@@ -107,7 +85,7 @@ void CompanionRobot::doExecuteLoop()
 	}
 }
 
-
+// TODO: SHOULD BE COMPANIONSHIP/LONELINESS ########################################################################################################
 void CompanionRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
 {
  	CompanionRobot* temp = dynamic_cast<CompanionRobot*>( ActorSpawner::getInstance().getActor());

@@ -7,7 +7,7 @@
 #include "ActorSpawner.h"
 
 
-
+// A Robot to cook meals for the Resident. Meals happen according to a regular schedule and can[not] be interrupted.
 void CookingRobot::doInitialSetup()
 {
 	velLinear = 0.0;
@@ -34,15 +34,6 @@ void CookingRobot::doExecuteLoop()
 			//TODO: Matt fix this shit (Target node reset upon reach destination)
 			//targetNode = 0;
 		}
-		/*
-        PathPlannerNode *target = this->pathPlanner.getNode(&node5Name);
-        vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-        if (this->goToNode(path))
-        {
-        	//ROS_INFO("ARRIVE HOME");
-        	returningHome=false;
-        }*/
-
 
         return;
 
@@ -50,11 +41,7 @@ void CookingRobot::doExecuteLoop()
 
 	if (!entertaining)
 	{
-		if (checkCookingLevel())
-		{
-			//ROS_INFO("Nothing to do here");
-		}
-		else
+		if (!checkCookingLevel())
 		{
 			if (first_call)
 			{
@@ -62,13 +49,6 @@ void CookingRobot::doExecuteLoop()
 				this->startMovingToResident();
 				first_call = false;
 			}
-			//Call method to do the entertaining
-			//PathPlannerNode *target = this->pathPlanner.getNode(&node2Name);
-	    	//vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-
-
-
-	    	//The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
 	    	if (!(this->movingToResident) )
 	    	{
 	    		//CookingRobot::doResponse("entertaining");
@@ -76,9 +56,6 @@ void CookingRobot::doExecuteLoop()
 	    		entertaining=true;
 	    		first = false;
 	    	}
-
-			//After finished entertaining set entertaining to flase
-
 		}
 	}
 	else
@@ -107,7 +84,7 @@ void CookingRobot::doExecuteLoop()
 	}
 }
 
-
+// TODO: SHOULD BE COOKING/FOOD ########################################################################################################################
 void CookingRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
 {
  	CookingRobot* temp = dynamic_cast<CookingRobot*>( ActorSpawner::getInstance().getActor());
