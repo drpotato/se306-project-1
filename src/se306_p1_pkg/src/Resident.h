@@ -5,6 +5,9 @@
 #include <msg_pkg/Interaction.h>
 #include "ros/ros.h"
 
+// Typedef for dbl-precision printing in randomEventLoop()
+typedef std::numeric_limits< double > dbl;
+
 class Resident : public Human
 {
 public:
@@ -16,6 +19,7 @@ protected:
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg);
+  static float getRandom(float, float);
   void randomEventLoop();
   
 private:
@@ -29,10 +33,16 @@ private:
   const static int WAIT_TIME = 50;
   bool e_replenished_;
 
-	// Randomness variables	
+	/* Randomness variables 
 	int randomData;
 	int myRandomInteger;
 	size_t randomDataLen;
+	*/
+
+	// Delay measurement variables
+	long long msAtPreviousLoop;
+	float randNum;
+	
 
   // Levels (1 = critical, attention required; 
 	// 5 = optimal, 'maximum')

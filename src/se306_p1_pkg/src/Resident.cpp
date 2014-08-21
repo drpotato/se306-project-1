@@ -1,6 +1,16 @@
 #include "Resident.h"
 #include <string.h>
+
+/* Old RNG includes
 #include <fcntl.h> // File access for RNG
+#include <ctime> // as above
+#include <limits> // Get information about max double/float prec.
+*/
+
+#include <time.h> // seed for rand()
+#include <stdlib.h> // rand()
+#include <limits> // Get information about max double/float prec.
+
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/Socialness.h>
 #include <msg_pkg/Entertainedness.h>
@@ -30,6 +40,9 @@ void Resident::doInitialSetup()
 
   // Set up subscribers
   subscriberInteraction = nodeHandle->subscribe("interaction", 1000, Resident::interactionCallback);
+
+  // Reset delay counter
+  msAtPreviousLoop = 0;
 
 }
 
@@ -207,12 +220,87 @@ void Resident::stopRobotSpinning()
 // human behaviours and needs
 void Resident::randomEventLoop()
 {
-	//ROS_INFO("Calculating random event(s)...");
+
+	ROS_INFO("Calculating random event(s)...\n");
+	//ROS_INFO("System time: %d\n", msExpiredPrevious);
 	
+	// - Delay test 
+	// Return time in milliseconds to check delay between
+	// *full* ROS loops
+	// KEEP THIS HERE - This time will change as more load is added
+	// to roscore; randomEventLoop() will have to change in response to this
+
+	
+
+
+	// DELAY TEST
+
+	///////////////////////
+	// Time measurement ///
+	struct timeval t_e; 
+    gettimeofday(&t_e, NULL); // get current time
+    long long milliseconds = t_e.tv_sec * 1000LL + t_e.tv_usec / 1000; // calculate milliseconds
+    //printf("milliseconds: %lld\n", milliseconds);
+	
+	printf("time since last loop = %lldms\n", (milliseconds - msAtPreviousLoop));
+	msAtPreviousLoop = milliseconds;
+	///////////////////////
+
+
+	int drop;
+	
+	// Description:
+	// Entertainedness, morale, health, fitness, hunger and thirst all
+	// drop over time, but not linearly.
+	
+	
+	// Entertainedness drops fastest and is most affected by randomness.
+	printf("rng = %.3f", getRandom(float(0), float(100)));
+
+	// Morale also drops quickly but is less affected by randomness than
+	// entertainedness.
+	randNum = (float)rand() / (float)RAND_MAX;
+
+	// Health drops in two ways, either almost completely linearly or in a
+	// random, drastic fashion.
+	randNum = (float)rand() / (float)RAND_MAX;
+
+	// Hunger drops almost completely linearly...
+	randNum = (float)rand() / (float)RAND_MAX;
+
+	// ...as does thirst
+	randNum = (float)rand() / (float)RAND_MAX;
+
+	
+
+
+
+	
+
+}
+
+
+// Basic random number generator with min/range input,
+// uses C's 'rand()'
+float Resident::getRandom(float minimum, float range) {
+	float rn = (float)rand() / (float)RAND_MAX;
+    rn = minimum += (rn * range);
+	return rn;
+}
+
+
+void oldRNG()
+{
+	// True random number generator (uses an entropy pool as opposed to
+	// time.h seed, too CPU intensive for the moment)
 
 	// Access/dev/random in read-only for true, random 
 	// number generation
-	randomData = open("/dev/random", O_RDONLY);
+	
+	//DELAY TEST
+	//clock_t begin = clock();
+
+	/*randomData = open("/dev/random", O_RDONLY);
 	myRandomInteger;
 	randomDataLen = 0;
 	
@@ -224,17 +312,20 @@ void Resident::randomEventLoop()
 		// the random number is being generated and assigned to result
 		if (randomResult < 0)
 		{
-			//ROS_INFO("Unable to read /dev/random, resorting to alternative RNG");
+			ROS_INFO("Unable to read /dev/random, resorting to alternative RNG");
 		}
 
 		randomDataLen += randomResult;
 	}
 
 	close(randomData);
-	//ROS_INFO("Random number generated: %d", randomDataLen);
+	ROS_INFO("Random number generated: %zu", randomDataLen);
 
+	// DELAY TEST
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	cout.precision(dbl::digits10);
+	cout << "Delay: " << fixed << elapsed_secs << endl;
 
-
-
-	// Entertainedness drop
+	*/
 }
