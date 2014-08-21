@@ -11,10 +11,10 @@ void EntertainmentRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
-	entertainednessLevel = 5;
+	moraleLevel = 5;
 	entertaining = false;
 	residentName = "RobotNode2";
-	subscriberEntertainedness = nodeHandle->subscribe("entertainedness", 1000, EntertainmentRobot::entertainednessCallback);
+	subscriberMorale = nodeHandle->subscribe("morale", 1000, EntertainmentRobot::moraleCallback);
 	y = 0;
 	x = 0;
 	first = true;
@@ -40,7 +40,7 @@ void EntertainmentRobot::doExecuteLoop()
 
 	if (!entertaining)
 	{
-		if (!checkEntertainmentLevel())
+		if (!checkMoraleLevel())
 		{
 			if (first_call)
 			{
@@ -63,7 +63,7 @@ void EntertainmentRobot::doExecuteLoop()
 	} 
 	else 
 	{
-		if (entertainednessLevel == 5)
+		if (moraleLevel == 5)
 		{
 			//Add do last desponse call that kurt implimented
 			EntertainmentRobot::stopResponse("entertaining");
@@ -89,17 +89,17 @@ void EntertainmentRobot::doExecuteLoop()
 
 
 // Upon receiving a message published to the 'entertainedness' topic, respond appropriately.
-void EntertainmentRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
+void EntertainmentRobot::moraleCallback(msg_pkg::Morale msg)
 {
  	EntertainmentRobot* temp = dynamic_cast<EntertainmentRobot*>( ActorSpawner::getInstance().getActor());
 
- 	temp->entertainednessLevel = msg.level;
+ 	temp->moraleLevel = msg.level;
  	//ROS_INFO("Changed value");
 }
 
-bool EntertainmentRobot::checkEntertainmentLevel()
+bool EntertainmentRobot::checkMoraleLevel()
 {
-	if (entertainednessLevel>=2 )
+	if (moraleLevel>=2 )
 	{
 		return true;
 	}

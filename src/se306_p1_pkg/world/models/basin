@@ -1,0 +1,89 @@
+define basin model
+(
+	# Basin Surface Back
+	model
+	(
+		size [0.15 0.6 0.16]
+		pose [-0.125 0.0 0.7 0.0]
+		color "white"
+	)
+	
+	# Basin Surface Front
+	model
+	(
+		size [0.05 0.6 0.16]
+		pose [0.225 0.0 0.7 0.0]
+		color "white"
+	)
+	
+	# Basin Surface Right
+	model
+	(
+		size [0.25 0.05 0.16]
+		pose [0.075 0.275 0.7 0.0]
+		color "white"
+	)
+	
+	# Basin Surface Left
+	model
+	(
+		size [0.25 0.05 0.16]
+		pose [0.075 -0.275 0.7 0.0]
+		color "white"
+	)
+	
+	# Basin Floor
+	model
+	(
+		size [0.4 0.55 0.04]
+		pose [0.0 0.0 0.66 0.0]
+		color "white"
+	)
+	
+	# Basin Tap Base
+	model
+	(
+		size [0.04 0.06 0.06]
+		pose [-0.125 0.0 0.86 0.0]
+		color "grey"
+	)
+	
+	# Basin Tap End
+	model
+	(
+		size [0.24 0.06 0.06]
+		pose [-0.025 0.0 0.92 0.0]
+		color "grey"
+	)
+	
+	# Basin Handle R
+	model
+	(
+		size [0.04 0.04 0.04]
+		pose [-0.125 0.15 0.86 45.0]
+		color "grey"
+	)
+	
+	# Basin Handle L
+	model
+	(
+		size [0.04 0.04 0.04]
+		pose [-0.125 -0.15 0.86 45.0]
+		color "grey"
+	)
+	
+	# Basin Stand
+	model
+	(
+		size [0.2 0.3 0.66]
+		pose [-0.1 0.0 0.0 0.0]
+		color "white"
+	)
+	
+	# Base
+	size [0.4 0.6 0.02]
+	color "white"
+	stack_children 0
+	obstacle_return 0
+	gui_nose 0
+)

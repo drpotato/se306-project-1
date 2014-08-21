@@ -2,9 +2,11 @@
 #include <string.h>
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/Socialness.h>
-#include <msg_pkg/Entertainedness.h>
+#include <msg_pkg/Morale.h>
 #include "Actor.h"
 #include "ActorSpawner.h"
+#include <ctime>
+#include <sstream>
 
 // The person living in our house. 
 // Has various attributes representing his needs/wants, which degrade over time.
@@ -18,18 +20,20 @@ void Resident::doInitialSetup()
   // Any other Actor can interact with him and acquire the lock.
   lock_ = false;
 
+  time_of_day = std::time(0);
+
   // Set levels to maximum initially.
-  entertainedness_level_ = 5;
+  morale_level_ = 5;
   socialness_level_ = 5;
 
-  entertainment_count_ = 0;
+  morale_count_ = 0;
   socialness_count_ = 0;
-  e_dropped_ = false;
-  e_replenished_ = false;
+  m_dropped_ = false;
+  m_replenished_ = false;
 
   // Set up publishers.
   publisherSocialness = nodeHandle->advertise<msg_pkg::Socialness>("socialness", 1000);
-  publisherEntertainedness = nodeHandle->advertise<msg_pkg::Entertainedness>("entertainedness", 1000);
+  publisherMorale = nodeHandle->advertise<msg_pkg::Morale>("morale", 1000);
 
   // Set up subscriptions.
   subscriberInteraction = nodeHandle->subscribe("interaction", 1000, Resident::interactionCallback);
@@ -37,32 +41,33 @@ void Resident::doInitialSetup()
 
 void Resident::doExecuteLoop()
 {    
-	if (entertainment_count_ >= WAIT_TIME && !e_dropped_)
+	//ROS_INFO("%s", ctime(&time_of_day));
+	if (morale_count_ >= WAIT_TIME && !m_dropped_)
 	{
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
-		if(residentInstance->entertainedness_level_ <= 1)
+		if(residentInstance->morale_level_ <= 1)
 		{
 			// don't drop the value any more, it's being tended to or has been already
-			e_dropped_ = true;
+			m_dropped_ = true;
 		}
 		else 
 		{
 			// Reduce the level every 1000 counts
-			residentInstance->entertainedness_level_--;
+			residentInstance->morale_level_--;
 			// Create a socialness message to publish
-			msg_pkg::Entertainedness entertainednessMessage;
+			msg_pkg::Morale moraleMessage;
 			// Assign current socialness level to the message
-			entertainednessMessage.level = residentInstance->entertainedness_level_;
+			moraleMessage.level = residentInstance->morale_level_;
 			// Publish the message
-			residentInstance->publisherEntertainedness.publish(entertainednessMessage);
+			residentInstance->publisherMorale.publish(moraleMessage);
 		}
-		entertainment_count_ = 0;
+		morale_count_ = 0;
 	}
-	else if (entertainment_count_ < WAIT_TIME && !e_dropped_) {
-		entertainment_count_++;
+	else if (morale_count_ < WAIT_TIME && !m_dropped_) {
+		morale_count_++;
 	}
 
-	else if (e_replenished_ && (socialness_count_ >= WAIT_TIME) && !s_dropped_) {
+	else if (m_replenished_ && (socialness_count_ >= WAIT_TIME) && !s_dropped_) {
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
 		if(residentInstance->socialness_level_ <= 1) {
 			// don't drop the value any more, it's being tended to or has been already
@@ -81,7 +86,7 @@ void Resident::doExecuteLoop()
 		}
 		socialness_count_ = 0;
 	}
-	else if (e_replenished_ && (socialness_count_ < WAIT_TIME) && !s_dropped_)
+	else if (m_replenished_ && (socialness_count_ < WAIT_TIME) && !s_dropped_)
 	{
 		socialness_count_++;
 	}
@@ -145,22 +150,22 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   else if (attribute == "entertaining")
   {
 	// Get new level
-	int newLevel = getNewLevel(amount, residentInstance->entertainedness_level_);
+	int newLevel = getNewLevel(amount, residentInstance->morale_level_);
 	// Update the residents socialness level
-	residentInstance->entertainedness_level_ = newLevel;
+	residentInstance->morale_level_ = newLevel;
 	//Create a socialness message to publish
-	msg_pkg::Entertainedness entertainednessMessage;
+	msg_pkg::Morale moraleMessage;
 	//Assign current socialness level to the message
-	entertainednessMessage.level = newLevel;
+	moraleMessage.level = newLevel;
 
 	if (newLevel == 5)
 	{
 		residentInstance->stopRobotSpinning();
-		residentInstance->e_replenished_ = true;
+		residentInstance->m_replenished_ = true;
 	}
 
 	//Publish the message
-	residentInstance->publisherEntertainedness.publish(entertainednessMessage);
+	residentInstance->publisherMorale.publish(moraleMessage);
   }
   // TODO: put others in when implemented ##################################################################################################################
 }

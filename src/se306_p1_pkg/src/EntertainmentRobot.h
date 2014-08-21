@@ -2,7 +2,7 @@
 #define SE306P1_ACTOR_ENTERTAINMENTROBOT_H_DEFINED
 
 #include "Robot.h"
-#include <msg_pkg/Entertainedness.h>
+#include <msg_pkg/Morale.h>
 
 class EntertainmentRobot : public Robot
 {
@@ -10,14 +10,14 @@ protected:
 	virtual void doInitialSetup(); 
 	virtual void doExecuteLoop();
 
-	bool checkEntertainmentLevel();
+	bool checkMoraleLevel();
 
-	static void entertainednessCallback(msg_pkg::Entertainedness msg);
+	static void moraleCallback(msg_pkg::Morale msg);
 
-	int8_t entertainednessLevel;
+	int8_t moraleLevel;
 	bool entertaining;
 
-	ros::Subscriber subscriberEntertainedness;
+	ros::Subscriber subscriberMorale;
 
 	string residentName;
 	int y;
