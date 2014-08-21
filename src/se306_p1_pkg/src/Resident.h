@@ -5,8 +5,11 @@
 #include <msg_pkg/Interaction.h>
 #include "ros/ros.h"
 
+<<<<<<< HEAD
 // Typedef for dbl-precision printing in randomEventLoop()
 typedef std::numeric_limits< double > dbl;
+// Uncomment this to use Conor's very high-quality (but sometimes blocking) PRNG stream.
+//#define USE_DEV_RANDOM
 
 class Resident : public Human
 {
@@ -42,7 +45,14 @@ private:
 	// Delay measurement variables
 	long long msAtPreviousLoop;
 	float randNum;
-	
+
+
+#ifdef USE_DEV_RANDOM
+	// Randomness variables	
+	int randomData;
+	int myRandomInteger;
+	size_t randomDataLen;
+#endif    
 
   // Levels (1 = critical, attention required; 
 	// 5 = optimal, 'maximum')

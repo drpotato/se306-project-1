@@ -1,5 +1,6 @@
 #include "Resident.h"
 #include <string.h>
+<<<<<<< HEAD
 
 /* Old RNG includes
 #include <fcntl.h> // File access for RNG
@@ -11,6 +12,14 @@
 #include <stdlib.h> // rand()
 #include <limits> // Get information about max double/float prec.
 
+=======
+#ifdef USE_DEV_RANDOM
+	#include <fcntl.h> // File access for RNG
+#else
+	#include <cstdlib>
+	#include <ctime>
+#endif
+>>>>>>> 2a40830626953ffb410a9af91e5fb8b9b8ba9e7f
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/Socialness.h>
 #include <msg_pkg/Entertainedness.h>
@@ -41,9 +50,16 @@ void Resident::doInitialSetup()
   // Set up subscribers
   subscriberInteraction = nodeHandle->subscribe("interaction", 1000, Resident::interactionCallback);
 
+<<<<<<< HEAD
   // Reset delay counter
   msAtPreviousLoop = 0;
 
+=======
+#ifndef USE_DEV_RANDOM
+  // Seed the PRNG
+  std::srand(std::time(NULL));
+#endif
+>>>>>>> 2a40830626953ffb410a9af91e5fb8b9b8ba9e7f
 }
 
 void Resident::doExecuteLoop()
@@ -220,6 +236,7 @@ void Resident::stopRobotSpinning()
 // human behaviours and needs
 void Resident::randomEventLoop()
 {
+<<<<<<< HEAD
 
 	ROS_INFO("Calculating random event(s)...\n");
 	//ROS_INFO("System time: %d\n", msExpiredPrevious);
@@ -275,6 +292,10 @@ void Resident::randomEventLoop()
 
 
 
+=======
+#ifdef USE_DEV_RANDOM
+	//ROS_INFO("Calculating random event(s)...");
+>>>>>>> 2a40830626953ffb410a9af91e5fb8b9b8ba9e7f
 	
 
 }
@@ -296,11 +317,16 @@ void oldRNG()
 
 	// Access/dev/random in read-only for true, random 
 	// number generation
-	
 	//DELAY TEST
 	//clock_t begin = clock();
 
 	/*randomData = open("/dev/random", O_RDONLY);
+	randomData = open("/dev/random", O_RDONLY);
+	// Note: /dev/random blocks when it's empty, and it seems to become empty pretty quickly :(
+	// It's probably higher quality than we need, but /dev/urandom sounds like it might be an okay compromise
+	// It takes the numbers from /dev/random, but also generates new lower-quality pseudo-random numbers instead of blocking
+	// I reckon we can get away with using C's rand(), which is just a simple linear congruential generator, but we're not storing passwords or anything.
+
 	myRandomInteger;
 	randomDataLen = 0;
 	
@@ -320,6 +346,22 @@ void oldRNG()
 
 	close(randomData);
 	ROS_INFO("Random number generated: %zu", randomDataLen);
+	//ROS_INFO("Random number generated: %d", randomDataLen);
+	
+#else // Use C's rand()
+
+	long myRandomInteger = 0;
+	
+	// RAND_MAX is guaranteed to be >= 32767, but that's 15 bytes, so to cover 32 bytes completely, we'll need to do it in 3 stages
+	for (int shiftVal = 0; shiftVal < 32; shiftVal += 15)
+	{
+		// Fill out myRandomInteger, 15 bits at a time
+		myRandomInteger |= (std::rand() & 0x7fff) << shiftVal;
+	}
+	
+	//ROS_INFO("Random number generated: %d", myRandomInteger);
+#endif
+
 
 	// DELAY TEST
 	clock_t end = clock();
