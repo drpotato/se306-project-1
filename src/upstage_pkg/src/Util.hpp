@@ -1,0 +1,9 @@
+#ifndef SE306P1_UPSTAGE_UTIL_HPP_DEFINED
+#define SE306P1_UPSTAGE_UTIL_HPP_DEFINED
+
+namespace ups
+{
+	
+}
+
+#endif // #ifndef SE306P1_UPSTAGE_UTIL_HPP_DEFINED

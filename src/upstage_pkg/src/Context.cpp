@@ -1,6 +1,12 @@
 #include "Context.hpp"
 #include "Debug.hpp"
-#include <unistd.h>
+#include "Util.hpp"
+#include <cstdlib>
+
+namespace
+{
+	void getOpenGLVersion(int &outMajor, int &outMinor);
+}
 
 ups::Context &ups::Context::getContext()
 {
@@ -97,8 +103,12 @@ void ups::Context::onResize()
 
 void ups::Context::setupGL()
 {
+	// Find what version of OpenGL we're running
+	getOpenGLVersion(_glVersionMajor, _glVersionMinor);
+	UPS_LOGF("getOpenGLVersion(%d, %d)", _glVersionMajor, _glVersionMinor);
+	
 	glEnable(GL_DEPTH_TEST);
-	glClearColor(1.f, 0.f, 1.f, 1.f);
+	glClearColor(0.f, 0.f, 0.f, 1.f);
 }
 
 void ups::Context::clearGL()
@@ -159,4 +169,19 @@ void ups::Context::drawStart()
 void ups::Context::drawEnd()
 {
 	glXSwapBuffers(_display, _window);
+}
+
+namespace
+{
+	void getOpenGLVersion(int &outMajor, int &outMinor)
+	{
+		const GLubyte* versionString = glGetString(GL_VERSION);
+		
+		// Read the first number, up until the decimal point
+		char* pos;
+		outMajor = std::strtol(reinterpret_cast<const char*>(versionString), &pos, 10);
+		
+		// Step over the decimal point, and get the next number
+		outMinor = std::strtol(pos + 1, NULL, 10);
+	}
 }
