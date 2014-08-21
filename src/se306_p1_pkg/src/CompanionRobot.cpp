@@ -12,7 +12,7 @@ void CompanionRobot::doInitialSetup()
 	velLinear = 0.0;
 	velRotational = 0.0;
 	moraleLevel = 5;
-	entertaining = false;
+	giving_morale = false;
 	residentName = "RobotNode2";
 	subscriberMorale = nodeHandle->subscribe("morale", 1000, CompanionRobot::moraleCallback);
 	y = 0;
@@ -25,64 +25,64 @@ void CompanionRobot::doInitialSetup()
 
 void CompanionRobot::doExecuteLoop()
 {
-	// if (returningHome){
-	// 	//ROS_INFO("MOVEING TO HOME");
+	if (returningHome){
+		//ROS_INFO("MOVEING TO HOME");
 
-	// 	if (returningHome_first){
-	// 		returningHome_first = false;
-	// 		//TODO: Matt fix this shit (Target node reset upon reach destination)
-	// 		//targetNode = 0;
-	// 	}
+		if (returningHome_first){
+			returningHome_first = false;
+			//TODO: Matt fix this shit (Target node reset upon reach destination)
+			//targetNode = 0;
+		}
 
- //        return;
-	// }
+        return;
+	}
 
-	// if (!entertaining)
-	// {
-	// 	if (!checkCompanionLevel())
-	// 	{
-	// 		if (first_call)
-	// 		{
-	// 			//this->activeNode = &node5;
-	// 			//this->startMovingToResident();
-	// 			first_call = false;
-	// 		}
-	//     	if (!(this->movingToResident) )
-	//     	{
-	//     		//CompanionRobot::doResponse("entertaining");
-	//     		ROS_INFO("CHANGED TO ENTERTAINING");
-	//     		entertaining=true;
-	//     		first = false;
-	//     	}
+	if (!giving_morale)
+	{
+		if (!checkMoraleLevel())
+		{
+			if (first_call)
+			{
+				//this->activeNode = &node5;
+				this->startMovingToResident();
+				first_call = false;
+			}
+	    	if (!(this->movingToResident) )
+	    	{
+	    		//CompanionRobot::doResponse("socialising");
+	    		ROS_INFO("CHANGED TO socialising");
+	    		giving_morale=true;
+	    		first = false;
+	    	}
 
-	// 		//After finished entertaining set entertaining to flase
+			//After finished socialising set socialising to flase
 
-	// 	}
-	// }
-	// else
-	// {
-	// 	if (moraleLevel == 5)
-	// 	{
-	// 		//Add do last desponse call that kurt implimented
-	// 		CompanionRobot::stopResponse("entertaining");
-	// 		entertaining = false;
-	// 		returningHome = true;
+		}
+	}
+	else
+	{
+		if (moraleLevel == 5)
+		{
+			//Add do last desponse call that kurt implimented
+			CompanionRobot::stopResponse("giving morale");
+			giving_morale = false;
+			returningHome = true;
 
-	// 	}
-	// 	else
-	// 	{
+		}
+		else
+		{
 
-	// 		if (y == 40)
-	// 		{
-	// 			CompanionRobot::doResponse("entertaining");
-	// 			y=0;
-	// 		}
-	// 		else
-	// 		{
-	// 			y++;
-	// 		}
-	// 	}
-	// }
+			if (y == 40)
+			{
+				CompanionRobot::doResponse("socialising");
+				y=0;
+			}
+			else
+			{
+				y++;
+			}
+		}
+	}
 }
 
 // TODO: SHOULD BE COMPANIONSHIP/LONELINESS ########################################################################################################
@@ -94,7 +94,7 @@ void CompanionRobot::moraleCallback(msg_pkg::Morale msg)
  	//ROS_INFO("Changed value");
 }
 
-bool CompanionRobot::checkCompanionLevel()
+bool CompanionRobot::checkMoraleLevel()
 {
 	if (moraleLevel>=2 )
 	{
