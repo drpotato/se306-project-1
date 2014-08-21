@@ -20,6 +20,7 @@ void Doctor::doExecuteLoop()
 void Doctor::healthCallback(msg_pkg::Health msg)
 {
 
+	//TODO: Change this to use telephone implementation
 	Doctor* temp = dynamic_cast<Doctor*>( ActorSpawner::getInstance().getActor());
 	temp->healthLevel = msg.level;
 
