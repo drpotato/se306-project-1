@@ -2,7 +2,7 @@
 #define SE306P1_UPSTAGE_RENDERER_HPP_DEFINED
 
 #include "RenderTask.hpp"
-#include "PointerUnique.hpp"
+#include "StackAllocator.hpp"
 #include <vector>
 
 namespace ups
@@ -22,16 +22,32 @@ namespace ups
 		
 		
 	private:
+		enum TaskListSlot
+		{
+			TLS_Env,
+			TLS_3D,
+			TLS_2D,
+			_TLS_NTypes
+		};
+		
 		void doRenderArrangeTasks();
 		void doRenderBefore();
 		void doRenderExecuteTasks();
 		void doRenderAfter();
+		void doTask(RenderTask *task);
+		
+		void addToTaskList(RenderTask *task, TaskListSlot slot);
 		
 		Context *_context;
+		StackAllocator _frameAlloc;
 		
-		std::vector<PointerUnique<RenderTask> > _renderEnvTasks;
-		std::vector<PointerUnique<RenderTask> > _render3DTasks;
-		std::vector<PointerUnique<RenderTask> > _render2DTasks;
+		std::vector<std::vector<RenderTask *> > _renderTaskSlots;
 	};
+	
+
+	inline void Renderer::addToTaskList(RenderTask *task, TaskListSlot slot)
+	{
+		_renderTaskSlots[slot].push_back(task);
+	}
 }
 #endif // #ifndef SE306P1_UPSTAGE_RENDERER_HPP_DEFINED

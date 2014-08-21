@@ -1,12 +1,11 @@
 #include "Context.hpp"
 #include "Renderer.hpp"
-#include <iostream>
+#include "StackAllocator.hpp"
 
 int main(int argc, char **argv)
 {
 	ups::Context &context = ups::Context::getContext();
 	ups::Renderer renderer(context);
-	std::cout << "Hello World!" << std::endl;
 	
 	while (context.step())
 	{

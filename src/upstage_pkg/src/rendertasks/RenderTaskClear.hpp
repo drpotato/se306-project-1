@@ -8,7 +8,10 @@ RenderTaskClear clear; // A member in the containing union, should be of this Re
 
 #ifdef PP_RT_MODE_DEFINE
 // The class info
-class RenderTaskClear
+struct RenderTaskClear
 {
+	float r;
+	float g;
+	float b;
 };
 #endif

@@ -20,7 +20,7 @@ namespace ups
 		~StackAllocator();
 		
 		template <typename t>
-		t *malloc();
+		t *allocate();
 		
 		void clear();
 		
@@ -35,39 +35,39 @@ namespace ups
 		std::vector<void *> _emergencyAllocs;
 	};
 	
-	StackAllocator::StackAllocator(size_t allocatorSize)
+	inline StackAllocator::StackAllocator(size_t allocatorSize)
 	{
-		_dataPtr = _dataMin = malloc(allocatorSize);
+		_dataPtr = _dataMin = reinterpret_cast<unsigned char *>(std::malloc(allocatorSize));
 		_dataMax = _dataMin + allocatorSize;
 	}
 	
-	StackAllocator::~StackAllocator()
+	inline StackAllocator::~StackAllocator()
 	{
 		// Clear the "nice" memory
-		free(_dataPtr);
+		std::free(_dataPtr);
 		
 		// Also clear the "bad" memory
 		clearEmergencyAllocs();
 	}
 	
-	void StackAllocator::clear()
+	inline void StackAllocator::clear()
 	{
 		_dataPtr = _dataMin;
 		clearEmergencyAllocs();
 	}
 	
-	void StackAllocator::clearEmergencyAllocs()
+	inline void StackAllocator::clearEmergencyAllocs()
 	{
 		for (std::vector<void *>::iterator it = _emergencyAllocs.begin(); it != _emergencyAllocs.end(); ++it)
 		{
-			free(*it);
+			std::free(*it);
 		}
 		
 		_emergencyAllocs.clear();
 	}
 	
 	template <typename t>
-	t *StackAllocator::malloc()
+	inline t *StackAllocator::allocate()
 	{
 		unsigned char *newDataPtr = _dataPtr + sizeof(t);
 		t *allocatedMemory;
@@ -76,7 +76,7 @@ namespace ups
 		if (newDataPtr > _dataMax)
 		{
 			// Uh-oh, we're fully booked, but we can offer the laundry cupboard instead.
-			allocatedMemory = malloc(sizeof(t));
+			allocatedMemory = reinterpret_cast<t *>(std::malloc(sizeof(t)));
 			
 			// Let's see if you'll be sharing the cupboard ...
 			if (_emergencyAllocs.size() == 0)
@@ -87,12 +87,12 @@ namespace ups
 			}
 			
 			// I'll write your name on this napkin so we'll know where to send your continental breakfast.
-			_emergencyAllocs.append(reinterpret_cast(void *)allocatedMemory);
+			_emergencyAllocs.push_back(reinterpret_cast<void *>(allocatedMemory));
 		}
 		else
 		{
 			// Ahh yes, right this way, sir. Here is your key.
-			allocatedMemory = reinterpret_cast(t *)_dataPtr;
+			allocatedMemory = reinterpret_cast<t *>(_dataPtr);
 			
 			// I'll just mark your room as occupied.
 			_dataPtr = newDataPtr;
