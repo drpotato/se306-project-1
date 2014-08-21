@@ -20,7 +20,10 @@ void Resident::doInitialSetup()
   // Any other Actor can interact with him and acquire the lock.
   lock_ = false;
 
+  // Initialise time of day to current time
   time_of_day = std::time(0);
+  // Get number of seconds to add on each loop
+  seconds_to_add = second_increase_per_loop();
 
   // Set levels to maximum initially.
   morale_level_ = 5;
@@ -41,7 +44,11 @@ void Resident::doInitialSetup()
 
 void Resident::doExecuteLoop()
 {    
-	//ROS_INFO("%s", ctime(&time_of_day));
+	// Increment the time of day
+	time_of_day += 12;
+
+
+	ROS_INFO("%s", ctime(&time_of_day));
 	if (morale_count_ >= WAIT_TIME && !m_dropped_)
 	{
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
@@ -185,4 +192,22 @@ void Resident::stopRobotSpinning()
 {
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
   residentInstance->velRotational = 0.0; // Stop rotation to show interaction finished
+}
+
+int Resident::second_increase_per_loop()
+{
+	Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+	int loop_rate = residentInstance->LOOP_RATE;
+
+	// 1 hr (Ultron world) = 30 seconds (real world)
+	// Number of loops needed to pass 30 seconds in the real world: (loop_rate is number loops per second)
+	double num_loops_for_real_30_seconds = loop_rate * 30; //e.g. 300
+
+	// Number of loops needed to pass one minute in the Ultron world
+	double num_loops_per_ultron_minute = num_loops_for_real_30_seconds / 60; //e.g. 5
+
+	// Number of seconds to add to the time_of_day on each loop in order to pass one Ultron hour in real world 30 seconds
+	double num_ultron_seconds_per_loop = 60 / num_loops_per_ultron_minute; //e.g. 12
+
+	return num_ultron_seconds_per_loop;
 }

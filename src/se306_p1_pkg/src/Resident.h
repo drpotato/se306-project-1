@@ -21,7 +21,7 @@ protected:
 private:
   bool lock_;
 
-  // Demo paramters to graduall reduce levels
+  // Demo paramters to gradually reduce levels
   int morale_count_;
   int socialness_count_;
   bool m_dropped_;
@@ -29,7 +29,10 @@ private:
   const static int WAIT_TIME = 50;
   bool m_replenished_;
 
+  // Stores the time of day in the Ultron world
   std::time_t time_of_day;
+  // Stores the number of seconds needed to add to time_of_day upon each loop
+  double seconds_to_add;
 
   // Level of social fulfillment: 
   // 1 - bad (lonely)
@@ -43,13 +46,14 @@ private:
 
   // Publisher for socialness
   ros::Publisher publisherSocialness;
-  // Publisher for entertainedness
+  // Publisher for morale
   ros::Publisher publisherMorale;
 
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;
 
   static int getNewLevel(int amount, int oldValue);
+  int second_increase_per_loop();
   void stopRobotSpinning();
 };
 
