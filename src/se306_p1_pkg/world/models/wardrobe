@@ -1,13 +1,5 @@
 define wardrobe model
-(
-	# Table surface
-	model
-	(
-		size [0.46 0.6 0.05]
-		pose [0.01 0.0 0.4 0.0]
-		color "burlywood4"
-	)
-	
+(	
 	# Left Door
 	model
 	(

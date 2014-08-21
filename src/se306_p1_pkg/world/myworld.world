@@ -9,6 +9,10 @@ include "models/shower"
 include "models/basin"
 include "models/toilet"
 include "models/bench_bathroom"
+include "models/bench_kitchen"
+include "models/bench_kitchen_corner"
+include "models/fridge"
+include "models/oven"
 
 define actor position
 (
@@ -73,9 +77,18 @@ bedsidetable( pose [-7.25 -4.25 0 0] name "bedsidetable2" )
 bedsidetable( pose [-7.25 -1.75 0 0] name "bedsidetable3" )
 wardrobe( pose [-3.5 -4.5 0 90] name "wardrobe1" )
 
-# Furniture bathroom
+# Furniture Bathroom
 shower( pose [-1.25 1.7 0 0] name "shower" )
 basin( pose [-0.5 4.5 0 -90] name "basin" )
 toilet( pose [1.25 4.5 0 -90] name "toilet" )
 bench_bathroom( pose [-1.25 4.5 0 -90] name "bench_bathroom0" )
 bench_bathroom( pose [0.25 4.5 0 -90] name "bench_bathroom1" )
+
+# Furniture Kitchen
+oven( pose [4.4 3.25 0 0] name "oven" )
+bench_kitchen_corner( pose [4.4 4.25 0 -90] name "bench_kitchen0" )
+fridge( pose [5.7 4.25 0 -90] name "bench_kitchen0" )
+bench_kitchen_corner( pose [7.0 4.25 0 -90] name "bench_kitchen1" )
+bench_kitchen( pose [7.0 3.25 0 -180] name "bench_kitchen2" )
+bench_kitchen( pose [7.0 2.25 0 -180] name "bench_kitchen3" )
+bench_kitchen( pose [7.0 1.25 0 -180] name "bench_kitchen4" )
