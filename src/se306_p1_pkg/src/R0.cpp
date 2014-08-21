@@ -1,8 +1,6 @@
 #include "R0.h"
-#include "PathPlanner.h"
-#include "PathPlannerNode.h"
 
-
+// Our test/debug robots. 
 void R0::doInitialSetup()
 {
 	velLinear = 0;

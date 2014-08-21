@@ -5,6 +5,7 @@
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 
+// A Visitor who provides Socialness.
 void Relative::doInitialSetup()
 {
     velLinear = 0.0;
@@ -45,25 +46,14 @@ void Relative::doExecuteLoop()
 
     if (!socialising)
     {
-        if (checkSocialnessLevel())
-        {
-            //ROS_INFO("Nothing to do here");
-        } 
-        else 
+        if (!checkSocialnessLevel())
         {
             if (first_call)
             {
-                //this->activeNode = &nodeDoor;
                 this->startMovingToResident();
                 first_call = false;
             }
-            //Call method to do the socialising
-            //PathPlannerNode *target = this->pathPlanner.getNode(&node2Name);
-            //vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
 
-
-
-            //The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
             if (!(this->movingToResident) )
             {
                 //Relative::doResponse("socialising");
@@ -71,13 +61,10 @@ void Relative::doExecuteLoop()
                 socialising=true;
                 first = false;
             }
-
-            //After finished socialising, set socialising to flase
-
         }
-    } 
-    else 
-    {
+    }
+
+    else {
         if (socialnessLevel == 5)
         {
             //Add do last desponse call that kurt implimented
@@ -102,7 +89,9 @@ void Relative::doExecuteLoop()
     }
 }
 
-
+/*
+ * Upon receiving a message published to the 'socialness' topic, respond appropriately.
+ */
 void Relative::socialnessCallback(msg_pkg::Socialness msg)
 {
 	// Debug	
@@ -122,6 +111,5 @@ bool Relative::checkSocialnessLevel()
 	if (socialnessLevel>=2 ) {
 		return true;
 	}
-
 	return false;
 }

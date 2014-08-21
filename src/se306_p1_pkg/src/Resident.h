@@ -4,8 +4,8 @@
 #include "Human.h"
 #include <msg_pkg/Interaction.h>
 #include "ros/ros.h"
+#include <ctime>
 
-<<<<<<< HEAD
 // Typedef for dbl-precision printing in randomEventLoop()
 typedef std::numeric_limits< double > dbl;
 // Uncomment this to use Conor's very high-quality (but sometimes blocking) PRNG stream.
@@ -29,12 +29,14 @@ private:
   bool lock_;
 
   // Demo paramters to graduall reduce levels
-  int entertainment_count_;
+  int morale_count_;
   int socialness_count_;
-  bool e_dropped_;
+  bool m_dropped_;
   bool s_dropped_;
   const static int WAIT_TIME = 50;
-  bool e_replenished_;
+  bool m_replenished_;
+
+  std::time_t time_of_day;
 
 	/* Randomness variables 
 	int randomData;
@@ -58,13 +60,17 @@ private:
 	// 5 = optimal, 'maximum')
   int socialness_level_;
   int entertainedness_level_;
+  // Level of morale:
+  // 1 - bad (bored)
+  // 5 - good (entertained)	
+  int morale_level_;
 
 	// Level publishers
 
   // Publisher for socialness
   ros::Publisher publisherSocialness;
   // Publisher for entertainedness
-  ros::Publisher publisherEntertainedness;
+  ros::Publisher publisherMorale;
 
 	// Event subscribers
 

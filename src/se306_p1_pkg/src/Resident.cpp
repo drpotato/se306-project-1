@@ -1,6 +1,5 @@
 #include "Resident.h"
 #include <string.h>
-<<<<<<< HEAD
 
 /* Old RNG includes
 #include <fcntl.h> // File access for RNG
@@ -12,54 +11,58 @@
 #include <stdlib.h> // rand()
 #include <limits> // Get information about max double/float prec.
 
-=======
 #ifdef USE_DEV_RANDOM
 	#include <fcntl.h> // File access for RNG
 #else
 	#include <cstdlib>
 	#include <ctime>
 #endif
->>>>>>> 2a40830626953ffb410a9af91e5fb8b9b8ba9e7f
+
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/Socialness.h>
-#include <msg_pkg/Entertainedness.h>
+#include <msg_pkg/Morale.h>
 #include "Actor.h"
 #include "ActorSpawner.h"
+#include <ctime>
+#include <sstream>
 
+// The person living in our house. 
+// Has various attributes representing his needs/wants, which degrade over time.
+// When they reach a certain level, messages are published to his assistant Robots and the VisitorController, requesting various services.
 void Resident::doInitialSetup()
 {
   velLinear = 0;
   velRotational = 0.0;
 
-  // Initially the resident is not locked
+  // Initially the resident is not locked.
+  // Any other Actor can interact with him and acquire the lock.
   lock_ = false;
 
-  // Set levels to maximum initially
-  entertainedness_level_ = 5;
+  time_of_day = std::time(0);
+
+  // Set levels to maximum initially.
+  morale_level_ = 5;
   socialness_level_ = 5;
 
-  entertainment_count_ = 0;
+  morale_count_ = 0;
   socialness_count_ = 0;
-  e_dropped_ = false;
-  e_replenished_ = false;
+  m_dropped_ = false;
+  m_replenished_ = false;
 
-  // Set up a publishers
+  // Set up publishers.
   publisherSocialness = nodeHandle->advertise<msg_pkg::Socialness>("socialness", 1000);
-  publisherEntertainedness = nodeHandle->advertise<msg_pkg::Entertainedness>("entertainedness", 1000);
+  publisherMorale = nodeHandle->advertise<msg_pkg::Morale>("morale", 1000);
 
-  // Set up subscribers
+  // Set up subscriptions.
   subscriberInteraction = nodeHandle->subscribe("interaction", 1000, Resident::interactionCallback);
 
-<<<<<<< HEAD
   // Reset delay counter
   msAtPreviousLoop = 0;
 
-=======
 #ifndef USE_DEV_RANDOM
   // Seed the PRNG
-  std::srand(std::time(NULL));
+  //std::srand(std::time(NULL));
 #endif
->>>>>>> 2a40830626953ffb410a9af91e5fb8b9b8ba9e7f
 }
 
 void Resident::doExecuteLoop()
@@ -72,43 +75,43 @@ void Resident::doExecuteLoop()
 // _REMOVE (when randomness implementation complete) 
 
 	if (entertainment_count_ >= WAIT_TIME && !e_dropped_)
+{    
+	//ROS_INFO("%s", ctime(&time_of_day));
+	if (morale_count_ >= WAIT_TIME && !m_dropped_)
 	{
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
-		if(residentInstance->entertainedness_level_ <= 1)
+		if(residentInstance->morale_level_ <= 1)
 		{
 			// don't drop the value any more, it's being tended to or has been already
-			e_dropped_ = true;
-			//ROS_INFO("e_dropped changed");
+			m_dropped_ = true;
 		}
 		else 
 		{
-			// reduce the level every 1000 counts
-			residentInstance->entertainedness_level_--;
-			//Create a socialness message to publish
-			msg_pkg::Entertainedness entertainednessMessage;
-			//Assign current socialness level to the message
-			entertainednessMessage.level = residentInstance->entertainedness_level_;
-			//Publish the message
-			residentInstance->publisherEntertainedness.publish(entertainednessMessage);
-
+			// Reduce the level every 1000 counts
+			residentInstance->morale_level_--;
+			// Create a socialness message to publish
+			msg_pkg::Morale moraleMessage;
+			// Assign current socialness level to the message
+			moraleMessage.level = residentInstance->morale_level_;
+			// Publish the message
+			residentInstance->publisherMorale.publish(moraleMessage);
 		}
-		entertainment_count_ = 0;
+		morale_count_ = 0;
 	}
-	else if (entertainment_count_ < WAIT_TIME && !e_dropped_)
-	{
-		entertainment_count_++;
+	else if (morale_count_ < WAIT_TIME && !m_dropped_) {
+		morale_count_++;
 	}
-	else if (e_replenished_ && (socialness_count_ >= WAIT_TIME) && !s_dropped_)
-	{
+
+	else if (m_replenished_ && (socialness_count_ >= WAIT_TIME) && !s_dropped_) {
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
-		if(residentInstance->socialness_level_ <= 1)
-		{
+		if(residentInstance->socialness_level_ <= 1) {
 			// don't drop the value any more, it's being tended to or has been already
 			s_dropped_ = true;
 		}
 		else 
 		{
-			
+
+		else {
 			// reduce the level every 1000 counts
 			residentInstance->socialness_level_--;
 			//Create a socialness message to publish
@@ -120,7 +123,7 @@ void Resident::doExecuteLoop()
 		}
 		socialness_count_ = 0;
 	}
-	else if (e_replenished_ && (socialness_count_ < WAIT_TIME) && !s_dropped_)
+	else if (m_replenished_ && (socialness_count_ < WAIT_TIME) && !s_dropped_)
 	{
 		socialness_count_++;
 	}
@@ -151,16 +154,18 @@ void Resident::lock()
 }
 
 /*
- * Robots should unlock the resident after interation * so that another robot may interact with the resident.
+ * Robots should unlock the resident after interation so that another robot may interact with the resident.
  */
 void Resident::unlock()
 {
   lock_ = false;
 }
 
+/*
+ * Upon receiving a message published to the 'interaction' topic, respond appropriately.
+ */
 void Resident::interactionCallback(msg_pkg::Interaction msg)
 {
-
   std::string attribute = msg.attribute;
   int amount = msg.amount;
 
@@ -190,24 +195,24 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   else if (attribute == "entertaining")
   {
 	// Get new level
-	int newLevel = getNewLevel(amount, residentInstance->entertainedness_level_);
+	int newLevel = getNewLevel(amount, residentInstance->morale_level_);
 	// Update the residents socialness level
-	residentInstance->entertainedness_level_ = newLevel;
+	residentInstance->morale_level_ = newLevel;
 	//Create a socialness message to publish
-	msg_pkg::Entertainedness entertainednessMessage;
+	msg_pkg::Morale moraleMessage;
 	//Assign current socialness level to the message
-	entertainednessMessage.level = newLevel;
+	moraleMessage.level = newLevel;
 
 	if (newLevel == 5)
 	{
 		residentInstance->stopRobotSpinning();
-		residentInstance->e_replenished_ = true;
+		residentInstance->m_replenished_ = true;
 	}
 
 	//Publish the message
-	residentInstance->publisherEntertainedness.publish(entertainednessMessage);
+	residentInstance->publisherMorale.publish(moraleMessage);
   }
-  // TODO: put others in when implemented
+  // TODO: put others in when implemented 
 }
 
 int Resident::getNewLevel(int amount, int oldLevel)
@@ -236,7 +241,6 @@ void Resident::stopRobotSpinning()
 // human behaviours and needs
 void Resident::randomEventLoop()
 {
-<<<<<<< HEAD
 
 	ROS_INFO("Calculating random event(s)...\n");
 	//ROS_INFO("System time: %d\n", msExpiredPrevious);
@@ -288,14 +292,7 @@ void Resident::randomEventLoop()
 	// ...as does thirst
 	randNum = (float)rand() / (float)RAND_MAX;
 
-	
-
-
-
-=======
-#ifdef USE_DEV_RANDOM
 	//ROS_INFO("Calculating random event(s)...");
->>>>>>> 2a40830626953ffb410a9af91e5fb8b9b8ba9e7f
 	
 
 }
@@ -320,7 +317,10 @@ void oldRNG()
 	//DELAY TEST
 	//clock_t begin = clock();
 
-	/*randomData = open("/dev/random", O_RDONLY);
+	/*
+	
+	#ifdef USE_DEV_RANDOM
+	randomData = open("/dev/random", O_RDONLY);
 	randomData = open("/dev/random", O_RDONLY);
 	// Note: /dev/random blocks when it's empty, and it seems to become empty pretty quickly :(
 	// It's probably higher quality than we need, but /dev/urandom sounds like it might be an okay compromise

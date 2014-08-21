@@ -1,2 +1,2 @@
 #!/bin/bash
-grep --color=always --with-filename -i TODO src/se306_p1_pkg/src/*
+grep -n --color=always --with-filename -i TODO src/se306_p1_pkg/src/*

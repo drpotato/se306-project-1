@@ -1,4 +1,4 @@
-#include "EntertainmentRobot.h"
+#include "CompanionRobot.h"
 #include "ActorSpawner.h"
 
 #include "Actor.h"
@@ -6,15 +6,15 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 
-// A Robot that provides the Resident with entertainment (possibly TV)
-void EntertainmentRobot::doInitialSetup()
+// A robot who provides the Resident with companionship (could be a robotic dog, a video call system, sex bot)
+void CompanionRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
 	moraleLevel = 5;
 	entertaining = false;
 	residentName = "RobotNode2";
-	subscriberMorale = nodeHandle->subscribe("morale", 1000, EntertainmentRobot::moraleCallback);
+	subscriberMorale = nodeHandle->subscribe("morale", 1000, CompanionRobot::moraleCallback);
 	y = 0;
 	x = 0;
 	first = true;
@@ -23,7 +23,7 @@ void EntertainmentRobot::doInitialSetup()
 	returningHome_first = true;
 }
 
-void EntertainmentRobot::doExecuteLoop()
+void CompanionRobot::doExecuteLoop()
 {
 	if (returningHome){
 		//ROS_INFO("MOVEING TO HOME");
@@ -33,14 +33,13 @@ void EntertainmentRobot::doExecuteLoop()
 			//TODO: Matt fix this shit (Target node reset upon reach destination)
 			//targetNode = 0;
 		}
-        
-        return;
 
+        return;
 	}
 
 	if (!entertaining)
 	{
-		if (!checkMoraleLevel())
+		if (!checkCompanionLevel())
 		{
 			if (first_call)
 			{
@@ -48,10 +47,9 @@ void EntertainmentRobot::doExecuteLoop()
 				this->startMovingToResident();
 				first_call = false;
 			}
-
 	    	if (!(this->movingToResident) )
 	    	{
-	    		//EntertainmentRobot::doResponse("entertaining");
+	    		//CompanionRobot::doResponse("entertaining");
 	    		ROS_INFO("CHANGED TO ENTERTAINING");
 	    		entertaining=true;
 	    		first = false;
@@ -60,44 +58,43 @@ void EntertainmentRobot::doExecuteLoop()
 			//After finished entertaining set entertaining to flase
 
 		}
-	} 
-	else 
+	}
+	else
 	{
 		if (moraleLevel == 5)
 		{
 			//Add do last desponse call that kurt implimented
-			EntertainmentRobot::stopResponse("entertaining");
+			CompanionRobot::stopResponse("entertaining");
 			entertaining = false;
 			returningHome = true;
 
-		} 
+		}
 		else
 		{
 
 			if (y == 40)
 			{
-				EntertainmentRobot::doResponse("entertaining");
+				CompanionRobot::doResponse("entertaining");
 				y=0;
-			} 
-			else 
+			}
+			else
 			{
 				y++;
-			}	
+			}
 		}
 	}
 }
 
-
-// Upon receiving a message published to the 'entertainedness' topic, respond appropriately.
-void EntertainmentRobot::moraleCallback(msg_pkg::Morale msg)
+// TODO: SHOULD BE COMPANIONSHIP/LONELINESS ########################################################################################################
+void CompanionRobot::moraleCallback(msg_pkg::Morale msg)
 {
- 	EntertainmentRobot* temp = dynamic_cast<EntertainmentRobot*>( ActorSpawner::getInstance().getActor());
+ 	CompanionRobot* temp = dynamic_cast<CompanionRobot*>( ActorSpawner::getInstance().getActor());
 
  	temp->moraleLevel = msg.level;
  	//ROS_INFO("Changed value");
 }
 
-bool EntertainmentRobot::checkMoraleLevel()
+bool CompanionRobot::checkCompanionLevel()
 {
 	if (moraleLevel>=2 )
 	{
