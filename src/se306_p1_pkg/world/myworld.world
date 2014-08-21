@@ -4,6 +4,11 @@ include "models/couch"
 include "models/queenbed"
 include "models/queenbedused"
 include "models/bedsidetable"
+include "models/wardrobe"
+include "models/shower"
+include "models/basin"
+include "models/toilet"
+include "models/bench_bathroom"
 
 define actor position
 (
@@ -52,10 +57,25 @@ floorplan
   pose [ 0.0 0.0 0.0 0.0 ]
 )
 
-# Furniture
+# Furniture Lounge
 couch( pose [-1.25 -2.75 0 0] name "couch0" )
 couch( pose [0.5 -1 0 -90] name "couch1" )
-queenbed( pose [-6.5 3.25 0 0] name "bed0" )
-queenbedused( pose [-6.5 -3 0 0] name "bed1" )
-bedsidetable( pose [-7.25 4.5 0 0] name "bedsidetable0" )
-# bedsidetable( pose [-7.25 2.0 0 0] name "bedsidetable1" )
+
+# Furniture Master Bedroom
+queenbedused( pose [-6.5 3.0 0 0] name "bed0" )
+bedsidetable( pose [-7.25 4.25 0 0] name "bedsidetable0" )
+bedsidetable( pose [-7.25 1.75 0 0] name "bedsidetable1" )
+wardrobe( pose [-3.5 4.5 0 -90] name "wardrobe0" )
+
+# Furniture Guest Bedroom
+queenbed( pose [-6.5 -3.0 0 0] name "bed1" )
+bedsidetable( pose [-7.25 -4.25 0 0] name "bedsidetable2" )
+bedsidetable( pose [-7.25 -1.75 0 0] name "bedsidetable3" )
+wardrobe( pose [-3.5 -4.5 0 90] name "wardrobe1" )
+
+# Furniture bathroom
+shower( pose [-1.25 1.7 0 0] name "shower" )
+basin( pose [-0.5 4.5 0 -90] name "basin" )
+toilet( pose [1.25 4.5 0 -90] name "toilet" )
+bench_bathroom( pose [-1.25 4.5 0 -90] name "bench_bathroom0" )
+bench_bathroom( pose [0.25 4.5 0 -90] name "bench_bathroom1" )
