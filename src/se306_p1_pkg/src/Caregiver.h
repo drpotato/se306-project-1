@@ -13,7 +13,7 @@ class Caregiver : public Visitor
 {
 protected:
     virtual void doInitialSetup();
-    Virtual void doExecuteLoop();
+    virtual void doExecuteLoop();
     
     
     ros::Subscriber subscriberFitness;
