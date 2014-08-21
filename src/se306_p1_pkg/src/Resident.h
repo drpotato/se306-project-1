@@ -16,6 +16,7 @@ protected:
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg);
+  void randomEventLoop();
   
 private:
   bool lock_;
@@ -28,20 +29,24 @@ private:
   const static int WAIT_TIME = 50;
   bool e_replenished_;
 
-  // Level of social fulfillment: 
-  // 1 - bad (lonely)
-  // 5 - good (not lonely)
-  int socialness_level_;
+	// Randomness variables	
+	int randomData;
+	int myRandomInteger;
+	size_t randomDataLen;
 
-  // Level of entertainedness:
-  // 1 - bad (bored)
-  // 5 - good (entertained)	
+  // Levels (1 = critical, attention required; 
+	// 5 = optimal, 'maximum')
+  int socialness_level_;
   int entertainedness_level_;
+
+	// Level publishers
 
   // Publisher for socialness
   ros::Publisher publisherSocialness;
   // Publisher for entertainedness
   ros::Publisher publisherEntertainedness;
+
+	// Event subscribers
 
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;

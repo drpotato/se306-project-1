@@ -1,5 +1,6 @@
 #include "Resident.h"
 #include <string.h>
+#include <fcntl.h> // File access for RNG
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/Socialness.h>
 #include <msg_pkg/Entertainedness.h>
@@ -29,6 +30,7 @@ void Resident::doInitialSetup()
 
   // Set up subscribers
   subscriberInteraction = nodeHandle->subscribe("interaction", 1000, Resident::interactionCallback);
+
 }
 
 void Resident::doExecuteLoop()
@@ -37,6 +39,9 @@ void Resident::doExecuteLoop()
     //vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
     //this->goToNode(path);
     
+////////////////////////////////////////////////////
+// _REMOVE (when randomness implementation complete) 
+
 	if (entertainment_count_ >= WAIT_TIME && !e_dropped_)
 	{
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
@@ -74,6 +79,7 @@ void Resident::doExecuteLoop()
 		}
 		else 
 		{
+			
 			// reduce the level every 1000 counts
 			residentInstance->socialness_level_--;
 			//Create a socialness message to publish
@@ -89,6 +95,14 @@ void Resident::doExecuteLoop()
 	{
 		socialness_count_++;
 	}
+
+// _REMOVE (when randomness implementation complete) 
+////////////////////////////////////////////////////
+
+	// Call random event for each iteration of the execution
+	// loop (not sure if this should happen at start or end
+	// of each loop; does this even matter?)
+	randomEventLoop();
 }
 
 /*
@@ -182,4 +196,45 @@ void Resident::stopRobotSpinning()
 {
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
   residentInstance->velRotational = 0.0; // Stop rotation to show interaction finished
+}
+
+
+
+
+
+
+// Function called for each iteration of 'doExecuteLoop()'; emulates random
+// human behaviours and needs
+void Resident::randomEventLoop()
+{
+	//ROS_INFO("Calculating random event(s)...");
+	
+
+	// Access/dev/random in read-only for true, random 
+	// number generation
+	randomData = open("/dev/random", O_RDONLY);
+	myRandomInteger;
+	randomDataLen = 0;
+	
+	while (randomDataLen < sizeof myRandomInteger)
+	{
+		ssize_t randomResult = read(randomData, ((char*)&myRandomInteger) + randomDataLen, (sizeof myRandomInteger) - randomDataLen);
+
+		// ssize_t type will return negative if an error occurs while
+		// the random number is being generated and assigned to result
+		if (randomResult < 0)
+		{
+			//ROS_INFO("Unable to read /dev/random, resorting to alternative RNG");
+		}
+
+		randomDataLen += randomResult;
+	}
+
+	close(randomData);
+	//ROS_INFO("Random number generated: %d", randomDataLen);
+
+
+
+
+	// Entertainedness drop
 }
