@@ -1,4 +1,4 @@
-#include "EntertainmentRobot.h"
+#include "CookingRobot.h"
 #include "ActorSpawner.h"
 
 #include "Actor.h"
@@ -6,15 +6,16 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 
-// A Robot that provides the Resident with entertainment (possibly TV)
-void EntertainmentRobot::doInitialSetup()
+
+// A Robot to cook meals for the Resident. Meals happen according to a regular schedule and can[not] be interrupted.
+void CookingRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
 	moraleLevel = 5;
 	entertaining = false;
 	residentName = "RobotNode2";
-	subscriberMorale = nodeHandle->subscribe("morale", 1000, EntertainmentRobot::moraleCallback);
+	subscriberMorale = nodeHandle->subscribe("morale", 1000, CookingRobot::moraleCallback);
 	y = 0;
 	x = 0;
 	first = true;
@@ -23,7 +24,7 @@ void EntertainmentRobot::doInitialSetup()
 	returningHome_first = true;
 }
 
-void EntertainmentRobot::doExecuteLoop()
+void CookingRobot::doExecuteLoop()
 {
 	if (returningHome){
 		//ROS_INFO("MOVEING TO HOME");
@@ -33,14 +34,14 @@ void EntertainmentRobot::doExecuteLoop()
 			//TODO: Matt fix this shit (Target node reset upon reach destination)
 			//targetNode = 0;
 		}
-        
+
         return;
 
 	}
 
 	if (!entertaining)
 	{
-		if (!checkMoraleLevel())
+		if (!checkCookingLevel())
 		{
 			if (first_call)
 			{
@@ -48,56 +49,51 @@ void EntertainmentRobot::doExecuteLoop()
 				this->startMovingToResident();
 				first_call = false;
 			}
-
 	    	if (!(this->movingToResident) )
 	    	{
-	    		//EntertainmentRobot::doResponse("entertaining");
+	    		//CookingRobot::doResponse("entertaining");
 	    		ROS_INFO("CHANGED TO ENTERTAINING");
 	    		entertaining=true;
 	    		first = false;
 	    	}
-
-			//After finished entertaining set entertaining to flase
-
 		}
-	} 
-	else 
+	}
+	else
 	{
 		if (moraleLevel == 5)
 		{
 			//Add do last desponse call that kurt implimented
-			EntertainmentRobot::stopResponse("entertaining");
+			CookingRobot::stopResponse("entertaining");
 			entertaining = false;
 			returningHome = true;
 
-		} 
+		}
 		else
 		{
 
 			if (y == 40)
 			{
-				EntertainmentRobot::doResponse("entertaining");
+				CookingRobot::doResponse("entertaining");
 				y=0;
-			} 
-			else 
+			}
+			else
 			{
 				y++;
-			}	
+			}
 		}
 	}
 }
 
-
-// Upon receiving a message published to the 'entertainedness' topic, respond appropriately.
-void EntertainmentRobot::moraleCallback(msg_pkg::Morale msg)
+// TODO: SHOULD BE COOKING/FOOD ########################################################################################################################
+void CookingRobot::moraleCallback(msg_pkg::Morale msg)
 {
- 	EntertainmentRobot* temp = dynamic_cast<EntertainmentRobot*>( ActorSpawner::getInstance().getActor());
+ 	CookingRobot* temp = dynamic_cast<CookingRobot*>( ActorSpawner::getInstance().getActor());
 
  	temp->moraleLevel = msg.level;
  	//ROS_INFO("Changed value");
 }
 
-bool EntertainmentRobot::checkMoraleLevel()
+bool CookingRobot::checkCookingLevel()
 {
 	if (moraleLevel>=2 )
 	{

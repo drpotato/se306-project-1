@@ -21,27 +21,27 @@ private:
   bool lock_;
 
   // Demo paramters to graduall reduce levels
-  int entertainment_count_;
+  int morale_count_;
   int socialness_count_;
-  bool e_dropped_;
+  bool m_dropped_;
   bool s_dropped_;
   const static int WAIT_TIME = 50;
-  bool e_replenished_;
+  bool m_replenished_;
 
   // Level of social fulfillment: 
   // 1 - bad (lonely)
   // 5 - good (not lonely)
   int socialness_level_;
 
-  // Level of entertainedness:
+  // Level of morale:
   // 1 - bad (bored)
   // 5 - good (entertained)	
-  int entertainedness_level_;
+  int morale_level_;
 
   // Publisher for socialness
   ros::Publisher publisherSocialness;
   // Publisher for entertainedness
-  ros::Publisher publisherEntertainedness;
+  ros::Publisher publisherMorale;
 
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;
