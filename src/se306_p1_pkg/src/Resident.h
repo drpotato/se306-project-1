@@ -5,6 +5,9 @@
 #include <msg_pkg/Interaction.h>
 #include "ros/ros.h"
 
+// Uncomment this to use Conor's very high-quality (but sometimes blocking) PRNG stream.
+//#define USE_DEV_RANDOM
+
 class Resident : public Human
 {
 public:
@@ -29,10 +32,12 @@ private:
   const static int WAIT_TIME = 50;
   bool e_replenished_;
 
+#ifdef USE_DEV_RANDOM
 	// Randomness variables	
 	int randomData;
 	int myRandomInteger;
 	size_t randomDataLen;
+#endif
 
   // Levels (1 = critical, attention required; 
 	// 5 = optimal, 'maximum')
