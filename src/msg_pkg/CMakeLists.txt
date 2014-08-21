@@ -52,6 +52,7 @@ add_message_files(
   Health.msg
   Hunger.msg
   Interaction.msg
+  Telephone.msg
   Leave.msg
   Location.msg
   Socialness.msg
