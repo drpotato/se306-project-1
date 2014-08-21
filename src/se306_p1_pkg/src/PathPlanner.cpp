@@ -58,3 +58,20 @@ PathPlannerNode* PathPlanner::getNode(string* name){
         }
     }
 }
+
+// Returns a pointer to the waypoint closest to the given set of coordinates.
+// Does not check for walls or collisions, so we will need sufficient coverage of waypoints to ensure this does not become a problem.
+PathPlannerNode* PathPlanner::getClosestNode(int x, int y){
+    int i;
+    PathPlannerNode * closestNode = this->nodes[0];
+
+    for (i=1;i<this->nodes.size();i++){
+        PathPlannerNode* nodeToCompare = this->nodes[i];
+        double distanceToOld = sqrtf(pow(x - closestNode->px, 2) + pow(y - closestNode->py, 2) 
+        double distanceToNew = sqrtf(pow(x - nodeToCompare->px, 2) + pow(y - nodeToCompare->py, 2) 
+        if (distanceToNew < distanceToOld) {
+            closestNode = nodeToCompare;
+        }
+    }
+    return closestNode;
+}

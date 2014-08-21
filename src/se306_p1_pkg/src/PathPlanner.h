@@ -16,9 +16,10 @@ private:
     typedef boost::unordered_map<string,string> map;
     
 public:
-	vector<PathPlannerNode*> pathToNode(PathPlannerNode*,PathPlannerNode*);
+	vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
     void addNode(PathPlannerNode*);
     PathPlannerNode* getNode(string*);
+    PathPlannerNode* getClosestNode(int, int);
 };
 
 

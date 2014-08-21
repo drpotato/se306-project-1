@@ -14,17 +14,18 @@ class PathPlannerNode{
         //position
     
     vector<PathPlannerNode*> neighbours;
+    
     public:
-    bool visited;
-    double px;
-    double py;
-    PathPlannerNode(string*,double,double);
-    PathPlannerNode();
-    void addNeighbour(PathPlannerNode*);
-    void removeNeighbour(PathPlannerNode*);
-    string* getName();
-    bool isVisited();
-    void setVisited(bool newVisited);
+        bool visited;
+        double px;
+        double py;
+        PathPlannerNode(string*,double,double);
+        PathPlannerNode();
+        void addNeighbour(PathPlannerNode*);
+        void removeNeighbour(PathPlannerNode*);
+        string* getName();
+        bool isVisited();
+        void setVisited(bool newVisited);
 };
 
 #endif // #ifndef SE306P1_ACTOR_VISITOR_H_DEFINED

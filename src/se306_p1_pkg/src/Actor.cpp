@@ -270,7 +270,7 @@ bool Actor::gotoPosition(double x,double y){
 
 }
 
-bool Actor::goToNode(vector<PathPlannerNode*> &path){
+bool Actor::goToNode(std::string nodeName){
     //Get the node
     if (targetNode >= path.size()){
         //We have arrived at the last node
@@ -285,6 +285,11 @@ bool Actor::goToNode(vector<PathPlannerNode*> &path){
         ROS_DEBUG("current position %f %f",px,py);
     }
     return false;
+}
+
+// Find the closest waypoint node to this Actor's current position.
+PathPlannerNode* Actor::getActiveNode() {
+    return pathPlanner.getClosestNode(this->px, this->py)
 }
 
 namespace

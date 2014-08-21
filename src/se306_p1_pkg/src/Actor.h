@@ -91,8 +91,6 @@ private:
     string node4Name;
     string node5Name;
     string nodeDoorName;
-
-   
 };
 
 
