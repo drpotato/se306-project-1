@@ -2,7 +2,7 @@
 #define SE306P1_ACTOR_DOCTOR_H_DEFINED
 
 #include "Visitor.h"
-#include <msg_pkg/Health.h>
+#include <msg_pkg/Telephone.h>
 #include "ActorSpawner.h"
 
 class Doctor : public Visitor
@@ -12,11 +12,12 @@ protected:
   virtual void doExecuteLoop();
   void emergency();
 
-  static void healthCallback(msg_pkg::Health msg);
+  static void telephoneCallback(msg_pkg::Telephone msg);
 
   ros::Subscriber subscriberHealth;
 
-  int8_t healthLevel;
+  bool homeVisit;
+
 
 
 };

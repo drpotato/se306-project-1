@@ -7,7 +7,8 @@ void Doctor::doInitialSetup()
 {
 	velLinear = 0.0;
     velRotational = 0.0;
-    subscriberHealth = nodeHandle->subscribe("socialness", 1000, Doctor::healthCallback);
+    subscriberHealth = nodeHandle->subscribe("telephone", 1000, Doctor::telephoneCallback);
+    homeVisit = false;
 }
 
 
@@ -17,15 +18,14 @@ void Doctor::doExecuteLoop()
 
 }
 
-void Doctor::healthCallback(msg_pkg::Health msg)
+void Doctor::telephoneCallback(msg_pkg::Telephone msg)
 {
 
-	//TODO: Change this to use telephone implementation
+	//TODO: Make something happen in the if statement
 	Doctor* temp = dynamic_cast<Doctor*>( ActorSpawner::getInstance().getActor());
-	temp->healthLevel = msg.level;
-
-	if (msg.level < 2){
-		temp->emergency();
+	if (msg.contact == "doctor")
+	{
+		temp->homeVisit = true;
 	}
 
 }
