@@ -5,6 +5,7 @@
 #include <msg_pkg/Interaction.h>
 #include "ros/ros.h"
 #include <ctime>
+#include <time.h>
 
 class Resident : public Human
 {
@@ -31,6 +32,8 @@ private:
 
   // Stores the time of day in the Ultron world
   std::time_t time_of_day;
+  // Gets updated separate minutes, seconds etc values from the time_of_day
+  struct tm *time_of_day_values;
   // Stores the number of seconds needed to add to time_of_day upon each loop
   double seconds_to_add;
 

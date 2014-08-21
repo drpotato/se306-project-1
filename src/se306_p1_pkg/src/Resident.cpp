@@ -6,7 +6,7 @@
 #include "Actor.h"
 #include "ActorSpawner.h"
 #include <ctime>
-#include <sstream>
+#include <time.h>
 
 // The person living in our house. 
 // Has various attributes representing his needs/wants, which degrade over time.
@@ -45,10 +45,13 @@ void Resident::doInitialSetup()
 void Resident::doExecuteLoop()
 {    
 	// Increment the time of day
-	time_of_day += 12;
+	//time_of_day += 12;
+	time_of_day += 3600;
+	//ROS_INFO("%s", ctime(&time_of_day));
 
+	time_of_day_values = gmtime(&time_of_day);
+	//ROS_INFO("%d", time_of_day_values->tm_hour);
 
-	ROS_INFO("%s", ctime(&time_of_day));
 	if (morale_count_ >= WAIT_TIME && !m_dropped_)
 	{
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
