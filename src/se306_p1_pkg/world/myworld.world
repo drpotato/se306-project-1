@@ -14,31 +14,10 @@ include "models/bench_kitchen_corner"
 include "models/fridge"
 include "models/oven"
 
-define actor position
-(
-  size [0.35 0.35 0.25]
-  drive "diff"
-)
-
-
-define floorplan model
-(
-  # sombre, sensible, artistic
-  color "gray30"
-
-  obstacle_return 1
-)
-
-define my_block model
-(
-  size [0.5 0.5 0.5]
-  gui_nose 0
-)
 
 # set the resolution of the underlying raytrace model in meters
 
 resolution 0.02 #resolution of the underline bitmap model in meters.
-
 interval_sim 100  # simulation timestep in milliseconds. length of each simulation update cycle.
 
 
@@ -50,16 +29,58 @@ window
 
 )
 
-# load an environment bitmap
-floorplan
+# Walls
+model
 (
-  name "swarm"
+  name "walls"
   bitmap "worldmaps/worldwalls.bmp"
+  color "gray30"
   
   # Tried to keep this roughly in line with a typical NZ house size, and using the same aspect ratio as the bitmap
   size [15.3985 10.0 0.5]
   pose [ 0.0 0.0 0.0 0.0 ]
+  
+  obstacle_return 1
 )
+
+# Carpet
+model
+(
+  name "carpet"
+  color "wheat3"
+  
+  size [15.3985 10.0 0.0]
+  pose [ 0.0 0.0 0.0 -0.01 ]
+  
+  stack_children 0
+  obstacle_return 0
+)
+
+# Tiles
+model
+(
+  name "tiles"
+  color "LightGray"
+  
+  size [ 3.69925 4.28571 0.0 ]
+  pose [ 0.0 2.85714 0.001 0.0 ]
+  
+  stack_children 0
+  obstacle_return 0
+)
+
+# Grass - looks good, but makes selection hard.
+#model
+#(
+#  name "grass"
+#  color "DarkOliveGreen4"
+#  
+#  size [200 200 0.005]
+#  pose [ 0.0 0.0 -0.005 0.0 ]
+#  
+#  stack_children 0
+#  obstacle_return 0
+#)
 
 # Furniture Lounge
 couch( pose [-1.25 -2.75 0 0] name "couch0" )

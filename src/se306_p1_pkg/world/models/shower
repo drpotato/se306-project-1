@@ -66,7 +66,7 @@ define shower model
 	
 	# Base
 	size [1.0 1.5 0.02]
-	color "SteelBlue3"
+	color "LightGray"
 	stack_children 0
 	obstacle_return 0
 	gui_nose 0
