@@ -48,7 +48,7 @@ add_message_files(
   FILES
   Action.msg
   Arrive.msg
-  Entertainedness.msg
+  Morale.msg
   Health.msg
   Hunger.msg
   Interaction.msg

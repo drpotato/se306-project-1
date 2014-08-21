@@ -11,10 +11,10 @@ void MedicationRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
-	entertainednessLevel = 5;
+	moraleLevel = 5;
 	entertaining = false;
 	residentName = "RobotNode2";
-	subscriberEntertainedness = nodeHandle->subscribe("entertainedness", 1000, MedicationRobot::entertainednessCallback);
+	subscriberMorale = nodeHandle->subscribe("morale", 1000, MedicationRobot::moraleCallback);
 	y = 0;
 	x = 0;
 	first = true;
@@ -58,7 +58,7 @@ void MedicationRobot::doExecuteLoop()
 	}
 	else
 	{
-		if (entertainednessLevel == 5)
+		if (moraleLevel == 5)
 		{
 			//Add do last desponse call that kurt implimented
 			MedicationRobot::stopResponse("entertaining");
@@ -83,16 +83,16 @@ void MedicationRobot::doExecuteLoop()
 }
 
 // TODO: SHOULD BE MEDICATION ##################################################################################################################################
-void MedicationRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
+void MedicationRobot::moraleCallback(msg_pkg::Morale msg)
 {
  	MedicationRobot* temp = dynamic_cast<MedicationRobot*>( ActorSpawner::getInstance().getActor());
 
- 	temp->entertainednessLevel = msg.level;
+ 	temp->moraleLevel = msg.level;
 }
 
 bool MedicationRobot::checkMedicationLevel()
 {
-	if (entertainednessLevel>=2 )
+	if (moraleLevel>=2 )
 	{
 		return true;
 	}

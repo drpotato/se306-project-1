@@ -12,10 +12,10 @@ void CookingRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
-	entertainednessLevel = 5;
+	moraleLevel = 5;
 	entertaining = false;
 	residentName = "RobotNode2";
-	subscriberEntertainedness = nodeHandle->subscribe("entertainedness", 1000, CookingRobot::entertainednessCallback);
+	subscriberMorale = nodeHandle->subscribe("morale", 1000, CookingRobot::moraleCallback);
 	y = 0;
 	x = 0;
 	first = true;
@@ -60,7 +60,7 @@ void CookingRobot::doExecuteLoop()
 	}
 	else
 	{
-		if (entertainednessLevel == 5)
+		if (moraleLevel == 5)
 		{
 			//Add do last desponse call that kurt implimented
 			CookingRobot::stopResponse("entertaining");
@@ -85,17 +85,17 @@ void CookingRobot::doExecuteLoop()
 }
 
 // TODO: SHOULD BE COOKING/FOOD ########################################################################################################################
-void CookingRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
+void CookingRobot::moraleCallback(msg_pkg::Morale msg)
 {
  	CookingRobot* temp = dynamic_cast<CookingRobot*>( ActorSpawner::getInstance().getActor());
 
- 	temp->entertainednessLevel = msg.level;
+ 	temp->moraleLevel = msg.level;
  	//ROS_INFO("Changed value");
 }
 
 bool CookingRobot::checkCookingLevel()
 {
-	if (entertainednessLevel>=2 )
+	if (moraleLevel>=2 )
 	{
 		return true;
 	}
