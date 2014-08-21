@@ -44,13 +44,12 @@ void Resident::doInitialSetup()
 
 void Resident::doExecuteLoop()
 {    
-	// Increment the time of day
-	//time_of_day += 12;
-	time_of_day += 3600;
-	//ROS_INFO("%s", ctime(&time_of_day));
+	// Increment the time of day by the value calculated previously (in seconds)
+	time_of_day += seconds_to_add;
+	//ROS_INFO("%s", ctime(&time_of_day)); //<-- use this to debug to print the time
 
 	time_of_day_values = gmtime(&time_of_day);
-	//ROS_INFO("%d", time_of_day_values->tm_hour);
+	//ROS_INFO("%d", time_of_day_values->tm_hour); //<-- use this to debug to print the hour value (can change to minutes or whatever too)
 
 	if (morale_count_ >= WAIT_TIME && !m_dropped_)
 	{
