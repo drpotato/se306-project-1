@@ -160,7 +160,7 @@ target_link_libraries(
 ## Add gtest based cpp test target and link libraries
 catkin_add_gtest(${PROJECT_NAME}-test
   test/utest.cpp
-  test/robot_test.cpp
+  test/resident_test.cpp
 )
 if(TARGET ${PROJECT_NAME}-test)
   target_link_libraries(${PROJECT_NAME}-test ActorLibrary ${catkin_LIBRARIES})
