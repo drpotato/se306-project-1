@@ -1,6 +1,5 @@
 all:
-	python build_includeActors.py
-	catkin_make
+	./build.sh
 clean:
 	rm -rf devel build
 	
