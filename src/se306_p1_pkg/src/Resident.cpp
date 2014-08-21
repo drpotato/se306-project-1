@@ -5,6 +5,8 @@
 #include <msg_pkg/Morale.h>
 #include "Actor.h"
 #include "ActorSpawner.h"
+#include <ctime>
+#include <sstream>
 
 // The person living in our house. 
 // Has various attributes representing his needs/wants, which degrade over time.
@@ -17,6 +19,8 @@ void Resident::doInitialSetup()
   // Initially the resident is not locked.
   // Any other Actor can interact with him and acquire the lock.
   lock_ = false;
+
+  time_of_day = std::time(0);
 
   // Set levels to maximum initially.
   morale_level_ = 5;
@@ -37,6 +41,7 @@ void Resident::doInitialSetup()
 
 void Resident::doExecuteLoop()
 {    
+	//ROS_INFO("%s", ctime(&time_of_day));
 	if (morale_count_ >= WAIT_TIME && !m_dropped_)
 	{
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());

@@ -4,6 +4,7 @@
 #include "Human.h"
 #include <msg_pkg/Interaction.h>
 #include "ros/ros.h"
+#include <ctime>
 
 class Resident : public Human
 {
@@ -27,6 +28,8 @@ private:
   bool s_dropped_;
   const static int WAIT_TIME = 50;
   bool m_replenished_;
+
+  std::time_t time_of_day;
 
   // Level of social fulfillment: 
   // 1 - bad (lonely)
