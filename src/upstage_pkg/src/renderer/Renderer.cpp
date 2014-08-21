@@ -1,6 +1,6 @@
 #include "Renderer.hpp"
-#include "Context.hpp"
-#include "Debug.hpp"
+#include "../Context.hpp"
+#include "../Debug.hpp"
 
 namespace
 {

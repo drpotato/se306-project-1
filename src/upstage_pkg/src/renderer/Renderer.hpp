@@ -2,7 +2,7 @@
 #define SE306P1_UPSTAGE_RENDERER_HPP_DEFINED
 
 #include "RenderTask.hpp"
-#include "StackAllocator.hpp"
+#include "../StackAllocator.hpp"
 #include <vector>
 
 namespace ups

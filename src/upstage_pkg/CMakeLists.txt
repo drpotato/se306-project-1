@@ -18,7 +18,7 @@ include_directories(
 add_library(UpstageLibrary
   src/Context.cpp
   src/Keyboard.cpp
-  src/Renderer.cpp
+  src/renderer/Renderer.cpp
 )
 
 
