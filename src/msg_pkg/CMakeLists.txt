@@ -49,11 +49,14 @@ add_message_files(
   Action.msg
   Arrive.msg
   Entertainedness.msg
+  Fitness.msg
   Health.msg
   Hunger.msg
+  Hygiene.msg
   Interaction.msg
   Leave.msg
   Location.msg
+  Morale.msg
   Socialness.msg
   Thirst.msg
 )
