@@ -14,6 +14,8 @@ protected:
 
 	static void moraleCallback(msg_pkg::Morale msg);
 
+	string getActorName();
+
 	int8_t moraleLevel;
 	bool entertaining;
 

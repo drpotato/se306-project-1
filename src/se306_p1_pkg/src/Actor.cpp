@@ -20,8 +20,8 @@
 
 namespace
 {
-	std::string generateNodeName(unsigned int ID);
-	std::string generateStageName(unsigned int ID);
+	std::string generateNodeName(unsigned int ID, string nodeName);
+	std::string generateStageName(unsigned int ID, string nodeName);
 }
 
 Actor::Actor():
@@ -46,8 +46,8 @@ Actor::~Actor()
 
 void Actor::initialSetup(unsigned int robotID, double px, double py, double theta)
 {
-	rosName = generateNodeName(robotID);
-	stageName = generateStageName(robotID);
+	rosName = generateNodeName(robotID, getActorName());
+	stageName = generateStageName(robotID, getActorName());
 	pxInitial = px;
 	pyInitial = py;
 	thetaInitial = theta;
@@ -126,6 +126,163 @@ void Actor::publishLocation()
 	locationMessage.id = rosName;
 	// Publish the message.
 	publisherLocation.publish(locationMessage);
+}
+
+// Check to see if any keys are pressed and set the mode appropriately
+void Actor::checkKeyboardPress()
+{
+    KeyboardListener &keyboardListener = KeyboardListener::getInstance();
+    if (keyboardListener.isKeyTapped(ups::KEY_D_CODE))
+    {
+        //doctor
+        toggleMode("doctor");
+        ROS_INFO("hello doctor");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_N_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
+    {
+        //nurse1
+        toggleMode("nurse1");
+    }
+    else if ((keyboardListener.isKeyTapped(ups::KEY_N_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
+    {
+        //nurse2
+        toggleMode("nurse2");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_F_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
+    {
+        //friend1
+        toggleMode("friend1");
+    }
+    else if ((keyboardListener.isKeyTapped(ups::KEY_F_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
+    {
+        //friend2
+        toggleMode("friend2");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_R_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
+    {
+        //relative1
+        toggleMode("relative1");
+    }
+    else if ((keyboardListener.isKeyTapped(ups::KEY_R_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
+    {
+        //relative2
+        toggleMode("relative2");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_C_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
+    {
+        //caregiver1
+        toggleMode("caregiver1");
+    }
+    else if ((keyboardListener.isKeyTapped(ups::KEY_C_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
+    {
+        //caregiver2
+        toggleMode("caregiver2");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_M_CODE))
+    {
+        //medicationRobot
+        toggleMode("medicationRobot");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_E_CODE))
+    {
+        //entertainmentRobot
+        toggleMode("entertainmentRobot");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_T_CODE))
+    {
+        //companionRobot
+        toggleMode("companionRobot");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_B_CODE))
+    {
+        //cookingRobot
+        toggleMode("cookingRobot");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_ENTER_CODE))
+    {
+        //resident
+        toggleMode("resident");
+    }
+}
+
+// Checks if there is any mode currently set
+bool Actor::modeSet()
+{
+    if (RCmode == "")
+    {
+        return false;
+    }
+    return true;
+}
+
+// Checks whether we are in a certain mode or not
+bool Actor::inMode(string mode)
+{
+    if (RCmode == mode)
+    {
+        return true;
+    }
+    return false;
+}
+
+// Turns a mode on or off
+void Actor::toggleMode(string mode)
+{
+    // If we are in this mode, turn the mode off
+    if (inMode(mode)) 
+    {
+        RCmode = "";
+    }
+    // If there is no current mode, we are free to put it in this mode
+    else if (!modeSet())
+    {
+        RCmode = mode;
+    }
+    // Cannot set the mode on or off if it is currently in another mode
+}
+
+// Only call this method from the subclass IF it is in your corresponding mode (RCmode)
+void Actor::controlRobot()
+{
+    KeyboardListener &keyboardListener = KeyboardListener::getInstance();
+    velRotational = 0.0;
+    velLinear = 0.0;
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_UP_CODE))
+    {
+        velLinear += 1.0;
+    }
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_DOWN_CODE))
+    {
+        velLinear -= 1.0;
+    }
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_LEFT_CODE))
+    {
+        velRotational += 1.0;
+    }
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_RIGHT_CODE))
+    {
+        velRotational -= 1.0;
+    }
+}
+
+// Request the lock for the resident
+void Actor::requestLock(std::string actor_name)
+{
+    msg_pkg::RequestLock request;
+    request.robot_id = rosName;
+    request.actor_name = actor_name;
+    publisherRequestLock.publish(request);
+}
+// Give up the resident lock
+void Actor::unlock()
+{
+    msg_pkg::Unlock unlock;
+    unlock.robot_id = rosName;
+    publisherUnlock.publish(unlock);
 }
 
 // Process messages coming from Stage.
@@ -246,25 +403,20 @@ ros::NodeHandle &Actor::getNodeHandle() const
 
 namespace
 {
-	std::string generateNodeName(unsigned int ID)
+	std::string generateNodeName(unsigned int ID, string nodeName)
 	{
-		char *buffer = new char[128];
-		sprintf(buffer, "RobotNode%u", ID);
-
-		std::string nodeName(buffer);
-		delete[] buffer;
-
-		return nodeName;
+          ostringstream os;
+          os << nodeName << ID;
+          string s = os.str();
+          return s;
 	}
 
-	std::string generateStageName(unsigned int ID)
+	std::string generateStageName(unsigned int ID, string nodeName)
 	{
-		char *buffer = new char[128];
-		sprintf(buffer, "robot_%u", ID);
-
-		std::string nodeName(buffer);
-		delete[] buffer;
-
-		return nodeName;
+          // TODO Jamie, why the fuck does this have to mess with the behaviour of robots?
+          ostringstream os;
+          os << "robot_" << ID;
+          string s = os.str();
+          return s;
 	}
 }

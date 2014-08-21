@@ -6,15 +6,20 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 
+string MedicationRobot::getActorName()
+{
+  return "MedicationRobot";
+}
+
 // A Robot which gives the Resident his medication.
 void MedicationRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
-	moraleLevel = 5;
-	entertaining = false;
+	healthLevel = 5;
+	healing = false;
 	residentName = "RobotNode2";
-	subscriberMorale = nodeHandle->subscribe("morale", 1000, MedicationRobot::moraleCallback);
+	subscriberHealth = nodeHandle->subscribe("health", 1000, MedicationRobot::healthCallback);
 	y = 0;
 	x = 0;
 	first = true;
@@ -25,6 +30,10 @@ void MedicationRobot::doInitialSetup()
 
 void MedicationRobot::doExecuteLoop()
 {
+	if (RCmode == "medicationRobot")
+  	{
+    	MedicationRobot::controlRobot();
+  	}
 	if (returningHome){
 
 		if (returningHome_first){
@@ -37,20 +46,24 @@ void MedicationRobot::doExecuteLoop()
 
 	}
 
-	if (!entertaining)
+	if (!healing)
 	{
-		if (!checkMedicationLevel())
+		if (checkHealthLevel())
+		{
+			//ROS_INFO("Nothing to do here");
+		}
+		else
 		{
 			if (first_call)
 			{
-
+				this->startMovingToResident();
 				first_call = false;
 			}
 
-	    	if (!(true) )
+	    	if (!(this->movingToResident) )
 	    	{
 	    		ROS_INFO("CHANGED TO ENTERTAINING");
-	    		entertaining=true;
+	    		healing=true;
 	    		first = false;
 	    	}
 
@@ -58,11 +71,11 @@ void MedicationRobot::doExecuteLoop()
 	}
 	else
 	{
-		if (moraleLevel == 5)
+		if (healthLevel == 5)
 		{
 			//Add do last desponse call that kurt implimented
 			MedicationRobot::stopResponse("entertaining");
-			entertaining = false;
+			healing = false;
 			returningHome = true;
 
 		}
@@ -82,17 +95,18 @@ void MedicationRobot::doExecuteLoop()
 	}
 }
 
-// TODO: SHOULD BE MEDICATION ##################################################################################################################################
-void MedicationRobot::moraleCallback(msg_pkg::Morale msg)
+
+void MedicationRobot::healthCallback(msg_pkg::Health msg)
 {
  	MedicationRobot* temp = dynamic_cast<MedicationRobot*>( ActorSpawner::getInstance().getActor());
 
- 	temp->moraleLevel = msg.level;
+ 	temp->healthLevel = msg.level;
+ 	//ROS_INFO("Changed value");
 }
 
-bool MedicationRobot::checkMedicationLevel()
+bool MedicationRobot::checkHealthLevel()
 {
-	if (moraleLevel>=2 )
+	if (healthLevel>=2 )
 	{
 		return true;
 	}

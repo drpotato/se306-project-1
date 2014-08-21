@@ -1,5 +1,6 @@
 Team Google Ultron Dev Team - SE306 Project 1 Repo
 ==================================================
+### git reset --merge ORIG_HEAD
 
 ![](http://ultronbrowser.info/0-Ultron_logo_1.png)
 

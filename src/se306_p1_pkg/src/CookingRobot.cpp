@@ -6,16 +6,20 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 
+string CookingRobot::getActorName()
+{
+  return "CookingRobot";
+}
 
 // A Robot to cook meals for the Resident. Meals happen according to a regular schedule and can[not] be interrupted.
 void CookingRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
-	moraleLevel = 5;
-	entertaining = false;
+	hungerLevel = 5;
+	cooking = false;
 	residentName = "RobotNode2";
-	subscriberMorale = nodeHandle->subscribe("morale", 1000, CookingRobot::moraleCallback);
+	subscriberHunger = nodeHandle->subscribe("hunger", 1000, CookingRobot::hungerCallback);
 	y = 0;
 	x = 0;
 	first = true;
@@ -26,6 +30,10 @@ void CookingRobot::doInitialSetup()
 
 void CookingRobot::doExecuteLoop()
 {
+	if (RCmode == "cookingRobot")
+  	{
+    	CookingRobot::controlRobot();	
+  	}
 	if (returningHome){
 		//ROS_INFO("MOVEING TO HOME");
 
@@ -37,42 +45,51 @@ void CookingRobot::doExecuteLoop()
 
         return;
 
-	}
+}
 
-	if (!entertaining)
+	if (!cooking)
 	{
-		if (!checkCookingLevel())
+		if (!checkHungerLevel())
 		{
 			if (first_call)
 			{
-
+				//this->activeNode = &node5;
+				this->startMovingToResident();
 				first_call = false;
 			}
-	    	if (!(true) )
+			//Call method to do the cooking
+			//PathPlannerNode *target = this->pathPlanner.getNode(&node2Name);
+	    	//vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+
+			
+
+	    	//The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
+	    	if (!(this->movingToResident) )
 	    	{
-	    		//CookingRobot::doResponse("entertaining");
-	    		ROS_INFO("CHANGED TO ENTERTAINING");
-	    		entertaining=true;
+	    		//CookingRobot::doResponse("cooking");
+	    		ROS_INFO("CHANGED TO cooking");
+	    		cooking=true;
 	    		first = false;
 	    	}
+			//After finished cooking set cooking to false
+
 		}
 	}
 	else
 	{
-		if (moraleLevel == 5)
+		if (hungerLevel == 5)
 		{
-			//Add do last desponse call that kurt implimented
-			CookingRobot::stopResponse("entertaining");
-			entertaining = false;
+			//Add do last response call that kurt implimented
+			CookingRobot::stopResponse("cooking");
+			cooking = false;
 			returningHome = true;
 
 		}
 		else
 		{
-
 			if (y == 40)
 			{
-				CookingRobot::doResponse("entertaining");
+				CookingRobot::doResponse("cooking");
 				y=0;
 			}
 			else
@@ -83,18 +100,17 @@ void CookingRobot::doExecuteLoop()
 	}
 }
 
-// TODO: SHOULD BE COOKING/FOOD ########################################################################################################################
-void CookingRobot::moraleCallback(msg_pkg::Morale msg)
+void CookingRobot::hungerCallback(msg_pkg::Hunger msg)
 {
  	CookingRobot* temp = dynamic_cast<CookingRobot*>( ActorSpawner::getInstance().getActor());
 
- 	temp->moraleLevel = msg.level;
+ 	temp->hungerLevel = msg.level;
  	//ROS_INFO("Changed value");
 }
 
-bool CookingRobot::checkCookingLevel()
+bool CookingRobot::checkHungerLevel()
 {
-	if (moraleLevel>=2 )
+	if (hungerLevel>=2 )
 	{
 		return true;
 	}
