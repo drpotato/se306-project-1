@@ -36,6 +36,21 @@ private:
   struct tm *time_of_day_values;
   // Stores the number of seconds needed to add to time_of_day upon each loop
   double seconds_to_add;
+  int the_hour;
+
+  // Event hours - c++ inverts 24hr time for some reason? - maybe just my machine does this
+  const static int WAKE_TIME = 19;
+  const static int BREAKFAST_TIME = 20;
+  const static int LUNCH_TIME = 1;
+  const static int DINNER_TIME = 6;
+  const static int SLEEP_TIME = 11;
+
+  // Has done event values
+  bool has_eaten_breakfast_;
+  bool has_eaten_lunch_;
+  bool has_eaten_dinner_;
+  bool has_woken_;
+  bool has_gone_to_bed_;
 
   // Level of social fulfillment: 
   // 1 - bad (lonely)
@@ -55,9 +70,19 @@ private:
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;
 
+  // Gets a new level with a maximum of 5 and minimum of 1
   static int getNewLevel(int amount, int oldValue);
-  int second_increase_per_loop();
+
+  // Number of seconds to increase Ultron world time by on each ROS loop
+  int secondIncreasePerLoop();
+
+  // Stop the robots angular velocity
   void stopRobotSpinning();
+
+  // Daily events
+  void wakeUp();
+  void eat();
+  void goToSleep();
 };
 
 
