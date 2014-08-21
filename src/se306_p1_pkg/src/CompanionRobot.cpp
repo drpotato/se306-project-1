@@ -1,4 +1,4 @@
-#include "EntertainmentRobot.h"
+#include "CompanionRobot.h"
 #include "ActorSpawner.h"
 
 #include "Actor.h"
@@ -8,14 +8,14 @@
 
 
 
-void EntertainmentRobot::doInitialSetup()
+void CompanionRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
 	entertainednessLevel = 5;
 	entertaining = false;
 	residentName = "RobotNode2";
-	subscriberEntertainedness = nodeHandle->subscribe("entertainedness", 1000, EntertainmentRobot::entertainednessCallback);
+	subscriberEntertainedness = nodeHandle->subscribe("entertainedness", 1000, CompanionRobot::entertainednessCallback);
 	y = 0;
 	x = 0;
 	first = true;
@@ -24,7 +24,7 @@ void EntertainmentRobot::doInitialSetup()
 	returningHome_first = true;
 }
 
-void EntertainmentRobot::doExecuteLoop()
+void CompanionRobot::doExecuteLoop()
 {
 	if (returningHome){
 		//ROS_INFO("MOVEING TO HOME");
@@ -42,19 +42,19 @@ void EntertainmentRobot::doExecuteLoop()
         	//ROS_INFO("ARRIVE HOME");
         	returningHome=false;
         }*/
-        
-        
+
+
         return;
 
 	}
 
 	if (!entertaining)
 	{
-		if (checkEntertainmentLevel())
+		if (checkCompanionLevel())
 		{
 			//ROS_INFO("Nothing to do here");
-		} 
-		else 
+		}
+		else
 		{
 			if (first_call)
 			{
@@ -71,7 +71,7 @@ void EntertainmentRobot::doExecuteLoop()
 	    	//The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
 	    	if (!(this->movingToResident) )
 	    	{
-	    		//EntertainmentRobot::doResponse("entertaining");
+	    		//CompanionRobot::doResponse("entertaining");
 	    		ROS_INFO("CHANGED TO ENTERTAINING");
 	    		entertaining=true;
 	    		first = false;
@@ -80,43 +80,43 @@ void EntertainmentRobot::doExecuteLoop()
 			//After finished entertaining set entertaining to flase
 
 		}
-	} 
-	else 
+	}
+	else
 	{
 		if (entertainednessLevel == 5)
 		{
 			//Add do last desponse call that kurt implimented
-			EntertainmentRobot::stopResponse("entertaining");
+			CompanionRobot::stopResponse("entertaining");
 			entertaining = false;
 			returningHome = true;
 
-		} 
+		}
 		else
 		{
 
 			if (y == 40)
 			{
-				EntertainmentRobot::doResponse("entertaining");
+				CompanionRobot::doResponse("entertaining");
 				y=0;
-			} 
-			else 
+			}
+			else
 			{
 				y++;
-			}	
+			}
 		}
 	}
 }
 
 
-void EntertainmentRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
+void CompanionRobot::entertainednessCallback(msg_pkg::Entertainedness msg)
 {
- 	EntertainmentRobot* temp = dynamic_cast<EntertainmentRobot*>( ActorSpawner::getInstance().getActor());
+ 	CompanionRobot* temp = dynamic_cast<CompanionRobot*>( ActorSpawner::getInstance().getActor());
 
  	temp->entertainednessLevel = msg.level;
  	//ROS_INFO("Changed value");
 }
 
-bool EntertainmentRobot::checkEntertainmentLevel()
+bool CompanionRobot::checkCompanionLevel()
 {
 	if (entertainednessLevel>=2 )
 	{

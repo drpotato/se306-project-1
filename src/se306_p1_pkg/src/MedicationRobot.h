@@ -4,13 +4,13 @@
 #include "Robot.h"
 #include <msg_pkg/Entertainedness.h>
 
-class EntertainmentRobot : public Robot
+class MedicationRobot : public Robot
 {
 protected:
-	virtual void doInitialSetup(); 
+	virtual void doInitialSetup();
 	virtual void doExecuteLoop();
 
-	bool checkEntertainmentLevel();
+	bool checkMedicationLevel();
 
 	static void entertainednessCallback(msg_pkg::Entertainedness msg);
 
