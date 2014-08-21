@@ -56,7 +56,6 @@ add_message_files(
   Leave.msg
   Location.msg
   Socialness.msg
-  Thirst.msg
 )
 
 ## Generate services in the 'srv' folder
