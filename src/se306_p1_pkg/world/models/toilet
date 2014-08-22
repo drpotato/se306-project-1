@@ -1,0 +1,74 @@
+define toilet model
+(
+	# Handle
+	model
+	(
+		size [0.03 0.03 0.15]
+		pose [-0.2 0.31 0.73 0.0]
+		color "grey"
+	)
+	
+	# HandleBase
+	model
+	(
+		size [0.03 0.03 0.03]
+		pose [-0.2 0.28 0.85 0.0]
+		color "grey"
+	)
+	
+	# Seat
+	model
+	(
+		size [0.4 0.6 0.05]
+		pose [0.1 0.0 0.4 -90.0]
+		bitmap "models/img/toilet.bmp"
+		color "white"
+	)
+	
+	# Cistern
+	model
+	(
+		size [0.2 0.54 0.4]
+		pose [-0.2 0.0 0.55 0.0]
+		color "white"
+	)
+	
+	# Cistern Pipe Top
+	model
+	(
+		size [0.15 0.3 0.1]
+		pose [-0.2 0.0 0.45 0.0]
+		color "white"
+	)
+	
+	# Cistern Pipe Lower
+	model
+	(
+		size [0.08 0.2 0.45]
+		pose [-0.19 0.0 0.0 0.0]
+		color "white"
+	)
+	
+	# Base Upper
+	model
+	(
+		size [0.5 0.35 0.2]
+		pose [0.075 0.0 0.2 0.0]
+		color "white"
+	)
+	
+	# Base Middle
+	model
+	(
+		size [0.3 0.2 0.2]
+		pose [0.0 0.0 0.0 0.0]
+		color "white"
+	)
+	
+	# Base Lower
+	size [0.5 0.4 0.02]
+	color "white"
+	stack_children 0
+	obstacle_return 0
+	gui_nose 0
+)

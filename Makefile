@@ -1,6 +1,13 @@
 all:
-	python build_includeActors.py
-	catkin_make
+	./build.sh
+run:
+	./run.sh
+debug:
+	./debug.sh
+tests:
+	./tests.sh
+todos:
+	./todos.sh
 clean:
 	rm -rf devel build
 	

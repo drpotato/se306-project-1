@@ -15,12 +15,16 @@
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
 
-
+// A 'Factory' class to control the arrival and departure of Visitors.
+// As we cannot dynamically create and remove Actors from the world, they will simply sit (or mill about/circle) outside the door of the house until needed.
+// When the Resident requests a Visitor, the ActorController notifies that Visitor.
+// When the Visitor has finished its task, it notifies the ActorController that it is leaving the house.
 ActorSpawner::ActorSpawner():
 theActor(0)
 {
 }
 
+//ActorController should act as a Singleton.
 ActorSpawner &ActorSpawner::getInstance()
 {
   static ActorSpawner *actorSpawnerInstance;
@@ -33,6 +37,7 @@ ActorSpawner &ActorSpawner::getInstance()
   return *actorSpawnerInstance;
 }
 
+// TODO: UPDATE THIS. CAN'T JUST SPAWN NEW NODES ############################################################################################################
 Actor *ActorSpawner::spawnActor(const char *actorTypeName)
 {
   if (strcmp("R0", actorTypeName) == 0)
@@ -75,7 +80,6 @@ Actor *ActorSpawner::getActor() const
 {
   return theActor;
 }
-    
 
 int main(int argc, char **argv)
 {

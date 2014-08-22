@@ -1,4 +1,4 @@
-#include "EntertainmentRobot.h"
+#include "MedicationRobot.h"
 #include "ActorSpawner.h"
 
 #include "Actor.h"
@@ -6,15 +6,15 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 
-// A Robot that provides the Resident with entertainment (possibly TV)
-void EntertainmentRobot::doInitialSetup()
+// A Robot which gives the Resident his medication.
+void MedicationRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
 	moraleLevel = 5;
 	entertaining = false;
 	residentName = "RobotNode2";
-	subscriberMorale = nodeHandle->subscribe("morale", 1000, EntertainmentRobot::moraleCallback);
+	subscriberMorale = nodeHandle->subscribe("morale", 1000, MedicationRobot::moraleCallback);
 	y = 0;
 	x = 0;
 	first = true;
@@ -23,81 +23,74 @@ void EntertainmentRobot::doInitialSetup()
 	returningHome_first = true;
 }
 
-void EntertainmentRobot::doExecuteLoop()
+void MedicationRobot::doExecuteLoop()
 {
 	if (returningHome){
-		//ROS_INFO("MOVEING TO HOME");
 
 		if (returningHome_first){
 			returningHome_first = false;
 			//TODO: Matt fix this shit (Target node reset upon reach destination)
 			//targetNode = 0;
 		}
-        
+
         return;
 
 	}
 
 	if (!entertaining)
 	{
-		if (!checkMoraleLevel())
+		if (!checkMedicationLevel())
 		{
 			if (first_call)
 			{
-				//this->activeNode = &node5;
 				this->startMovingToResident();
 				first_call = false;
 			}
 
 	    	if (!(this->movingToResident) )
 	    	{
-	    		//EntertainmentRobot::doResponse("entertaining");
 	    		ROS_INFO("CHANGED TO ENTERTAINING");
 	    		entertaining=true;
 	    		first = false;
 	    	}
 
-			//After finished entertaining set entertaining to flase
-
 		}
-	} 
-	else 
+	}
+	else
 	{
 		if (moraleLevel == 5)
 		{
 			//Add do last desponse call that kurt implimented
-			EntertainmentRobot::stopResponse("entertaining");
+			MedicationRobot::stopResponse("entertaining");
 			entertaining = false;
 			returningHome = true;
 
-		} 
+		}
 		else
 		{
 
 			if (y == 40)
 			{
-				EntertainmentRobot::doResponse("entertaining");
+				MedicationRobot::doResponse("entertaining");
 				y=0;
-			} 
-			else 
+			}
+			else
 			{
 				y++;
-			}	
+			}
 		}
 	}
 }
 
-
-// Upon receiving a message published to the 'entertainedness' topic, respond appropriately.
-void EntertainmentRobot::moraleCallback(msg_pkg::Morale msg)
+// TODO: SHOULD BE MEDICATION ##################################################################################################################################
+void MedicationRobot::moraleCallback(msg_pkg::Morale msg)
 {
- 	EntertainmentRobot* temp = dynamic_cast<EntertainmentRobot*>( ActorSpawner::getInstance().getActor());
+ 	MedicationRobot* temp = dynamic_cast<MedicationRobot*>( ActorSpawner::getInstance().getActor());
 
  	temp->moraleLevel = msg.level;
- 	//ROS_INFO("Changed value");
 }
 
-bool EntertainmentRobot::checkMoraleLevel()
+bool MedicationRobot::checkMedicationLevel()
 {
 	if (moraleLevel>=2 )
 	{
