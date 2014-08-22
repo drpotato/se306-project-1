@@ -112,7 +112,7 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	ros::init(fakeArgC, 0, rosName.c_str());
 
 	nodeHandle = new ros::NodeHandle();
-	loopRate = new ros::Rate(10);
+	loopRate = new ros::Rate(LOOP_RATE);
 
 	publisherLocation = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
 

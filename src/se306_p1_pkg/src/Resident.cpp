@@ -6,7 +6,7 @@
 #include "Actor.h"
 #include "ActorSpawner.h"
 #include <ctime>
-#include <sstream>
+#include <time.h>
 
 // The person living in our house. 
 // Has various attributes representing his needs/wants, which degrade over time.
@@ -20,7 +20,18 @@ void Resident::doInitialSetup()
   // Any other Actor can interact with him and acquire the lock.
   lock_ = false;
 
+  // Initialise time of day to current time
   time_of_day = std::time(0);
+  the_hour = gmtime(&time_of_day)->tm_hour;
+  // Get number of seconds to add on each loop
+  seconds_to_add = secondIncreasePerLoop();
+
+  // Initialise statuses
+  has_eaten_breakfast_ = false;
+  has_eaten_lunch_ = false;
+  has_eaten_dinner_ = false;
+  has_woken_ = (the_hour > WAKE_TIME);
+  has_gone_to_bed_ = (the_hour > SLEEP_TIME);
 
   // Set levels to maximum initially.
   morale_level_ = 5;
@@ -41,7 +52,37 @@ void Resident::doInitialSetup()
 
 void Resident::doExecuteLoop()
 {    
-	//ROS_INFO("%s", ctime(&time_of_day));
+	// Increment the time of day by the value calculated previously (in seconds)
+	time_of_day += seconds_to_add; //1800; <-- a good debug time frame is 1800 seconds
+	//ROS_INFO("%s", ctime(&time_of_day)); //<-- use this to debug to print the time
+
+	// Grab out the hour value from the current Ultron world time
+	the_hour = gmtime(&time_of_day)->tm_hour;
+	//ROS_INFO("%d", gmtime(&time_of_day)->tm_hour); //<-- use this to debug to print the hour value (can change to minutes or whatever too)
+
+	// Check if its currently any event times
+	if ((the_hour == WAKE_TIME) && (!has_woken_))
+	{
+		// WAKE THE FK UP
+		ROS_INFO("Wake up!");
+		ROS_INFO("%s", has_gone_to_bed_ ? "Sleeping" : "Awake");
+		wakeUp();
+	}
+	else if ( ((the_hour == BREAKFAST_TIME) && (!has_eaten_breakfast_)) || ((the_hour == LUNCH_TIME) && (!has_eaten_lunch_)) || ((the_hour == DINNER_TIME) && (!has_eaten_dinner_)))
+	{
+		// Here have some food
+		ROS_INFO("Eat");
+		eat();
+	}
+	else if ((the_hour == SLEEP_TIME) && (!has_gone_to_bed_))
+	{
+		// Go to sleep yo
+		ROS_INFO("Sleep time!");
+		ROS_INFO("%s", has_gone_to_bed_ ? "Sleeping" : "Awake");
+		goToSleep();
+	}
+
+	//TODO: REMOVE THIS WHEN RANDOMNESS AND DAY LOGIC IS IMPLEMENTED##################################################################################
 	if (morale_count_ >= WAIT_TIME && !m_dropped_)
 	{
 		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
@@ -90,6 +131,7 @@ void Resident::doExecuteLoop()
 	{
 		socialness_count_++;
 	}
+	//###################################################################################################################################################
 }
 
 /*
@@ -185,4 +227,55 @@ void Resident::stopRobotSpinning()
 {
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
   residentInstance->velRotational = 0.0; // Stop rotation to show interaction finished
+}
+
+int Resident::secondIncreasePerLoop()
+{
+	Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+	int loop_rate = residentInstance->LOOP_RATE;
+
+	// 1 hr (Ultron world) = 30 seconds (real world)
+	// Number of loops needed to pass 30 seconds in the real world: (loop_rate is number loops per second)
+	double num_loops_for_real_30_seconds = loop_rate * 30; //e.g. 300
+
+	// Number of loops needed to pass one minute in the Ultron world
+	double num_loops_per_ultron_minute = num_loops_for_real_30_seconds / 60; //e.g. 5
+
+	// Number of seconds to add to the time_of_day on each loop in order to pass one Ultron hour in real world 30 seconds
+	double num_ultron_seconds_per_loop = 60 / num_loops_per_ultron_minute; //e.g. 12
+
+	return num_ultron_seconds_per_loop;
+}
+void Resident::wakeUp()
+{
+	// Reset sleep value for the day
+	has_gone_to_bed_ = false;
+
+	has_woken_ = true;
+}
+void Resident::eat()
+{
+	if (the_hour == BREAKFAST_TIME)
+	{
+		has_eaten_breakfast_ = true;
+	}
+	else if (the_hour == LUNCH_TIME)
+	{
+		has_eaten_lunch_ = true;
+	}
+	else if (the_hour == DINNER_TIME)
+	{
+		has_eaten_dinner_ = true;
+	}
+}
+void Resident::goToSleep()
+{
+	// Reset values for next day
+	has_eaten_breakfast_ = false;
+	has_eaten_breakfast_ = false;
+	has_eaten_lunch_ = false;
+	has_eaten_dinner_ = false;
+	has_woken_ = false;
+
+	has_gone_to_bed_ = true;
 }

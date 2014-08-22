@@ -72,6 +72,9 @@ protected:
 
     bool movingToResident;
 
+    //The rate at which ros will loop - used to calculate time of day
+    const static int LOOP_RATE = 10;
+
 private:
     
     PathPlanner pathPlanner;
@@ -91,7 +94,6 @@ private:
     string node4Name;
     string node5Name;
     string nodeDoorName;
-
    
 };
 
