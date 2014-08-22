@@ -31,6 +31,8 @@ std::set<unsigned char> ups::Keyboard::getActiveKeyCodes() const
 // Since this is based on the raw keycodes, it's not sensitive to remapping.
 // This is actually what you want for things like WASD movement, since WASD is super-inconvenient
 // on something like a dvorak layout.
+// 
+// That said, it's probably easier to use the one above.
 std::set<std::string> ups::Keyboard::getActiveKeyCodeNames() const
 {
 	std::set<unsigned char> activeKeyCodes = getActiveKeyCodes();
@@ -54,7 +56,7 @@ namespace
 		}
 		
 		// From http://www.gp32x.com/board/index.php?/topic/57164-raw-x11-keycodes/
-		keyCodeMap[10] = "1";
+		//keyCodeMap[10] = "1";
 	}
 	
 	std::string mapKeyCodeToString(unsigned char keyCode)

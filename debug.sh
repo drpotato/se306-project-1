@@ -53,35 +53,22 @@ rosrun se306_p1_pkg ActorSpawner 3 Relative 2.75 5 0 >> log/actor_Relative_000.t
 ROBOT3_PID=$!
 echo ROBOT3_PID = $ROBOT3_PID >> log/debugscript.txt
 
-echo "############################## DEBUG LOG ##############################" > log/topic_interaction.txt
-echo Topic          = interaction >> log/topic_interaction.txt
-echo "#######################################################################" >> log/topic_interaction.txt
-$TERM -hold -title "interaction" -e /bin/bash -c ". devel/setup.bash; ./persist.sh \"rostopic echo interaction\"| tee -a log/topic_interaction.txt" &
+echo "############################## DEBUG LOG ##############################" > log/topic_upstagekeyinput.txt
+echo Topic          = upstagekeyinput >> log/topic_upstagekeyinput.txt
+echo "#######################################################################" >> log/topic_upstagekeyinput.txt
+$TERM -hold -title "upstagekeyinput" -e /bin/bash -c ". devel/setup.bash; ./persist.sh \"rostopic echo upstagekeyinput\"| tee -a log/topic_upstagekeyinput.txt" &
 MESSAGE0_PID=$!
 echo MESSAGE0_PID = $MESSAGE0_PID >> log/debugscript.txt
 
-echo "############################## DEBUG LOG ##############################" > log/topic_socialness.txt
-echo Topic          = socialness >> log/topic_socialness.txt
-echo "#######################################################################" >> log/topic_socialness.txt
-$TERM -hold -title "socialness" -e /bin/bash -c ". devel/setup.bash; ./persist.sh \"rostopic echo socialness\"| tee -a log/topic_socialness.txt" &
-MESSAGE1_PID=$!
-echo MESSAGE1_PID = $MESSAGE1_PID >> log/debugscript.txt
-
-echo "############################## DEBUG LOG ##############################" > log/topic_entertainedness.txt
-echo Topic          = entertainedness >> log/topic_entertainedness.txt
-echo "#######################################################################" >> log/topic_entertainedness.txt
-$TERM -hold -title "entertainedness" -e /bin/bash -c ". devel/setup.bash; ./persist.sh \"rostopic echo entertainedness\"| tee -a log/topic_entertainedness.txt" &
-MESSAGE2_PID=$!
-echo MESSAGE2_PID = $MESSAGE2_PID >> log/debugscript.txt
-
+rosrun upstage_pkg Upstage &
+UPSTAGE_PID=$!
 
 rosrun stage_ros stageros src/se306_p1_pkg/world/myworld.world
 
+kill $UPSTAGE_PID
 kill $ROBOT0_PID
 kill $ROBOT1_PID
 kill $ROBOT2_PID
 kill $ROBOT3_PID
 kill $MESSAGE0_PID
-kill $MESSAGE1_PID
-kill $MESSAGE2_PID
 kill $ROSCORE_PID

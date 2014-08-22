@@ -19,6 +19,8 @@ namespace ups
 		
 		bool minGLVersion(int majorMin, int minorMin) const;
 		void getGLVersion(int &major, int &minor) const;
+		Keyboard &getKeyboard();
+		const Keyboard &getKeyboard() const;
 		
 		static Context &getContext();
 	private:
@@ -50,6 +52,16 @@ inline void ups::Context::getGLVersion(int &major, int &minor) const
 {
 	major = _glVersionMajor;
 	minor = _glVersionMinor;
+}
+
+inline ups::Keyboard &ups::Context::getKeyboard()
+{
+	return _keyboard;
+}
+
+inline const ups::Keyboard &ups::Context::getKeyboard() const
+{
+	return _keyboard;
 }
 
 #endif // #ifndef SE306P1_UPSTAGE_CONTEXT_HPP_DEFINED

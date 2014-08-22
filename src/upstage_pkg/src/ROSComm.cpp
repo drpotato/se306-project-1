@@ -33,14 +33,35 @@ ups::ROSComm::~ROSComm()
 {
 }
 
+// To avoid losing keys, the set of active keys is added to, but not cleared until the message is sent.
 void ups::ROSComm::publishKeys(const ups::Keyboard &keyboard)
 {
-
+	std::set<unsigned char> activeKeysFromKeyboard = keyboard.getActiveKeyCodes();
+	for (std::set<unsigned char>::iterator it = activeKeysFromKeyboard.begin(); it != activeKeysFromKeyboard.end(); ++it)
+	{
+		activeKeys.insert(*it);
+	}
 }
 
+// Flush the activeKeys set, and send the messages.
 void ups::ROSComm::doPublishKeys()
 {
-
+	// Create a KeyInput message to publish.
+	msg_pkg::KeyInput keyInputMessage;
+	
+	// Add all stored key codes
+	for (std::set<unsigned char>::iterator it = activeKeys.begin(); it != activeKeys.end(); ++it)
+	{
+		printf("Pubbing %d\n", *it);
+		keyInputMessage.pressedkeys.push_back(*it);
+	}
+	
+	// Send the message
+	publisherKeyInput.publish(keyInputMessage);
+	printf("Pubbed\n");
+	
+	// Clear the key code set
+	activeKeys.clear();
 }
 
 bool ups::ROSComm::executeLoop()

@@ -1,6 +1,7 @@
 #ifndef SE306P1_UPSTAGE_KEYBOARD_HPP_DEFINED
 #define SE306P1_UPSTAGE_KEYBOARD_HPP_DEFINED
 
+#include "KeyCodes.hpp"
 #include <X11/Xlib.h>
 #include <set>
 #include <string>

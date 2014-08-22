@@ -25,6 +25,8 @@ namespace ups
 		
 		void doPublishKeys();
 		
+		std::set<unsigned char> activeKeys;
+		
 		std::string rosName;
 		ros::NodeHandle *nodeHandle;
 		ros::Rate *loopRate;
