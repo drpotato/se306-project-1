@@ -83,7 +83,7 @@ namespace ups
 			{
 				// Looks like you're the first here. I'm so sorry sir, this has never happened before.
 				// I'd better phone management ...
-				UPS_LOGF("StackAllocator storage exceeded. Current limit is %d.", (int)_dataMax - (int)_dataMin);
+				UPS_LOG("StackAllocator storage exceeded.");
 			}
 			
 			// I'll write your name on this napkin so we'll know where to send your continental breakfast.
