@@ -7,7 +7,7 @@ void Doctor::doInitialSetup()
 {
 	velLinear = 0.0;
     velRotational = 0.0;
-    subscriberHealth = nodeHandle->subscribe("telephone", 1000, Doctor::telephoneCallback);
+    subscriberTelephone = nodeHandle->subscribe("telephone", 1000, Doctor::telephoneCallback);
     homeVisit = false;
 }
 
@@ -32,6 +32,6 @@ void Doctor::telephoneCallback(msg_pkg::Telephone msg)
 
 void Doctor::emergency()
 {
-	ROS_DEBUG("HEARD THAT THERE IS AN EMERGENCY");
+	ROS_DEBUG("TRANSMITTING THERE IS AN EMERGENCY");
 
 }

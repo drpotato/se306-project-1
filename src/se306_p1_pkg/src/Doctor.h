@@ -14,7 +14,7 @@ protected:
 
   static void telephoneCallback(msg_pkg::Telephone msg);
 
-  ros::Subscriber subscriberHealth;
+  ros::Subscriber subscriberTelephone;
 
   bool homeVisit;
 
