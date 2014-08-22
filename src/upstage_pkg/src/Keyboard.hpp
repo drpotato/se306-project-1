@@ -2,8 +2,12 @@
 #define SE306P1_UPSTAGE_KEYBOARD_HPP_DEFINED
 
 #include <X11/Xlib.h>
+#include <set>
+#include <string>
 
-#define KEYBOARD_STATES_NBYTES 32
+#define KEYBOARD_STATES_COUNT 256
+
+#define KEYBOARD_STATES_NBYTES ((KEYBOARD_STATES_COUNT + 7) / 8)
 
 namespace ups
 {
@@ -16,6 +20,9 @@ namespace ups
 		void setCodeState(unsigned char keyCode, bool state);
 		bool getCodeState(unsigned char keyCode) const;
 		bool getKeyState(Display *display, KeySym keySymbol) const;
+		
+		std::set<unsigned char> getActiveKeyCodes() const;
+		std::set<std::string> getActiveKeyCodeNames() const;
 	private:
 		unsigned char keyStates[KEYBOARD_STATES_NBYTES];
 	};
