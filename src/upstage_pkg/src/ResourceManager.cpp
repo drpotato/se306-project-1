@@ -13,19 +13,6 @@ ups::ResourceManager::~ResourceManager()
 	}
 }
 
-template<typename t>
-t *ups::ResourceManager::fetch(const std::string &resName) const
-{
-	ups::ResMap::iterator it = _resources.find(resName);
-	
-	if (it == _resources.end())
-	{
-		return load(resName);
-	}
-	
-	return *it;
-}
-
 void ups::ResourceManager::add(const std::string &resName, Resource *resource)
 {
 	_resources[resName] = resource;
@@ -36,7 +23,7 @@ std::string ups::ResourceManager::resolvePath(const std::string &resName) const
 	return resName;
 }
 
-ups::Resource *ups::ResourceManager::load(const std::string &resName) const
+ups::Resource *ups::ResourceManager::load(const std::string &resName)
 {
 	std::string resourcePath = resolvePath(resName);
 	if (resourcePath == "") 
@@ -44,5 +31,7 @@ ups::Resource *ups::ResourceManager::load(const std::string &resName) const
 		return 0;
 	}
 	
-	
+	ups::Resource *resource = _loader.loadFrom(resName);
+	add(resName, resource);
+	return resource;
 }

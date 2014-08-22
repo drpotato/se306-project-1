@@ -7,14 +7,24 @@ namespace ups
 {
 	class Resource;
 	
-	template<typename t>
 	class ResourceLoader
 	{
 	public:
+		enum LoaderType
+		{
+			RL_LT_UpstageEnv,
+			RL_LT_StageWorld
+		};
+		
 		ResourceLoader();
 		~ResourceLoader();
 
-		Resource *loadFrom(const std::string &resName);
+		// Version which is told a type - can be used to force non-default loading.
+		template<LoaderType t>
+		Resource *loadFrom(const std::string &filePath) const;
+		
+		// Version which attempts to guess the type
+		Resource *loadFrom(const std::string &filePath) const;
 		
 	private:
 		
