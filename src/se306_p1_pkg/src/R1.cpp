@@ -1,5 +1,6 @@
 #include "R1.h"
 
+// Our test/debug robots. 
 void R1::doInitialSetup()
 {
 	velLinear = 0.2;

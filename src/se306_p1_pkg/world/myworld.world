@@ -4,32 +4,20 @@ include "models/couch"
 include "models/queenbed"
 include "models/queenbedused"
 include "models/bedsidetable"
+include "models/wardrobe"
+include "models/shower"
+include "models/basin"
+include "models/toilet"
+include "models/bench_bathroom"
+include "models/bench_kitchen"
+include "models/bench_kitchen_corner"
+include "models/fridge"
+include "models/oven"
 
-define actor position
-(
-  size [0.35 0.35 0.25]
-  drive "diff"
-)
-
-
-define floorplan model
-(
-  # sombre, sensible, artistic
-  color "gray30"
-
-  obstacle_return 1
-)
-
-define my_block model
-(
-  size [0.5 0.5 0.5]
-  gui_nose 0
-)
 
 # set the resolution of the underlying raytrace model in meters
 
 resolution 0.02 #resolution of the underline bitmap model in meters.
-
 interval_sim 100  # simulation timestep in milliseconds. length of each simulation update cycle.
 
 
@@ -41,21 +29,87 @@ window
 
 )
 
-# load an environment bitmap
-floorplan
+# Walls
+model
 (
-  name "swarm"
+  name "walls"
   bitmap "worldmaps/worldwalls.bmp"
+  color "gray30"
   
   # Tried to keep this roughly in line with a typical NZ house size, and using the same aspect ratio as the bitmap
   size [15.3985 10.0 0.5]
   pose [ 0.0 0.0 0.0 0.0 ]
+  
+  obstacle_return 1
 )
 
-# Furniture
+# Carpet
+model
+(
+  name "carpet"
+  color "wheat3"
+  
+  size [15.3985 10.0 0.0]
+  pose [ 0.0 0.0 0.0 -0.01 ]
+  
+  stack_children 0
+  obstacle_return 0
+)
+
+# Tiles
+model
+(
+  name "tiles"
+  color "LightGray"
+  
+  size [ 3.69925 4.28571 0.0 ]
+  pose [ 0.0 2.85714 0.001 0.0 ]
+  
+  stack_children 0
+  obstacle_return 0
+)
+
+# Grass - looks good, but makes selection hard.
+#model
+#(
+#  name "grass"
+#  color "DarkOliveGreen4"
+#  
+#  size [200 200 0.005]
+#  pose [ 0.0 0.0 -0.005 0.0 ]
+#  
+#  stack_children 0
+#  obstacle_return 0
+#)
+
+# Furniture Lounge
 couch( pose [-1.25 -2.75 0 0] name "couch0" )
 couch( pose [0.5 -1 0 -90] name "couch1" )
-queenbed( pose [-6.5 3.25 0 0] name "bed0" )
-queenbedused( pose [-6.5 -3 0 0] name "bed1" )
-bedsidetable( pose [-7.25 4.5 0 0] name "bedsidetable0" )
-# bedsidetable( pose [-7.25 2.0 0 0] name "bedsidetable1" )
+
+# Furniture Master Bedroom
+queenbedused( pose [-6.5 3.0 0 0] name "bed0" )
+bedsidetable( pose [-7.25 4.25 0 0] name "bedsidetable0" )
+bedsidetable( pose [-7.25 1.75 0 0] name "bedsidetable1" )
+wardrobe( pose [-3.5 4.5 0 -90] name "wardrobe0" )
+
+# Furniture Guest Bedroom
+queenbed( pose [-6.5 -3.0 0 0] name "bed1" )
+bedsidetable( pose [-7.25 -4.25 0 0] name "bedsidetable2" )
+bedsidetable( pose [-7.25 -1.75 0 0] name "bedsidetable3" )
+wardrobe( pose [-3.5 -4.5 0 90] name "wardrobe1" )
+
+# Furniture Bathroom
+shower( pose [-1.25 1.7 0 0] name "shower" )
+basin( pose [-0.5 4.5 0 -90] name "basin" )
+toilet( pose [1.25 4.5 0 -90] name "toilet" )
+bench_bathroom( pose [-1.25 4.5 0 -90] name "bench_bathroom0" )
+bench_bathroom( pose [0.25 4.5 0 -90] name "bench_bathroom1" )
+
+# Furniture Kitchen
+oven( pose [4.4 3.25 0 0] name "oven" )
+bench_kitchen_corner( pose [4.4 4.25 0 -90] name "bench_kitchen0" )
+fridge( pose [5.7 4.25 0 -90] name "bench_kitchen0" )
+bench_kitchen_corner( pose [7.0 4.25 0 -90] name "bench_kitchen1" )
+bench_kitchen( pose [7.0 3.25 0 -180] name "bench_kitchen2" )
+bench_kitchen( pose [7.0 2.25 0 -180] name "bench_kitchen3" )
+bench_kitchen( pose [7.0 1.25 0 -180] name "bench_kitchen4" )
