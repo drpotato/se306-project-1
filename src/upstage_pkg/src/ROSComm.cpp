@@ -52,13 +52,11 @@ void ups::ROSComm::doPublishKeys()
 	// Add all stored key codes
 	for (std::set<unsigned char>::iterator it = activeKeys.begin(); it != activeKeys.end(); ++it)
 	{
-		printf("Pubbing %d\n", *it);
 		keyInputMessage.pressedkeys.push_back(*it);
 	}
 	
 	// Send the message
 	publisherKeyInput.publish(keyInputMessage);
-	printf("Pubbed\n");
 	
 	// Clear the key code set
 	activeKeys.clear();

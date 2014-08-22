@@ -300,6 +300,11 @@ bool Actor::goToNode(vector<PathPlannerNode*> &path){
     return false;
 }
 
+ros::NodeHandle &Actor::getNodeHandle() const
+{
+  return *nodeHandle;
+}
+
 namespace
 {
 	std::string generateNodeName(unsigned int ID)
