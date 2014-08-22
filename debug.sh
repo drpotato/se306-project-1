@@ -53,6 +53,17 @@ rosrun se306_p1_pkg ActorSpawner 3 Relative 2.75 5 0 >> log/actor_Relative_000.t
 ROBOT3_PID=$!
 echo ROBOT3_PID = $ROBOT3_PID >> log/debugscript.txt
 
+echo "############################## DEBUG LOG ##############################" > log/actor_RCActor_000.txt
+echo ActorClass     = RCActor >> log/actor_RCActor_000.txt
+echo InitialX       = 2.75 >> log/actor_RCActor_000.txt
+echo InitialY       = 3 >> log/actor_RCActor_000.txt
+echo InitialAngle   = 0 >> log/actor_RCActor_000.txt
+echo Colour         = grey >> log/actor_RCActor_000.txt
+echo "#######################################################################" >> log/actor_RCActor_000.txt
+rosrun se306_p1_pkg ActorSpawner 4 RCActor 2.75 3 0 >> log/actor_RCActor_000.txt &
+ROBOT4_PID=$!
+echo ROBOT4_PID = $ROBOT4_PID >> log/debugscript.txt
+
 echo "############################## DEBUG LOG ##############################" > log/topic_upstagekeyinput.txt
 echo Topic          = upstagekeyinput >> log/topic_upstagekeyinput.txt
 echo "#######################################################################" >> log/topic_upstagekeyinput.txt
@@ -70,5 +81,6 @@ kill $ROBOT0_PID
 kill $ROBOT1_PID
 kill $ROBOT2_PID
 kill $ROBOT3_PID
+kill $ROBOT4_PID
 kill $MESSAGE0_PID
 kill $ROSCORE_PID

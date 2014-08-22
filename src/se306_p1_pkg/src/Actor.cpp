@@ -14,6 +14,7 @@
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
+#include "keyinput/KeyboardListener.hpp"
 
 namespace
 {
@@ -119,6 +120,7 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	publisherInteraction = nodeHandle->advertise<msg_pkg::Interaction>("interaction", 1000);
 
 	// Put custom init stuff here (or make a method and call it from here)
+	KeyboardListener::init();
 	initialSetupStage();
 	doInitialSetup();
 }
