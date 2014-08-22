@@ -9,6 +9,7 @@
 #include <vector>
 #include <string>
 #include "std_msgs/String.h"
+#include "ActorLocation.h"
 
 class Actor
 {
@@ -73,10 +74,12 @@ protected:
     bool movingToResident;
 
 private:
-    
+    vector<ActorLocation> actorLocations;
     PathPlanner pathPlanner;
     PathPlannerNode *activeNode;
     double faceDirection(double,double);
+    double getActorX(string);
+    double getActorY(string);
     bool gotoPosition(double x,double y);
     int targetNode;
     PathPlannerNode node1;

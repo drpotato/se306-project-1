@@ -7,6 +7,7 @@
 
 #include <math.h>
 #include <string>
+#include <vector>
 #include <msg_pkg/Location.h>
 #include <msg_pkg/Interaction.h>
 
@@ -14,6 +15,8 @@
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
+#include "ActorLocation.h"
+
 namespace
 {
 	std::string generateNodeName(unsigned int ID);
@@ -152,14 +155,19 @@ void Actor::StageOdom_callback(nav_msgs::Odometry msg)
   actorPtr->px = actorPtr->pxInitial + msg.pose.pose.position.x;
   actorPtr->py = actorPtr->pyInitial + msg.pose.pose.position.y;
   actorPtr->theta = actorPtr->thetaInitial + tf::getYaw(msg.pose.pose.orientation);
-  // std::stringstream ss;
-  // ss << ActorSpawner::getInstance().getActor("")->px;
-  // ROS_INFO("%s", ss.str().c_str());
 }
 
+// When a location message is received, updates the list of current Actor locations to reflect this change.
 void Actor::locationCallback(msg_pkg::Location msg)
 {
+    ActorLocation newLocation = ActorLocation(msg);
+    for (int i = 0; i < actorLocations.size(); i++) {
+        if (actorLocations[i].id == newLocation.id) {
+            actorLocations.erase(i);
+        }
+    }
 
+    actorLocations.push_back(newLocation);
 }
 
 void Actor::publishLocation()
@@ -267,10 +275,36 @@ bool Actor::gotoPosition(double x,double y){
         this->velLinear = 0;
         return true;
     }
-
 }
 
-bool Actor::goToNode(std::string nodeName){
+// Gets the x-position of Node nodeName from the list of current Actor locations.
+double Actor::getActorX(string nodeName) {
+    for (int i = 0; i < actorLocations.size(); i++) {
+        if (actorLocations[i].id == nodeName) {
+            return actorLocations[i].xpos;
+        }
+    }
+}
+
+// Gets the y-position of Node nodeName from the list of current Actor locations.
+double Actor::getActorY(nodeName) {
+    for (int i = 0; i < actorLocations.size(); i++) {
+        if (actorLocations[i].id == nodeName) {
+            return actorLocations[i].ypos;
+        }
+    }
+}
+
+bool Actor::goToNode(std::string nodeName) {
+    activeNode = getActiveNode();
+
+    goingToX = getActorX(nodeName);
+    goingToY = getActorY(nodeName);
+
+    goingToNode = pathPlanner.getClosestNode(goingToX, goingToY);
+
+    vector <PathPlannerNodepath = pathPlanner.pathToNode(this->activeNode, goingToNode);
+
     //Get the node
     if (targetNode >= path.size()){
         //We have arrived at the last node
