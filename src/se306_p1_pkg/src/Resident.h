@@ -34,6 +34,7 @@ private:
   bool m_dropped_;
   bool s_dropped_;
   const static int WAIT_TIME = 50;
+  const static float FREQUENCY = 10;
   bool m_replenished_;
 
   std::time_t time_of_day;

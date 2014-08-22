@@ -237,7 +237,7 @@ void Resident::stopRobotSpinning()
 void Resident::randomEventLoop()
 {
 
-	ROS_INFO("Calculating random event(s)...\n");
+	//ROS_INFO("Calculating random event(s)...\n");
 	//ROS_INFO("System time: %d\n", msExpiredPrevious);
 	
 	// - Delay test 
@@ -269,22 +269,52 @@ void Resident::randomEventLoop()
 	// Entertainedness, morale, health, fitness, hunger and thirst all
 	// drop over time, but not linearly.
 	
-	
-	// Entertainedness drops fastest and is most affected by randomness.
-	printf("rng = %.3f", getRandom(float(0), float(100)));
+	// == IMPORTANT: Read if you are another person building/running this feature
+	// At the moment, this is executed once for every 'doExecuteLoop()' iteration
+	// The loop itself is executed every 100+/-10ms (10Hz)
+	// This -probably- won't change, but any severe delays in the build that are 
+	// introduced after this was initially implemented will affect this.
+	// The times described below (in seconds) are running under the assumption
+	// that each loop iteration takes 100ms to be executed (e.g. for Morale,
+	// an average of 140 loop iterations should pass before the Morale level drops
+	// by 1).
+	// As we have (unofficially) set a day length at 12 minutes, hunger drop will
+	// be based on this, as will thirst.
 
+	// getRandom(float(0), float(14 * FREQUENCY))); explained:
+	// The second argument to get random is the maximum value that the randomly
+	// generated number can be. This number is the product of a) the amount of 
+	// seconds expected (on average) before an event occurs and b) the frequency
+	// of the system as a whole, which is seperately defined in Resident.h at the
+	// moment (as 'FREQUENCY'). 
+	// In this case, an event will occur whenever the random number is between 139
+	// and 140 (14 * FREQUENCY {10} - 1), so 1/140 of the time. 140 loops = 14 seconds.
+
+	// Socialness drops fastest and is most affected by randomness.
+	// On average, it should drop by 1 every 10 seconds
+	randNum = getRandom(float(0), float(10 * FREQUENCY));
+	if (randNum > ((10 * FREQUENCY) - 1)) {
+		printf("Event occured: rng = %.3f", randNum);
+	} else {
+		//printf("Event not occured: rng = %.3f", randNum);
+	}
+	
 	// Morale also drops quickly but is less affected by randomness than
 	// entertainedness.
+	// On average, it should drop by 1 every 14 seconds
 	randNum = (float)rand() / (float)RAND_MAX;
 
-	// Health drops in two ways, either almost completely linearly or in a
-	// random, drastic fashion.
-	randNum = (float)rand() / (float)RAND_MAX;
+	// Health drops in two ways, either almost slowly and almost 
+	// completely linearly or in a random, drastic fashion.
+	// On average, it should drop by 1 every 25 seconds
+		
 
 	// Hunger drops almost completely linearly...
+	// On average, it should drop by 1 every 10 seconds
 	randNum = (float)rand() / (float)RAND_MAX;
 
 	// ...as does thirst
+	// On average, it should drop by 1 every 10 seconds
 	randNum = (float)rand() / (float)RAND_MAX;
 
 	//ROS_INFO("Calculating random event(s)...");
