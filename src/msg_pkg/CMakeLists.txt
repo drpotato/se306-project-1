@@ -48,14 +48,15 @@ add_message_files(
   FILES
   Action.msg
   Arrive.msg
-  Morale.msg
   Health.msg
   Hunger.msg
   Interaction.msg
-  Telephone.msg
   Leave.msg
   Location.msg
+  Morale.msg
   Socialness.msg
+  Telephone.msg
+  Time.msg
 )
 
 ## Generate services in the 'srv' folder

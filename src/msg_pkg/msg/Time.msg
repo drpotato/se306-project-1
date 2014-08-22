@@ -1,2 +1,2 @@
 # Message containing the time
-ros::Time time
+time time_of_day
