@@ -12,13 +12,9 @@
 
 // Declare a test
 TEST(TestSuite, test_path_planner_node_contructor) {
-    // string name = "test_name";
-    // double x = 0.0;
-    // double y = 0.0;
-    // PathPlannerNode *pathPlannerNode = new PathPlannerNode(&name, *x, *y);
-    // ASSERT_EQ(pathPlannerNode->name, name);
-    // ASSERT_EQ(pathPlannerNode->px, x);
-    // ASSERT_EQ(pathPlannerNode->py, y);
-
-    ASSERT_EQ(1, 1);
+    string name = "test_name";
+    PathPlannerNode *pathPlannerNode = new PathPlannerNode(&name, 1.5, 2.5);
+    ASSERT_EQ(pathPlannerNode->name, &name);
+    ASSERT_EQ(pathPlannerNode->px, 1.5);
+    ASSERT_EQ(pathPlannerNode->py, 2.5);
 }
