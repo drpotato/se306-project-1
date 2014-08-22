@@ -10,6 +10,7 @@ PathPlannerNode::PathPlannerNode(string* inputName,double x,double y){
 }
 
 PathPlannerNode::PathPlannerNode(){}
+
 string* PathPlannerNode::getName(){
     return this->name;
 }

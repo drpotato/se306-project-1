@@ -1,4 +1,4 @@
-define queenbed model
+define queenbedused model
 (
 	# Sheets over queen-sized mattress
 	model

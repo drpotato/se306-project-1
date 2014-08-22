@@ -1,0 +1,18 @@
+define bench_kitchen_corner model
+(
+	# Bench Surface
+	model
+	(
+		size [1.0 1.0 0.06]
+		pose [0.0 0.0 0.8 0.0]
+		color "grey"
+	)
+	
+	
+	# Base
+	size [1.0 1.0 0.8]
+	color "white"
+	stack_children 0
+	obstacle_return 0
+	gui_nose 0
+)
