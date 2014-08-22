@@ -18,6 +18,9 @@ include_directories(
 add_library(UpstageLibrary
   src/Context.cpp
   src/Keyboard.cpp
+  src/Resource.cpp
+  src/ResourceLoader.cpp
+  src/ResourceManager.cpp
   src/ROSComm.cpp
   src/renderer/Renderer.cpp
 )
