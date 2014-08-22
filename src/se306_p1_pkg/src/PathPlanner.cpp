@@ -3,6 +3,22 @@
 
 // This class maintains a graph of navigation waypoint nodes, and calculates the shortest (fewest nodes) path between any two of them.
 
+//TODO: Make PathPlanner a singleton
+
+pathPlanner::pathPlanner() {
+    subscriberLocation = nodeHandle->subscribe("location", 1000, Actor::locationCallback);
+}
+
+// When a location message is received, updates the graph with that Actor's new location.
+void Actor::locationCallback(msg_pkg::Location msg)
+{
+    // Find actor of this name in graph and remove it.
+    PathPlannerNode* actorNode = removeNode(&msg.id);
+
+    // Find the actor's neighbour at its new location, and add it back into the graph.
+    addActorNode(actorNode);
+}
+
 // Returns the shortest path between the two given nodes.
 vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,PathPlannerNode *target)
 {
@@ -47,8 +63,30 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
         return path;
 }
 
+PathPlannerNode* PathPlanner::removeNode(string* name) {
+    for (int i = 0; i < this->nodes.size(); i++){
+        PathPlannerNode* node = this->nodes[i];
+        if (node->getName()->compare(*name) == 0){
+            // For each of its neighbours
+            for (int j = 0; j < node->neighbours.size(); j++) {
+                PathPlannerNode* neighbour = node->neighbours[i];
+                neighbour->removeNeighbour(node);
+            }
+            nodes.erase(node);
+        }
+    }
+    return node;
+}
+
+// Adds an Actor to the graph.
+void PathPlanner::addActorNode(PathPlannerNode* p) {
+    // Actors have only a single neighbour, the closest waypoint node to them.
+    p.addNeighbour(getClosestNode(p->px, p->py);
+    addNode(p);
+}
+
 // Adds a PathPlannerNode to the graph.
-void PathPlanner::addNode(PathPlannerNode* p){
+void PathPlanner::addNode(PathPlannerNode* p) {
     this->nodes.push_back(p);
 }
 
@@ -59,7 +97,6 @@ PathPlannerNode* PathPlanner::getNode(string* name){
         PathPlannerNode* node = this->nodes[i];
         if (node->getName()->compare(*name) == 0){
             return node;
-        }else{
         }
     }
 }

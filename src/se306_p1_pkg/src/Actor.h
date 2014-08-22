@@ -10,8 +10,9 @@
 #include <string>
 #include "std_msgs/String.h"
 #include "ActorLocation.h"
+#include "PathPlannerNode.h"
 
-class Actor
+class Actor : public PathPlannerNode
 {
 public:
 	Actor();

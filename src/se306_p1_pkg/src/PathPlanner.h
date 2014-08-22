@@ -6,20 +6,26 @@
 #include <queue>
 #include <boost/unordered_map.hpp>
 #include "PathPlannerNode.h"
+#include <msg_pkg/Location.h>
 
 using namespace std;
 
-class PathPlanner
-{
+class PathPlanner {
 private:
+    vector<ActorLocation> actorLocations;
     vector<PathPlannerNode*> nodes;
     typedef boost::unordered_map<string,string> map;
+
+    ros::Subscriber subscriberLocation;
     
 public:
 	vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
+    void addActorNode(PathPlannerNode*);
     void addNode(PathPlannerNode*);
+    PathPlannerNode* removeNode(string*);
     PathPlannerNode* getNode(string*);
     PathPlannerNode* getClosestNode(int, int);
+    static void locationCallback(msg_pkg::Location msg);
 };
 
 
