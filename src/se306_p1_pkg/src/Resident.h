@@ -38,12 +38,6 @@ private:
 
   std::time_t time_of_day;
 
-	/* Randomness variables 
-	int randomData;
-	int myRandomInteger;
-	size_t randomDataLen;
-	*/
-
 	// Delay measurement variables
 	long long msAtPreviousLoop;
 	float randNum;
@@ -56,23 +50,20 @@ private:
 	size_t randomDataLen;
 #endif    
 
-  // Levels (1 = critical, attention required; 
-	// 5 = optimal, 'maximum')
+   // Level of social fulfillment: 
+  // 1 - bad (lonely)
+  // 5 - good (not lonely)
   int socialness_level_;
-  int entertainedness_level_;
+
   // Level of morale:
   // 1 - bad (bored)
   // 5 - good (entertained)	
   int morale_level_;
 
-	// Level publishers
-
   // Publisher for socialness
   ros::Publisher publisherSocialness;
   // Publisher for entertainedness
   ros::Publisher publisherMorale;
-
-	// Event subscribers
 
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;

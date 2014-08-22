@@ -61,7 +61,7 @@ void Resident::doInitialSetup()
 
 #ifndef USE_DEV_RANDOM
   // Seed the PRNG
-  //std::srand(std::time(NULL));
+  std::srand(std::time(NULL));
 #endif
 }
 
@@ -74,8 +74,6 @@ void Resident::doExecuteLoop()
 ////////////////////////////////////////////////////
 // _REMOVE (when randomness implementation complete) 
 
-	if (entertainment_count_ >= WAIT_TIME && !e_dropped_)
-{    
 	//ROS_INFO("%s", ctime(&time_of_day));
 	if (morale_count_ >= WAIT_TIME && !m_dropped_)
 	{
@@ -108,9 +106,6 @@ void Resident::doExecuteLoop()
 			// don't drop the value any more, it's being tended to or has been already
 			s_dropped_ = true;
 		}
-		else 
-		{
-
 		else {
 			// reduce the level every 1000 counts
 			residentInstance->socialness_level_--;
