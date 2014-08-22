@@ -7,6 +7,7 @@
 #include <boost/unordered_map.hpp>
 #include "PathPlannerNode.h"
 #include <msg_pkg/Location.h>
+#include "ActorLocation.h"
 
 using namespace std;
 

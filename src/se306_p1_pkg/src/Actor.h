@@ -40,7 +40,7 @@ protected:
 	virtual void doExecuteLoop() = 0;
 
 	void doResponse(const char *attribute);
-        void stopResponse(const char *attribute);
+    void stopResponse(const char *attribute);
 
 	//velocity of the robot
 	double velLinear;
@@ -63,24 +63,20 @@ protected:
 	ros::Publisher  publisherInteraction;
 	ros::Subscriber subscriberStageOdometry;
 	ros::Subscriber subscriberStageLaserScan;
-	ros::Subscriber subscriberLocation;
 
 	std::string rosName;
 	std::string stageName;
 
     //Path Planner
-    bool goToNode(vector<PathPlannerNode*> &path);
+    bool goToNode(string*);
     PathPlannerNode* getActiveNode();
 
     bool movingToResident;
 
 private:
-    vector<ActorLocation> actorLocations;
     PathPlanner pathPlanner;
     PathPlannerNode *activeNode;
     double faceDirection(double,double);
-    double getActorX(string);
-    double getActorY(string);
     bool gotoPosition(double x,double y);
     int targetNode;
     PathPlannerNode node1;

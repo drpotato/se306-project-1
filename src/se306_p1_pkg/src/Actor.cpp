@@ -151,7 +151,6 @@ bool Actor::executeLoop()
 void Actor::initialSetupStage()
 {
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
-	subscriberLocation = nodeHandle->subscribe("location", 1000, Actor::locationCallback);
 	subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000,
 Actor::StageOdom_callback);
 
@@ -166,19 +165,6 @@ void Actor::StageOdom_callback(nav_msgs::Odometry msg)
   actorPtr->px = actorPtr->pxInitial + msg.pose.pose.position.x;
   actorPtr->py = actorPtr->pyInitial + msg.pose.pose.position.y;
   actorPtr->theta = actorPtr->thetaInitial + tf::getYaw(msg.pose.pose.orientation);
-}
-
-// When a location message is received, updates the list of current Actor locations to reflect this change.
-void Actor::locationCallback(msg_pkg::Location msg)
-{
-    ActorLocation newLocation = ActorLocation(msg);
-    for (int i = 0; i < actorLocations.size(); i++) {
-        if (actorLocations[i].id == newLocation.id) {
-            actorLocations.erase(i);
-        }
-    }
-
-    actorLocations.push_back(newLocation);
 }
 
 // Publish a message containing own x and y coordinates to the 'location' topic.
@@ -239,17 +225,16 @@ void Actor::startMovingToResident() {
 }
 
 bool Actor::moveToResident() {
-
-    if (this->movingToResident) {
-    	//ROS_INFO("MOVING TO RESIDENT");
-        PathPlannerNode *target = this->pathPlanner.getNode(&node1Name);
-        vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-        if ( this->goToNode(path))
-        {
-        	ROS_INFO("CHANGED MOVING TO RESIDENT");
-        	this->movingToResident = false;
-        }
-    }
+    // if (this->movingToResident) {
+    // 	//ROS_INFO("MOVING TO RESIDENT");
+    //     PathPlannerNode *target = this->pathPlanner.getNode(&node1Name);
+    //     vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+    //     if ( this->goToNode(path))
+    //     {
+    //     	ROS_INFO("CHANGED MOVING TO RESIDENT");
+    //     	this->movingToResident = false;
+    //     }
+    // }
 }
 
 double Actor::faceDirection(double x,double y){
@@ -290,25 +275,7 @@ bool Actor::gotoPosition(double x,double y){
     }
 }
 
-// Gets the x-position of Node nodeName from the list of current Actor locations.
-double Actor::getActorX(string nodeName) {
-    for (int i = 0; i < actorLocations.size(); i++) {
-        if (actorLocations[i].id == nodeName) {
-            return actorLocations[i].xpos;
-        }
-    }
-}
-
-// Gets the y-position of Node nodeName from the list of current Actor locations.
-double Actor::getActorY(nodeName) {
-    for (int i = 0; i < actorLocations.size(); i++) {
-        if (actorLocations[i].id == nodeName) {
-            return actorLocations[i].ypos;
-        }
-    }
-}
-
-bool Actor::goToNode(std::string nodeName) {
+bool Actor::goToNode(string* nodeName) {
     activeNode = getActiveNode();
 
     goingToX = getActorX(nodeName);
@@ -336,7 +303,7 @@ bool Actor::goToNode(std::string nodeName) {
 
 // Find the closest waypoint node to this Actor's current position.
 PathPlannerNode* Actor::getActiveNode() {
-    return pathPlanner.getClosestNode(this->px, this->py)
+    return pathPlanner.getClosestNode(this->px, this->py);
 }
 
 namespace
