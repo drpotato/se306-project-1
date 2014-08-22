@@ -34,6 +34,8 @@ result = resident->getNewLevel(0, 5);
 ASSERT_EQ(result, 5);
 result = resident->getNewLevel(0, 6);
 ASSERT_EQ(result, 5);
+result = resident->getNewLevel(-99, 6);
+ASSERT_EQ(result, 1);
 }
 
 

@@ -172,13 +172,8 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 
 int Resident::getNewLevel(int amount, int oldLevel)
 {
-	int newLevel = std::min(amount + oldLevel, 5); // Can only have a maximum level of 5
-	// Code to check it doesn't go below 1... just incase interactions can reduce levels at some point
-	if (newLevel < 1)
-	{
-		newLevel = 1;
-	}
-	return newLevel;
+  int newLevel = std::min(amount + oldLevel, 5); // Can only have a maximum level of 5
+  return newLevel < 1 ? 1 : newLevel; // Should not be below 1
 }
 
 void Resident::stopRobotSpinning()
