@@ -9,6 +9,6 @@ R1	-6	-3	0	yellow
 EntertainmentRobot -2.5 -3 0 blue
 Relative 2.75 5 0 pink
 Doctor 2.75 6 0 black
+RCActor 2.75 3 0 grey
 Nurse 4 6 0 white
 Nurse 5 6 0 white
-RCActor 2.75 3 0 grey

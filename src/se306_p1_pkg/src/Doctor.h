@@ -3,6 +3,7 @@
 
 #include "Visitor.h"
 #include <msg_pkg/Telephone.h>
+#include <msg_pkg/Nurse.h>
 #include "ActorSpawner.h"
 
 class Doctor : public Visitor
@@ -17,6 +18,8 @@ protected:
   static void telephoneCallback(msg_pkg::Telephone msg);
 
   ros::Subscriber subscriberTelephone;
+  ros::Publisher publisherNurse1;
+  ros::Publisher publisherNurse2;
 
   bool homeVisit;
 

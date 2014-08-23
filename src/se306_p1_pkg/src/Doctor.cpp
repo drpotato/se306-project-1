@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
-
+#include <msg_pkg/Nurse.h>
 #include "Doctor.h"
 
 #include "PathPlanner.h"
@@ -10,9 +10,13 @@ void Doctor::doInitialSetup()
 {
 	velLinear = 0.0;
     velRotational = 0.0;
+    srand(time(NULL));
     subscriberTelephone = nodeHandle->subscribe("telephone", 1000, Doctor::telephoneCallback);
     homeVisit = false;
-    srand(time(NULL));
+    
+    // Set up publishers.
+ 	publisherNurse1 = nodeHandle->advertise<msg_pkg::Nurse>("nurse1", 1000);
+ 	publisherNurse2 = nodeHandle->advertise<msg_pkg::Nurse>("nurse2", 1000);
     
 }
 

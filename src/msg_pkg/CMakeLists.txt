@@ -57,6 +57,7 @@ add_message_files(
   Location.msg
   Socialness.msg
   KeyInput.msg
+  Nurse.msg
 )
 
 ## Generate services in the 'srv' folder
