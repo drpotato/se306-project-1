@@ -31,11 +31,11 @@ public:
   bool m_replenished_;
 
   // Event hours - c++ inverts 24hr time for some reason? - maybe just my machine does this
-  const static int WAKE_TIME = 19;
-  const static int BREAKFAST_TIME = 20;
-  const static int LUNCH_TIME = 1;
-  const static int DINNER_TIME = 6;
-  const static int SLEEP_TIME = 11;
+  const static int WAKE_TIME = 7;
+  const static int BREAKFAST_TIME = 8;
+  const static int LUNCH_TIME = 13;
+  const static int DINNER_TIME = 18;
+  const static int SLEEP_TIME = 23;
 
   // Has done event values
   bool has_eaten_breakfast_;
@@ -72,8 +72,9 @@ public:
 
   // Daily events
   void wakeUp();
-  void eat();
+  void eat(int hour);
   void goToSleep();
+  bool hasWoken();
 };
 
 

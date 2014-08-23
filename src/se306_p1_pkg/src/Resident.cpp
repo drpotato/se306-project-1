@@ -25,8 +25,8 @@ void Resident::doInitialSetup()
   has_eaten_breakfast_ = false;
   has_eaten_lunch_ = false;
   has_eaten_dinner_ = false;
-  has_woken_ = true;
-  has_gone_to_bed_ = false;
+  has_woken_ = hasWoken();
+  has_gone_to_bed_ = !hasWoken();
 
   // Set levels to maximum initially.
   morale_level_ = 5;
@@ -187,20 +187,20 @@ void Resident::timeCallback(msg_pkg::Time msg)
   if ((msg.hour == residentInstance->WAKE_TIME) && (!residentInstance->has_woken_))
   {
     // WAKE THE FK UP
-    ROS_INFO("Wake up!");
+    ROS_INFO("It is %d:00. Wake up!", msg.hour);
     residentInstance->wakeUp();
     ROS_INFO("%s", residentInstance->has_gone_to_bed_ ? "Sleeping" : "Awake");
   }
   else if ( ((msg.hour == residentInstance->BREAKFAST_TIME) && (!residentInstance->has_eaten_breakfast_)) || ((msg.hour == residentInstance->LUNCH_TIME) && (!residentInstance->has_eaten_lunch_)) || ((msg.hour == residentInstance->DINNER_TIME) && (!residentInstance->has_eaten_dinner_)))
   {
     // Here have some food
-    ROS_INFO("Eat");
-    residentInstance->eat();
+    ROS_INFO("It is %d:00 - time to eat!", msg.hour);
+    residentInstance->eat(msg.hour);
   }
   else if ((msg.hour == residentInstance->SLEEP_TIME) && (!residentInstance->has_gone_to_bed_))
   {
     // Go to sleep yo
-    ROS_INFO("Sleep time!");
+    ROS_INFO("It is %d:00. Sleep time!", msg.hour);
     residentInstance->goToSleep();
     ROS_INFO("%s", residentInstance->has_gone_to_bed_ ? "Sleeping" : "Awake");
   }
@@ -231,20 +231,20 @@ void Resident::wakeUp()
 
   has_woken_ = true;
 }
-void Resident::eat()
+void Resident::eat(int hour)
 {
-  // if (the_hour == BREAKFAST_TIME)
-  // {
-  //  has_eaten_breakfast_ = true;
-  // }
-  // else if (the_hour == LUNCH_TIME)
-  // {
-  //  has_eaten_lunch_ = true;
-  // }
-  // else if (the_hour == DINNER_TIME)
-  // {
-  //  has_eaten_dinner_ = true;
-  // }
+  if (hour == BREAKFAST_TIME)
+  {
+    has_eaten_breakfast_ = true;
+  }
+  else if (hour == LUNCH_TIME)
+  {
+    has_eaten_lunch_ = true;
+  }
+    else if (hour == DINNER_TIME)
+  {
+    has_eaten_dinner_ = true;
+  }
 }
 void Resident::goToSleep()
 {
@@ -256,4 +256,15 @@ void Resident::goToSleep()
   has_woken_ = false;
 
   has_gone_to_bed_ = true;
+}
+bool Resident::hasWoken()
+{
+  std::time_t time_of_day = std::time(0);
+  int hour = gmtime(&time_of_day)->tm_hour;
+  // Hours are inverted by 12 hours, so an hour value of 11 corresponds to 11pm while an hour value of 23 corresponds to 11am
+  if ((hour < 11) && (hour > 6))
+  {
+    return true;
+  }
+  return false;
 }

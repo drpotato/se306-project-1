@@ -11,6 +11,7 @@ void Clock::doInitialSetup()
 {
   // Initialise time of day to current time
   time_of_day = std::time(0);
+  invertHours(gmtime(&time_of_day)->tm_hour);
 
   // Get number of seconds to add on each loop
   seconds_to_add = secondIncreasePerLoop();
@@ -22,7 +23,7 @@ void Clock::doInitialSetup()
 void Clock::doExecuteLoop()
 {    
 	// Increment the time of day by the value calculated previously (in seconds)
-  time_of_day += seconds_to_add; //1800; <-- a good debug time frame is 1800 seconds
+  time_of_day += 1800;//seconds_to_add; //1800; <-- a good debug time frame is 1800 seconds
   //ROS_INFO("%s", ctime(&time_of_day)); //<-- use this to debug to print the time
 
   // Grab out the hour value from the current Ultron world time
@@ -58,4 +59,18 @@ int Clock::secondIncreasePerLoop()
   double num_ultron_seconds_per_loop = 60 / num_loops_per_ultron_minute; //e.g. 12
 
   return num_ultron_seconds_per_loop;
+}
+
+void Clock::invertHours(int hour)
+{
+  if (hour < 12 )
+  {
+    // Add 12 hours to the time
+    time_of_day = time_of_day += (60*60*12);
+  }
+  else if (hour >= 12)
+  {
+    // Minus 12 hours from the time
+    time_of_day = time_of_day -= (60*60*12);
+  }
 }
