@@ -32,6 +32,9 @@ private:
 
   // Hours are inverted 12 hours for some reason. This function inverts it.
   void invertHours(int hour);
+
+  // Checks if it is night time or not
+  bool isNightTime(int hour);
 };
 
 

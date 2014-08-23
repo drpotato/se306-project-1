@@ -21,14 +21,20 @@ void Clock::doInitialSetup()
 }
 
 void Clock::doExecuteLoop()
-{    
-	// Increment the time of day by the value calculated previously (in seconds)
-  time_of_day += seconds_to_add; //1800; <-- a good debug time frame is 1800 seconds
-  //ROS_INFO("%s", ctime(&time_of_day)); //<-- use this to debug to print the time
-
+{ 
   // Grab out the hour value from the current Ultron world time
   ptm = gmtime(&time_of_day);
-  //ROS_INFO("%d", gmtime(&time_of_day)->tm_hour); //<-- use this to debug to print the hour value (can change to minutes or whatever too)
+
+	// Increment the time of day by the value calculated previously (in seconds)
+  // Increment faster if night time
+  if (isNightTime(ptm->tm_hour))
+  {
+    time_of_day += seconds_to_add*10;
+  }
+  else
+  {
+    time_of_day += seconds_to_add; //1800; <-- a good debug time frame is 1800 seconds
+  }
 
   // Create a time message to publish
   msg_pkg::Time timeMessage;
@@ -73,4 +79,13 @@ void Clock::invertHours(int hour)
     // Minus 12 hours from the time
     time_of_day = time_of_day -= (60*60*12);
   }
+}
+
+bool Clock::isNightTime(int hour)
+{
+  if ((hour < 11) && (hour > 6))
+  {
+    return false;
+  }
+  return true;
 }
