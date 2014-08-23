@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <time.h>
-#include <msg_pkg/Nurse.h>
 #include "Doctor.h"
 
 #include "PathPlanner.h"
@@ -46,7 +45,7 @@ void Doctor::telephoneCallback(msg_pkg::Telephone msg)
 
 void Doctor::emergency()
 {
-	ROS_DEBUG("TRANSMITTING THERE IS AN EMERGENCY");
+	ROS_INFO("TRANSMITTING THERE IS AN EMERGENCY");
 
 }
 
@@ -55,15 +54,26 @@ void Doctor::attendPatient()
 
 }
 
+
 void Doctor::callNurses()
 {
+	// Create a nurse message to publish.
+	msg_pkg::Nurse nurseMessage;
+
+	nurseMessage.follow = true;
+
+	// Publish the message.
+	
 	float num = rand() % 3;
     if (num < 1){
     	return;
     } else if (num > 2){
-    	//TODO: Call all nurses
+    	//Call all nurses
+    	publisherNurse1.publish(nurseMessage);
+    	publisherNurse2.publish(nurseMessage);
     } else {
-    	//TODO: Call one Nurse
+    	//Call one Nurse
+    	publisherNurse1.publish(nurseMessage);
     }
 
 	ROS_DEBUG("Called Nurse");
