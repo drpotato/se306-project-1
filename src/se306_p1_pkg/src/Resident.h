@@ -6,6 +6,7 @@
 #include "ros/ros.h"
 #include <ctime>
 #include <time.h>
+#include <msg_pkg/Time.h>
 
 class Resident : public Human
 {
@@ -17,6 +18,7 @@ public:
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg);
+  static void timeCallback(msg_pkg::Time msg);
   
   bool lock_;
 
@@ -59,6 +61,8 @@ public:
 
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;
+  // Subscriber for time
+  ros::Subscriber subscriberTime;
 
   // Gets a new level with a maximum of 5 and minimum of 1
   static int getNewLevel(int amount, int oldValue);
