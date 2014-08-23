@@ -11,6 +11,8 @@ protected:
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
   void emergency();
+  void callNurses();
+  void attendPatient();
 
   static void telephoneCallback(msg_pkg::Telephone msg);
 
