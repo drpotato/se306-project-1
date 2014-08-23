@@ -1,12 +1,27 @@
 #include "XML.hpp"
 #include "../Util.hpp"
 
+//#define XML_DEBUG_LOG
+
+#ifdef XML_DEBUG_LOG
+	#define XML_LOG(msg) UPS_LOG(msg)
+	#define XML_LOGF(msg, ...) UPS_LOGF(msg, __VA_ARGS__)
+	#define XML_ASSERT(msg) UPS_ASSERT(msg)
+	#define XML_ASSERTF(msg, ...) UPS_ASSERTF(msg, __VA_ARGS__)
+#else
+	#define XML_LOG(msg)
+	#define XML_LOGF(msg, ...)
+	#define XML_ASSERT(msg)
+	#define XML_ASSERTF(msg, ...)
+#endif
+
 ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f)
 {
 	// Read everything up-front to make it easier to go backwards and forwards.
 	std::vector<char> buffer = readAll(f);
 	
-	XML *lastNode = 0;
+	XML *openNode = 0;
+	XML *rootNode = 0;
 	enum TagType
 	{
 		XMLTagComment,
@@ -20,7 +35,7 @@ ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f)
 	for (unsigned long pos = 0; pos < buffer.size(); ++pos)
 	{
 		// Ignore everything until the first tag
-		if (lastNode == 0 && buffer[pos] != '<')
+		if (rootNode == 0 && buffer[pos] != '<')
 		{
 			continue;
 		}
@@ -34,7 +49,7 @@ ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f)
 			unsigned long tagEnd = pos;
 			while (++tagEnd < buffer.size() && buffer[tagEnd] != '>');
 			
-			UPS_ASSERTF(tagEnd != buffer.size(), "XML tag from position %lu does not terminate!", pos);
+			XML_ASSERTF(tagEnd != buffer.size(), "XML tag from position %lu does not terminate!", pos);
 
 			// Determine what kind of tag it is.
 			if (buffer[pos + 1] == '!')
@@ -58,28 +73,99 @@ ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f)
 				tagType = XMLTagStart;
 			}
 			
-			UPS_LOGF("XML tag %d", static_cast<int>(tagType));
+			// <name.*/?>
+			if (tagType == XMLTagEmpty or tagType == XMLTagStart)
+			{
+				// The tag name begins immediately after the < character, and continues until the
+				// first whitespace, or the end of the tag (whichever comes first).
+				unsigned long nameStart = pos + 1;
+				unsigned long nameEnd = nameStart;
+				while (++nameEnd < tagEnd && !isWhitespace(buffer[nameEnd]));
+				std::string tagName(buffer.begin() + nameStart, buffer.begin() + nameEnd);
+				
+				// We now have enough information to create the XML tag. 
+				XML *newTag = new XML(openNode);
+				newTag->setName(tagName);
+				
+				// If this tag is the first tag, it is the "root" tag. If it is also an "empty" tag,
+				// then the XML document ends here.
+				if (rootNode == 0)
+				{
+					rootNode = newTag;
+					if (tagType == XMLTagEmpty)
+					{
+						break;
+					}
+					openNode = newTag;
+				}
+				else // The node is not the root, so it has a parent.
+				{
+					openNode->addChild(newTag);
+					if (tagType != XMLTagEmpty)
+					{
+						openNode = newTag;
+					}
+				}
+				
+				XML_LOGF("XML opened tag %d \"%s\"", static_cast<int>(tagType), tagName.c_str());
+			}
+			else if (tagType == XMLTagEnd)
+			{
+				// Normally, I would check to see that the closing tag matches the opening tag, but if there's a
+				// missing tag, it will manifest itself as an invalid structure anyway.
+				// If it's not missing, then it's probably a typo, and I
+				// don't think it's worth unduly punishing the XML writer for such a trivial mistake, especially if it
+				// means extra effort on the part of the reader.
+				// 
+				// Soooo ... instead I ignore that piece of redundancy.
+				
+				XML *closedNode = openNode;
+				openNode = openNode->_parent;
+				
+				XML_LOGF("XML closed tag %d \"%s\"", static_cast<int>(tagType), closedNode->_name.c_str());
+				
+				// If we closed the root, the parsing ends. There can only be one root in the XML spec, and I rely on that fact.
+				if (closedNode == rootNode)
+				{
+					XML_LOG("XML root closed");
+					break;
+				}
+			}
+			else
+			{
+				XML_LOGF("XML tag type enum val %d", static_cast<int>(tagType));
+			}
+			
+			// We've parsed the tag, so we can move on to the next thing
+			pos = tagEnd;
 		}
 	}
 	
-	return new XML(0);
+	return rootNode;
 }
 
 ups::XML::XML(XML *parent):
 	_parent(parent)
 {
-	std::printf("XML CONSTRUCTOR\n");
 }
 
 ups::XML::~XML()
 {
-	std::printf("XML DESTRUCTOR FOR %s\n", _name.c_str());
 }
 
 void ups::XML::print(int indentDepth) const
 {
 	std::string indentString(indentDepth, '\t');
-	std::printf("%s+XML(%s)", indentString.c_str(), _name.c_str());
+	
+	if (_children.empty())
+	{
+		std::printf("%sXML(%s)", indentString.c_str(), _name.c_str());
+	}
+	else
+	{
+		std::printf("%s+XML(%s)", indentString.c_str(), _name.c_str());
+	}
+	
 	for (AttrMap::const_iterator it = _attributes.begin(); it != _attributes.end(); ++it)
 	{
 		std::printf(" \"%s\"->\"%s\"", it->first.c_str(), it->second.c_str());
@@ -91,5 +177,8 @@ void ups::XML::print(int indentDepth) const
 		(*it)->print(indentDepth + 1);
 	}
 	
-	std::printf("%s-XML(%s)\n", indentString.c_str(), _name.c_str());
+	if (!_children.empty())
+	{
+		std::printf("%s-XML(%s)\n", indentString.c_str(), _name.c_str());
+	}
 }

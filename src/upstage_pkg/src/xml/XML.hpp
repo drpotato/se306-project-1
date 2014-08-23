@@ -28,9 +28,9 @@ namespace ups
 		~XML();
 		
 		static ups::PointerUnique<XML> fromFile(std::FILE *f);
+		void setName(const std::string &name);
 		void setContent(const std::string &content);
 		void addChild(XML *child);
-		void setName(const std::string &name);
 		
 		void print(int indentDepth = 0) const;
 		
@@ -42,6 +42,11 @@ namespace ups
 		AttrMap _attributes;
 	};
 	
+	inline void XML::setName(const std::string &name)
+	{
+		_name = name;
+	}
+	
 	inline void XML::setContent(const std::string &content)
 	{
 		_content = content;
@@ -50,11 +55,6 @@ namespace ups
 	inline void XML::addChild(XML *child)
 	{
 		_children.push_back(PointerUnique<XML>(child));
-	}
-	
-	inline void XML::setName(const std::string &name)
-	{
-		_name = name;
 	}
 }
 
