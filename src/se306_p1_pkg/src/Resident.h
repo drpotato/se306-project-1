@@ -28,14 +28,6 @@ public:
   const static int WAIT_TIME = 50;
   bool m_replenished_;
 
-  // Stores the time of day in the Ultron world
-  std::time_t time_of_day;
-  // Gets updated separate minutes, seconds etc values from the time_of_day
-  struct tm *time_of_day_values;
-  // Stores the number of seconds needed to add to time_of_day upon each loop
-  double seconds_to_add;
-  int the_hour;
-
   // Event hours - c++ inverts 24hr time for some reason? - maybe just my machine does this
   const static int WAKE_TIME = 19;
   const static int BREAKFAST_TIME = 20;
@@ -70,9 +62,6 @@ public:
 
   // Gets a new level with a maximum of 5 and minimum of 1
   static int getNewLevel(int amount, int oldValue);
-
-  // Number of seconds to increase Ultron world time by on each ROS loop
-  int secondIncreasePerLoop();
 
   // Stop the robots angular velocity
   void stopRobotSpinning();
