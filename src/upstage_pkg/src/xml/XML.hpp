@@ -31,6 +31,7 @@ namespace ups
 		void setName(const std::string &name);
 		void setContent(const std::string &content);
 		void addChild(XML *child);
+		void addAttribute(const std::string &name, const std::string &value);
 		
 		void print(int indentDepth = 0) const;
 		
@@ -55,6 +56,11 @@ namespace ups
 	inline void XML::addChild(XML *child)
 	{
 		_children.push_back(PointerUnique<XML>(child));
+	}
+	
+	inline void XML::addAttribute(const std::string &name, const std::string &value)
+	{
+		_attributes[name] = value;
 	}
 }
 

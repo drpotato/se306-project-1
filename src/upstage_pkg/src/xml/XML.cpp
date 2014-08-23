@@ -87,6 +87,44 @@ ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f)
 				XML *newTag = new XML(openNode);
 				newTag->setName(tagName);
 				
+				// Get attributes
+				unsigned long attrStart = nameEnd;
+				while (attrStart < tagEnd)
+				{
+					// Scan past whitespace
+					while (++attrStart < tagEnd && isWhitespace(buffer[attrStart]));
+					
+					// Make sure it's not the /> at the end of an empty tag that we're bumping into,
+					// since that also counts as being before tagEnd
+					if (buffer[attrStart] == '/')
+					{
+						break;
+					}
+					
+					// Find the "="
+					unsigned long attrEnd = attrStart;
+					while (++attrEnd < tagEnd && buffer[attrEnd] != '=');
+					
+					// Find the start of the quoted value section
+					unsigned long attValStart = attrEnd;
+					while (++attValStart < tagEnd && buffer[attValStart] != '\'' && buffer[attValStart] != '"');
+					
+					// Make sure the closing quote matches the opening one
+					char quoteType = buffer[attValStart];
+					
+					// Find the end of the quoted value section
+					unsigned long attValEnd = attValStart;
+					while (++attValEnd < tagEnd && buffer[attValEnd] != quoteType);
+					
+					// We now have enough information to get the attribute name and value.
+					std::string attrName(buffer.begin() + attrStart, buffer.begin() + attrEnd);
+					std::string attrValue(buffer.begin() + attValStart + 1, buffer.begin() + attValEnd);
+					
+					// Add the attribute, and shift along
+					newTag->addAttribute(attrName, attrValue);
+					attrStart = attValEnd;
+				}
+				
 				// If this tag is the first tag, it is the "root" tag. If it is also an "empty" tag,
 				// then the XML document ends here.
 				if (rootNode == 0)
