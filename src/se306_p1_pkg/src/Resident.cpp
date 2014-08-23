@@ -85,8 +85,7 @@ void Resident::doExecuteLoop()
 ////////////////////////////////////////////////////
 // _REMOVE (when randomness implementation complete) 
 
-	//ROS_INFO("%s", ctime(&time_of_day));
-{    
+	//ROS_INFO("%s", ctime(&time_of_day)); 
 	// Increment the time of day by the value calculated previously (in seconds)
 	time_of_day += seconds_to_add; //1800; <-- a good debug time frame is 1800 seconds
 	//ROS_INFO("%s", ctime(&time_of_day)); //<-- use this to debug to print the time
@@ -465,7 +464,7 @@ void oldRNG()
 
 	*/
 }
-=======
+
 int Resident::secondIncreasePerLoop()
 {
 	Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
@@ -516,4 +515,3 @@ void Resident::goToSleep()
 
 	has_gone_to_bed_ = true;
 }
->>>>>>> develop
