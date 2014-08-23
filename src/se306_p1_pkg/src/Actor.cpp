@@ -14,6 +14,7 @@
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
+#include "keyinput/KeyboardListener.hpp"
 
 namespace
 {
@@ -112,13 +113,14 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	ros::init(fakeArgC, 0, rosName.c_str());
 
 	nodeHandle = new ros::NodeHandle();
-	loopRate = new ros::Rate(10);
+	loopRate = new ros::Rate(LOOP_RATE);
 
 	publisherLocation = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
 
 	publisherInteraction = nodeHandle->advertise<msg_pkg::Interaction>("interaction", 1000);
 
 	// Put custom init stuff here (or make a method and call it from here)
+	KeyboardListener::init();
 	initialSetupStage();
 	doInitialSetup();
 }
@@ -298,6 +300,11 @@ bool Actor::goToNode(vector<PathPlannerNode*> &path){
         ROS_DEBUG("current position %f %f",px,py);
     }
     return false;
+}
+
+ros::NodeHandle &Actor::getNodeHandle() const
+{
+  return *nodeHandle;
 }
 
 namespace
