@@ -16,4 +16,4 @@
 #    Topics(entertainedness) # This and the line above are together equivalent to Topics(socialness, entertainedness)
 
 LogDirectory(log)
-Topics(entertainedness, interaction, socialness)
+Topics(upstagekeyinput)

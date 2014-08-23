@@ -48,9 +48,12 @@ add_message_files(
   FILES
   Action.msg
   Arrive.msg
+  Fitness.msg
   Health.msg
   Hunger.msg
+  Hygiene.msg
   Interaction.msg
+  KeyInput.msg
   Leave.msg
   Location.msg
   Morale.msg

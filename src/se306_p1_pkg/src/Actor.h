@@ -30,6 +30,8 @@ public:
 
     bool moveToResident();
     void startMovingToResident();
+	
+	ros::NodeHandle &getNodeHandle() const;
 
 
 protected:
