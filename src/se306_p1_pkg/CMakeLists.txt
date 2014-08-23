@@ -157,8 +157,6 @@ target_link_libraries(
 ## Testing ##
 #############
 
-catkin_add_gtest(navigationtests test/navigationtests.cpp)
-
 ## Add gtest based cpp test target and link libraries
 catkin_add_gtest(${PROJECT_NAME}-test
   test/utest.cpp
