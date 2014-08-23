@@ -3,44 +3,77 @@
 
 ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f)
 {
-	std::vector<char> buffer;
-	int fChr;
-	bool rootNodeStarted = false;
-	std::vector<XML *> nodeHierarchy;
+	// Read everything up-front to make it easier to go backwards and forwards.
+	std::vector<char> buffer = readAll(f);
 	
-	while ((fChr = std::fgetc(f)) != EOF)
+	XML *lastNode = 0;
+	enum TagType
 	{
-		// Ignore whitespace until the root node is found.
-		if (!isWhitespace(fChr) || rootNodeStarted)
+		XMLTagComment,
+		XMLTagDeclaration,
+		XMLTagStart,
+		XMLTagEnd,
+		XMLTagEmpty,
+		XMLTagInvalid
+	};
+	
+	for (unsigned long pos = 0; pos < buffer.size(); ++pos)
+	{
+		// Ignore everything until the first tag
+		if (lastNode == 0 && buffer[pos] != '<')
 		{
-			
+			continue;
 		}
 		
-		buffer.push_back(fChr);
+		// Start of a tag
+		if (buffer[pos] == '<')
+		{
+			TagType tagType = XMLTagInvalid; // ... until we can determine what kind it really is.
+			
+			// Find the end of the tag
+			unsigned long tagEnd = pos;
+			while (++tagEnd < buffer.size() && buffer[tagEnd] != '>');
+			
+			UPS_ASSERTF(tagEnd != buffer.size(), "XML tag from position %lu does not terminate!", pos);
+
+			// Determine what kind of tag it is.
+			if (buffer[pos + 1] == '!')
+			{
+				tagType = XMLTagComment;
+			}
+			else if (buffer[pos + 1] == '?')
+			{
+				tagType = XMLTagDeclaration;
+			}
+			else if (buffer[pos + 1] == '/')
+			{
+				tagType = XMLTagEnd;
+			}
+			else if (buffer[tagEnd - 1] == '/')
+			{
+				tagType = XMLTagEmpty;
+			}
+			else
+			{
+				tagType = XMLTagStart;
+			}
+			
+			UPS_LOGF("XML tag %d", static_cast<int>(tagType));
+		}
 	}
 	
-	return new XML("test");
+	return new XML(0);
 }
 
-ups::XML::XML(const std::string &name):
-	_name(name)
+ups::XML::XML(XML *parent):
+	_parent(parent)
 {
-	std::printf("XML CONSTRUCTOR FOR %s\n", _name.c_str());
+	std::printf("XML CONSTRUCTOR\n");
 }
 
 ups::XML::~XML()
 {
 	std::printf("XML DESTRUCTOR FOR %s\n", _name.c_str());
-}
-		
-void ups::XML::setContent(const std::string &content)
-{
-	
-}
-
-void ups::XML::addChild(XML *child)
-{
-	_children.push_back(PointerUnique<XML>(child));
 }
 
 void ups::XML::print(int indentDepth) const

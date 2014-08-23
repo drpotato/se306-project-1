@@ -24,20 +24,38 @@ namespace ups
 		typedef std::map<std::string, std::string> AttrMap;
 		typedef std::vector<PointerUnique<XML> > ChildList;
 		
-		XML(const std::string &name);
+		XML(XML *parent = 0);
 		~XML();
 		
 		static ups::PointerUnique<XML> fromFile(std::FILE *f);
 		void setContent(const std::string &content);
 		void addChild(XML *child);
+		void setName(const std::string &name);
 		
 		void print(int indentDepth = 0) const;
+		
 	private:
+		XML *_parent;
 		std::string _name;
 		std::string _content;
 		ChildList _children;
 		AttrMap _attributes;
 	};
+	
+	inline void XML::setContent(const std::string &content)
+	{
+		_content = content;
+	}
+	
+	inline void XML::addChild(XML *child)
+	{
+		_children.push_back(PointerUnique<XML>(child));
+	}
+	
+	inline void XML::setName(const std::string &name)
+	{
+		_name = name;
+	}
 }
 
 #endif // #ifndef SE306P1_UPSTAGE_XML_HPP_DEFINED
