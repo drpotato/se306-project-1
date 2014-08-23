@@ -83,8 +83,6 @@ ups::Context::Context():
 	_glContext = glXCreateContext(_display, visualInfo, NULL, GL_TRUE);
 	glXMakeCurrent(_display, _window, _glContext);
 	setupGL();
-	
-	std::printf("Great success!\n\n");
 }
 
 ups::Context::~Context()

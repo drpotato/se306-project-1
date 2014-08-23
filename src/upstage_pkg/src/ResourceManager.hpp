@@ -3,12 +3,14 @@
 
 #include "ResourceLoader.hpp"
 #include <map>
+#include <list>
 #include <string>
 
 namespace ups
 {
 	class Resource;
 	typedef std::map<std::string, Resource *> ResMap;
+	typedef std::list<std::string> PathList;
 	class ResourceManager
 	{
 	public:
@@ -18,6 +20,8 @@ namespace ups
 		template<typename t>
 		t *fetch(const std::string &resName);
 		void add(const std::string &resName, Resource *resource);
+		void addPriorityPath(const std::string &path);
+		void addFallbackPath(const std::string &path);
 		
 	private:
 		std::string resolvePath(const std::string &resName) const;
@@ -25,6 +29,7 @@ namespace ups
 		
 		ResourceManager();
 		
+		PathList _paths;
 		ResourceLoader _loader;
 		ResMap _resources;
 	};

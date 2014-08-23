@@ -5,7 +5,7 @@ mkdir log
 export ROS_PACKAGE_PATH=`pwd`:$ROS_PACKAGE_PATH
 
 source devel/setup.bash
-roscore &
+roscore >> log/roscore.txt &
 ROSCORE_PID=$!
 echo ROSCORE_PID = $ROSCORE_PID >> log/debugscript.txt
 
@@ -16,7 +16,7 @@ echo InitialY       = 3 >> log/actor_Resident_000.txt
 echo InitialAngle   = 0 >> log/actor_Resident_000.txt
 echo Colour         = red >> log/actor_Resident_000.txt
 echo "#######################################################################" >> log/actor_Resident_000.txt
-rosrun se306_p1_pkg ActorSpawner 0 Resident -5 3 0 >> log/actor_Resident_000.txt &
+rosrun se306_p1_pkg ActorSpawner 0 Resident -5 3 0 & # >> log/actor_Resident_000.txt &
 ROBOT0_PID=$!
 echo ROBOT0_PID = $ROBOT0_PID >> log/debugscript.txt
 
@@ -27,7 +27,7 @@ echo InitialY       = -3 >> log/actor_R1_000.txt
 echo InitialAngle   = 0 >> log/actor_R1_000.txt
 echo Colour         = yellow >> log/actor_R1_000.txt
 echo "#######################################################################" >> log/actor_R1_000.txt
-rosrun se306_p1_pkg ActorSpawner 1 R1 -6 -3 0 >> log/actor_R1_000.txt &
+rosrun se306_p1_pkg ActorSpawner 1 R1 -6 -3 0 & # >> log/actor_R1_000.txt &
 ROBOT1_PID=$!
 echo ROBOT1_PID = $ROBOT1_PID >> log/debugscript.txt
 
@@ -38,7 +38,7 @@ echo InitialY       = -3 >> log/actor_EntertainmentRobot_000.txt
 echo InitialAngle   = 0 >> log/actor_EntertainmentRobot_000.txt
 echo Colour         = blue >> log/actor_EntertainmentRobot_000.txt
 echo "#######################################################################" >> log/actor_EntertainmentRobot_000.txt
-rosrun se306_p1_pkg ActorSpawner 2 EntertainmentRobot -2.5 -3 0 >> log/actor_EntertainmentRobot_000.txt &
+rosrun se306_p1_pkg ActorSpawner 2 EntertainmentRobot -2.5 -3 0 & # >> log/actor_EntertainmentRobot_000.txt &
 ROBOT2_PID=$!
 echo ROBOT2_PID = $ROBOT2_PID >> log/debugscript.txt
 
@@ -49,7 +49,7 @@ echo InitialY       = 5 >> log/actor_Relative_000.txt
 echo InitialAngle   = 0 >> log/actor_Relative_000.txt
 echo Colour         = pink >> log/actor_Relative_000.txt
 echo "#######################################################################" >> log/actor_Relative_000.txt
-rosrun se306_p1_pkg ActorSpawner 3 Relative 2.75 5 0 >> log/actor_Relative_000.txt &
+rosrun se306_p1_pkg ActorSpawner 3 Relative 2.75 5 0 & # >> log/actor_Relative_000.txt &
 ROBOT3_PID=$!
 echo ROBOT3_PID = $ROBOT3_PID >> log/debugscript.txt
 
@@ -60,21 +60,18 @@ echo InitialY       = 3 >> log/actor_RCActor_000.txt
 echo InitialAngle   = 0 >> log/actor_RCActor_000.txt
 echo Colour         = grey >> log/actor_RCActor_000.txt
 echo "#######################################################################" >> log/actor_RCActor_000.txt
-rosrun se306_p1_pkg ActorSpawner 4 RCActor 2.75 3 0 >> log/actor_RCActor_000.txt &
+rosrun se306_p1_pkg ActorSpawner 4 RCActor 2.75 3 0 & # >> log/actor_RCActor_000.txt &
 ROBOT4_PID=$!
 echo ROBOT4_PID = $ROBOT4_PID >> log/debugscript.txt
 
-echo "############################## DEBUG LOG ##############################" > log/topic_upstagekeyinput.txt
-echo Topic          = upstagekeyinput >> log/topic_upstagekeyinput.txt
-echo "#######################################################################" >> log/topic_upstagekeyinput.txt
-$TERM -hold -title "upstagekeyinput" -e /bin/bash -c ". devel/setup.bash; ./persist.sh \"rostopic echo upstagekeyinput\"| tee -a log/topic_upstagekeyinput.txt" &
-MESSAGE0_PID=$!
-echo MESSAGE0_PID = $MESSAGE0_PID >> log/debugscript.txt
-
-rosrun upstage_pkg Upstage &
+echo "############################## DEBUG LOG ##############################" > log/upstage.txt
+echo "#######################################################################" >> log/upstage.txt
+rosrun upstage_pkg Upstage & # >> log/upstage.txt &
 UPSTAGE_PID=$!
+echo UPSTAGE_PID = $UPSTAGE_PID >> log/debugscript.txt
 
-rosrun stage_ros stageros src/se306_p1_pkg/world/myworld.world
+
+rosrun stage_ros stageros src/se306_p1_pkg/world/myworld.world >> log/stage.txt
 
 kill $UPSTAGE_PID
 kill $ROBOT0_PID
@@ -82,5 +79,4 @@ kill $ROBOT1_PID
 kill $ROBOT2_PID
 kill $ROBOT3_PID
 kill $ROBOT4_PID
-kill $MESSAGE0_PID
 kill $ROSCORE_PID

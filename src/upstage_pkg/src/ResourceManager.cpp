@@ -1,8 +1,10 @@
 #include "ResourceManager.hpp"
 #include "Resource.hpp"
+#include "Util.hpp"
 
 ups::ResourceManager::ResourceManager()
 {
+	_paths.push_back(std::string());
 }
 
 ups::ResourceManager::~ResourceManager()
@@ -18,9 +20,33 @@ void ups::ResourceManager::add(const std::string &resName, Resource *resource)
 	_resources[resName] = resource;
 }
 
+void ups::ResourceManager::addPriorityPath(const std::string &path)
+{
+	_paths.push_front(path);
+}
+
+void ups::ResourceManager::addFallbackPath(const std::string &path)
+{
+	_paths.push_back(path);
+}
+
 std::string ups::ResourceManager::resolvePath(const std::string &resName) const
 {
-	return resName;
+	std::string resolvedPath;
+	for (ups::PathList::const_iterator it = _paths.begin(); it != _paths.end(); ++it)
+	{
+		std::string testPath = *it + "/" + resName;
+		
+		if (canRead(testPath))
+		{
+			resolvedPath = testPath;
+			break;
+		}
+	}
+	
+	UPS_LOGF("Searched for \"%s\", found \"%s\"", resName.c_str(), resolvedPath.c_str());
+	
+	return resolvedPath;
 }
 
 ups::Resource *ups::ResourceManager::load(const std::string &resName)
@@ -31,7 +57,7 @@ ups::Resource *ups::ResourceManager::load(const std::string &resName)
 		return 0;
 	}
 	
-	ups::Resource *resource = _loader.loadFrom(resName);
+	ups::Resource *resource = _loader.loadFrom(resourcePath);
 	add(resName, resource);
 	return resource;
 }

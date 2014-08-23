@@ -11,8 +11,11 @@ int main(int argc, char **argv)
 	ups::Renderer renderer(context);
 	ups::ROSComm &rosComm = ups::ROSComm::getROSComm();
 	ups::ResourceManager &resMan = ups::ResourceManager::getInstance();
+	resMan.addPriorityPath("upstage");
 	
-	resMan.fetch<ups::Resource>("upstageenv.unv");
+	resMan.fetch<ups::Resource>("test.xml");
+	
+	renderer.setEnvClearColour(0.f, 0.f, 0.f);
 	
 	bool isContinuing = true;
 	while (isContinuing)
@@ -23,7 +26,7 @@ int main(int argc, char **argv)
 		isContinuing&= rosComm.executeLoop();
 		
 		// Update positions etc. here
-		renderer.setEnvClearColour(1.f, 0.5f, 0.f);
+		
 		
 		
 		
