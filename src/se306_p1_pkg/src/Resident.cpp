@@ -290,36 +290,64 @@ void Resident::randomEventLoop()
 	// In this case, an event will occur whenever the random number is between 139
 	// and 140 (14 * FREQUENCY {10} - 1), so 1/140 of the time. 140 loops = 14 seconds.
 
+	// TODO: Reduce code repetition by moving the first two lines of each section below
+	// to the random method
+
 	// Socialness drops fastest and is most affected by randomness.
 	// On average, it should drop by 1 every 10 seconds
 	randNum = getRandom(float(0), float(10 * FREQUENCY));
 	if (randNum > ((10 * FREQUENCY) - 1)) {
-		printf("Event occured: rng = %.3f", randNum);
-	} else {
-		//printf("Event not occured: rng = %.3f", randNum);
+		printf("Insert logic for socialness dropping here (rng = %.3f\n", randNum);
 	}
 	
 	// Morale also drops quickly but is less affected by randomness than
 	// entertainedness.
 	// On average, it should drop by 1 every 14 seconds
-	randNum = (float)rand() / (float)RAND_MAX;
+	randNum = getRandom(float(0), float(14 * FREQUENCY));
+	if (randNum > ((14 * FREQUENCY) - 1)) {
+		printf("Insert logic for morale dropping here (rng = %.3f\n", randNum);
+	}
 
 	// Health drops in two ways, either almost slowly and almost 
 	// completely linearly or in a random, drastic fashion.
 	// On average, it should drop by 1 every 25 seconds
-		
+	randNum = getRandom(float(0), float(25 * FREQUENCY));
+	if (randNum > ((25 * FREQUENCY) - 1)) {
+		printf("Insert logic for slow, near-linear hunger drop here (rng = %.3f\n", randNum);
+	}	
+
+	// Hygiene
+	// On average, it should drop by 1 every 15 seconds
+	randNum = getRandom(float(0), float(15 * FREQUENCY));
+	if (randNum > ((15 * FREQUENCY) - 1)) {
+		printf("Insert logic for hygiene dropping here (rng = %.3f\n", randNum);
+	}
 
 	// Hunger drops almost completely linearly...
-	// On average, it should drop by 1 every 10 seconds
-	randNum = (float)rand() / (float)RAND_MAX;
+	// On average, it should drop by 1 every 30 seconds (THIS IS NOT EVEN CLOSE TO FINAL)
+	randNum = getRandom(float(0), float(30 * FREQUENCY));
+	if (randNum > ((30 * FREQUENCY) - 1)) {
+		printf("Insert logic for hunger dropping here (rng = %.3f\n", randNum);
+	}	
 
 	// ...as does thirst
 	// On average, it should drop by 1 every 10 seconds
-	randNum = (float)rand() / (float)RAND_MAX;
+	randNum = getRandom(float(0), float(10 * FREQUENCY));
+	if (randNum > ((10 * FREQUENCY) - 1)) {
+		printf("Insert logic for thirst dropping here (rng = %.3f\n", randNum);
+	}
 
-	//ROS_INFO("Calculating random event(s)...");
-	
 
+
+
+}
+
+
+// TODO: Method used to change resident levels 
+// Pass an int and a char to change a resident level
+// Use example: (-1, 's') will reduce socialness by 1.
+void Resident::changeLevel(int, char) {
+	// do nothing
 }
 
 

@@ -23,6 +23,7 @@ protected:
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg);
   static float getRandom(float, float);
+  void changeLevel(int, char);
   void randomEventLoop();
   
 private:
