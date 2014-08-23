@@ -3,6 +3,7 @@
 #include <ctime>
 #include <time.h>
 #include "Clock.h"
+#include "ActorSpawner.h"
 
 // The clock object keeps track of the time of day and publishes it to the time topic
 
@@ -10,7 +11,6 @@ void Clock::doInitialSetup()
 {
   // Initialise time of day to current time
   time_of_day = std::time(0);
-  the_hour = gmtime(&time_of_day)->tm_hour;
 
   // Get number of seconds to add on each loop
   seconds_to_add = secondIncreasePerLoop();
@@ -26,18 +26,23 @@ void Clock::doExecuteLoop()
   //ROS_INFO("%s", ctime(&time_of_day)); //<-- use this to debug to print the time
 
   // Grab out the hour value from the current Ultron world time
-  the_hour = gmtime(&time_of_day)->tm_hour;
+  ptm = gmtime(&time_of_day);
   //ROS_INFO("%d", gmtime(&time_of_day)->tm_hour); //<-- use this to debug to print the hour value (can change to minutes or whatever too)
 
   // Create a time message to publish
   msg_pkg::Time timeMessage;
-  // Assign current socialness level to the message
-  timeMessage.time_of_day = time_of_day;
+
+  // Assign current time values to the message
+  timeMessage.hour = ptm->tm_hour;
+  timeMessage.minutes = ptm->tm_min;
+  timeMessage.seconds = ptm->tm_sec;
+
   // Publish the message
-  residentInstance->publisherTime.publish(timeMessage);
+  Clock* clockInstance = dynamic_cast<Clock*>(ActorSpawner::getInstance().getActor());
+  clockInstance->publisherTime.publish(timeMessage);
 }
 
-int Resident::secondIncreasePerLoop()
+int Clock::secondIncreasePerLoop()
 {
   Clock* clockInstance = dynamic_cast<Clock*>(ActorSpawner::getInstance().getActor());
   int loop_rate = clockInstance->LOOP_RATE;

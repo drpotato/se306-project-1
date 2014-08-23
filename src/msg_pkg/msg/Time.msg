@@ -1,2 +1,4 @@
 # Message containing the time
-time time_of_day
+int8 hour
+int8 minutes
+int8 seconds

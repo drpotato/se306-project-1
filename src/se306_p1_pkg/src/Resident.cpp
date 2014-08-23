@@ -24,8 +24,8 @@ void Resident::doInitialSetup()
   has_eaten_breakfast_ = false;
   has_eaten_lunch_ = false;
   has_eaten_dinner_ = false;
-  has_woken_ = (the_hour > WAKE_TIME);
-  has_gone_to_bed_ = (the_hour > SLEEP_TIME);
+  //has_woken_ = (the_hour > WAKE_TIME);
+  //has_gone_to_bed_ = (the_hour > SLEEP_TIME);
 
   // Set levels to maximum initially.
   morale_level_ = 5;
@@ -215,23 +215,6 @@ void Resident::stopRobotSpinning()
   residentInstance->velRotational = 0.0; // Stop rotation to show interaction finished
 }
 
-int Resident::secondIncreasePerLoop()
-{
-	Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
-	int loop_rate = residentInstance->LOOP_RATE;
-
-	// 1 hr (Ultron world) = 30 seconds (real world)
-	// Number of loops needed to pass 30 seconds in the real world: (loop_rate is number loops per second)
-	double num_loops_for_real_30_seconds = loop_rate * 30; //e.g. 300
-
-	// Number of loops needed to pass one minute in the Ultron world
-	double num_loops_per_ultron_minute = num_loops_for_real_30_seconds / 60; //e.g. 5
-
-	// Number of seconds to add to the time_of_day on each loop in order to pass one Ultron hour in real world 30 seconds
-	double num_ultron_seconds_per_loop = 60 / num_loops_per_ultron_minute; //e.g. 12
-
-	return num_ultron_seconds_per_loop;
-}
 void Resident::wakeUp()
 {
 	// Reset sleep value for the day
@@ -241,18 +224,18 @@ void Resident::wakeUp()
 }
 void Resident::eat()
 {
-	if (the_hour == BREAKFAST_TIME)
-	{
-		has_eaten_breakfast_ = true;
-	}
-	else if (the_hour == LUNCH_TIME)
-	{
-		has_eaten_lunch_ = true;
-	}
-	else if (the_hour == DINNER_TIME)
-	{
-		has_eaten_dinner_ = true;
-	}
+	// if (the_hour == BREAKFAST_TIME)
+	// {
+	// 	has_eaten_breakfast_ = true;
+	// }
+	// else if (the_hour == LUNCH_TIME)
+	// {
+	// 	has_eaten_lunch_ = true;
+	// }
+	// else if (the_hour == DINNER_TIME)
+	// {
+	// 	has_eaten_dinner_ = true;
+	// }
 }
 void Resident::goToSleep()
 {
