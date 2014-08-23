@@ -278,27 +278,26 @@ bool Actor::gotoPosition(double x,double y){
 bool Actor::goToNode(string* nodeName) {
     activeNode = getActiveNode();
 
-    goingToX = getActorX(nodeName);
-    goingToY = getActorY(nodeName);
+    targetNode = this->pathPlanner.getNode(nodeName);
+                //TODO: REWIRITE THIS TO USE NEW SYSTEM ################################################################################################
+    // goingToNode = pathPlanner.getClosestNode(goingToX, goingToY);
 
-    goingToNode = pathPlanner.getClosestNode(goingToX, goingToY);
+    // vector <PathPlannerNodepath = pathPlanner.pathToNode(this->activeNode, goingToNode);
 
-    vector <PathPlannerNodepath = pathPlanner.pathToNode(this->activeNode, goingToNode);
-
-    //Get the node
-    if (targetNode >= path.size()){
-        //We have arrived at the last node
-        this->velLinear = 0;
+    // //Get the node
+    // if (targetNode >= path.size()){
+    //     //We have arrived at the last node
+    //     this->velLinear = 0;
         
-        return true;
-    }
-    if (!this->gotoPosition(path[targetNode]->px,path[targetNode]->py)){
-        this->activeNode = path[targetNode];
-        targetNode++;
-    }else{
-        ROS_DEBUG("current position %f %f",px,py);
-    }
-    return false;
+    //     return true;
+    // }
+    // if (!this->gotoPosition(path[targetNode]->px,path[targetNode]->py)){
+    //     this->activeNode = path[targetNode];
+    //     targetNode++;
+    // }else{
+    //     ROS_DEBUG("current position %f %f",px,py);
+    // }
+    // return false;
 }
 
 // Find the closest waypoint node to this Actor's current position.

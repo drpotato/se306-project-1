@@ -5,15 +5,16 @@
 
 //TODO: Make PathPlanner a singleton
 
-pathPlanner::pathPlanner() {
+PathPlanner::PathPlanner() {
     subscriberLocation = nodeHandle->subscribe("location", 1000, Actor::locationCallback);
+    nodeHandle = new ros::NodeHandle();
 }
 
 // When a location message is received, updates the graph with that Actor's new location.
 void Actor::locationCallback(msg_pkg::Location msg)
 {
     // Find actor of this name in graph and remove it.
-    PathPlannerNode* actorNode = removeNode(&msg.id);
+    PathPlannerNode* actorNode = this.removeNode(&msg.id);
 
     // Find the actor's neighbour at its new location, and add it back into the graph.
     addActorNode(actorNode);

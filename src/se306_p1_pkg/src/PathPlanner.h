@@ -4,10 +4,12 @@
 #include <vector>
 #include <string>
 #include <queue>
+#include "ros/ros.h"
 #include <boost/unordered_map.hpp>
 #include "PathPlannerNode.h"
 #include <msg_pkg/Location.h>
 #include "ActorLocation.h"
+#include "Actor.h"
 
 using namespace std;
 
@@ -18,8 +20,10 @@ private:
     typedef boost::unordered_map<string,string> map;
 
     ros::Subscriber subscriberLocation;
+    ros::NodeHandle *nodeHandle;
     
 public:
+    PathPlanner();
 	vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
     void addActorNode(PathPlannerNode*);
     void addNode(PathPlannerNode*);

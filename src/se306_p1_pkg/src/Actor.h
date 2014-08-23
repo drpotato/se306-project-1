@@ -75,16 +75,19 @@ protected:
 
 private:
     PathPlanner pathPlanner;
-    PathPlannerNode *activeNode;
+    PathPlannerNode* activeNode;
+    PathPlannerNode* targetNode;
+
     double faceDirection(double,double);
     bool gotoPosition(double x,double y);
-    int targetNode;
+
     PathPlannerNode node1;
     PathPlannerNode node2;
     PathPlannerNode node3;
     PathPlannerNode node4;
     PathPlannerNode node5;
     PathPlannerNode nodeDoor;
+
     string node1Name;
     string node2Name;
     string node3Name;
