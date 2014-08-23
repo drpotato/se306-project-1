@@ -23,7 +23,7 @@ void Clock::doInitialSetup()
 void Clock::doExecuteLoop()
 {    
 	// Increment the time of day by the value calculated previously (in seconds)
-  time_of_day += 1800;//seconds_to_add; //1800; <-- a good debug time frame is 1800 seconds
+  time_of_day += seconds_to_add; //1800; <-- a good debug time frame is 1800 seconds
   //ROS_INFO("%s", ctime(&time_of_day)); //<-- use this to debug to print the time
 
   // Grab out the hour value from the current Ultron world time

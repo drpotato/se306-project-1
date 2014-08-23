@@ -29,9 +29,9 @@ private:
 
   // Number of seconds to increase Ultron world time by on each ROS loop
   int secondIncreasePerLoop();
+
   // Hours are inverted 12 hours for some reason. This function inverts it.
   void invertHours(int hour);
-
 };
 
 
