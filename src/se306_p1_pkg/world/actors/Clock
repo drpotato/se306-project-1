@@ -1,0 +1,7 @@
+define Clock position
+(
+	# Base
+	# size [1 0.5 1] this would put it up against the wall - jenna was going to make it a clock shape lol
+	size [0 0 0]
+    drive "diff"
+)
