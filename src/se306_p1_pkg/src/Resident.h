@@ -14,12 +14,10 @@ public:
   virtual void lock();
   virtual void unlock();
   
-protected:
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg);
   
-private:
   bool lock_;
 
   // Demo paramters to gradually reduce levels
@@ -87,4 +85,3 @@ private:
 
 
 #endif
-
