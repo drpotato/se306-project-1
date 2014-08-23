@@ -18,5 +18,3 @@ World
 	-findByNamedID()
 Entity
 	Actor
-
-ROSComm
