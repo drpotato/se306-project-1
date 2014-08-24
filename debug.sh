@@ -69,7 +69,7 @@ echo ActorClass     = Clock >> log/actor_Clock_000.txt
 echo InitialX       = 6 >> log/actor_Clock_000.txt
 echo InitialY       = -4.6 >> log/actor_Clock_000.txt
 echo InitialAngle   = 0 >> log/actor_Clock_000.txt
-echo Colour         = black >> log/actor_Clock_000.txt
+echo Colour         = grey30 >> log/actor_Clock_000.txt
 echo "#######################################################################" >> log/actor_Clock_000.txt
 rosrun se306_p1_pkg ActorSpawner 5 Clock 6 -4.6 0 & # >> log/actor_Clock_000.txt &
 ROBOT5_PID=$!
