@@ -9,7 +9,6 @@
 #include "PathPlannerNode.h"
 #include <msg_pkg/Location.h>
 #include "ActorLocation.h"
-#include "Actor.h"
 
 using namespace std;
 
@@ -35,4 +34,3 @@ public:
 
 
 #endif // #ifndef SE306P1_ACTOR_VISITOR_H_DEFINED
-

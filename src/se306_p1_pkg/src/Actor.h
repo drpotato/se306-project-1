@@ -5,11 +5,11 @@
 #include <msg_pkg/Location.h>
 
 #include "ros/ros.h"
-#include "PathPlanner.h"
 #include <vector>
 #include <string>
 #include "std_msgs/String.h"
 #include "ActorLocation.h"
+#include "PathPlanner.h"
 #include "PathPlannerNode.h"
 
 class Actor : public PathPlannerNode

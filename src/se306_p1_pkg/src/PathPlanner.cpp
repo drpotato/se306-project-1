@@ -1,20 +1,23 @@
 #include "PathPlanner.h"
 #include "ros/ros.h"
+#include <msg_pkg/Location.h>
 
 // This class maintains a graph of navigation waypoint nodes, and calculates the shortest (fewest nodes) path between any two of them.
 
 //TODO: Make PathPlanner a singleton
 
 PathPlanner::PathPlanner() {
-    subscriberLocation = nodeHandle->subscribe("location", 1000, Actor::locationCallback);
+    subscriberLocation = nodeHandle->subscribe("location", 1000, PathPlanner::locationCallback);
     nodeHandle = new ros::NodeHandle();
 }
 
 // When a location message is received, updates the graph with that Actor's new location.
-void Actor::locationCallback(msg_pkg::Location msg)
+void PathPlanner::locationCallback(msg_pkg::Location msg)
 {
     // Find actor of this name in graph and remove it.
-    PathPlannerNode* actorNode = this.removeNode(&msg.id);
+    string name = msg.id;
+
+    PathPlannerNode* actorNode = removeNode(&name);
 
     // Find the actor's neighbour at its new location, and add it back into the graph.
     addActorNode(actorNode);
@@ -73,7 +76,7 @@ PathPlannerNode* PathPlanner::removeNode(string* name) {
                 PathPlannerNode* neighbour = node->neighbours[i];
                 neighbour->removeNeighbour(node);
             }
-            nodes.erase(node);
+            nodes.erase(*node);
         }
     }
     return node;
