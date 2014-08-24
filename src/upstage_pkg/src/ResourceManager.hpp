@@ -26,6 +26,8 @@ namespace ups
 	private:
 		std::string resolvePath(const std::string &resName) const;
 		Resource *load(const std::string &resName);
+		template<typename t>
+		t *load(const std::string &resName);
 		
 		ResourceManager();
 		
@@ -52,10 +54,16 @@ namespace ups
 		ResMap::iterator it = _resources.find(resName);
 		if (it == _resources.end())
 		{
-			return load(resName);
+			return load<t>(resName);
 		}
 		
-		return it->second;
+		return dynamic_cast<t*>(it->second);
+	}
+	
+	template<typename t>
+	inline t *ResourceManager::load(const std::string &resName)
+	{
+		return dynamic_cast<t*>(load(resName));
 	}
 }
 

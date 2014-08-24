@@ -1,6 +1,7 @@
 #ifndef SE306P1_UPSTAGE_RENDERER_HPP_DEFINED
 #define SE306P1_UPSTAGE_RENDERER_HPP_DEFINED
 
+#include "Types.hpp"
 #include "RenderTask.hpp"
 #include "../StackAllocator.hpp"
 #include <vector>
@@ -17,7 +18,7 @@ namespace ups
 		void render();
 		
 		// Functionality
-		void setEnvClearColour(float r, float g, float b);
+		void setEnvClearColour(const Colour &colour);
 	protected:
 		
 		

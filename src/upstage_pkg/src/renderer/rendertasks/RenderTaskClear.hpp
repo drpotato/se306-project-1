@@ -10,8 +10,6 @@ RenderTaskClear clear; // A member in the containing union, should be of this Re
 // The class info
 struct RenderTaskClear
 {
-	float r;
-	float g;
-	float b;
+	Colour col;
 };
 #endif

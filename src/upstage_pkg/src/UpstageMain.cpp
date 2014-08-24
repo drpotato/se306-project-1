@@ -3,6 +3,7 @@
 #include "Resource.hpp"
 #include "ResourceManager.hpp"
 #include "StackAllocator.hpp"
+#include "UpstageEnvironment.hpp"
 #include "renderer/Renderer.hpp"
 
 int main(int argc, char **argv)
@@ -13,9 +14,7 @@ int main(int argc, char **argv)
 	ups::ResourceManager &resMan = ups::ResourceManager::getInstance();
 	resMan.addPriorityPath("upstage");
 	
-	resMan.fetch<ups::Resource>("test.xml");
-	
-	renderer.setEnvClearColour(0.f, 0.f, 0.f);
+	ups::UpstageEnvironment *env = resMan.fetch<ups::UpstageEnvironment>("upstageenv.unv");
 	
 	bool isContinuing = true;
 	while (isContinuing)
@@ -26,9 +25,8 @@ int main(int argc, char **argv)
 		isContinuing&= rosComm.executeLoop();
 		
 		// Update positions etc. here
-		
-		
-		
+		env->step();
+		env->draw(renderer);
 		
 		context.drawStart();
 		renderer.render();

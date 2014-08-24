@@ -1,6 +1,8 @@
 #ifndef SE306P1_UPSTAGE_RENDERTASK_HPP_DEFINED
 #define SE306P1_UPSTAGE_RENDERTASK_HPP_DEFINED
 
+#include "Types.hpp"
+
 // If you don't like macros, this may not be the header for you.
 // The advantage of this is that you don't have to maintain 3 lists,
 // instead you maintain a single list in RenderTaskList.inc

@@ -1,6 +1,8 @@
+#include "../Debug.hpp"
 #include "../ResourceLoader.hpp"
 #include "../Resource.hpp"
-#include "../Debug.hpp"
+#include "../UpstageEnvironment.hpp"
+#include "../xml/XML.hpp"
 
 #include <cstdio>
 
@@ -11,7 +13,15 @@ namespace ups
 	Resource *ResourceLoader::loadFrom<ResourceLoader::RL_LT_UpstageEnv>(const std::string &filePath) const
 	{
 		UPS_LOGF("Looking at RL_LT_UpstageEnv for %s", filePath.c_str());
-
-		return new Resource();
+		
+		std::FILE *f = std::fopen(filePath.c_str(), "rb");
+		PointerUnique<XML> xml = XML::fromFile(f);
+		fclose(f);
+		
+		xml->print();
+		
+		UpstageEnvironment *env = new UpstageEnvironment();
+		
+		return env;
 	}
 }

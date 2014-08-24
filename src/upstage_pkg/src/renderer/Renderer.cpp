@@ -82,20 +82,18 @@ void ups::Renderer::doTask(RenderTask *task)
 	switch (task->type)
 	{
 	case RenderTask::RT_Clear:
-		glClearColor(task->clear.r, task->clear.g, task->clear.b, 1.f);
+		glClearColor(task->clear.col.r, task->clear.col.g, task->clear.col.b, task->clear.col.a);
 		break;
 	default:
 		break;
 	}
 }
 
-void ups::Renderer::setEnvClearColour(float r, float g, float b)
+void ups::Renderer::setEnvClearColour(const Colour &colour)
 {
 	RenderTask *rt = _frameAlloc.allocate<RenderTask>();
 	rt->type = RenderTask::RT_Clear;
-	rt->clear.r = r;
-	rt->clear.g = g;
-	rt->clear.b = b;
+	rt->clear.col = colour;
 	
 	addToTaskList(rt, TLS_Env);
 }
