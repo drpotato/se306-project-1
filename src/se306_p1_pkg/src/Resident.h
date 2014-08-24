@@ -5,6 +5,8 @@
 #include <msg_pkg/Interaction.h>
 #include "ros/ros.h"
 #include <ctime>
+#include <time.h>
+#include <msg_pkg/Time.h>
 
 class Resident : public Human
 {
@@ -13,15 +15,14 @@ public:
   virtual void lock();
   virtual void unlock();
   
-protected:
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg);
+  static void timeCallback(msg_pkg::Time msg);
   
-private:
   bool lock_;
 
-  // Demo paramters to graduall reduce levels
+  // Demo paramters to gradually reduce levels
   int morale_count_;
   int socialness_count_;
   bool m_dropped_;
@@ -29,7 +30,19 @@ private:
   const static int WAIT_TIME = 50;
   bool m_replenished_;
 
-  std::time_t time_of_day;
+  // Event hours - c++ inverts 24hr time for some reason? - maybe just my machine does this
+  const static int WAKE_TIME = 7;
+  const static int BREAKFAST_TIME = 8;
+  const static int LUNCH_TIME = 13;
+  const static int DINNER_TIME = 18;
+  const static int SLEEP_TIME = 23;
+
+  // Has done event values
+  bool has_eaten_breakfast_;
+  bool has_eaten_lunch_;
+  bool has_eaten_dinner_;
+  bool has_woken_;
+  bool has_gone_to_bed_;
 
   // Level of social fulfillment: 
   // 1 - bad (lonely)
@@ -43,16 +56,26 @@ private:
 
   // Publisher for socialness
   ros::Publisher publisherSocialness;
-  // Publisher for entertainedness
+  // Publisher for morale
   ros::Publisher publisherMorale;
 
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;
+  // Subscriber for time
+  ros::Subscriber subscriberTime;
 
+  // Gets a new level with a maximum of 5 and minimum of 1
   static int getNewLevel(int amount, int oldValue);
+
+  // Stop the robots angular velocity
   void stopRobotSpinning();
+
+  // Daily events
+  void wakeUp();
+  void eat(int hour);
+  void goToSleep();
+  bool hasWoken();
 };
 
 
 #endif
-

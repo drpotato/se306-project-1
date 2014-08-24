@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<package>
+  <name>upstage_pkg</name>
+  <version>0.0.0</version>
+  <description>Visualisation tool for running alongside Stage</description>
+
+  <!-- Maintainers and Authors -->
+  <maintainer email="jpet987@aucklanduni.ac.nz">Jamie Peterson</maintainer>
+  
+  <maintainer email="jfin982@aucklanduni.ac.nz">Jenna Finlayson</maintainer>
+  <maintainer email="kurtmcalpine@gmail.com">Kurt McAlpine</maintainer>
+  <maintainer email="cmor149@aucklanduni.ac.nz">Chris Morgan</maintainer>
+  <maintainer email="mdye175@aucklanduni.ac.nz">Matthew Dyer</maintainer>
+  <maintainer email="nz.ampersand@gmail.com">Michael Lo</maintainer>
+  <maintainer email="conor.j.simmonds@gmail.com">Conor Simmonds</maintainer>
+  <maintainer email="joshofreeness@gmail.com">Joshua Free</maintainer>
+  <maintainer email="qwyqqcy@gmail.com">Chaoyi Qin</maintainer>
+
+  <!-- License tag -->
+  <license>BSD</license>
+
+  <!-- Repository link -->
+  <url type="repository">https://github.com/drpotato/se306-project-1</url>
+
+
+  <!-- Dependencies: -->
+  <!-- Dependencies can be catkin packages or system dependencies -->
+  <!-- Use build_depend for packages you need at compile time: -->
+  <build_depend>message_generation</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>msg_pkg</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>X11</build_depend>
+  <build_depend>GL</build_depend>
+  <build_depend>GLU</build_depend>
+
+  <!-- Use buildtool_depend for build tool packages: -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- Use run_depend for packages you need at runtime: -->
+  <run_depend>message_runtime</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>msg_pkg</run_depend>
+  <run_depend>tf</run_depend>
+  <build_depend>X11</build_depend>
+  <build_depend>GL</build_depend>
+  <build_depend>GLU</build_depend>
+  <!-- Use test_depend for packages you need only for testing: -->
+  <!--   <test_depend>gtest</test_depend> -->
+
+
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- You can specify that this package is a metapackage here: -->
+    <!-- <metapackage/> -->
+    <!-- Other tools can request additional information be placed here -->
+  </export>
+</package>

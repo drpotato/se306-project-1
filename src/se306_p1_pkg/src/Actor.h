@@ -32,6 +32,11 @@ public:
 
     bool moveToResident();
     void startMovingToResident();
+	
+	ros::NodeHandle &getNodeHandle() const;
+
+	//The rate at which ros will loop - used to calculate time of day
+    const static int LOOP_RATE = 10;
 
 
 protected:

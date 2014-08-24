@@ -6,7 +6,8 @@
 #include "Actor.h"
 #include "ActorSpawner.h"
 #include <ctime>
-#include <sstream>
+#include <time.h>
+#include <msg_pkg/Time.h>
 
 // The person living in our house. 
 // Has various attributes representing his needs/wants, which degrade over time.
@@ -20,7 +21,12 @@ void Resident::doInitialSetup()
   // Any other Actor can interact with him and acquire the lock.
   lock_ = false;
 
-  time_of_day = std::time(0);
+  // Initialise statuses
+  has_eaten_breakfast_ = false;
+  has_eaten_lunch_ = false;
+  has_eaten_dinner_ = false;
+  has_woken_ = hasWoken();
+  has_gone_to_bed_ = !hasWoken();
 
   // Set levels to maximum initially.
   morale_level_ = 5;
@@ -37,59 +43,62 @@ void Resident::doInitialSetup()
 
   // Set up subscriptions.
   subscriberInteraction = nodeHandle->subscribe("interaction", 1000, Resident::interactionCallback);
+  subscriberTime = nodeHandle->subscribe("time", 1000, Resident::timeCallback);
 }
 
 void Resident::doExecuteLoop()
 {    
-	//ROS_INFO("%s", ctime(&time_of_day));
-	if (morale_count_ >= WAIT_TIME && !m_dropped_)
-	{
-		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
-		if(residentInstance->morale_level_ <= 1)
-		{
-			// don't drop the value any more, it's being tended to or has been already
-			m_dropped_ = true;
-		}
-		else 
-		{
-			// Reduce the level every 1000 counts
-			residentInstance->morale_level_--;
-			// Create a socialness message to publish
-			msg_pkg::Morale moraleMessage;
-			// Assign current socialness level to the message
-			moraleMessage.level = residentInstance->morale_level_;
-			// Publish the message
-			residentInstance->publisherMorale.publish(moraleMessage);
-		}
-		morale_count_ = 0;
-	}
-	else if (morale_count_ < WAIT_TIME && !m_dropped_) {
-		morale_count_++;
-	}
 
-	else if (m_replenished_ && (socialness_count_ >= WAIT_TIME) && !s_dropped_) {
-		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
-		if(residentInstance->socialness_level_ <= 1) {
-			// don't drop the value any more, it's being tended to or has been already
-			s_dropped_ = true;
-		}
+  //TODO: REMOVE THIS WHEN RANDOMNESS AND DAY LOGIC IS IMPLEMENTED##################################################################################
+  if (morale_count_ >= WAIT_TIME && !m_dropped_)
+  {
+    Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+    if(residentInstance->morale_level_ <= 1)
+    {
+      // don't drop the value any more, it's being tended to or has been already
+      m_dropped_ = true;
+    }
+    else 
+    {
+      // Reduce the level every 1000 counts
+      residentInstance->morale_level_--;
+      // Create a socialness message to publish
+      msg_pkg::Morale moraleMessage;
+      // Assign current socialness level to the message
+      moraleMessage.level = residentInstance->morale_level_;
+      // Publish the message
+      residentInstance->publisherMorale.publish(moraleMessage);
+    }
+    morale_count_ = 0;
+  }
+  else if (morale_count_ < WAIT_TIME && !m_dropped_) {
+    morale_count_++;
+  }
 
-		else {
-			// reduce the level every 1000 counts
-			residentInstance->socialness_level_--;
-			//Create a socialness message to publish
-			msg_pkg::Socialness socialnessMessage;
-			//Assign current socialness level to the message
-			socialnessMessage.level = residentInstance->socialness_level_;
-			//Publish the message
-			residentInstance->publisherSocialness.publish(socialnessMessage);
-		}
-		socialness_count_ = 0;
-	}
-	else if (m_replenished_ && (socialness_count_ < WAIT_TIME) && !s_dropped_)
-	{
-		socialness_count_++;
-	}
+  else if (m_replenished_ && (socialness_count_ >= WAIT_TIME) && !s_dropped_) {
+    Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+    if(residentInstance->socialness_level_ <= 1) {
+      // don't drop the value any more, it's being tended to or has been already
+      s_dropped_ = true;
+    }
+
+    else {
+      // reduce the level every 1000 counts
+      residentInstance->socialness_level_--;
+      //Create a socialness message to publish
+      msg_pkg::Socialness socialnessMessage;
+      //Assign current socialness level to the message
+      socialnessMessage.level = residentInstance->socialness_level_;
+      //Publish the message
+      residentInstance->publisherSocialness.publish(socialnessMessage);
+    }
+    socialness_count_ = 0;
+  }
+  else if (m_replenished_ && (socialness_count_ < WAIT_TIME) && !s_dropped_)
+  {
+    socialness_count_++;
+  }
+  //###################################################################################################################################################
 }
 
 /*
@@ -130,59 +139,127 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 
   if (attribute == "socialising")
   {
-  	// Get new level
-  	int newLevel = getNewLevel(amount, residentInstance->socialness_level_);
-	// Update the residents socialness level
-	residentInstance->socialness_level_ = newLevel;
-	//Create a socialness message to publish
-	msg_pkg::Socialness socialnessMessage;
-	//Assign current socialness level to the message
-	socialnessMessage.level = newLevel;
+    // Get new level
+    int newLevel = getNewLevel(amount, residentInstance->socialness_level_);
+  // Update the residents socialness level
+  residentInstance->socialness_level_ = newLevel;
+  //Create a socialness message to publish
+  msg_pkg::Socialness socialnessMessage;
+  //Assign current socialness level to the message
+  socialnessMessage.level = newLevel;
 
-	if (newLevel == 5)
-	{
-		residentInstance->stopRobotSpinning();
-	}
+  if (newLevel == 5)
+  {
+    residentInstance->stopRobotSpinning();
+  }
 
-	//Publish the message
-	residentInstance->publisherSocialness.publish(socialnessMessage);
+  //Publish the message
+  residentInstance->publisherSocialness.publish(socialnessMessage);
   } 
   else if (attribute == "entertaining")
   {
-	// Get new level
-	int newLevel = getNewLevel(amount, residentInstance->morale_level_);
-	// Update the residents socialness level
-	residentInstance->morale_level_ = newLevel;
-	//Create a socialness message to publish
-	msg_pkg::Morale moraleMessage;
-	//Assign current socialness level to the message
-	moraleMessage.level = newLevel;
+  // Get new level
+  int newLevel = getNewLevel(amount, residentInstance->morale_level_);
+  // Update the residents socialness level
+  residentInstance->morale_level_ = newLevel;
+  //Create a socialness message to publish
+  msg_pkg::Morale moraleMessage;
+  //Assign current socialness level to the message
+  moraleMessage.level = newLevel;
 
-	if (newLevel == 5)
-	{
-		residentInstance->stopRobotSpinning();
-		residentInstance->m_replenished_ = true;
-	}
+  if (newLevel == 5)
+  {
+    residentInstance->stopRobotSpinning();
+    residentInstance->m_replenished_ = true;
+  }
 
-	//Publish the message
-	residentInstance->publisherMorale.publish(moraleMessage);
+  //Publish the message
+  residentInstance->publisherMorale.publish(moraleMessage);
   }
   // TODO: put others in when implemented ##################################################################################################################
 }
 
+void Resident::timeCallback(msg_pkg::Time msg)
+{
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+
+  // Check if its currently any event times
+  if ((msg.hour == residentInstance->WAKE_TIME) && (!residentInstance->has_woken_))
+  {
+    // WAKE THE FK UP
+    ROS_INFO("It is %d:00. Wake up!", msg.hour);
+    residentInstance->wakeUp();
+    ROS_INFO("%s", residentInstance->has_gone_to_bed_ ? "Sleeping" : "Awake");
+  }
+  else if ( ((msg.hour == residentInstance->BREAKFAST_TIME) && (!residentInstance->has_eaten_breakfast_)) || ((msg.hour == residentInstance->LUNCH_TIME) && (!residentInstance->has_eaten_lunch_)) || ((msg.hour == residentInstance->DINNER_TIME) && (!residentInstance->has_eaten_dinner_)))
+  {
+    // Here have some food
+    ROS_INFO("It is %d:00 - time to eat!", msg.hour);
+    residentInstance->eat(msg.hour);
+  }
+  else if ((msg.hour == residentInstance->SLEEP_TIME) && (!residentInstance->has_gone_to_bed_))
+  {
+    // Go to sleep yo
+    ROS_INFO("It is %d:00. Sleep time!", msg.hour);
+    residentInstance->goToSleep();
+    ROS_INFO("%s", residentInstance->has_gone_to_bed_ ? "Sleeping" : "Awake");
+  }
+}
+
+
 int Resident::getNewLevel(int amount, int oldLevel)
 {
-	int newLevel = std::min(amount + oldLevel, 5); // Can only have a maximum level of 5
-	// Code to check it doesn't go below 1... just incase interactions can reduce levels at some point
-	if (newLevel < 1)
-	{
-		newLevel = 1;
-	}
-	return newLevel;
+  int newLevel = std::min(amount + oldLevel, 5); // Can only have a maximum level of 5
+  return newLevel < 1 ? 1 : newLevel; // Should not be below 1
 }
 
 void Resident::stopRobotSpinning()
 {
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
   residentInstance->velRotational = 0.0; // Stop rotation to show interaction finished
+}
+
+void Resident::wakeUp()
+{
+  // Reset sleep value for the day
+  has_gone_to_bed_ = false;
+
+  has_woken_ = true;
+}
+void Resident::eat(int hour)
+{
+  if (hour == BREAKFAST_TIME)
+  {
+    has_eaten_breakfast_ = true;
+  }
+  else if (hour == LUNCH_TIME)
+  {
+    has_eaten_lunch_ = true;
+  }
+    else if (hour == DINNER_TIME)
+  {
+    has_eaten_dinner_ = true;
+  }
+}
+void Resident::goToSleep()
+{
+  // Reset values for next day
+  has_eaten_breakfast_ = false;
+  has_eaten_breakfast_ = false;
+  has_eaten_lunch_ = false;
+  has_eaten_dinner_ = false;
+  has_woken_ = false;
+
+  has_gone_to_bed_ = true;
+}
+bool Resident::hasWoken()
+{
+  std::time_t time_of_day = std::time(0);
+  int hour = gmtime(&time_of_day)->tm_hour;
+  // Hours are inverted by 12 hours, so an hour value of 11 corresponds to 11pm while an hour value of 23 corresponds to 11am
+  if ((hour < 11) && (hour > 6))
+  {
+    return true;
+  }
+  return false;
 }

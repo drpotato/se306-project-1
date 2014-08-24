@@ -17,6 +17,8 @@
 #include "ActorSpawner.h"
 #include "ActorLocation.h"
 
+#include "keyinput/KeyboardListener.hpp"
+
 namespace
 {
 	std::string generateNodeName(unsigned int ID);
@@ -114,13 +116,14 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	ros::init(fakeArgC, 0, rosName.c_str());
 
 	nodeHandle = new ros::NodeHandle();
-	loopRate = new ros::Rate(10);
+	loopRate = new ros::Rate(LOOP_RATE);
 
 	publisherLocation = nodeHandle->advertise<msg_pkg::Location>("location", 1000);
 
 	publisherInteraction = nodeHandle->advertise<msg_pkg::Interaction>("interaction", 1000);
 
 	// Put custom init stuff here (or make a method and call it from here)
+	KeyboardListener::init();
 	initialSetupStage();
 	doInitialSetup();
 }
@@ -303,6 +306,11 @@ bool Actor::goToNode(string* nodeName) {
 // Find the closest waypoint node to this Actor's current position.
 PathPlannerNode* Actor::getActiveNode() {
     return pathPlanner.getClosestNode(this->px, this->py);
+}
+
+ros::NodeHandle &Actor::getNodeHandle() const
+{
+  return *nodeHandle;
 }
 
 namespace
