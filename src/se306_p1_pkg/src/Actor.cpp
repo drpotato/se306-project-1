@@ -138,7 +138,6 @@ bool Actor::executeLoop()
 
 		doExecuteLoop();
 		executeLoopStagePublication();
-        ROS_DEBUG("loop");
 
 		ros::spinOnce();
 		loopRate->sleep();
