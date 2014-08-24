@@ -2,6 +2,7 @@
 #include "../Util.hpp"
 
 //#define XML_DEBUG_LOG
+const ups::XML ups::XML::xmlNull(0);
 
 #ifdef XML_DEBUG_LOG
 	#define XML_LOG(msg) UPS_LOG(msg)

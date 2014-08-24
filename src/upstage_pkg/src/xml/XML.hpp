@@ -3,6 +3,7 @@
 
 #include "../Resource.hpp"
 #include "../PointerUnique.hpp"
+#include "../Util.hpp"
 #include <cstdio>
 #include <map>
 #include <string>
@@ -42,6 +43,11 @@ namespace ups
 		void addChild(XML *child);
 		void addAttribute(const std::string &name, const std::string &value);
 		
+		std::vector<const XML *>getChildren(const std::string &childName) const;
+		const XML &getChild(const std::string &childName) const;
+		template<typename t>
+		const t getAttr(const std::string &attrName, const t &attrDefault) const;
+		
 		void print(int indentDepth = 0) const;
 		
 	private:
@@ -50,6 +56,8 @@ namespace ups
 		TextList _textNodes;
 		ChildList _children;
 		AttrMap _attributes;
+		
+		static const XML xmlNull;
 	};
 	
 	inline void XML::setName(const std::string &name)
@@ -70,6 +78,61 @@ namespace ups
 	inline void XML::addAttribute(const std::string &name, const std::string &value)
 	{
 		_attributes[name] = value;
+	}
+	
+	inline std::vector<const XML *>XML::getChildren(const std::string &childName) const
+	{
+		std::vector<const XML *> outputVector;
+		
+		for (ChildList::const_iterator it = _children.begin(); it != _children.end(); ++it)
+		{
+			if ((*it)->_name == childName)
+			{
+				outputVector.push_back(&**it);
+			}
+		}
+		
+		return outputVector;
+	}
+	
+	inline const XML &XML::getChild(const std::string &childName) const
+	{
+		for (ChildList::const_iterator it = _children.begin(); it != _children.end(); ++it)
+		{
+			if ((*it)->_name == childName)
+			{
+				return **it;
+			}
+		}
+		
+		return xmlNull;
+	}
+	
+	template<>
+	inline const char *const XML::getAttr<const char *>(const std::string &attrName, const char *const &attrDefault) const
+	{
+		AttrMap::const_iterator it = _attributes.find(attrName);
+		
+		if (it == _attributes.end())
+		{
+			return attrDefault;
+		}
+		
+		return it->second.c_str();
+	}
+	
+	template<>
+	inline const float XML::getAttr<float>(const std::string &attrName, const float &attrDefault) const
+	{
+		float output;
+		return s2num<float>(output, getAttr<const char *>(attrName, "")) ? output : attrDefault;
+	}
+	
+	template<>
+	inline const double XML::getAttr<double>(const std::string &attrName, const double &attrDefault) const
+	{
+		double output;
+		return s2num<double>(output, getAttr<const char *>(attrName, "")) ? output : attrDefault;
 	}
 }
 
