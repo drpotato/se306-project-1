@@ -15,11 +15,12 @@
 	#define XML_ASSERTF(msg, ...)
 #endif
 
-ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f)
+ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f, unsigned int parserFlags)
 {
 	// Read everything up-front to make it easier to go backwards and forwards.
 	std::vector<char> buffer = readAll(f);
 	
+	unsigned long lastNodePos = 0;
 	XML *openNode = 0;
 	XML *rootNode = 0;
 	enum TagType
@@ -32,7 +33,7 @@ ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f)
 		XMLTagInvalid
 	};
 	
-	for (unsigned long pos = 0; pos < buffer.size(); ++pos)
+	for (long pos = 0; pos < buffer.size(); ++pos)
 	{
 		// Ignore everything until the first tag
 		if (rootNode == 0 && buffer[pos] != '<')
@@ -43,10 +44,34 @@ ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f)
 		// Start of a tag
 		if (buffer[pos] == '<')
 		{
-			TagType tagType = XMLTagInvalid; // ... until we can determine what kind it really is.
+			// If we have a node to add it to, push the text data as a text node (unless it's empty)
+			long textLength = pos - lastNodePos;
+			if (openNode && textLength > 0)
+			{
+				std::string textNode = std::string(buffer.begin() + lastNodePos, buffer.begin() + pos);
+				
+				// If we've been told to ignore pure whitespace, we need to check that that's not what we have.
+				if (parserFlags & XML_IGNORE_PURE_WHITESPACE)
+				{
+					long nonWhitespacePos = 0;
+					while (++nonWhitespacePos < textNode.length() && isWhitespace(textNode[nonWhitespacePos]));
+					
+					if (nonWhitespacePos != textNode.length())
+					{
+						openNode->addTextNode(textNode);
+					}
+				}
+				else // Otherwise, we can just accept it.
+				{
+					openNode->addTextNode(textNode);
+				}
+			}
+			
+			
+			TagType tagType = XMLTagInvalid;
 			
 			// Find the end of the tag
-			unsigned long tagEnd = pos;
+			long tagEnd = pos;
 			while (++tagEnd < buffer.size() && buffer[tagEnd] != '>');
 			
 			XML_ASSERTF(tagEnd != buffer.size(), "XML tag from position %lu does not terminate!", pos);
@@ -55,6 +80,13 @@ ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f)
 			if (buffer[pos + 1] == '!')
 			{
 				tagType = XMLTagComment;
+				
+				// Comments have special behaviour - they ignore >s that don't have -- before them.
+				// That's so that you can comment out XML markup, but it means we may have tagEnd set to a > before the end
+				while (buffer[tagEnd-1] != '-' || buffer[tagEnd-2] != '-')
+				{
+					while (++tagEnd < buffer.size() && buffer[tagEnd] != '>');
+				}
 			}
 			else if (buffer[pos + 1] == '?')
 			{
@@ -78,8 +110,8 @@ ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f)
 			{
 				// The tag name begins immediately after the < character, and continues until the
 				// first whitespace, or the end of the tag (whichever comes first).
-				unsigned long nameStart = pos + 1;
-				unsigned long nameEnd = nameStart;
+				long nameStart = pos + 1;
+				long nameEnd = nameStart;
 				while (++nameEnd < tagEnd && !isWhitespace(buffer[nameEnd]));
 				std::string tagName(buffer.begin() + nameStart, buffer.begin() + nameEnd);
 				
@@ -88,32 +120,31 @@ ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f)
 				newTag->setName(tagName);
 				
 				// Get attributes
-				unsigned long attrStart = nameEnd;
+				long attrStart = nameEnd;
 				while (attrStart < tagEnd)
 				{
 					// Scan past whitespace
 					while (++attrStart < tagEnd && isWhitespace(buffer[attrStart]));
 					
-					// Make sure it's not the /> at the end of an empty tag that we're bumping into,
-					// since that also counts as being before tagEnd
-					if (buffer[attrStart] == '/')
+					// Make sure it's not the the end of an tag that we're bumping into, rather than an attribute.
+					if (buffer[attrStart] == '/' || buffer[attrStart] == '>')
 					{
 						break;
 					}
 					
 					// Find the "="
-					unsigned long attrEnd = attrStart;
+					long attrEnd = attrStart;
 					while (++attrEnd < tagEnd && buffer[attrEnd] != '=');
 					
 					// Find the start of the quoted value section
-					unsigned long attValStart = attrEnd;
+					long attValStart = attrEnd;
 					while (++attValStart < tagEnd && buffer[attValStart] != '\'' && buffer[attValStart] != '"');
 					
 					// Make sure the closing quote matches the opening one
 					char quoteType = buffer[attValStart];
 					
 					// Find the end of the quoted value section
-					unsigned long attValEnd = attValStart;
+					long attValEnd = attValStart;
 					while (++attValEnd < tagEnd && buffer[attValEnd] != quoteType);
 					
 					// We now have enough information to get the attribute name and value.
@@ -176,6 +207,7 @@ ups::PointerUnique<ups::XML> ups::XML::fromFile(std::FILE *f)
 			
 			// We've parsed the tag, so we can move on to the next thing
 			pos = tagEnd;
+			lastNodePos = tagEnd + 1;
 		}
 	}
 	
@@ -195,20 +227,34 @@ void ups::XML::print(int indentDepth) const
 {
 	std::string indentString(indentDepth, '\t');
 	
-	if (_children.empty())
-	{
-		std::printf("%sXML(%s)", indentString.c_str(), _name.c_str());
-	}
-	else
-	{
-		std::printf("%s+XML(%s)", indentString.c_str(), _name.c_str());
-	}
+	std::printf("%s<%s", indentString.c_str(), _name.c_str());
 	
 	for (AttrMap::const_iterator it = _attributes.begin(); it != _attributes.end(); ++it)
 	{
-		std::printf(" \"%s\"->\"%s\"", it->first.c_str(), it->second.c_str());
+		std::printf(" %s=\"%s\"", it->first.c_str(), it->second.c_str());
 	}
-	std::printf("\n");
+	
+	if (_children.empty())
+	{
+		std::printf(" />\n");
+		return;
+	}
+	
+	std::printf(">");
+	
+	if (_textNodes.empty())
+	{
+		std::printf("\n");
+	}
+	else
+	{
+		bool leaveGap = false;
+		for (TextList::const_iterator it = _textNodes.begin(); it != _textNodes.end(); ++it)
+		{
+			std::printf("%s%s", leaveGap ? "\n" : "", it->c_str());
+			leaveGap = true;
+		}
+	}
 	
 	for (ChildList::const_iterator it = _children.begin(); it != _children.end(); ++it)
 	{
@@ -217,6 +263,6 @@ void ups::XML::print(int indentDepth) const
 	
 	if (!_children.empty())
 	{
-		std::printf("%s-XML(%s)\n", indentString.c_str(), _name.c_str());
+		std::printf("%s</%s>\n", indentString.c_str(), _name.c_str());
 	}
 }

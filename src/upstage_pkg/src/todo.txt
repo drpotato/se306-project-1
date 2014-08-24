@@ -9,7 +9,6 @@ Model
 Font
 
 ResourceManager
-	Resource
 	TextureLoader
 	ModelLoader
 	MaterialLoader

@@ -8,28 +8,37 @@
 #include <string>
 #include <vector>
 
-// A super-relaxed XML parser. XML parsers are meant to throw errors if everything isn't just-so, but
-// this parser is ignorant to a lot of the XML spec. It should correctly parse any well-formed XML
-// document, but it probably accepts just about anything else too, so don't take the fact that it generated
+// A simple XML parser. XML parsers are meant to throw errors if everything isn't just-so, but
+// this parser is ignorant to a lot of the XML spec. It should parse any well-formed XML document,
+// but it probably accepts just about anything else too, so don't take the fact that it generated
 // output to mean anything significant.
 // 
 // A significant exception to the can-parse-anything-XML rule is that this parser has no support for characters
 // outside of the ASCII range.
+// 
+// Another thing worth mentioning is that the XML is transformed into a representation that doesn't
+// preserve the order of children. For that reason, text interspersed with child elements won't stay
+// in the same structure, but the advantage is faster querying of a child with a particular name.
 
 namespace ups
 {
 	class XML : public Resource
 	{
 	public:
+		enum ParserConfig {
+			XML_IGNORE_PURE_WHITESPACE = 0x00000001
+		};
+		
 		typedef std::map<std::string, std::string> AttrMap;
 		typedef std::vector<PointerUnique<XML> > ChildList;
+		typedef std::vector<std::string> TextList;
 		
 		XML(XML *parent = 0);
 		~XML();
 		
-		static ups::PointerUnique<XML> fromFile(std::FILE *f);
+		static ups::PointerUnique<XML> fromFile(std::FILE *f, unsigned int parserFlags = XML_IGNORE_PURE_WHITESPACE);
 		void setName(const std::string &name);
-		void setContent(const std::string &content);
+		void addTextNode(const std::string &text);
 		void addChild(XML *child);
 		void addAttribute(const std::string &name, const std::string &value);
 		
@@ -38,7 +47,7 @@ namespace ups
 	private:
 		XML *_parent;
 		std::string _name;
-		std::string _content;
+		TextList _textNodes;
 		ChildList _children;
 		AttrMap _attributes;
 	};
@@ -48,9 +57,9 @@ namespace ups
 		_name = name;
 	}
 	
-	inline void XML::setContent(const std::string &content)
+	inline void XML::addTextNode(const std::string &text)
 	{
-		_content = content;
+		_textNodes.push_back(text);
 	}
 	
 	inline void XML::addChild(XML *child)
