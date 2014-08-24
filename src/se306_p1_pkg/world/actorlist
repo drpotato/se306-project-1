@@ -9,5 +9,5 @@ R1	-6	-3	0	yellow
 EntertainmentRobot -2.5 -3 0 blue
 Relative 2.75 5 0 pink
 Doctor 2.75 6 0 black
-Caregiver1 2.75 7 0 purple
-Caregiver2 2.75 8 0 orange
+Caregiver 3 7 0 cyan
+Caregiver 3 7 0 cyan
