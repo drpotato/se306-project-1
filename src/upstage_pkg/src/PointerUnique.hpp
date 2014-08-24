@@ -12,15 +12,14 @@ namespace ups
 	{
 	public:
 		PointerUnique(baseType *data);
-		PointerUnique(PointerUnique &stealFrom);
+		PointerUnique(const PointerUnique &stealFrom);
 		~PointerUnique();
 		PointerUnique &operator=(PointerUnique &stealFrom);
 		
 		baseType &operator*() const;
 		baseType *operator->() const;
 	private:
-		
-		baseType* _data;
+		mutable baseType* _data; // Making it mutable is a dirty hack to sidestep constness - necessary to get copying-as-move working with C++98
 	};
 	
 	template <typename baseType>
@@ -30,7 +29,7 @@ namespace ups
 	}
 	
 	template <typename baseType>
-	PointerUnique<baseType>::PointerUnique(PointerUnique<baseType> &stealFrom) :
+	PointerUnique<baseType>::PointerUnique(const PointerUnique<baseType> &stealFrom) :
 		_data(stealFrom._data)
 	{
 		stealFrom._data = 0;

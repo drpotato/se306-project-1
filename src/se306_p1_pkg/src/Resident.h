@@ -6,6 +6,7 @@
 #include "ros/ros.h"
 #include <ctime>
 #include <time.h>
+#include <msg_pkg/Time.h>
 
 class Resident : public Human
 {
@@ -14,12 +15,11 @@ public:
   virtual void lock();
   virtual void unlock();
   
-protected:
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg);
+  static void timeCallback(msg_pkg::Time msg);
   
-private:
   bool lock_;
 
   // Demo paramters to gradually reduce levels
@@ -30,20 +30,12 @@ private:
   const static int WAIT_TIME = 50;
   bool m_replenished_;
 
-  // Stores the time of day in the Ultron world
-  std::time_t time_of_day;
-  // Gets updated separate minutes, seconds etc values from the time_of_day
-  struct tm *time_of_day_values;
-  // Stores the number of seconds needed to add to time_of_day upon each loop
-  double seconds_to_add;
-  int the_hour;
-
   // Event hours - c++ inverts 24hr time for some reason? - maybe just my machine does this
-  const static int WAKE_TIME = 19;
-  const static int BREAKFAST_TIME = 20;
-  const static int LUNCH_TIME = 1;
-  const static int DINNER_TIME = 6;
-  const static int SLEEP_TIME = 11;
+  const static int WAKE_TIME = 7;
+  const static int BREAKFAST_TIME = 8;
+  const static int LUNCH_TIME = 13;
+  const static int DINNER_TIME = 18;
+  const static int SLEEP_TIME = 23;
 
   // Has done event values
   bool has_eaten_breakfast_;
@@ -69,22 +61,21 @@ private:
 
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;
+  // Subscriber for time
+  ros::Subscriber subscriberTime;
 
   // Gets a new level with a maximum of 5 and minimum of 1
   static int getNewLevel(int amount, int oldValue);
-
-  // Number of seconds to increase Ultron world time by on each ROS loop
-  int secondIncreasePerLoop();
 
   // Stop the robots angular velocity
   void stopRobotSpinning();
 
   // Daily events
   void wakeUp();
-  void eat();
+  void eat(int hour);
   void goToSleep();
+  bool hasWoken();
 };
 
 
 #endif
-
