@@ -55,11 +55,17 @@ class ActorListBuilder:
         outStrList.append("source devel/setup.bash\n")
         outStrList.append("roscore &\nROSCORE_PID=$!\n")
 
+        # Upstage
+        outStrList.append("rosrun upstage_pkg Upstage &\nUPSTAGE_PID=$!\n")
+
         for i in range(len(self.actors)):
             actor = self.actors[i]
             outStrList.append("rosrun se306_p1_pkg ActorSpawner %d %s %s %s %s &\nROBOT%d_PID=$!\n" % (i, actor[0], actor[1], actor[2], actor[3], i))
 
         outStrList.append("\nrosrun stage_ros stageros src/se306_p1_pkg/world/myworld.world\n\n")
+        
+        # Upstage
+        outStrList.append("kill $UPSTAGE_PID\n")
 
         for i in range(len(self.actors)):
             outStrList.append("kill $ROBOT%d_PID\n" % (i))
@@ -77,7 +83,7 @@ class ActorListBuilder:
         outStrList.append("mkdir %s\n" % (self.debugDir))
         outStrList.append("export ROS_PACKAGE_PATH=`pwd`:$ROS_PACKAGE_PATH\n\n")
         outStrList.append("source devel/setup.bash\n")
-        outStrList.append("roscore &\nROSCORE_PID=$!\n")
+        outStrList.append("roscore >> %s/roscore.txt &\nROSCORE_PID=$!\n" % (self.debugDir))
         outStrList.append("echo ROSCORE_PID = $ROSCORE_PID >> %s\n\n" % (scriptDebugFile))
 
         actorCounter = {}
@@ -98,7 +104,7 @@ class ActorListBuilder:
             outStrList.append("echo Colour         = %s >> %s\n" % (actor[4], debugFile))
             outStrList.append("echo \"%s\" >> %s\n" % ("#" * (debugPaddingSize * 2 + len(debugLogTitle)), debugFile))
             
-            outStrList.append("rosrun se306_p1_pkg ActorSpawner %d %s %s %s %s >> %s &\nROBOT%d_PID=$!\n" % (
+            outStrList.append("rosrun se306_p1_pkg ActorSpawner %d %s %s %s %s & # >> %s &\nROBOT%d_PID=$!\n" % (
                 i,
                 actor[0],
                 actor[1],
@@ -136,8 +142,22 @@ class ActorListBuilder:
             outStrList.append("echo MESSAGE%d_PID = $MESSAGE%d_PID >> %s\n\n" % (i, i, scriptDebugFile))
 
             i += 1
-
-        outStrList.append("\nrosrun stage_ros stageros src/se306_p1_pkg/world/myworld.world\n\n")
+        
+        # Upstage
+        if True: # I want to indent this for organisational purposes.
+            debugFile = "%s/upstage.txt" % (self.debugDir)
+            
+            outStrList.append("echo \"%s%s%s\" > %s\n" % ("#" * debugPaddingSize, debugLogTitle, "#" * debugPaddingSize, debugFile))
+            outStrList.append("echo \"%s\" >> %s\n" % ("#" * (debugPaddingSize * 2 + len(debugLogTitle)), debugFile))
+            
+            outStrList.append("rosrun upstage_pkg Upstage & # >> %s &\nUPSTAGE_PID=$!\n" % (debugFile))
+            outStrList.append("echo UPSTAGE_PID = $UPSTAGE_PID >> %s\n\n" % (scriptDebugFile))
+        
+        outStrList.append("\nrosrun stage_ros stageros src/se306_p1_pkg/world/myworld.world >> %s/stage.txt\n\n" % (self.debugDir))
+        
+        # Upstage
+        if True:
+            outStrList.append("kill $UPSTAGE_PID\n")
 
         for i in range(len(self.actors)):
             outStrList.append("kill $ROBOT%d_PID\n" % (i))

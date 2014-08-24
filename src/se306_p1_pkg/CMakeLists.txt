@@ -161,7 +161,10 @@ target_link_libraries(
 catkin_add_gtest(${PROJECT_NAME}-test
   test/utest.cpp
   test/resident_test.cpp
+  test/path_planner.cpp
+  test/path_planner_node.cpp
 )
+
 if(TARGET ${PROJECT_NAME}-test)
   target_link_libraries(${PROJECT_NAME}-test ActorLibrary ${catkin_LIBRARIES})
 endif()

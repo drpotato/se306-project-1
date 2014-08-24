@@ -25,7 +25,7 @@ void Relative::doInitialSetup()
 void Relative::doExecuteLoop()
 {
     if (returningHome){
-        //ROS_INFO("MOVEING TO HOME");
+        //ROS_INFO("MOVING TO HOME");
 
         if (returningHome_first){
             //this->activeNode = &node1;
@@ -93,17 +93,10 @@ void Relative::doExecuteLoop()
  * Upon receiving a message published to the 'socialness' topic, respond appropriately.
  */
 void Relative::socialnessCallback(msg_pkg::Socialness msg)
-{
-	// Debug	
-	ROS_INFO("callback!");
- 	
+{ 	
 	Relative* temp = dynamic_cast<Relative*>( ActorSpawner::getInstance().getActor());
 
- 	temp->socialnessLevel = msg.level;
-
-	// Debug
- 	ROS_INFO("Changed value");
-	
+ 	temp->socialnessLevel = msg.level;	
 }
 
 bool Relative::checkSocialnessLevel()

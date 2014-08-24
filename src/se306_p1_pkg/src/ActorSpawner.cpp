@@ -1,11 +1,3 @@
-#include "ActorSpawner.h"
-#include "Actor.h"
-#include "R0.h"
-#include "R1.h"
-#include "Resident.h"
-#include "Relative.h"
-#include "EntertainmentRobot.h"
-
 #include <cstdio>
 #include <cstring>
 
@@ -14,6 +6,11 @@
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
+
+// Load the actor subclasses
+#define SE306P1___AUTOGEN__ACTORLIST___INCLUDE
+#include "__autogen__actorlist__"
+#undef SE306P1___AUTOGEN__ACTORLIST___INCLUDE
 
 // A 'Factory' class to control the arrival and departure of Visitors.
 // As we cannot dynamically create and remove Actors from the world, they will simply sit (or mill about/circle) outside the door of the house until needed.
@@ -37,36 +34,15 @@ ActorSpawner &ActorSpawner::getInstance()
   return *actorSpawnerInstance;
 }
 
-// TODO: UPDATE THIS. CAN'T JUST SPAWN NEW NODES ############################################################################################################
 Actor *ActorSpawner::spawnActor(const char *actorTypeName)
 {
-  if (strcmp("R0", actorTypeName) == 0)
-  {
-    return new R0();
-  }
+  // Spawn the actor type
+  #define SE306P1___AUTOGEN__ACTORLIST___SPAWN
+  #include "__autogen__actorlist__"
+  #undef SE306P1___AUTOGEN__ACTORLIST___SPAWN
 
-  if (strcmp("R1", actorTypeName) == 0)
-  {
-    return new R1();
-  }
-
-  if (strcmp("Resident", actorTypeName) == 0)
-  {
-    return new Resident();
-  }
-
-  if (strcmp("Relative", actorTypeName) == 0)
-  {
-    return new Relative();
-  }
-
-  if (strcmp("EntertainmentRobot", actorTypeName) == 0)
-  {
-    return new EntertainmentRobot();
-  }
-
-  // Uh oh, we didn't match anything ... return an R0?
-  return new R0();
+  // Uh oh, we didn't match anything. Return a null pointer so it blows up immediately rather than working for a bit
+  return 0;
 }
 
 Actor *ActorSpawner::getActor(const char *actorTypeName)
