@@ -23,6 +23,7 @@ add_library(UpstageLibrary
   src/ResourceManager.cpp
   src/ROSComm.cpp
   src/UpstageEnvironment.cpp
+  src/maths/Quaternion.cpp
   src/renderer/Renderer.cpp
   src/resourceloaders/ResourceLoaderGenericXML.cpp
   src/resourceloaders/ResourceLoaderStageWorld.cpp

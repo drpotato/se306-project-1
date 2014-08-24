@@ -2,4 +2,7 @@
 	<env>
 		<bgcol r="0.2" g="0.7" b="1.0" />
 	</env>
+	<stage>
+		<world file="src/se306_p1_pkg/world/myworld.world" />
+	</stage>
 </upstage>

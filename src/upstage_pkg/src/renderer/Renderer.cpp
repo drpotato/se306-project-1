@@ -58,6 +58,18 @@ void ups::Renderer::doRenderExecuteTasks()
 {
 	for (int slot = 0; slot < _TLS_NTypes; ++slot)
 	{
+		switch (slot)
+		{
+		case TLS_3D:
+			// Configure for 3D
+			break;
+		case TLS_2D:
+			// Configure for 2D
+			break;
+		default:
+			break;
+		}
+		
 		for (int task = 0; task < _renderTaskSlots[slot].size(); ++task)
 		{
 			doTask(_renderTaskSlots[slot][task]);
