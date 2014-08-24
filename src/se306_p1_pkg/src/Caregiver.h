@@ -8,15 +8,55 @@
 #include <msg_pkg/Hygiene.h>
 #include <msg_pkg/Morale.h>
 #include <msg_pkg/Socialness.h>
+#include <msg_pkg/Interaction.h>
 
 class Caregiver : public Visitor
 {
 protected:
     virtual void doInitialSetup();
     virtual void doExecuteLoop();
-    
+
+    bool checkFitnessLevel();
+    bool checkHungerLevel();
+    bool checkHygieneLevel();
+    bool checkMoraleLevel();
+    bool checkSocialLevel();
+
+    int8_t fitnessLevel;
+    int8_t hungerLevel;
+    int8_t hygieneLevel; 
+    int8_t moraleLevel;
+    int8_t socialnessLevel;
+
+    bool exercising;  // Increase fitnessLevel
+    bool feeding;  // Increase hungerLevel
+    bool bathing;  // Increase hygieneLevel
+    bool moralesupporting;  // Increase moraleLevel
+    bool talking;  // Increase socialnessLevel
+
+    static void fitnessCallback(msg_pkg::Fitness msg);
+    static void hungerCallback(msg_pkg::Hunger msg);
+    static void hygieneCallback(msg_pkg::Hygiene msg);
+    static void moraleCallback(msg_pkg::Morale msg);
+    static void socialnessCallback(msg_pkg::Socialness msg);
     
     ros::Subscriber subscriberFitness;
+    ros::Subscriber subscriberHunger;
+    ros::Subscriber subscriberHygiene;
+    ros::Subscriber subscriberMorale;
+    ros::Subscriber subscriberSocialness;
+
+    string caregiverName;
+    int y1;
+    int y2;
+    int y3;
+    int y4;
+    int y5;
+    int x;
+    bool first;
+    bool first_call;
+    bool returningHome;
+    bool returningHome_first;
 };
 
 
