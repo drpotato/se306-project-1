@@ -8,7 +8,6 @@
 #include <vector>
 #include <string>
 #include "std_msgs/String.h"
-#include "ActorLocation.h"
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 
@@ -29,9 +28,6 @@ public:
 
 	static void StageOdom_callback(nav_msgs::Odometry msg);
 	static void locationCallback(msg_pkg::Location msg);
-
-    bool moveToResident();
-    void startMovingToResident();
 	
 	ros::NodeHandle &getNodeHandle() const;
 
@@ -72,32 +68,9 @@ protected:
 	std::string rosName;
 	std::string stageName;
 
-    //Path Planner
-    bool goToNode(string*);
-    PathPlannerNode* getActiveNode();
-
-    bool movingToResident;
-
 private:
-    PathPlannerNode* activeNode;
-    PathPlannerNode* targetNode;
-
     double faceDirection(double,double);
     bool gotoPosition(double x,double y);
-
-    PathPlannerNode node1;
-    PathPlannerNode node2;
-    PathPlannerNode node3;
-    PathPlannerNode node4;
-    PathPlannerNode node5;
-    PathPlannerNode nodeDoor;
-
-    string node1Name;
-    string node2Name;
-    string node3Name;
-    string node4Name;
-    string node5Name;
-    string nodeDoorName;
 };
 
 

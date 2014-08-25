@@ -15,7 +15,6 @@
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
-#include "ActorLocation.h"
 
 #include "keyinput/KeyboardListener.hpp"
 
@@ -37,64 +36,7 @@ Actor::Actor():
 	theta(0.0),
 	nodeHandle(0),
 	loopRate(0)
-
-{
-    // Setup navigation waypoint nodes.
-    this->targetNode = 0;
-
-    // Next to the Resident.
-    node1Name = "testnode1";
-
-    node2Name = "testnode2";
-    node3Name = "testnode3";
-    node4Name = "testnode4";
-
-    // Next to the Entertainment Robot.
-
-    node5Name = "testnode5";
-    // At the door to the house
-    nodeDoorName = "nodeDoorName";
-
-    node1 = PathPlannerNode(&node1Name,-2.5,3);
-    node2 = PathPlannerNode(&node2Name,-2.5,-0);
-    node3 = PathPlannerNode(&node3Name,3,0);
-    node4 = PathPlannerNode(&node4Name,3,3);
-    node5 = PathPlannerNode(&node5Name, -2.5, -3);
-    nodeDoor = PathPlannerNode(&nodeDoorName,2.8,5);
-
-    // Specify which nodes have a clear line of sight to each other.
-    node1.addNeighbour(&node2);
-    node1.addNeighbour(&node5);
-
-    node2.addNeighbour(&node1);
-    node2.addNeighbour(&node3);
-    node2.addNeighbour(&node5);
-
-    node3.addNeighbour(&node2);
-    node3.addNeighbour(&node4);
-    node3.addNeighbour(&nodeDoor);
-
-    node4.addNeighbour(&node3);
-    node4.addNeighbour(&nodeDoor);
-
-    node5.addNeighbour(&node2);
-    node5.addNeighbour(&node1);
-    
-    nodeDoor.addNeighbour(&node3);
-    nodeDoor.addNeighbour(&node4);
-
-    // Add the nodes to the path planner's graph of nodes and connections.
-    PathPlanner::addNode(&node1);
-    PathPlanner::addNode(&node2);
-    PathPlanner::addNode(&node3);
-    PathPlanner::addNode(&node4);
-    PathPlanner::addNode(&node5);
-    PathPlanner::addNode(&nodeDoor);
-
-    this->activeNode = &node1;
-
-    this->movingToResident = false;
-}
+{ }
 
 Actor::~Actor()
 {
@@ -286,11 +228,6 @@ bool Actor::goToNode(string* nodeName) {
     //     ROS_DEBUG("current position %f %f",px,py);
     // }
     // return false;
-}
-
-// Find the closest waypoint node to this Actor's current position.
-PathPlannerNode* Actor::getActiveNode() {
-    return PathPlanner::getClosestNode(this->px, this->py);
 }
 
 ros::NodeHandle &Actor::getNodeHandle() const

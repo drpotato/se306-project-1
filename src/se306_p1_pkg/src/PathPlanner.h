@@ -9,7 +9,6 @@
 #include "PathPlannerNode.h"
 #include <msg_pkg/Location.h>
 
-
 using namespace std;
 
 class PathPlanner {
@@ -19,6 +18,19 @@ private:
     static ros::NodeHandle *nodeHandle;
 
     typedef boost::unordered_map<string,string> map;
+  
+    PathPlannerNode  nodeBedroomCentre;
+    PathPlannerNode  nodeHallwayByBedroom;
+    PathPlannerNode  nodeHalllwayByLivingRoom;
+    PathPlannerNode  nodeGuestBedroomCentre;
+    PathPlannerNode  nodeHouseDoor;
+
+    string nodeBedroomCentreName;
+    string nodeHallwayByBedroomName;
+    string nodeHalllwayByLivingRoomName;
+    string nodeGuestBedroomCentreName;
+    string nodeHouseDoorName;
+
 
 public:
     PathPlanner();
@@ -28,7 +40,6 @@ public:
     static void addNode(PathPlannerNode*);
     static PathPlannerNode* removeNode(string*);
     static PathPlannerNode* getNode(string);
-    static PathPlannerNode* getClosestNode(int, int);
     static void locationCallback(msg_pkg::Location msg);
 };
 

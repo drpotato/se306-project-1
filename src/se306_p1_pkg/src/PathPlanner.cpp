@@ -9,11 +9,44 @@ ros::NodeHandle* PathPlanner::nodeHandle;
 
 // This class maintains a graph of navigation waypoint nodes, and calculates the shortest (fewest nodes) path between any two of them.
 
-//TODO: Make PathPlanner a singleton
-
 PathPlanner::PathPlanner() {
     subscriberLocation = nodeHandle->subscribe("location", 1000, PathPlanner::locationCallback);
     nodeHandle = new ros::NodeHandle();
+
+    nodeBedroomCentreName = "nodeBedroomCentre";
+    nodeHallwayByBedroomName = "nodeHallwayByBedroom";
+    nodeHalllwayByLivingRoomName = "nodeHalllwayByLivingRoom";
+    nodeGuestBedroomCentreName = "nodeGuestBedroomCentre";
+    nodeHouseDoorName = "nodeHouseDoorName";
+
+    nodeBedroomCentre = PathPlannerNode(&nodeBedroomCentreName,-2.5,3);
+    nodeHallwayByBedroom = PathPlannerNode(&nodeHallwayByBedroomName,-2.5,-0);
+    nodeHalllwayByLivingRoom = PathPlannerNode(&nodeHalllwayByLivingRoomName,3,0);
+    nodeGuestBedroomCentre = PathPlannerNode(&nodeGuestBedroomCentreName, -2.5, -3);
+    nodeHouseDoor = PathPlannerNode(&nodeHouseDoorName,2.8,5);
+
+    // Specify which nodes have a clear line of sight to each other.
+    nodeBedroomCentre.addNeighbour(&nodeHallwayByBedroom);
+    nodeBedroomCentre.addNeighbour(&nodeGuestBedroomCentre);
+
+    nodeHallwayByBedroom.addNeighbour(&nodeBedroomCentre);
+    nodeHallwayByBedroom.addNeighbour(&nodeHalllwayByLivingRoom);
+    nodeHallwayByBedroom.addNeighbour(&nodeGuestBedroomCentre);
+
+    nodeHalllwayByLivingRoom.addNeighbour(&nodeHallwayByBedroom);
+    nodeHalllwayByLivingRoom.addNeighbour(&nodeHouseDoor);
+
+    nodeGuestBedroomCentre.addNeighbour(&nodeHallwayByBedroom);
+    nodeGuestBedroomCentre.addNeighbour(&nodeBedroomCentre);
+    
+    nodeHouseDoor.addNeighbour(&nodeHalllwayByLivingRoom);
+
+    // Add the nodes to the path planner's graph of nodes and connections.
+    addNode(&nodeBedroomCentre);
+    addNode(&nodeHallwayByBedroom);
+    addNode(&nodeHalllwayByLivingRoom);
+    addNode(&nodeGuestBedroomCentre);
+    addNode(&nodeHouseDoor);
 }
 
 // When a location message is received, updates the graph with that Actor's new location.
@@ -108,20 +141,4 @@ PathPlannerNode* PathPlanner::getNode(string* name){
             return node;
         }
     }
-}
-
-// Returns a pointer to the waypoint closest to the given set of coordinates.
-// Does not check for walls or collisions, so we will need sufficient coverage of waypoints to ensure this does not become a problem.
-PathPlannerNode* PathPlanner::getClosestNode(int x, int y){
-    PathPlannerNode * closestNode = nodes[0];
-
-    for (int i = 1; i < nodes.size(); i++){
-        PathPlannerNode* nodeToCompare = nodes[i];
-        double distanceToOld = sqrtf(pow(x - closestNode->px, 2) + pow(y - closestNode->py, 2));
-        double distanceToNew = sqrtf(pow(x - nodeToCompare->px, 2) + pow(y - nodeToCompare->py, 2));
-        if (distanceToNew < distanceToOld) {
-            closestNode = nodeToCompare;
-        }
-    }
-    return closestNode;
 }
