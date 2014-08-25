@@ -1,0 +1,142 @@
+define MedicationRobot position
+(
+
+	# Left Leg
+	model
+	(
+		size [0.08 0.08 0.15]
+		pose [0.0 -0.13 0.0 0.0]
+		color "grey45"
+	)
+
+	# Right leg
+	model
+	(
+		size [0.08 0.08 0.15]
+		pose [0.0 0.13 0.0 0.0]
+		color "grey45"
+	)
+
+	
+	# Torso
+	model
+	(
+		size [0.3 0.4 0.4]
+		pose [0.0 0.0 0.15 0.0]
+		color "red3"
+	)
+
+	# Left arm
+	model
+	(
+		size [0.08 0.08 0.3]
+		pose [0.0 0.24 0.25 0.0]
+		color "grey45"
+	)
+
+	# Right arm
+	model
+	(
+		size [0.08 0.08 0.3]
+		pose [0.0 -0.24 0.25 0.0]
+		color "grey45"
+	)
+
+	# Head
+	model
+	(
+		size [0.25 0.25 0.25]
+		pose [0.0 0.0 0.55 0.0]
+		color "LemonChiffon"
+	)
+
+	# Left eye
+	model
+	(
+		size [0.01 0.05 0.05]
+		pose [0.125 0.0625 0.63 0.0]
+		color "grey30"
+	)
+
+	# Right eye
+	model
+	(
+		size [0.01 0.05 0.05]
+		pose [0.125 -0.0625 0.63 0.0]
+		color "grey30"
+	)
+
+	# Headband thing
+	# Middle thingy
+	model
+	(
+		size [0.01 0.06 0.06]
+		pose [0.125 0.0 0.710 0.0]
+		color "red3"
+	)
+	# Front left
+	model
+	(
+		size [0.01 0.09 0.05]
+		pose [0.125 0.0775 0.715 0.0]
+		color "grey45"
+	)
+	# Front right
+	model
+	(
+		size [0.01 0.09 0.05]
+		pose [0.125 -0.0775 0.715 0.0]
+		color "grey45"
+	)
+	# Back
+	model
+	(
+		size [0.01 0.25 0.05]
+		pose [-0.125 0.0 0.715 0.0]
+		color "grey45"
+	)
+	# Right side
+	model
+	(
+		size [0.25 0.01 0.05]
+		pose [0.0 0.125 0.715 0.0]
+		color "grey45"
+	)
+	# Left side
+	model
+	(
+		size [0.25 0.01 0.05]
+		pose [0.0 -0.125 0.715 0.0]
+		color "grey45"
+	)
+
+	# Health symbol
+	# Horizontal
+	model
+	(
+		size [0.01 0.25 0.05]
+		pose [0.15 0.0 0.35 0.0]
+		color "LemonChiffon"
+	)
+	# Vertical top
+	model
+	(
+		size [0.01 0.05 0.1]
+		pose [0.15 0.0 0.4 0.0]
+		color "LemonChiffon"
+	)
+	# Vertical bottom
+	model
+	(
+		size [0.01 0.05 0.1]
+		pose [0.15 0.0 0.25 0.0]
+		color "LemonChiffon"
+	)
+
+	# Base
+	size [0.0 0.0 0.0]
+    drive "diff"
+	color "ivory2"
+	stack_children 0
+	gui_nose 0
+)
