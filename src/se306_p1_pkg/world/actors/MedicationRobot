@@ -1,5 +1,4 @@
-#TODO Change to medication giving robot
-define RCActor position
+define MedicationRobot position
 (
 
 	# Left Leg
