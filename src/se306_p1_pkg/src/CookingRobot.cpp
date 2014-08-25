@@ -45,8 +45,7 @@ void CookingRobot::doExecuteLoop()
 		{
 			if (first_call)
 			{
-				//this->activeNode = &node5;
-				this->startMovingToResident();
+
 				first_call = false;
 			}
 	    	if (!(this->movingToResident) )

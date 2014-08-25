@@ -50,7 +50,6 @@ void Relative::doExecuteLoop()
         {
             if (first_call)
             {
-                this->startMovingToResident();
                 first_call = false;
             }
 
@@ -72,7 +71,7 @@ void Relative::doExecuteLoop()
             socialising = false;
             returningHome = true;
 
-        } 
+        }
         else
         {
 
@@ -80,11 +79,11 @@ void Relative::doExecuteLoop()
             {
                 Relative::doResponse("socialising");
                 y=0;
-            } 
-            else 
+            }
+            else
             {
                 y++;
-            }   
+            }
         }
     }
 }
@@ -93,10 +92,10 @@ void Relative::doExecuteLoop()
  * Upon receiving a message published to the 'socialness' topic, respond appropriately.
  */
 void Relative::socialnessCallback(msg_pkg::Socialness msg)
-{ 	
+{
 	Relative* temp = dynamic_cast<Relative*>( ActorSpawner::getInstance().getActor());
 
- 	temp->socialnessLevel = msg.level;	
+ 	temp->socialnessLevel = msg.level;
 }
 
 bool Relative::checkSocialnessLevel()

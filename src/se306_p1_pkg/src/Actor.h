@@ -30,9 +30,6 @@ public:
 	static void StageOdom_callback(nav_msgs::Odometry msg);
 	static void locationCallback(msg_pkg::Location msg);
 
-    bool moveToResident();
-    void startMovingToResident();
-	
 	ros::NodeHandle &getNodeHandle() const;
 
 	//The rate at which ros will loop - used to calculate time of day
@@ -73,7 +70,7 @@ protected:
 	std::string stageName;
 
     //Path Planner
-    bool goToNode(string*);
+    bool goToNode(string);
     PathPlannerNode* getActiveNode();
 
     bool movingToResident;
@@ -102,4 +99,3 @@ private:
 
 
 #endif // #ifndef SE306P1_ACTOR_ACTOR_H_DEFINED
-

@@ -79,7 +79,7 @@ Actor::Actor():
 
     node5.addNeighbour(&node2);
     node5.addNeighbour(&node1);
-    
+
     nodeDoor.addNeighbour(&node3);
     nodeDoor.addNeighbour(&node4);
 
@@ -136,7 +136,6 @@ bool Actor::executeLoop()
 
 		publishLocation();
 
-        moveToResident();
 
 		doExecuteLoop();
 		executeLoopStagePublication();
@@ -216,7 +215,7 @@ void Actor::doResponse(const char *attribute)
 void Actor::stopResponse(const char *attribute)
 {
   // TODO maybe do something with the attribute
-  
+
   // Stop moving TODO Kurt, this could possibly be threaded and be delayed on a new thread
   velRotational = 0.0;
   velLinear = 0.0;
@@ -260,13 +259,13 @@ bool Actor::gotoPosition(double x,double y){
     }
 }
 
-bool Actor::goToNode(string* nodeName) {
-    
+bool Actor::goToNode(string nodeName) {
+
     ROS_INFO("Going to node");
-    
+
     activeNode = getActiveNode();
 
-    targetNode = PathPlanner::getNode(nodeName);
+    targetNode = PathPlanner::getNode(&nodeName);
                 //TODO: REWIRITE THIS TO USE NEW SYSTEM ################################################################################################
     // goingToNode = pathPlanner.getClosestNode(goingToX, goingToY);
 
@@ -276,7 +275,7 @@ bool Actor::goToNode(string* nodeName) {
     // if (targetNode >= path.size()){
     //     //We have arrived at the last node
     //     this->velLinear = 0;
-        
+
     //     return true;
     // }
     // if (!this->gotoPosition(path[targetNode]->px,path[targetNode]->py)){

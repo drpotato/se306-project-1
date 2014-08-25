@@ -22,12 +22,12 @@ private:
 
 public:
     PathPlanner();
-    
+
     static vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
     static void addActorNode(PathPlannerNode*);
     static void addNode(PathPlannerNode*);
     static PathPlannerNode* removeNode(string*);
-    static PathPlannerNode* getNode(string);
+    static PathPlannerNode* getNode(string*);
     static PathPlannerNode* getClosestNode(int, int);
     static void locationCallback(msg_pkg::Location msg);
 };
