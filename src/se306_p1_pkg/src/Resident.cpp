@@ -128,6 +128,7 @@ void Resident::lock(ActorType type)
 void Resident::unlock()
 {
   lock_ = false;
+  lock_type_ = NULL;
 }
 
 /*
@@ -216,7 +217,17 @@ void Resident::requestLockCallback(msg_pkg::RequestLock msg)
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
   if (residentInstance->isLocked())
   {
+    ActorType type = residentInstance->getActorTypeFromString(msg.actor_name);
+    if ((!lock_type_) && (type > lock_type_))
+    {
+      // The robot requesting the lock has a higher priority than the current one. You can have the lock!
+      
+    }
+    else
+    {
+      // The robot with the lock has the same or higher priority than the one requesting it, you cannot have the lock m8
 
+    }
   }
   else
   {
@@ -301,5 +312,28 @@ Resident::ActorType Resident::getActorTypeFromString(string actorType)
   else if (actorType == "Robot")
   {
     return Robot;
+  }
+}
+string Resident::getStringFromActorType(ActorType actorType)
+{
+  if (actorType == Doctor)
+  {
+    return "Doctor";
+  }
+  else if (actorType == Nurse)
+  {
+    return "Nurse";
+  }
+  else if (actorType == Caregiver)
+  {
+    return "Caregiver";
+  }
+  else if (actorType == Visitor)
+  {
+    return "Visitor";
+  }
+  else if (actorType == Robot)
+  {
+    return "Robot";
   }
 }

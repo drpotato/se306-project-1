@@ -87,6 +87,7 @@ public:
 
   // Enum conversions
   ActorType getActorTypeFromString(string actorType);
+  string getStringFromActorType(ActorType actorType);
 };
 
 

@@ -7,3 +7,4 @@
 # Robot (any robot assistant)
 
 string actor_name
+bool has_lock
