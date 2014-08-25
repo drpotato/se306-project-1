@@ -36,7 +36,7 @@ echo ActorClass     = EntertainmentRobot >> log/actor_EntertainmentRobot_000.txt
 echo InitialX       = -2.5 >> log/actor_EntertainmentRobot_000.txt
 echo InitialY       = -3 >> log/actor_EntertainmentRobot_000.txt
 echo InitialAngle   = 0 >> log/actor_EntertainmentRobot_000.txt
-echo Colour         = blue >> log/actor_EntertainmentRobot_000.txt
+echo Colour         = wheat3 >> log/actor_EntertainmentRobot_000.txt
 echo "#######################################################################" >> log/actor_EntertainmentRobot_000.txt
 rosrun se306_p1_pkg ActorSpawner 2 EntertainmentRobot -2.5 -3 0 & # >> log/actor_EntertainmentRobot_000.txt &
 ROBOT2_PID=$!
