@@ -111,10 +111,41 @@ define CookingRobot position
 	)
 	model
 	(
-		size [0.27 0.27 0.1]
-		pose [0.1 0.0 0.82 0.0]
+		size [0.27 0.1 0.2]
+		pose [0.0 0.12 0.82 0.0]
 		color "white"
 	)
+	model
+	(
+		size [0.27 0.01 0.2]
+		pose [0.0 0.065 0.82 0.0]
+		color "grey45"
+	)
+	model
+	(
+		size [0.27 0.12 0.2]
+		pose [0.0 0.0 0.82 0.0]
+		color "white"
+	)
+	model
+	(
+		size [0.27 0.1 0.2]
+		pose [0.0 -0.12 0.82 0.0]
+		color "white"
+	)
+	model
+	(
+		size [0.27 0.01 0.2]
+		pose [0.0 -0.065 0.82 0.0]
+		color "grey45"
+	)
+	model
+	(
+		size [0.27 0.34 0.01]
+		pose [0.0 0.0 1.02 0.0]
+		color "white"
+	)
+
 
 	# Base
 	size [0.0 0.0 0.0]
