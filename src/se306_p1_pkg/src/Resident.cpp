@@ -21,16 +21,27 @@
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/Socialness.h>
 #include <msg_pkg/Morale.h>
+#include <msg_pkg/Health.h>
+#include <msg_pkg/Hygiene.h>
+#include <msg_pkg/Hunger.h>
+#include <msg_pkg/Thirst.h>
+#include <msg_pkg/Fitness.h>
 #include "Actor.h"
 #include "ActorSpawner.h"
 #include <ctime>
 #include <time.h>
+
+const float Resident::FREQUENCY = 10;
+const int Resident::WAIT_TIME = 50;
+const int Resident::LEVEL_MAX = 5;
 
 // The person living in our house. 
 // Has various attributes representing his needs/wants, which degrade over time.
 // When they reach a certain level, messages are published to his assistant Robots and the VisitorController, requesting various services.
 void Resident::doInitialSetup()
 {
+
+
   velLinear = 0;
   velRotational = 0.0;
 
@@ -52,17 +63,33 @@ void Resident::doInitialSetup()
   has_gone_to_bed_ = (the_hour > SLEEP_TIME);
 
   // Set levels to maximum initially.
-  morale_level_ = 5;
-  socialness_level_ = 5;
+  morale_level_ = LEVEL_MAX;
+  socialness_level_ = LEVEL_MAX;
+  health_level_ = LEVEL_MAX;
+  hygiene_level_ = LEVEL_MAX;
+  hunger_level_ = LEVEL_MAX;
+  thirst_level_ = LEVEL_MAX;
+  fitness_level_ = LEVEL_MAX;
 
+  //
   morale_count_ = 0;
   socialness_count_ = 0;
+
+
   m_dropped_ = false;
   m_replenished_ = false;
 
   // Set up publishers.
   publisherSocialness = nodeHandle->advertise<msg_pkg::Socialness>("socialness", 1000);
   publisherMorale = nodeHandle->advertise<msg_pkg::Morale>("morale", 1000);
+  publisherHygiene = nodeHandle->advertise<msg_pkg::Hygiene>("hygiene", 1000);
+  publisherHunger = nodeHandle->advertise<msg_pkg::Hunger>("hunger", 1000);
+  publisherThirst = nodeHandle->advertise<msg_pkg::Thirst>("thirst", 1000);
+  publisherHealth = nodeHandle->advertise<msg_pkg::Health>("health", 1000);
+  //publisherFitness = nodeHandle->advertise<msg_pkg::Fitness>("fitness", 1000);
+
+
+
 
   // Set up subscriptions.
   subscriberInteraction = nodeHandle->subscribe("interaction", 1000, Resident::interactionCallback);
@@ -74,6 +101,7 @@ void Resident::doInitialSetup()
   // Seed the PRNG
   std::srand(std::time(NULL));
 #endif
+
 }
 
 void Resident::doExecuteLoop()
@@ -86,7 +114,7 @@ void Resident::doExecuteLoop()
 // _REMOVE (when randomness implementation complete) 
 
 	//ROS_INFO("%s", ctime(&time_of_day));
-{    
+    
 	// Increment the time of day by the value calculated previously (in seconds)
 	time_of_day += seconds_to_add; //1800; <-- a good debug time frame is 1800 seconds
 	//ROS_INFO("%s", ctime(&time_of_day)); //<-- use this to debug to print the time
@@ -223,7 +251,7 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 	//Assign current socialness level to the message
 	socialnessMessage.level = newLevel;
 
-	if (newLevel == 5)
+	if (newLevel == LEVEL_MAX)
 	{
 		residentInstance->stopRobotSpinning();
 	}
@@ -242,7 +270,7 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 	//Assign current socialness level to the message
 	moraleMessage.level = newLevel;
 
-	if (newLevel == 5)
+	if (newLevel == LEVEL_MAX)
 	{
 		residentInstance->stopRobotSpinning();
 		residentInstance->m_replenished_ = true;
@@ -254,9 +282,10 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   // TODO: put others in when implemented 
 }
 
+// Alpha (deprecated)
 int Resident::getNewLevel(int amount, int oldLevel)
 {
-	int newLevel = std::min(amount + oldLevel, 5); // Can only have a maximum level of 5
+	int newLevel = std::min(amount + oldLevel, LEVEL_MAX); // Can only have a maximum level of 5
 	// Code to check it doesn't go below 1... just incase interactions can reduce levels at some point
 	if (newLevel < 1)
 	{
@@ -265,6 +294,7 @@ int Resident::getNewLevel(int amount, int oldLevel)
 	return newLevel;
 }
 
+// Alpha (deprecated)
 void Resident::stopRobotSpinning()
 {
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
@@ -335,46 +365,62 @@ void Resident::randomEventLoop()
 	// to the random method
 
 	// Socialness drops fastest and is most affected by randomness.
-	// On average, it should drop by 1 every 10 seconds
-	randNum = getRandom(float(0), float(10 * FREQUENCY));
-	if (randNum > ((10 * FREQUENCY) - 1)) {
+	// On average, it should drop by 1 every second
+
+	// Every cycle, ANY and ALL levels may change
+	randNum = getRandom(float(0), float(1 * FREQUENCY));
+	if (randNum > ((1 * FREQUENCY) - 1)) {
+		changeLevel(-1, SOCIALNESS);
 		printf("Insert logic for socialness dropping here (rng = %.3f\n", randNum);
 	}
 	
 	// Morale also drops quickly but is less affected by randomness than
 	// entertainedness.
-	// On average, it should drop by 1 every 14 seconds
-	randNum = getRandom(float(0), float(14 * FREQUENCY));
-	if (randNum > ((14 * FREQUENCY) - 1)) {
+	// On average, it should drop by 1 every 1.4 seconds
+	randNum = getRandom(float(0), float(1.4 * FREQUENCY));
+	if (randNum > ((1.4 * FREQUENCY) - 1)) {
+		changeLevel(-1, MORALE);
 		printf("Insert logic for morale dropping here (rng = %.3f\n", randNum);
 	}
 
 	// Health drops in two ways, either almost slowly and almost 
 	// completely linearly or in a random, drastic fashion.
-	// On average, it should drop by 1 every 25 seconds
-	randNum = getRandom(float(0), float(25 * FREQUENCY));
-	if (randNum > ((25 * FREQUENCY) - 1)) {
+	// On average, it should drop by 1 every 2.5 seconds
+	randNum = getRandom(float(0), float(2.5 * FREQUENCY));
+	if (randNum > ((2.5 * FREQUENCY) - 1)) {
+		changeLevel(-1, HEALTH);
 		printf("Insert logic for slow, near-linear hunger drop here (rng = %.3f\n", randNum);
 	}	
 
 	// Hygiene
-	// On average, it should drop by 1 every 15 seconds
-	randNum = getRandom(float(0), float(15 * FREQUENCY));
-	if (randNum > ((15 * FREQUENCY) - 1)) {
+	// On average, it should drop by 1 every 1.5 seconds
+	randNum = getRandom(float(0), float(1.5 * FREQUENCY));
+	if (randNum > ((1.5 * FREQUENCY) - 1)) {
+		changeLevel(-1, HYGIENE);
 		printf("Insert logic for hygiene dropping here (rng = %.3f\n", randNum);
 	}
 
 	// Hunger drops almost completely linearly...
-	// On average, it should drop by 1 every 30 seconds (THIS IS NOT EVEN CLOSE TO FINAL)
-	randNum = getRandom(float(0), float(30 * FREQUENCY));
-	if (randNum > ((30 * FREQUENCY) - 1)) {
+	// On average, it should drop by 1 every 3 seconds (THIS IS NOT EVEN CLOSE TO FINAL)
+	randNum = getRandom(float(0), float(3 * FREQUENCY));
+	if (randNum > ((3 * FREQUENCY) - 1)) {
+		changeLevel(-1, HUNGER);
 		printf("Insert logic for hunger dropping here (rng = %.3f\n", randNum);
 	}	
 
 	// ...as does thirst
-	// On average, it should drop by 1 every 10 seconds
-	randNum = getRandom(float(0), float(10 * FREQUENCY));
-	if (randNum > ((10 * FREQUENCY) - 1)) {
+	// On average, it should drop by 1 every second
+	randNum = getRandom(float(0), float(1 * FREQUENCY));
+	if (randNum > ((1 * FREQUENCY) - 1)) {
+		changeLevel(-1, THIRST);
+		printf("Insert logic for thirst dropping here (rng = %.3f\n", randNum);
+	}
+
+	// Fitness drops fairly slowly...
+	// On average, it should drop by 1 every second
+	randNum = getRandom(float(0), float(1 * FREQUENCY));
+	if (randNum > ((1 * FREQUENCY) - 1)) {
+		changeLevel(-1, THIRST);
 		printf("Insert logic for thirst dropping here (rng = %.3f\n", randNum);
 	}
 
@@ -384,11 +430,88 @@ void Resident::randomEventLoop()
 }
 
 
-// TODO: Method used to change resident levels 
+// Method used to change resident levels 
 // Pass an int and a char to change a resident level
 // Use example: (-1, 's') will reduce socialness by 1.
-void Resident::changeLevel(int, char) {
-	// do nothing
+// IMPORTANT
+// In changing a level, this will also force a message
+// to be published in the appropriate topic (morale, soc. etc)
+void Resident::changeLevel(float change, Level level) {
+
+	// Get the current resident class instance
+	Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+
+	// Change level, publish new level showing new level value
+	if (level == MORALE) {
+		if (residentInstance->morale_level_ + change >= LEVEL_MAX) {
+			residentInstance->morale_level_ = LEVEL_MAX;
+		} else {
+			residentInstance->morale_level_ = residentInstance->morale_level_ + change;
+		}
+		msg_pkg::Morale moraleMessage;
+		moraleMessage.level = residentInstance->morale_level_;
+		residentInstance->publisherMorale.publish(moraleMessage);	
+
+	} else if (level == SOCIALNESS) {
+		if (residentInstance->socialness_level_ + change >= LEVEL_MAX) {
+			residentInstance->socialness_level_ = LEVEL_MAX;
+		} else {
+			residentInstance->socialness_level_ = residentInstance->socialness_level_ + change;
+		}
+		msg_pkg::Socialness socialnessMessage;
+		socialnessMessage.level = residentInstance->socialness_level_;
+		residentInstance->publisherSocialness.publish(socialnessMessage);
+
+	} else if (level == HYGIENE) {
+		if (residentInstance->hygiene_level_ + change >= LEVEL_MAX) {
+			residentInstance->hygiene_level_ = LEVEL_MAX;
+		} else {
+			residentInstance->hygiene_level_ = residentInstance->hygiene_level_ + change;
+		}
+		msg_pkg::Hygiene hygieneMessage;
+		hygieneMessage.level = residentInstance->hygiene_level_;
+		residentInstance->publisherHygiene.publish(hygieneMessage);
+
+	} else if (level == HUNGER) {
+		if (residentInstance->hunger_level_ + change >= LEVEL_MAX) {
+			residentInstance->hunger_level_ = LEVEL_MAX;
+		} else {
+			residentInstance->hunger_level_ = residentInstance->hunger_level_ + change;
+		}
+		msg_pkg::Hunger hungerMessage;
+		hungerMessage.level = residentInstance->hunger_level_;
+		residentInstance->publisherHunger.publish(hungerMessage);
+
+	} else if (level == THIRST) {
+		if (residentInstance->thirst_level_ + change >= LEVEL_MAX) {
+			residentInstance->thirst_level_ = LEVEL_MAX;
+		} else {
+			residentInstance->thirst_level_ = residentInstance->thirst_level_ + change;
+		}
+		msg_pkg::Thirst thirstMessage;
+		thirstMessage.level = residentInstance->thirst_level_;
+		residentInstance->publisherThirst.publish(thirstMessage);
+
+	}  else if (level == FITNESS) {
+		if (residentInstance->fitness_level_ + change >= LEVEL_MAX) {
+			residentInstance->fitness_level_ = LEVEL_MAX;
+		} else {
+			residentInstance->fitness_level_ = residentInstance->fitness_level_ + change;
+		}
+		msg_pkg::Fitness fitnessMessage;
+		fitnessMessage.level = residentInstance->fitness_level_;
+		residentInstance->publisherFitness.publish(fitnessMessage);
+
+	} else if (level == HEALTH) {
+		if (residentInstance->health_level_ + change >= LEVEL_MAX) {
+			residentInstance->health_level_ = LEVEL_MAX;
+		} else {
+			residentInstance->health_level_ = residentInstance->health_level_ + change;
+		}
+		msg_pkg::Health healthMessage;
+		healthMessage.level = residentInstance->health_level_;
+		residentInstance->publisherHealth.publish(healthMessage);
+	}  
 }
 
 
@@ -465,7 +588,6 @@ void oldRNG()
 
 	*/
 }
-=======
 int Resident::secondIncreasePerLoop()
 {
 	Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
@@ -516,4 +638,3 @@ void Resident::goToSleep()
 
 	has_gone_to_bed_ = true;
 }
->>>>>>> develop
