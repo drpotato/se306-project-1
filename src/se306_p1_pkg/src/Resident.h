@@ -12,15 +12,17 @@ class Resident : public Human
 {
 public:
   virtual bool isLocked();
-  virtual void lock();
+  virtual void lock(ActorType type);
   virtual void unlock();
   
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg);
   static void timeCallback(msg_pkg::Time msg);
+  static void requestLockCallback(msg_pkg::RequestLock msg);
   
   bool lock_;
+  ActorType lock_type_;
 
   // Demo paramters to gradually reduce levels
   int morale_count_;
@@ -58,11 +60,16 @@ public:
   ros::Publisher publisherSocialness;
   // Publisher for morale
   ros::Publisher publisherMorale;
+  // Publisher for lock status
+  ros::Publisher publisherLockStatus;
 
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;
   // Subscriber for time
   ros::Subscriber subscriberTime;
+  // Subscriber for requesting a lock
+  ros::Subscriber subscriberRequestLock;
+
 
   // Gets a new level with a maximum of 5 and minimum of 1
   static int getNewLevel(int amount, int oldValue);

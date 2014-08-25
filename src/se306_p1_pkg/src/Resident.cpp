@@ -40,10 +40,12 @@ void Resident::doInitialSetup()
   // Set up publishers.
   publisherSocialness = nodeHandle->advertise<msg_pkg::Socialness>("socialness", 1000);
   publisherMorale = nodeHandle->advertise<msg_pkg::Morale>("morale", 1000);
+  publisherLockStatus = nodeHandle->advertise<msg_pkg::LockStatus>("lockStatus", 1000);
 
   // Set up subscriptions.
   subscriberInteraction = nodeHandle->subscribe("interaction", 1000, Resident::interactionCallback);
   subscriberTime = nodeHandle->subscribe("time", 1000, Resident::timeCallback);
+  subscriberRequestLock = nodeHandle->subscribe("requestLock", 1000, Resident::requestLockCallback);
 }
 
 void Resident::doExecuteLoop()
@@ -112,9 +114,10 @@ bool Resident::isLocked()
 /*
  * Robots should only lock the resident if the resident is currently not locked
  */
-void Resident::lock()
+void Resident::lock(ActorType type)
 {
   lock_ = true;
+  lock_type_ = type;
 }
 
 /*
@@ -206,6 +209,18 @@ void Resident::timeCallback(msg_pkg::Time msg)
   }
 }
 
+void Resident::requestLockCallback(msg_pkg::RequestLock msg)
+{
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+  if (residentInstance->isLocked())
+  {
+
+  }
+  else
+  {
+    residentInstance->lock();
+  }
+}
 
 int Resident::getNewLevel(int amount, int oldLevel)
 {
