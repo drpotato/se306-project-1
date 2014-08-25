@@ -45,7 +45,7 @@ void EntertainmentRobot::doExecuteLoop()
 			if (first_call)
 			{
 				//this->activeNode = &node5;
-				this->startMovingToResident();
+                this->goToNode("Resident");
 				first_call = false;
 			}
 
