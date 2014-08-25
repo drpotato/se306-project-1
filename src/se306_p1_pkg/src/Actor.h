@@ -36,7 +36,7 @@ public:
 	//The rate at which ros will loop - used to calculate time of day
     const static int LOOP_RATE = 10;
 
-    enum ActorTypes {Doctor=3, Nurse=2, Caregiver=2, Visitor=1, Robot=0};
+    enum ActorType {Doctor=3, Nurse=2, Caregiver=2, Visitor=1, Robot=0};
 
 
 protected:

@@ -3,11 +3,13 @@
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/Socialness.h>
 #include <msg_pkg/Morale.h>
+#include <msg_pkg/Time.h>
+#include <msg_pkg/RequestLock.h>
 #include "Actor.h"
 #include "ActorSpawner.h"
 #include <ctime>
 #include <time.h>
-#include <msg_pkg/Time.h>
+
 
 // The person living in our house. 
 // Has various attributes representing his needs/wants, which degrade over time.
@@ -218,7 +220,7 @@ void Resident::requestLockCallback(msg_pkg::RequestLock msg)
   }
   else
   {
-    residentInstance->lock();
+    residentInstance->lock(residentInstance->getActorTypeFromString(msg.actor_name));
   }
 }
 
@@ -277,4 +279,27 @@ bool Resident::hasWoken()
     return true;
   }
   return false;
+}
+Resident::ActorType Resident::getActorTypeFromString(string actorType)
+{
+  if (actorType == "Doctor")
+  {
+    return Doctor;
+  }
+  else if (actorType == "Nurse")
+  {
+    return Nurse;
+  }
+  else if (actorType == "Caregiver")
+  {
+    return Caregiver;
+  }
+  else if (actorType == "Visitor")
+  {
+    return Visitor;
+  }
+  else if (actorType == "Robot")
+  {
+    return Robot;
+  }
 }

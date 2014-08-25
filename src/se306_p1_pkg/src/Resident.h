@@ -3,10 +3,12 @@
 
 #include "Human.h"
 #include <msg_pkg/Interaction.h>
+#include <msg_pkg/Time.h>
+#include <msg_pkg/RequestLock.h>
+#include <msg_pkg/LockStatus.h>
 #include "ros/ros.h"
 #include <ctime>
 #include <time.h>
-#include <msg_pkg/Time.h>
 
 class Resident : public Human
 {
@@ -32,7 +34,7 @@ public:
   const static int WAIT_TIME = 50;
   bool m_replenished_;
 
-  // Event hours - c++ inverts 24hr time for some reason? - maybe just my machine does this
+  // Event hours
   const static int WAKE_TIME = 7;
   const static int BREAKFAST_TIME = 8;
   const static int LUNCH_TIME = 13;
@@ -82,6 +84,9 @@ public:
   void eat(int hour);
   void goToSleep();
   bool hasWoken();
+
+  // Enum conversions
+  ActorType getActorTypeFromString(string actorType);
 };
 
 

@@ -56,7 +56,9 @@ add_message_files(
   KeyInput.msg
   Leave.msg
   Location.msg
+  LockStatus.msg
   Morale.msg
+  RequestLock.msg
   Socialness.msg
   Telephone.msg
   Time.msg
