@@ -44,7 +44,7 @@ void CompanionRobot::doExecuteLoop()
 			if (first_call)
 			{
 				//this->activeNode = &node5;
-				this->startMovingToResident();
+				//TODO: Change to movetoNode(resident)
 				first_call = false;
 			}
 	    	if (!(this->movingToResident) )
