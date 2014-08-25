@@ -11,3 +11,5 @@ Relative 2.75 5 0 pink
 RCActor 2.75 3 0 grey
 Clock 6 -4.6 0 grey30
 MedicationRobot -7.3 0 0 grey30
+CompanionRobot -6.8 0 0 grey30
+CookingRobot -6.3 0 0 grey30

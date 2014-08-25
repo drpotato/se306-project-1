@@ -86,6 +86,28 @@ rosrun se306_p1_pkg ActorSpawner 6 MedicationRobot -7.3 0 0 & # >> log/actor_Med
 ROBOT6_PID=$!
 echo ROBOT6_PID = $ROBOT6_PID >> log/debugscript.txt
 
+echo "############################## DEBUG LOG ##############################" > log/actor_CompanionRobot_000.txt
+echo ActorClass     = CompanionRobot >> log/actor_CompanionRobot_000.txt
+echo InitialX       = -6.8 >> log/actor_CompanionRobot_000.txt
+echo InitialY       = 0 >> log/actor_CompanionRobot_000.txt
+echo InitialAngle   = 0 >> log/actor_CompanionRobot_000.txt
+echo Colour         = grey30 >> log/actor_CompanionRobot_000.txt
+echo "#######################################################################" >> log/actor_CompanionRobot_000.txt
+rosrun se306_p1_pkg ActorSpawner 7 CompanionRobot -6.8 0 0 & # >> log/actor_CompanionRobot_000.txt &
+ROBOT7_PID=$!
+echo ROBOT7_PID = $ROBOT7_PID >> log/debugscript.txt
+
+echo "############################## DEBUG LOG ##############################" > log/actor_CookingRobot_000.txt
+echo ActorClass     = CookingRobot >> log/actor_CookingRobot_000.txt
+echo InitialX       = -6.3 >> log/actor_CookingRobot_000.txt
+echo InitialY       = 0 >> log/actor_CookingRobot_000.txt
+echo InitialAngle   = 0 >> log/actor_CookingRobot_000.txt
+echo Colour         = grey30 >> log/actor_CookingRobot_000.txt
+echo "#######################################################################" >> log/actor_CookingRobot_000.txt
+rosrun se306_p1_pkg ActorSpawner 8 CookingRobot -6.3 0 0 & # >> log/actor_CookingRobot_000.txt &
+ROBOT8_PID=$!
+echo ROBOT8_PID = $ROBOT8_PID >> log/debugscript.txt
+
 echo "############################## DEBUG LOG ##############################" > log/upstage.txt
 echo "#######################################################################" >> log/upstage.txt
 rosrun upstage_pkg Upstage & # >> log/upstage.txt &
@@ -103,4 +125,6 @@ kill $ROBOT3_PID
 kill $ROBOT4_PID
 kill $ROBOT5_PID
 kill $ROBOT6_PID
+kill $ROBOT7_PID
+kill $ROBOT8_PID
 kill $ROSCORE_PID
