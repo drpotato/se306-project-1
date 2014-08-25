@@ -27,58 +27,58 @@ void MedicationRobot::doExecuteLoop()
 {
 	if (returningHome){
 
-		if (returningHome_first){
-			returningHome_first = false;
-			//TODO: Matt fix this shit (Target node reset upon reach destination)
-			//targetNode = 0;
-		}
+		// if (returningHome_first){
+		// 	returningHome_first = false;
+		// 	//TODO: Matt fix this shit (Target node reset upon reach destination)
+		// 	//targetNode = 0;
+		// }
 
-        return;
+  //       return;
 
 	}
 
 	if (!entertaining)
 	{
-		if (!checkMedicationLevel())
-		{
-			if (first_call)
-			{
-				//this->startMovingToResident();
-				first_call = false;
-			}
+		// if (!checkMedicationLevel())
+		// {
+		// 	if (first_call)
+		// 	{
+		// 		//this->startMovingToResident();
+		// 		first_call = false;
+		// 	}
 
-	    	if (!(this->movingToResident) )
-	    	{
-	    		ROS_INFO("CHANGED TO ENTERTAINING");
-	    		entertaining=true;
-	    		first = false;
-	    	}
+	 //    	if (!(this->movingToResident) )
+	 //    	{
+	 //    		ROS_INFO("CHANGED TO ENTERTAINING");
+	 //    		entertaining=true;
+	 //    		first = false;
+	 //    	}
 
-		}
+		// }
 	}
 	else
 	{
-		if (moraleLevel == 5)
-		{
-			//Add do last desponse call that kurt implimented
-			MedicationRobot::stopResponse("entertaining");
-			entertaining = false;
-			returningHome = true;
+		// if (moraleLevel == 5)
+		// {
+		// 	//Add do last desponse call that kurt implimented
+		// 	MedicationRobot::stopResponse("entertaining");
+		// 	entertaining = false;
+		// 	returningHome = true;
 
-		}
-		else
-		{
+		// }
+		// else
+		// {
 
-			if (y == 40)
-			{
-				MedicationRobot::doResponse("entertaining");
-				y=0;
-			}
-			else
-			{
-				y++;
-			}
-		}
+		// 	if (y == 40)
+		// 	{
+		// 		MedicationRobot::doResponse("entertaining");
+		// 		y=0;
+		// 	}
+		// 	else
+		// 	{
+		// 		y++;
+		// 	}
+		// }
 	}
 }
 

@@ -23,13 +23,29 @@ define CookingRobot position
 	(
 		size [0.3 0.4 0.4]
 		pose [0.0 0.0 0.15 0.0]
-		color "LemonChiffon"
+		color "white"
+	)
+
+	# Left sleeve
+	model
+	(
+		size [0.08 0.08 0.25]
+		pose [0.0 0.24 0.30 0.0]
+		color "white"
+	)
+
+	# Right sleeve
+	model
+	(
+		size [0.08 0.08 0.25]
+		pose [0.0 -0.24 0.30 0.0]
+		color "white"
 	)
 
 	# Left arm
 	model
 	(
-		size [0.08 0.08 0.3]
+		size [0.08 0.08 0.05]
 		pose [0.0 0.24 0.25 0.0]
 		color "grey45"
 	)
@@ -37,7 +53,7 @@ define CookingRobot position
 	# Right arm
 	model
 	(
-		size [0.08 0.08 0.3]
+		size [0.08 0.08 0.05]
 		pose [0.0 -0.24 0.25 0.0]
 		color "grey45"
 	)
@@ -45,7 +61,7 @@ define CookingRobot position
 	# Head
 	model
 	(
-		size [0.25 0.25 0.25]
+		size [0.25 0.25 0.22]
 		pose [0.0 0.0 0.55 0.0]
 		color "LemonChiffon"
 	)
@@ -54,7 +70,7 @@ define CookingRobot position
 	model
 	(
 		size [0.01 0.05 0.05]
-		pose [0.125 0.0625 0.63 0.0]
+		pose [0.125 0.0625 0.68 0.0]
 		color "grey30"
 	)
 
@@ -62,8 +78,42 @@ define CookingRobot position
 	model
 	(
 		size [0.01 0.05 0.05]
-		pose [0.125 -0.0625 0.63 0.0]
+		pose [0.125 -0.0625 0.68 0.0]
 		color "grey30"
+	)
+
+	# Coat detailing
+	model
+	(
+		size [0.01 0.025 0.025]
+		pose [0.15 0.0 0.35 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.01 0.025 0.025]
+		pose [0.15 0.0 0.42 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.01 0.025 0.025]
+		pose [0.15 0.0 0.28 0.0]
+		color "grey30"
+	)
+
+	# Chef Hat
+	model
+	(
+		size [0.27 0.27 0.05]
+		pose [0.0 0.0 0.77 0.0]
+		color "white"
+	)
+	model
+	(
+		size [0.27 0.27 0.05]
+		pose [0.0 0.0 0.82 0.0]
+		color "white"
 	)
 
 	# Base
