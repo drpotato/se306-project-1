@@ -43,7 +43,7 @@ void MedicationRobot::doExecuteLoop()
 		{
 			if (first_call)
 			{
-				this->startMovingToResident();
+				//this->startMovingToResident();
 				first_call = false;
 			}
 
