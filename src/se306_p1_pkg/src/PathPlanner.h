@@ -31,7 +31,6 @@ private:
     string nodeGuestBedroomCentreName;
     string nodeHouseDoorName;
 
-
 public:
     PathPlanner();
 
@@ -40,6 +39,7 @@ public:
     static void addNode(PathPlannerNode*);
     static PathPlannerNode* removeNode(string*);
     static PathPlannerNode* getNode(string);
+    static PathPlannerNode* getClosestNode(int, int);
     static void locationCallback(msg_pkg::Location msg);
 };
 

@@ -49,7 +49,7 @@ void EntertainmentRobot::doExecuteLoop()
 				first_call = false;
 			}
 
-	    	if (!(this->movingToResident) )
+	    	if (!(true) )
 	    	{
 	    		//EntertainmentRobot::doResponse("entertaining");
 	    		ROS_INFO("CHANGED TO ENTERTAINING");

@@ -53,7 +53,7 @@ void Relative::doExecuteLoop()
                 first_call = false;
             }
 
-            if (!(this->movingToResident) )
+            if (!(true) )
             {
                 //Relative::doResponse("socialising");
                 ROS_INFO("CHANGED TO SOCIALISING");

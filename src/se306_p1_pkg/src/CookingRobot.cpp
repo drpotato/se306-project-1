@@ -48,7 +48,7 @@ void CookingRobot::doExecuteLoop()
 
 				first_call = false;
 			}
-	    	if (!(this->movingToResident) )
+	    	if (!(true) )
 	    	{
 	    		//CookingRobot::doResponse("entertaining");
 	    		ROS_INFO("CHANGED TO ENTERTAINING");

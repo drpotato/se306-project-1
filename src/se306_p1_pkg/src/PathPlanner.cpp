@@ -133,12 +133,28 @@ void PathPlanner::addNode(PathPlannerNode* p) {
 }
 
 // Returns the PathPlannerNode with the given name (if any).
-PathPlannerNode* PathPlanner::getNode(string* name){
+PathPlannerNode* PathPlanner::getNode(string name){
     int i = 0;
     for (i = 0; i < nodes.size(); i++){
         PathPlannerNode* node = nodes[i];
-        if (node->getName()->compare(*name) == 0){
+        if (node->getName()->compare(name) == 0){
             return node;
         }
     }
+}
+
+// Returns a pointer to the waypoint closest to the given set of coordinates.
+// Does not check for walls or collisions, so we will need sufficient coverage of waypoints to ensure this does not become a problem.
+PathPlannerNode* PathPlanner::getClosestNode(int x, int y) {
+    PathPlannerNode * closestNode = nodes[0];
+
+    for (int i = 1; i < nodes.size(); i++){
+        PathPlannerNode* nodeToCompare = nodes[i];
+        double distanceToOld = sqrtf(pow(x - closestNode->px, 2) + pow(y - closestNode->py, 2));
+        double distanceToNew = sqrtf(pow(x - nodeToCompare->px, 2) + pow(y - nodeToCompare->py, 2));
+        if (distanceToNew < distanceToOld) {
+            closestNode = nodeToCompare;
+        }
+    }
+    return closestNode;
 }

@@ -47,7 +47,7 @@ void MedicationRobot::doExecuteLoop()
 				first_call = false;
 			}
 
-	    	if (!(this->movingToResident) )
+	    	if (!(true) )
 	    	{
 	    		ROS_INFO("CHANGED TO ENTERTAINING");
 	    		entertaining=true;

@@ -13,7 +13,7 @@ void CompanionRobot::doInitialSetup()
 	velRotational = 0.0;
 	moraleLevel = 5;
 	entertaining = false;
-	residentName = "RobotNode2";
+	residentName = "Resident";
 	subscriberMorale = nodeHandle->subscribe("morale", 1000, CompanionRobot::moraleCallback);
 	y = 0;
 	x = 0;
@@ -47,7 +47,7 @@ void CompanionRobot::doExecuteLoop()
 				//TODO: Change to movetoNode(resident)
 				first_call = false;
 			}
-	    	if (!(this->movingToResident) )
+	    	if (!(true) )
 	    	{
 	    		//CompanionRobot::doResponse("entertaining");
 	    		ROS_INFO("CHANGED TO ENTERTAINING");

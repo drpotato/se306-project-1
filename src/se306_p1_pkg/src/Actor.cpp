@@ -179,22 +179,22 @@ double Actor::faceDirection(double x,double y){
 }
 
 // Moves the Actor in a straight line towards the given x and y coordinates.
-bool Actor::gotoPosition(double x,double y){
+bool Actor::gotoPosition(double x,double y) {
     // Face the node
-    if (faceDirection(x,y) < 0.1){
+    if (faceDirection(x,y) < 0.1) {
         double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
 
         ROS_DEBUG("Distance is %f",distance);
 
-        if (distance > 0.01){
+        if (distance > 0.01) {
             faceDirection(x,y);
             this->velLinear = distance*1;
             return true;
-        }else{
+        } else {
             this->velLinear = 0;
             return false;
         }
-    }else{
+    } else {
         ROS_DEBUG("Target: %f",faceDirection(x,y));
         this->velLinear = 0;
         return true;
@@ -203,12 +203,8 @@ bool Actor::gotoPosition(double x,double y){
 
 bool Actor::goToNode(string nodeName) {
 
-    ROS_INFO("Going to node");
-
-    activeNode = getActiveNode();
-
-    targetNode = PathPlanner::getNode(&nodeName);
-                //TODO: REWIRITE THIS TO USE NEW SYSTEM ################################################################################################
+    ROS_INFO_STREAM("Going to node");
+    //TODO: REWIRITE THIS TO USE NEW SYSTEM ################################################################################################
     // goingToNode = pathPlanner.getClosestNode(goingToX, goingToY);
 
     // vector <PathPlannerNodepath = pathPlanner.pathToNode(this->activeNode, goingToNode);
