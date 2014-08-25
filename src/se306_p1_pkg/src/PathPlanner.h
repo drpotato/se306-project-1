@@ -14,21 +14,21 @@ using namespace std;
 
 class PathPlanner {
 private:
-    vector<ActorLocation> actorLocations;
-    vector<PathPlannerNode*> nodes;
+    static vector<ActorLocation> actorLocations;
+    static vector<PathPlannerNode*> nodes;
     typedef boost::unordered_map<string,string> map;
 
-    ros::Subscriber subscriberLocation;
-    ros::NodeHandle *nodeHandle;
+    static ros::Subscriber subscriberLocation;
+    static ros::NodeHandle *nodeHandle;
+    PathPlanner();
     
 public:
-    PathPlanner();
-	vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
-    void addActorNode(PathPlannerNode*);
-    void addNode(PathPlannerNode*);
-    PathPlannerNode* removeNode(string*);
-    PathPlannerNode* getNode(string*);
-    PathPlannerNode* getClosestNode(int, int);
+	static vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
+    static void addActorNode(PathPlannerNode*);
+    static void addNode(PathPlannerNode*);
+    static PathPlannerNode* removeNode(string*);
+    static PathPlannerNode* getNode(string*);
+    static PathPlannerNode* getClosestNode(int, int);
     static void locationCallback(msg_pkg::Location msg);
 };
 

@@ -30,8 +30,8 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
     queue<PathPlannerNode*> s;
     s.push(startNode);
     
-    for (int i=0;i<this->nodes.size();i++){
-        this->nodes[i]->visited = false;
+    for (int i = 0; i < nodes.size(); i++){
+        nodes[i]->visited = false;
     }
     
     startNode->setVisited(true);
@@ -67,38 +67,37 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
         return path;
 }
 
+// Removes a node from the graph, and removes it from all its' neighbours' lists of neighbours.
 PathPlannerNode* PathPlanner::removeNode(string* name) {
-    for (int i = 0; i < this->nodes.size(); i++){
-        PathPlannerNode* node = this->nodes[i];
-        if (node->getName()->compare(*name) == 0){
+    for (vector<PathPlannerNode*>::iterator itr = nodes.begin(); itr != nodes.end();) {
+        if ((*itr)->getName()->compare(*name) == 0) {
             // For each of its neighbours
-            for (int j = 0; j < node->neighbours.size(); j++) {
-                PathPlannerNode* neighbour = node->neighbours[i];
-                neighbour->removeNeighbour(node);
+            for (int j = 0; j < (*itr)->neighbours.size(); j++) {
+                PathPlannerNode* neighbour = (*itr)->neighbours[j];
+                neighbour->removeNeighbour((*itr));
+                itr = nodes.erase(itr);
             }
-            nodes.erase(*node);
         }
     }
-    return node;
 }
 
 // Adds an Actor to the graph.
 void PathPlanner::addActorNode(PathPlannerNode* p) {
     // Actors have only a single neighbour, the closest waypoint node to them.
-    p.addNeighbour(getClosestNode(p->px, p->py);
+    p->addNeighbour(getClosestNode(p->px, p->py));
     addNode(p);
 }
 
 // Adds a PathPlannerNode to the graph.
 void PathPlanner::addNode(PathPlannerNode* p) {
-    this->nodes.push_back(p);
+    nodes.push_back(p);
 }
 
 // Returns the PathPlannerNode with the given name (if any).
 PathPlannerNode* PathPlanner::getNode(string* name){
-    int i =0;
-    for (i=0;i<this->nodes.size();i++){
-        PathPlannerNode* node = this->nodes[i];
+    int i = 0;
+    for (i = 0; i < nodes.size(); i++){
+        PathPlannerNode* node = nodes[i];
         if (node->getName()->compare(*name) == 0){
             return node;
         }
@@ -108,13 +107,12 @@ PathPlannerNode* PathPlanner::getNode(string* name){
 // Returns a pointer to the waypoint closest to the given set of coordinates.
 // Does not check for walls or collisions, so we will need sufficient coverage of waypoints to ensure this does not become a problem.
 PathPlannerNode* PathPlanner::getClosestNode(int x, int y){
-    int i;
-    PathPlannerNode * closestNode = this->nodes[0];
+    PathPlannerNode * closestNode = nodes[0];
 
-    for (i=1;i<this->nodes.size();i++){
-        PathPlannerNode* nodeToCompare = this->nodes[i];
-        double distanceToOld = sqrtf(pow(x - closestNode->px, 2) + pow(y - closestNode->py, 2) 
-        double distanceToNew = sqrtf(pow(x - nodeToCompare->px, 2) + pow(y - nodeToCompare->py, 2) 
+    for (int i = 1; i < nodes.size(); i++){
+        PathPlannerNode* nodeToCompare = nodes[i];
+        double distanceToOld = sqrtf(pow(x - closestNode->px, 2) + pow(y - closestNode->py, 2));
+        double distanceToNew = sqrtf(pow(x - nodeToCompare->px, 2) + pow(y - nodeToCompare->py, 2));
         if (distanceToNew < distanceToOld) {
             closestNode = nodeToCompare;
         }

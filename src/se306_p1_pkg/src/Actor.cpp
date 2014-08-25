@@ -39,8 +39,7 @@ Actor::Actor():
 	loopRate(0)
 
 {
-    //Create path planner and setup navigation waypoint nodes.
-    this->pathPlanner = PathPlanner();
+    // Setup navigation waypoint nodes.
     this->targetNode = 0;
 
     // Next to the Resident.
@@ -85,12 +84,12 @@ Actor::Actor():
     nodeDoor.addNeighbour(&node4);
 
     // Add the nodes to the path planner's graph of nodes and connections.
-    this->pathPlanner.addNode(&node1);
-    this->pathPlanner.addNode(&node2);
-    this->pathPlanner.addNode(&node3);
-    this->pathPlanner.addNode(&node4);
-    this->pathPlanner.addNode(&node5);
-    this->pathPlanner.addNode(&nodeDoor);
+    PathPlanner::addNode(&node1);
+    PathPlanner::addNode(&node2);
+    PathPlanner::addNode(&node3);
+    PathPlanner::addNode(&node4);
+    PathPlanner::addNode(&node5);
+    PathPlanner::addNode(&nodeDoor);
 
     this->activeNode = &node1;
 
@@ -281,7 +280,7 @@ bool Actor::gotoPosition(double x,double y){
 bool Actor::goToNode(string* nodeName) {
     activeNode = getActiveNode();
 
-    targetNode = this->pathPlanner.getNode(nodeName);
+    targetNode = PathPlanner::getNode(nodeName);
                 //TODO: REWIRITE THIS TO USE NEW SYSTEM ################################################################################################
     // goingToNode = pathPlanner.getClosestNode(goingToX, goingToY);
 
@@ -305,7 +304,7 @@ bool Actor::goToNode(string* nodeName) {
 
 // Find the closest waypoint node to this Actor's current position.
 PathPlannerNode* Actor::getActiveNode() {
-    return pathPlanner.getClosestNode(this->px, this->py);
+    return PathPlanner::getClosestNode(this->px, this->py);
 }
 
 ros::NodeHandle &Actor::getNodeHandle() const

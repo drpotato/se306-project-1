@@ -79,7 +79,6 @@ protected:
     bool movingToResident;
 
 private:
-    PathPlanner pathPlanner;
     PathPlannerNode* activeNode;
     PathPlannerNode* targetNode;
 
