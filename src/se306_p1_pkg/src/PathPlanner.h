@@ -8,22 +8,22 @@
 #include <boost/unordered_map.hpp>
 #include "PathPlannerNode.h"
 #include <msg_pkg/Location.h>
-#include "ActorLocation.h"
+
 
 using namespace std;
 
 class PathPlanner {
 private:
-    static vector<ActorLocation> actorLocations;
     static vector<PathPlannerNode*> nodes;
-    typedef boost::unordered_map<string,string> map;
-
     static ros::Subscriber subscriberLocation;
     static ros::NodeHandle *nodeHandle;
+
+    typedef boost::unordered_map<string,string> map;
+
+public:
     PathPlanner();
     
-public:
-	static vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
+    static vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
     static void addActorNode(PathPlannerNode*);
     static void addNode(PathPlannerNode*);
     static PathPlannerNode* removeNode(string*);

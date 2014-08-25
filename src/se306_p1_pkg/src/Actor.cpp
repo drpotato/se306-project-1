@@ -278,6 +278,9 @@ bool Actor::gotoPosition(double x,double y){
 }
 
 bool Actor::goToNode(string* nodeName) {
+    
+    ROS_INFO("Going to node");
+    
     activeNode = getActiveNode();
 
     targetNode = PathPlanner::getNode(nodeName);

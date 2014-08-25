@@ -2,6 +2,11 @@
 #include "ros/ros.h"
 #include <msg_pkg/Location.h>
 
+vector<PathPlannerNode*> PathPlanner::nodes;
+ros::Subscriber PathPlanner::subscriberLocation;
+ros::NodeHandle* PathPlanner::nodeHandle;
+
+
 // This class maintains a graph of navigation waypoint nodes, and calculates the shortest (fewest nodes) path between any two of them.
 
 //TODO: Make PathPlanner a singleton
@@ -26,6 +31,7 @@ void PathPlanner::locationCallback(msg_pkg::Location msg)
 // Returns the shortest path between the two given nodes.
 vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,PathPlannerNode *target)
 {
+    ROS_INFO_STREAM("Pathplanning!");
     PathPlannerNode *top;
     queue<PathPlannerNode*> s;
     s.push(startNode);
