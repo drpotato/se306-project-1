@@ -22,6 +22,9 @@ namespace ups
 		Keyboard &getKeyboard();
 		const Keyboard &getKeyboard() const;
 		
+		int getWidth() const;
+		int getHeight() const;
+		
 		static Context &getContext();
 	private:
 		Context();
@@ -41,27 +44,38 @@ namespace ups
 		GLXContext _glContext;
 		Atom _wmDeleteMessage;
 	};
-}
+	
+	inline bool Context::minGLVersion(int majorMin, int minorMin) const
+	{
+		return _glVersionMajor != majorMin ? _glVersionMajor > majorMin : _glVersionMinor >= minorMin;
+	}
 
-inline bool ups::Context::minGLVersion(int majorMin, int minorMin) const
-{
-	return _glVersionMajor != majorMin ? _glVersionMajor > majorMin : _glVersionMinor >= minorMin;
-}
+	inline void Context::getGLVersion(int &major, int &minor) const
+	{
+		major = _glVersionMajor;
+		minor = _glVersionMinor;
+	}
 
-inline void ups::Context::getGLVersion(int &major, int &minor) const
-{
-	major = _glVersionMajor;
-	minor = _glVersionMinor;
-}
+	inline Keyboard &Context::getKeyboard()
+	{
+		return _keyboard;
+	}
 
-inline ups::Keyboard &ups::Context::getKeyboard()
-{
-	return _keyboard;
-}
+	inline const Keyboard &Context::getKeyboard() const
+	{
+		return _keyboard;
+	}
 
-inline const ups::Keyboard &ups::Context::getKeyboard() const
-{
-	return _keyboard;
+	inline int Context::getWidth() const
+	{
+		return _w;
+	}
+	
+	inline int Context::getHeight() const
+	{
+		return _h;
+	}
+	
 }
 
 #endif // #ifndef SE306P1_UPSTAGE_CONTEXT_HPP_DEFINED

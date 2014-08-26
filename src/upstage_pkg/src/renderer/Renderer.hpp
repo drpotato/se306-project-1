@@ -19,6 +19,7 @@ namespace ups
 		
 		// Functionality
 		void setEnvClearColour(const Colour &colour);
+		void drawTestQuad(const Colour &colour, float x, float y, float w, float h);
 	protected:
 		
 		
@@ -36,6 +37,9 @@ namespace ups
 		void doRenderExecuteTasks();
 		void doRenderAfter();
 		void doTask(RenderTask *task);
+		
+		void setUpMatrix2D();
+		void setUpMatrix3D();
 		
 		void addToTaskList(RenderTask *task, TaskListSlot slot);
 		

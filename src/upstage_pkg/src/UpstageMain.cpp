@@ -39,6 +39,11 @@ int main(int argc, char **argv)
 		// Update positions etc. here
 		env->step();
 		env->draw(renderer);
+		ups::Colour c0; c0.r = 1.f; c0.g = 0.f; c0.b = 0.f; c0.a = 1.f;
+		ups::Colour c1; c1.r = 0.f; c1.g = 1.f; c1.b = 0.f; c1.a = 1.f;
+		renderer.drawTestQuad(c0, 32.f, 32.f, 64.f, 64.f);
+		renderer.drawTestQuad(c1, 32.f, 96.f, 64.f, 64.f);
+		//renderer.drawTestQuad(c1, 0.0, 1.0, 1.0, -0.5);
 		
 		context.drawStart();
 		renderer.render();
