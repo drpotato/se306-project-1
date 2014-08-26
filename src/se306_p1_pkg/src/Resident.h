@@ -112,6 +112,9 @@ public:
 
   // Publisher for lock status
   ros::Publisher publisherLockStatus;
+  // Publisher for telephone
+  ros::Publisher publisherTelephone;
+
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;
   // Subscriber for time
@@ -133,6 +136,9 @@ public:
   void eat(int hour);
   void goToSleep();
   bool hasWoken();
+
+  // Phone call
+  void call(string personType);
 
   // Enum conversions
   ActorType getActorTypeFromString(string actorType);

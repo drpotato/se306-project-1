@@ -31,6 +31,7 @@
 #include <msg_pkg/Fitness.h>
 #include <msg_pkg/Time.h>
 #include <msg_pkg/RequestLock.h>
+#include <msg_pkg/Telephone.h>
 #include "Actor.h"
 #include "ActorSpawner.h"
 #include <ctime>
@@ -90,13 +91,14 @@ void Resident::doInitialSetup()
   publisherFitness = nodeHandle->advertise<msg_pkg::Fitness>("fitness", 1000);
 
   publisherLockStatus = nodeHandle->advertise<msg_pkg::LockStatus>("lockStatus", 1000);
+  publisherTelephone = nodeHandle->advertise<msg_pkg::Telephone>("telephone", 1000);
 
   // Set up subscriptions.
   subscriberInteraction = nodeHandle->subscribe("interaction", 1000, Resident::interactionCallback);
   subscriberTime = nodeHandle->subscribe("time", 1000, Resident::timeCallback);
   subscriberRequestLock = nodeHandle->subscribe("requestLock", 1000, Resident::requestLockCallback);
   subscriberUnlock = nodeHandle->subscribe("unlock", 1000, Resident::unlockCallback);
-
+}
 
 void Resident::doExecuteLoop()
 {
@@ -164,16 +166,26 @@ void Resident::doExecuteLoop()
 	randomEventLoop();
 }
 
-
-
+// PHONE CALLING -------------------------------------------------------------------------------------------------//
+/*
+ * personType should be one of the following: doctor, relative, friend (are there more???) (note the lowercase)
+ */ 
+void Resident::call(string personType)
+{
+  msg_pkg::Telephone phonecall;
+  phonecall.contact = personType;
+  publisherTelephone.publish(phonecall);
+}
 
 
 // INTERACTION RELATED --------------------------------------------------------------------------------------------//
 /*
  * Upon receiving a message published to the 'interaction' topic, respond appropriately.
  */
+
 void Resident::interactionCallback(msg_pkg::Interaction msg)
 {
+	/* == COMMENTED OUT ALPHA CODE BELOW ==
   std::string attribute = msg.attribute;
   int amount = msg.amount;
 
@@ -185,47 +197,48 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   {
     // Get new level
     int newLevel = getNewLevel(amount, residentInstance->socialness_level_);
-  // Update the residents socialness level
-  residentInstance->socialness_level_ = newLevel;
-  //Create a socialness message to publish
-  msg_pkg::Socialness socialnessMessage;
-  //Assign current socialness level to the message
-  socialnessMessage.level = newLevel;
+    // Update the residents socialness level
+    residentInstance->socialness_level_ = newLevel;
+    //Create a socialness message to publish
+    msg_pkg::Socialness socialnessMessage;
+    //Assign current socialness level to the message
+    socialnessMessage.level = newLevel;
 
-  if (newLevel == LEVEL_MAX)
-  {
-    residentInstance->stopRobotSpinning();
-  }
+    if (newLevel == 5)
+    {
+      residentInstance->stopRobotSpinning();
+    }
 
-  //Publish the message
-  residentInstance->publisherSocialness.publish(socialnessMessage);
+    //Publish the message
+    residentInstance->publisherSocialness.publish(socialnessMessage);
   } 
   else if (attribute == "entertaining")
   {
-  // Get new level
-  int newLevel = getNewLevel(amount, residentInstance->morale_level_);
-  // Update the residents socialness level
-  residentInstance->morale_level_ = newLevel;
-  //Create a socialness message to publish
-  msg_pkg::Morale moraleMessage;
-  //Assign current socialness level to the message
-  moraleMessage.level = newLevel;
+    // Get new level
+    int newLevel = getNewLevel(amount, residentInstance->morale_level_);
+    // Update the residents socialness level
+    residentInstance->morale_level_ = newLevel;
+    //Create a socialness message to publish
+    msg_pkg::Morale moraleMessage;
+    //Assign current socialness level to the message
+    moraleMessage.level = newLevel;
 
-  if (newLevel == LEVEL_MAX)
-  {
-    residentInstance->stopRobotSpinning();
-    residentInstance->m_replenished_ = true;
-  }
+    if (newLevel == 5)
+    {
+      residentInstance->stopRobotSpinning();
+      residentInstance->m_replenished_ = true;
+    }
 
-  //Publish the message
-  residentInstance->publisherMorale.publish(moraleMessage);
+    //Publish the message
+    residentInstance->publisherMorale.publish(moraleMessage);
   }
-  // TODO: put others in when implemented 
+  // TODO: put others in when implemented
+	*/// == COMMENTED OUT ALPHA CODE ABOVE ==
 }
 
 
 // DAILY EVENTS -----------------------------------------------------------------------------------------------------//
->>>>>>> develop
+
 void Resident::timeCallback(msg_pkg::Time msg)
 {
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
@@ -254,7 +267,7 @@ void Resident::timeCallback(msg_pkg::Time msg)
 }
 
 
-
+// Alpha (deprecated)
 int Resident::getNewLevel(int amount, int oldLevel)
 {
   int newLevel = std::min(amount + oldLevel, 5); // Can only have a maximum level of 5
@@ -383,6 +396,8 @@ void Resident::randomEventLoop()
 		#endif
 	}	
 
+	// == THIRST NOT CURRENTLY IMPLEMENTED ==
+	/*
 	// ...as does thirst
 	// On average, it should drop by 1 every 3 seconds, with
 	randNum = getRandom(float(0), float(1 * FREQUENCY));
@@ -391,13 +406,13 @@ void Resident::randomEventLoop()
 		#ifdef DEBUG_CHANGE_LEVEL
 		ROS_INFO("EVENT: thirst drop -1 (rand = %.3f)\n", randNum);
 		#endif
-	}
+	} */
 
 	// Fitness drops fairly slowly...
-	// On average, it should drop by 1 every second
-	randNum = getRandom(float(0), float(1 * FREQUENCY));
-	if (randNum > ((1 * FREQUENCY) - 1)) {
-		changeLevel(-5, FITNESS);
+	// On average, it should drop by 1 every 4 seconds
+	randNum = getRandom(float(0), float(4 * FREQUENCY));
+	if (randNum > ((4 * FREQUENCY) - 1)) {
+		changeLevel(-1, FITNESS);
 		#ifdef DEBUG_CHANGE_LEVEL
 		ROS_INFO("EVENT: thirst drop -1 (rand = %.3f)\n", randNum);
 		#endif
@@ -526,8 +541,8 @@ int Resident::changeLevel(float change, Level level) {
 	} else if (level == HEALTH) {
 		if (residentInstance->health_level_ + change >= LEVEL_MAX) {
 			residentInstance->health_level_ = LEVEL_MAX;
-		} else if (residentInstance->fitness_level_ + change <= LEVEL_MIN) {
-			residentInstance->fitness_level_ = LEVEL_MIN;
+		} else if (residentInstance->health_level_ + change <= LEVEL_MIN) {
+			residentInstance->health_level_ = LEVEL_MIN;
 		} else { 
 			residentInstance->health_level_ = residentInstance->health_level_ + change;
 		}
