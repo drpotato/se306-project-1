@@ -162,7 +162,8 @@ void Resident::doExecuteLoop()
 	// Call random event for each iteration of the execution
 	// loop (not sure if this should happen at start or end
 	// of each loop; does this even matter?)
-	//randomEventLoop();
+
+	randomEventLoop();
 }
 
 /*
@@ -310,7 +311,7 @@ void Resident::randomEventLoop()
     long long milliseconds = t_e.tv_sec * 1000LL + t_e.tv_usec / 1000; // calculate milliseconds
     //printf("milliseconds: %lld\n", milliseconds);
 	
-	printf("time since last loop = %lldms\n", (milliseconds - msAtPreviousLoop));
+	//printf("time since last loop = %lldms\n", (milliseconds - msAtPreviousLoop));
 	msAtPreviousLoop = milliseconds;
 	///////////////////////
 
@@ -348,11 +349,11 @@ void Resident::randomEventLoop()
 	// Socialness drops fastest and is most affected by randomness.
 	// On average, it should drop by 1 every second
 
-	// Every cycle, ANY and ALL levels may change
+		// Every cycle, ANY and ALL levels may change
 	randNum = getRandom(float(0), float(1 * FREQUENCY));
 	if (randNum > ((1 * FREQUENCY) - 1)) {
 		changeLevel(-1, SOCIALNESS);
-		printf("Insert logic for socialness dropping here (rng = %.3f\n", randNum);
+		ROS_INFO("EVENT: socialness drop -1 (rand = %.3f)\n", randNum);
 	}
 	
 	// Morale also drops quickly but is less affected by randomness than
@@ -361,7 +362,7 @@ void Resident::randomEventLoop()
 	randNum = getRandom(float(0), float(1.4 * FREQUENCY));
 	if (randNum > ((1.4 * FREQUENCY) - 1)) {
 		changeLevel(-1, MORALE);
-		printf("Insert logic for morale dropping here (rng = %.3f\n", randNum);
+		ROS_INFO("EVENT: morale drop -1 (rand = %.3f)\n", randNum);
 	}
 
 	// Health drops in two ways, either almost slowly and almost 
@@ -370,7 +371,7 @@ void Resident::randomEventLoop()
 	randNum = getRandom(float(0), float(2.5 * FREQUENCY));
 	if (randNum > ((2.5 * FREQUENCY) - 1)) {
 		changeLevel(-1, HEALTH);
-		printf("Insert logic for slow, near-linear hunger drop here (rng = %.3f\n", randNum);
+		ROS_INFO("EVENT: slow, near-linear hunger drop here (rand = %.3f)\n", randNum);
 	}	
 
 	// Hygiene
@@ -378,7 +379,7 @@ void Resident::randomEventLoop()
 	randNum = getRandom(float(0), float(1.5 * FREQUENCY));
 	if (randNum > ((1.5 * FREQUENCY) - 1)) {
 		changeLevel(-1, HYGIENE);
-		printf("Insert logic for hygiene dropping here (rng = %.3f\n", randNum);
+		ROS_INFO("EVENT: hygiene drop -1 (rand = %.3f)\n", randNum);
 	}
 
 	// Hunger drops almost completely linearly...
@@ -386,7 +387,7 @@ void Resident::randomEventLoop()
 	randNum = getRandom(float(0), float(3 * FREQUENCY));
 	if (randNum > ((3 * FREQUENCY) - 1)) {
 		changeLevel(-1, HUNGER);
-		printf("Insert logic for hunger dropping here (rng = %.3f\n", randNum);
+		ROS_INFO("EVENT: hunger drop -1 (rand = %.3f)\n", randNum);
 	}	
 
 	// ...as does thirst
@@ -394,7 +395,7 @@ void Resident::randomEventLoop()
 	randNum = getRandom(float(0), float(1 * FREQUENCY));
 	if (randNum > ((1 * FREQUENCY) - 1)) {
 		changeLevel(-1, THIRST);
-		printf("Insert logic for thirst dropping here (rng = %.3f\n", randNum);
+		ROS_INFO("EVENT: thirst drop -1 (rand = %.3f)\n", randNum);
 	}
 
 	// Fitness drops fairly slowly...
@@ -402,9 +403,8 @@ void Resident::randomEventLoop()
 	randNum = getRandom(float(0), float(1 * FREQUENCY));
 	if (randNum > ((1 * FREQUENCY) - 1)) {
 		changeLevel(-1, THIRST);
-		printf("Insert logic for thirst dropping here (rng = %.3f\n", randNum);
+		ROS_INFO("EVENT: thirst drop -1 (rand = %.3f)\n", randNum);
 	}
-
 
 
 
@@ -417,7 +417,8 @@ void Resident::randomEventLoop()
 // IMPORTANT
 // In changing a level, this will also force a message
 // to be published in the appropriate topic (morale, soc. etc)
-void Resident::changeLevel(float change, Level level) {
+// Return the new value  
+int Resident::changeLevel(float change, Level level) {
 
 	// Get the current resident class instance
 	Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
@@ -433,6 +434,10 @@ void Resident::changeLevel(float change, Level level) {
 		moraleMessage.level = residentInstance->morale_level_;
 		residentInstance->publisherMorale.publish(moraleMessage);	
 
+		// DEBUG
+		ROS_INFO("Morale: %d", residentInstance->morale_level_);
+		return residentInstance->morale_level_;
+
 	} else if (level == SOCIALNESS) {
 		if (residentInstance->socialness_level_ + change >= LEVEL_MAX) {
 			residentInstance->socialness_level_ = LEVEL_MAX;
@@ -442,6 +447,10 @@ void Resident::changeLevel(float change, Level level) {
 		msg_pkg::Socialness socialnessMessage;
 		socialnessMessage.level = residentInstance->socialness_level_;
 		residentInstance->publisherSocialness.publish(socialnessMessage);
+
+		// DEBUG
+		ROS_INFO("Socialness: %d", residentInstance->socialness_level_);
+		return residentInstance->socialness_level_;
 
 	} else if (level == HYGIENE) {
 		if (residentInstance->hygiene_level_ + change >= LEVEL_MAX) {
@@ -453,6 +462,10 @@ void Resident::changeLevel(float change, Level level) {
 		hygieneMessage.level = residentInstance->hygiene_level_;
 		residentInstance->publisherHygiene.publish(hygieneMessage);
 
+		// DEBUG
+		ROS_INFO("Hygiene: %d", residentInstance->hygiene_level_);
+		return residentInstance->hygiene_level_;
+
 	} else if (level == HUNGER) {
 		if (residentInstance->hunger_level_ + change >= LEVEL_MAX) {
 			residentInstance->hunger_level_ = LEVEL_MAX;
@@ -462,6 +475,10 @@ void Resident::changeLevel(float change, Level level) {
 		msg_pkg::Hunger hungerMessage;
 		hungerMessage.level = residentInstance->hunger_level_;
 		residentInstance->publisherHunger.publish(hungerMessage);
+
+		// DEBUG
+		ROS_INFO("Hunger: %d", residentInstance->hunger_level_);
+		return residentInstance->hunger_level_;
 
 	} else if (level == THIRST) {
 		if (residentInstance->thirst_level_ + change >= LEVEL_MAX) {
@@ -473,6 +490,10 @@ void Resident::changeLevel(float change, Level level) {
 		thirstMessage.level = residentInstance->thirst_level_;
 		residentInstance->publisherThirst.publish(thirstMessage);
 
+		// DEBUG
+		ROS_INFO("Thirst: %d", residentInstance->thirst_level_);
+		return residentInstance->thirst_level_;
+
 	}  else if (level == FITNESS) {
 		if (residentInstance->fitness_level_ + change >= LEVEL_MAX) {
 			residentInstance->fitness_level_ = LEVEL_MAX;
@@ -483,6 +504,10 @@ void Resident::changeLevel(float change, Level level) {
 		fitnessMessage.level = residentInstance->fitness_level_;
 		residentInstance->publisherFitness.publish(fitnessMessage);
 
+		// DEBUG
+		ROS_INFO("Fitness: %d", residentInstance->fitness_level_);
+		return residentInstance->fitness_level_;
+
 	} else if (level == HEALTH) {
 		if (residentInstance->health_level_ + change >= LEVEL_MAX) {
 			residentInstance->health_level_ = LEVEL_MAX;
@@ -492,6 +517,11 @@ void Resident::changeLevel(float change, Level level) {
 		msg_pkg::Health healthMessage;
 		healthMessage.level = residentInstance->health_level_;
 		residentInstance->publisherHealth.publish(healthMessage);
+
+		// DEBUG
+		ROS_INFO("Health: %d", residentInstance->health_level_);
+		return residentInstance->health_level_;
+
 	}  
 }
 

@@ -37,7 +37,7 @@ public:
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg); //alpha
   static float getRandom(float, float);
-  void changeLevel(float, Level); 
+  int changeLevel(float, Level); 
   void randomEventLoop();
 
   static void timeCallback(msg_pkg::Time msg);
@@ -93,7 +93,7 @@ public:
 #endif    
 
 	// Publishers for all attributes/levels  
-  	ros::Publisher publisherMorale;
+  ros::Publisher publisherMorale;
 	ros::Publisher publisherSocialness;
 	ros::Publisher publisherHealth;
 	ros::Publisher publisherHygiene;
