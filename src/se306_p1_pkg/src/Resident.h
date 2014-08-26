@@ -46,7 +46,7 @@ public:
 
 	// Level variables
 	int morale_level_;
-  int socialness_level_;
+	int socialness_level_;
 	int health_level_;
 	int hygiene_level_;
 	int hunger_level_;
@@ -58,7 +58,8 @@ public:
   int socialness_count_;
 
   const static int WAIT_TIME;  
-	const static int LEVEL_MAX; // Final release should be 100
+	const static float LEVEL_MAX; // Final release should be 100
+	const static float LEVEL_MIN; // Final release should be 0
 	const static float FREQUENCY;
 
 	// Deprecated (alpha) - will be replaced by 'm_changed_' for example

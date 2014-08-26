@@ -19,7 +19,7 @@
 #endif
 
 // Debug lines for changeLevel()
-//#define DEBUG_CHANGE_LEVEL
+#define DEBUG_CHANGE_LEVEL
 
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/Socialness.h>
@@ -37,7 +37,8 @@
 
 const float Resident::FREQUENCY = 10;
 const int Resident::WAIT_TIME = 50;
-const int Resident::LEVEL_MAX = 5;
+const float Resident::LEVEL_MAX = 100;
+const float Resident::LEVEL_MIN = 0;
 
 // The person living in our house. 
 // Has various attributes representing his needs/wants, which degrade over time.
@@ -393,7 +394,7 @@ void Resident::randomEventLoop()
 	}
 
 	// Hunger drops almost completely linearly...
-	// On average, it should drop by 1 every 3 seconds (THIS IS NOT EVEN CLOSE TO FINAL)
+	// On average, it should drop by 1 every 3 seconds
 	randNum = getRandom(float(0), float(3 * FREQUENCY));
 	if (randNum > ((3 * FREQUENCY) - 1)) {
 		changeLevel(-1, HUNGER);
@@ -403,9 +404,9 @@ void Resident::randomEventLoop()
 	}	
 
 	// ...as does thirst
-	// On average, it should drop by 1 every second
+	// On average, it should drop by 1 every 3 seconds, with
 	randNum = getRandom(float(0), float(1 * FREQUENCY));
-	if (randNum > ((1 * FREQUENCY) - 1)) {
+	if (randNum > ((3 * FREQUENCY) - 1)) {
 		changeLevel(-1, THIRST);
 		#ifdef DEBUG_CHANGE_LEVEL
 		ROS_INFO("EVENT: thirst drop -1 (rand = %.3f)\n", randNum);
@@ -416,7 +417,7 @@ void Resident::randomEventLoop()
 	// On average, it should drop by 1 every second
 	randNum = getRandom(float(0), float(1 * FREQUENCY));
 	if (randNum > ((1 * FREQUENCY) - 1)) {
-		changeLevel(-1, THIRST);
+		changeLevel(-5, FITNESS);
 		#ifdef DEBUG_CHANGE_LEVEL
 		ROS_INFO("EVENT: thirst drop -1 (rand = %.3f)\n", randNum);
 		#endif
@@ -443,6 +444,8 @@ int Resident::changeLevel(float change, Level level) {
 	if (level == MORALE) {
 		if (residentInstance->morale_level_ + change >= LEVEL_MAX) {
 			residentInstance->morale_level_ = LEVEL_MAX;
+		} else if (residentInstance->morale_level_ + change <= LEVEL_MIN) {
+			residentInstance->morale_level_ = LEVEL_MIN;
 		} else {
 			residentInstance->morale_level_ = residentInstance->morale_level_ + change;
 		}
@@ -458,6 +461,8 @@ int Resident::changeLevel(float change, Level level) {
 	} else if (level == SOCIALNESS) {
 		if (residentInstance->socialness_level_ + change >= LEVEL_MAX) {
 			residentInstance->socialness_level_ = LEVEL_MAX;
+		} else if (residentInstance->socialness_level_ + change <= LEVEL_MIN) {
+			residentInstance->socialness_level_ = LEVEL_MIN;
 		} else {
 			residentInstance->socialness_level_ = residentInstance->socialness_level_ + change;
 		}
@@ -473,6 +478,8 @@ int Resident::changeLevel(float change, Level level) {
 	} else if (level == HYGIENE) {
 		if (residentInstance->hygiene_level_ + change >= LEVEL_MAX) {
 			residentInstance->hygiene_level_ = LEVEL_MAX;
+		} else if (residentInstance->hygiene_level_ + change <= LEVEL_MIN) {
+			residentInstance->hygiene_level_ = LEVEL_MIN;
 		} else {
 			residentInstance->hygiene_level_ = residentInstance->hygiene_level_ + change;
 		}
@@ -488,6 +495,8 @@ int Resident::changeLevel(float change, Level level) {
 	} else if (level == HUNGER) {
 		if (residentInstance->hunger_level_ + change >= LEVEL_MAX) {
 			residentInstance->hunger_level_ = LEVEL_MAX;
+		} else if (residentInstance->hunger_level_ + change <= LEVEL_MIN) {
+			residentInstance->hunger_level_ = LEVEL_MIN;
 		} else {
 			residentInstance->hunger_level_ = residentInstance->hunger_level_ + change;
 		}
@@ -503,6 +512,8 @@ int Resident::changeLevel(float change, Level level) {
 	} else if (level == THIRST) {
 		if (residentInstance->thirst_level_ + change >= LEVEL_MAX) {
 			residentInstance->thirst_level_ = LEVEL_MAX;
+		} else if (residentInstance->thirst_level_ + change <= LEVEL_MIN) {
+			residentInstance->thirst_level_ = LEVEL_MIN;
 		} else {
 			residentInstance->thirst_level_ = residentInstance->thirst_level_ + change;
 		}
@@ -518,6 +529,8 @@ int Resident::changeLevel(float change, Level level) {
 	}  else if (level == FITNESS) {
 		if (residentInstance->fitness_level_ + change >= LEVEL_MAX) {
 			residentInstance->fitness_level_ = LEVEL_MAX;
+		} else if (residentInstance->fitness_level_ + change <= LEVEL_MIN) {
+			residentInstance->fitness_level_ = LEVEL_MIN;
 		} else {
 			residentInstance->fitness_level_ = residentInstance->fitness_level_ + change;
 		}
@@ -533,7 +546,9 @@ int Resident::changeLevel(float change, Level level) {
 	} else if (level == HEALTH) {
 		if (residentInstance->health_level_ + change >= LEVEL_MAX) {
 			residentInstance->health_level_ = LEVEL_MAX;
-		} else {
+		} else if (residentInstance->fitness_level_ + change <= LEVEL_MIN) {
+			residentInstance->fitness_level_ = LEVEL_MIN;
+		} else { 
 			residentInstance->health_level_ = residentInstance->health_level_ + change;
 		}
 		msg_pkg::Health healthMessage;
@@ -544,7 +559,6 @@ int Resident::changeLevel(float change, Level level) {
 		ROS_INFO("Health: %d", residentInstance->health_level_);
 		return residentInstance->health_level_;
 		#endif
-
 	}  
 }
 
