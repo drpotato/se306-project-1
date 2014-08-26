@@ -25,7 +25,6 @@ void EntertainmentRobot::doInitialSetup()
 
 void EntertainmentRobot::doExecuteLoop()
 {
-	EntertainmentRobot::requestLock("Robot");
 	if (returningHome){
 		//ROS_INFO("MOVEING TO HOME");
 

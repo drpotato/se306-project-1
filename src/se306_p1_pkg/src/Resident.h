@@ -6,6 +6,7 @@
 #include <msg_pkg/Time.h>
 #include <msg_pkg/RequestLock.h>
 #include <msg_pkg/LockStatus.h>
+#include <msg_pkg/Unlock.h>
 #include "ros/ros.h"
 #include <ctime>
 #include <time.h>
@@ -16,13 +17,14 @@ class Resident : public Human
 public:
   virtual bool isLocked();
   virtual void lock(ActorType type, string id);
-  virtual void unlock();
+  virtual void unlock(std::string robot_id);
   
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg);
   static void timeCallback(msg_pkg::Time msg);
   static void requestLockCallback(msg_pkg::RequestLock msg);
+  static void unlockCallback(msg_pkg::Unlock msg);
   
   bool lock_;
   ActorType lock_type_;
@@ -73,6 +75,8 @@ public:
   ros::Subscriber subscriberTime;
   // Subscriber for requesting a lock
   ros::Subscriber subscriberRequestLock;
+  // Subscriber for unlocking
+  ros::Subscriber subscriberUnlock;
 
 
   // Gets a new level with a maximum of 5 and minimum of 1

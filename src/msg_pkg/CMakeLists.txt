@@ -62,6 +62,7 @@ add_message_files(
   Socialness.msg
   Telephone.msg
   Time.msg
+  Unlock.msg
 )
 
 ## Generate services in the 'srv' folder

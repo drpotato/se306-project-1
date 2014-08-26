@@ -10,6 +10,7 @@
 #include <msg_pkg/Location.h>
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/RequestLock.h>
+#include <msg_pkg/Unlock.h>
 
 #include "Actor.h"
 #include "PathPlanner.h"
@@ -121,6 +122,7 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	publisherInteraction = nodeHandle->advertise<msg_pkg::Interaction>("interaction", 1000);
 
     publisherRequestLock = nodeHandle->advertise<msg_pkg::RequestLock>("requestLock", 1000);
+    publisherUnlock = nodeHandle->advertise<msg_pkg::Unlock>("unlock", 1000);
 
 	// Put custom init stuff here (or make a method and call it from here)
 	KeyboardListener::init();
@@ -199,6 +201,13 @@ void Actor::requestLock(std::string actor_name)
     request.robot_id = rosName;
     request.actor_name = actor_name;
     publisherRequestLock.publish(request);
+}
+// Give up the resident lock
+void Actor::unlock()
+{
+    msg_pkg::Unlock unlock;
+    unlock.robot_id = rosName;
+    publisherUnlock.publish(unlock);
 }
 
 // Process messages coming from Stage.
