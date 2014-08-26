@@ -10,6 +10,8 @@ ros::NodeHandle* PathPlanner::nodeHandle;
 // This class maintains a graph of navigation waypoint nodes, and calculates the shortest (fewest nodes) path between any two of them.
 
 PathPlanner::PathPlanner() {
+    ROS_INFO_STREAM("PATHPLANNER CONSTRUCTOR HAS BEEN CALLED");
+    
     subscriberLocation = nodeHandle->subscribe("location", 1000, PathPlanner::locationCallback);
     nodeHandle = new ros::NodeHandle();
 

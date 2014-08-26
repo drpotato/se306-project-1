@@ -206,22 +206,24 @@ bool Actor::gotoPosition(double x,double y) {
 bool Actor::goToNode(string nodeName) {
 
     ROS_INFO("current position %f %f", px, py);
-    ROS_INFO("Name of closest node is %s", PathPlanner::getClosestNode(this->px, this->py)->getName()->c_str());
+    string* closest = PathPlanner::getClosestNode(this->px, this->py)->getName();
+
+    ROS_INFO("Name of closest node is %s", closest->c_str());
 
     PathPlannerNode* goingToNode = PathPlanner::getNode(nodeName);
 
     vector <PathPlannerNode*> path = PathPlanner::pathToNode(this, goingToNode);
 
-    PathPlannerNode* nextNode = path[0];
+    int nextNode = 0;
 
-    if (!this->gotoPosition(nextNode->px, nextNode->py)) {
-        if (path.size() == 1) {
-            //We have arrived at the last node
-            this->velLinear = 0;
-            return true;
+    while (nextNode < path.size() + 1) {
+        if (!this->gotoPosition(path[nextNode]->px, path[nextNode]->py)) {
+            // We have arrived at the next node.
+            nextNode++;
         }
-    return false;
     }
+    this->velLinear = 0;
+    return false;
 }
 
 ros::NodeHandle &Actor::getNodeHandle() const
