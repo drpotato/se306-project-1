@@ -179,6 +179,7 @@ double Actor::faceDirection(double x,double y){
 }
 
 // Moves the Actor in a straight line towards the given x and y coordinates.
+// Returns true while moving/rotating, and false when it has arrived at its location and stopped.
 bool Actor::gotoPosition(double x,double y) {
     // Face the node
     if (faceDirection(x,y) < 0.1) {
@@ -201,28 +202,26 @@ bool Actor::gotoPosition(double x,double y) {
     }
 }
 
+// Returns false when it has arrived at the target node, and true when in transit.
 bool Actor::goToNode(string nodeName) {
 
-    ROS_INFO_STREAM("Going to node");
-    //TODO: REWIRITE THIS TO USE NEW SYSTEM ################################################################################################
-    // goingToNode = pathPlanner.getClosestNode(goingToX, goingToY);
+    ROS_INFO("current position %f %f", px, py);
+    ROS_INFO("Name of closest node is %s", PathPlanner::getClosestNode(this->px, this->py)->getName()->c_str());
 
-    // vector <PathPlannerNodepath = pathPlanner.pathToNode(this->activeNode, goingToNode);
+    PathPlannerNode* goingToNode = PathPlanner::getNode(nodeName);
 
-    // //Get the node
-    // if (targetNode >= path.size()){
-    //     //We have arrived at the last node
-    //     this->velLinear = 0;
+    vector <PathPlannerNode*> path = PathPlanner::pathToNode(this, goingToNode);
 
-    //     return true;
-    // }
-    // if (!this->gotoPosition(path[targetNode]->px,path[targetNode]->py)){
-    //     this->activeNode = path[targetNode];
-    //     targetNode++;
-    // }else{
-    //     ROS_DEBUG("current position %f %f",px,py);
-    // }
-    // return false;
+    PathPlannerNode* nextNode = path[0];
+
+    if (!this->gotoPosition(nextNode->px, nextNode->py)) {
+        if (path.size() == 1) {
+            //We have arrived at the last node
+            this->velLinear = 0;
+            return true;
+        }
+    return false;
+    }
 }
 
 ros::NodeHandle &Actor::getNodeHandle() const

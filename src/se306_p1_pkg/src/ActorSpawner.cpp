@@ -59,6 +59,13 @@ Actor *ActorSpawner::getActor() const
   return theActor;
 }
 
+void ActorSpawner::setupPathPlanner() {
+    // Call the constructor for the static class PathPlanner.
+  if (!this->pathPlanner) {
+    this->pathPlanner = new PathPlanner();
+  }
+}
+
 int main(int argc, char **argv)
 {
   // This needs to be run as ActorSpawner <robotID> <robotType> <x> <y> <angle>
@@ -66,6 +73,8 @@ int main(int argc, char **argv)
 
   ActorSpawner &spawner = ActorSpawner::getInstance();
   Actor *actor = spawner.getActor(argv[2]);
+
+  spawner.setupPathPlanner();
 
   unsigned int robotID;
   double px, py, theta;

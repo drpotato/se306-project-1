@@ -129,6 +129,8 @@ void PathPlanner::addActorNode(PathPlannerNode* p) {
 
 // Adds a PathPlannerNode to the graph.
 void PathPlanner::addNode(PathPlannerNode* p) {
+    //TODO: THIS IS NOT GETTING PRINTED. IS THE FUNCTION EVER ACTUALLY BEING CALLED?
+    ROS_INFO("Node added: %s", p->getName()->c_str());
     nodes.push_back(p);
 }
 
