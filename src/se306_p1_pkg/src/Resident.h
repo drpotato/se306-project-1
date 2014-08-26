@@ -3,10 +3,14 @@
 
 #include "Human.h"
 #include <msg_pkg/Interaction.h>
+#include <msg_pkg/Time.h>
+#include <msg_pkg/RequestLock.h>
+#include <msg_pkg/LockStatus.h>
+#include <msg_pkg/Unlock.h>
 #include "ros/ros.h"
 #include <ctime>
 #include <time.h>
-#include <msg_pkg/Time.h>
+#include "Actor.h"
 
 // Typedef for dbl-precision printing in randomEventLoop()
 typedef std::numeric_limits< double > dbl;
@@ -30,8 +34,8 @@ public:
 	};
 
   virtual bool isLocked();
-  virtual void lock();
-  virtual void unlock();
+  virtual void lock(ActorType type, string id);
+  virtual void unlock(std::string robot_id);
   
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
@@ -41,8 +45,12 @@ public:
   void randomEventLoop();
 
   static void timeCallback(msg_pkg::Time msg);
+  static void requestLockCallback(msg_pkg::RequestLock msg);
+  static void unlockCallback(msg_pkg::Unlock msg);
   
   bool lock_;
+  ActorType lock_type_;
+  string lock_id_;
 
 	// Level variables
 	int morale_level_;
@@ -67,7 +75,7 @@ public:
   bool m_dropped_;
   bool s_dropped_;
 
-  // Event hours - c++ inverts 24hr time for some reason? - maybe just my machine does this
+  // Event hours
   const static int WAKE_TIME = 7;
   const static int BREAKFAST_TIME = 8;
   const static int LUNCH_TIME = 13;
@@ -102,10 +110,17 @@ public:
 	ros::Publisher publisherThirst;
 	ros::Publisher publisherFitness;
 
+  // Publisher for lock status
+  ros::Publisher publisherLockStatus;
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;
   // Subscriber for time
   ros::Subscriber subscriberTime;
+  // Subscriber for requesting a lock
+  ros::Subscriber subscriberRequestLock;
+  // Subscriber for unlocking
+  ros::Subscriber subscriberUnlock;
+
 
   // Gets a new level with a maximum of MAX_LEVEL and minimum of 0
   static int getNewLevel(int amount, int oldValue);
@@ -118,6 +133,10 @@ public:
   void eat(int hour);
   void goToSleep();
   bool hasWoken();
+
+  // Enum conversions
+  ActorType getActorTypeFromString(string actorType);
+  string getStringFromActorType(ActorType actorType);
 };
 
 

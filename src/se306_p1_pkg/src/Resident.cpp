@@ -29,11 +29,13 @@
 #include <msg_pkg/Hunger.h>
 #include <msg_pkg/Thirst.h>
 #include <msg_pkg/Fitness.h>
+#include <msg_pkg/Time.h>
+#include <msg_pkg/RequestLock.h>
 #include "Actor.h"
 #include "ActorSpawner.h"
 #include <ctime>
 #include <time.h>
-#include <msg_pkg/Time.h>
+
 
 const float Resident::FREQUENCY = 10;
 const int Resident::WAIT_TIME = 50;
@@ -87,22 +89,14 @@ void Resident::doInitialSetup()
   publisherHealth = nodeHandle->advertise<msg_pkg::Health>("health", 1000);
   publisherFitness = nodeHandle->advertise<msg_pkg::Fitness>("fitness", 1000);
 
-
-
+  publisherLockStatus = nodeHandle->advertise<msg_pkg::LockStatus>("lockStatus", 1000);
 
   // Set up subscriptions.
   subscriberInteraction = nodeHandle->subscribe("interaction", 1000, Resident::interactionCallback);
   subscriberTime = nodeHandle->subscribe("time", 1000, Resident::timeCallback);
+  subscriberRequestLock = nodeHandle->subscribe("requestLock", 1000, Resident::requestLockCallback);
+  subscriberUnlock = nodeHandle->subscribe("unlock", 1000, Resident::unlockCallback);
 
-  // Reset delay counter
-  msAtPreviousLoop = 0;
-
-#ifndef USE_DEV_RANDOM
-  // Seed the PRNG
-  std::srand(std::time(NULL));
-#endif
-
-}
 
 void Resident::doExecuteLoop()
 {
@@ -170,30 +164,11 @@ void Resident::doExecuteLoop()
 	randomEventLoop();
 }
 
-/*
- * A robot should not be able to interact with the resident if the resident is currently locked.
- */
-bool Resident::isLocked()
-{
-  return lock_;
-}
 
-/*
- * Robots should only lock the resident if the resident is currently not locked
- */
-void Resident::lock()
-{
-  lock_ = true;
-}
 
-/*
- * Robots should unlock the resident after interation so that another robot may interact with the resident.
- */
-void Resident::unlock()
-{
-  lock_ = false;
-}
 
+
+// INTERACTION RELATED --------------------------------------------------------------------------------------------//
 /*
  * Upon receiving a message published to the 'interaction' topic, respond appropriately.
  */
@@ -249,6 +224,8 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 }
 
 
+// DAILY EVENTS -----------------------------------------------------------------------------------------------------//
+>>>>>>> develop
 void Resident::timeCallback(msg_pkg::Time msg)
 {
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
@@ -256,20 +233,20 @@ void Resident::timeCallback(msg_pkg::Time msg)
   // Check if its currently any event times
   if ((msg.hour == residentInstance->WAKE_TIME) && (!residentInstance->has_woken_))
   {
-    // WAKE THE FK UP
+    // WAKE UP
     ROS_INFO("It is %d:00. Wake up!", msg.hour);
     residentInstance->wakeUp();
     ROS_INFO("%s", residentInstance->has_gone_to_bed_ ? "Sleeping" : "Awake");
   }
   else if ( ((msg.hour == residentInstance->BREAKFAST_TIME) && (!residentInstance->has_eaten_breakfast_)) || ((msg.hour == residentInstance->LUNCH_TIME) && (!residentInstance->has_eaten_lunch_)) || ((msg.hour == residentInstance->DINNER_TIME) && (!residentInstance->has_eaten_dinner_)))
   {
-    // Here have some food
+    // Have some food
     ROS_INFO("It is %d:00 - time to eat!", msg.hour);
     residentInstance->eat(msg.hour);
   }
   else if ((msg.hour == residentInstance->SLEEP_TIME) && (!residentInstance->has_gone_to_bed_))
   {
-    // Go to sleep yo
+    // Go to sleep
     ROS_INFO("It is %d:00. Sleep time!", msg.hour);
     residentInstance->goToSleep();
     ROS_INFO("%s", residentInstance->has_gone_to_bed_ ? "Sleeping" : "Awake");
@@ -277,11 +254,14 @@ void Resident::timeCallback(msg_pkg::Time msg)
 }
 
 
+
 int Resident::getNewLevel(int amount, int oldLevel)
 {
   int newLevel = std::min(amount + oldLevel, 5); // Can only have a maximum level of 5
   return newLevel < 1 ? 1 : newLevel; // Should not be below 1
 }
+
+
 
 void Resident::stopRobotSpinning()
 {
@@ -668,7 +648,6 @@ void Resident::goToSleep()
   has_eaten_lunch_ = false;
   has_eaten_dinner_ = false;
   has_woken_ = false;
-
 	has_gone_to_bed_ = true;
 }
 
@@ -683,4 +662,139 @@ bool Resident::hasWoken()
     return true;
   }
   return false;
+}
+
+
+// LOCK RELATED -------------------------------------------------------------------------------------------------//
+void Resident::requestLockCallback(msg_pkg::RequestLock msg)
+{
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+
+  if (residentInstance->isLocked())
+  {
+
+    Resident::ActorType type = residentInstance->getActorTypeFromString(msg.actor_name);
+
+    if (type > residentInstance->lock_type_)
+    {
+      // The robot requesting the lock has a higher priority than the current one. You can have the lock!
+      
+      // REMOVE LOCK FROM CURRENT ROBOT
+      residentInstance->unlock(residentInstance->lock_id_);
+
+      // SET NEW LOCK
+      residentInstance->lock((residentInstance->getActorTypeFromString(msg.actor_name)), msg.robot_id);
+    }
+    else
+    {
+      // The robot with the lock has the same or higher priority than the one requesting it, you cannot have the lock
+      msg_pkg::LockStatus lockStatusMessage;
+      lockStatusMessage.robot_id = msg.robot_id;
+      lockStatusMessage.has_lock = false;
+      residentInstance->publisherLockStatus.publish(lockStatusMessage);
+    }
+  }
+  else
+  {
+    // No one has the lock, give it to the requester
+    residentInstance->lock(residentInstance->getActorTypeFromString(msg.actor_name), msg.robot_id);
+  }
+}
+
+/*
+ * Unlock the resident when receiving an unlock callback
+ */
+void Resident::unlockCallback(msg_pkg::Unlock msg)
+{
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+  residentInstance->unlock(msg.robot_id);
+}
+
+/*
+ * A robot should not be able to interact with the resident if the resident is currently locked.
+ */
+bool Resident::isLocked()
+{
+  return lock_;
+}
+
+/*
+ * Robots should only lock the resident if the resident is currently not locked
+ */
+void Resident::lock(ActorType type, string id)
+{
+  lock_ = true;
+  lock_type_ = type;
+  lock_id_ = id;
+
+  msg_pkg::LockStatus lockStatusMessage;
+
+  lockStatusMessage.robot_id = id;
+  lockStatusMessage.has_lock = true;
+
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+  residentInstance->publisherLockStatus.publish(lockStatusMessage);
+}
+
+/*
+ * Robots should unlock the resident after interation so that another robot may interact with the resident.
+ */
+void Resident::unlock(string robot_id)
+{
+  lock_ = false;
+  msg_pkg::LockStatus lockStatusMessage;
+  lockStatusMessage.robot_id = robot_id;
+  lockStatusMessage.has_lock = false;
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+  residentInstance->publisherLockStatus.publish(lockStatusMessage);
+}
+
+
+
+// HELPER FUNCTIONS ---------------------------------------------------------------------------//
+Resident::ActorType Resident::getActorTypeFromString(string actorType)
+{
+  if (actorType == "Doctor")
+  {
+    return Doctor;
+  }
+  else if (actorType == "Nurse")
+  {
+    return Nurse;
+  }
+  else if (actorType == "Caregiver")
+  {
+    return Caregiver;
+  }
+  else if (actorType == "Visitor")
+  {
+    return Visitor;
+  }
+  else if (actorType == "Robot")
+  {
+    return Robot;
+  }
+}
+string Resident::getStringFromActorType(ActorType actorType)
+{
+  if (actorType == Doctor)
+  {
+    return "Doctor";
+  }
+  else if (actorType == Nurse)
+  {
+    return "Nurse";
+  }
+  else if (actorType == Caregiver)
+  {
+    return "Caregiver";
+  }
+  else if (actorType == Visitor)
+  {
+    return "Visitor";
+  }
+  else if (actorType == Robot)
+  {
+    return "Robot";
+  }
 }
