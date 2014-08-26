@@ -12,6 +12,7 @@ void Doctor::doInitialSetup()
     srand(time(NULL));
     subscriberTelephone = nodeHandle->subscribe("telephone", 1000, Doctor::telephoneCallback);
     homeVisit = false;
+    travellingToResident = false;
     
     // Set up publishers.
  	publisherNurse1 = nodeHandle->advertise<msg_pkg::Nurse>("nurse1", 1000);
@@ -38,6 +39,7 @@ void Doctor::telephoneCallback(msg_pkg::Telephone msg)
 	if (msg.contact == "doctor" && !temp->homeVisit)
 	{
 		temp->homeVisit = true;
+		temp->travellingToResident = true;
 		temp->callNurses();
 	}
 
@@ -51,6 +53,24 @@ void Doctor::emergency()
 
 void Doctor::attendPatient()
 {
+	//
+	if (travellingToResident)
+	{
+		//This is here so that it will compile. Get rid of when uncommenting goToNode()
+		bool temp;
+		//bool temp = goToNode("RosNode0");
+		if (!temp)
+		{
+			travellingToResident = false;
+			treating = true;
+		}
+		return;
+	}
+
+	if (treating)
+	{
+		//Send message to patient to rise health stats
+	}
 
 }
 

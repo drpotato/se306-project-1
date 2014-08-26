@@ -22,6 +22,8 @@ protected:
   ros::Publisher publisherNurse2;
 
   bool homeVisit;
+  bool travellingToResident;
+  bool treating;
 
 
 
