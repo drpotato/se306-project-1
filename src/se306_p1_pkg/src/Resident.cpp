@@ -116,10 +116,11 @@ bool Resident::isLocked()
 /*
  * Robots should only lock the resident if the resident is currently not locked
  */
-void Resident::lock(ActorType type)
+void Resident::lock(ActorType type, string id)
 {
   lock_ = true;
   lock_type_ = type;
+  lock_id_ = id;
 }
 
 /*
@@ -128,7 +129,6 @@ void Resident::lock(ActorType type)
 void Resident::unlock()
 {
   lock_ = false;
-  lock_type_ = NULL;
 }
 
 /*
@@ -217,21 +217,56 @@ void Resident::requestLockCallback(msg_pkg::RequestLock msg)
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
   if (residentInstance->isLocked())
   {
-    ActorType type = residentInstance->getActorTypeFromString(msg.actor_name);
-    if ((!lock_type_) && (type > lock_type_))
+    Resident::ActorType type = residentInstance->getActorTypeFromString(msg.actor_name);
+    if (type > residentInstance->lock_type_)
     {
       // The robot requesting the lock has a higher priority than the current one. You can have the lock!
       
+      // REMOVE LOCK FROM CURRENT ROBOT
+      // Create a LockStatus message to publish
+      msg_pkg::LockStatus lockStatusMessage;
+      
+      // Set the values
+      lockStatusMessage.robot_id = residentInstance->lock_id_;
+      lockStatusMessage.has_lock = false;
+
+      // Publish the message
+      residentInstance->publisherLockStatus.publish(lockStatusMessage);
+
+      // SET NEW LOCK
+      // Create a LockStatus message to publish
+      msg_pkg::LockStatus lockStatusMessage2;
+
+      // Set the values
+      lockStatusMessage2.robot_id = msg.robot_id;
+      lockStatusMessage2.has_lock = true;
+
+      // Set local values
+      residentInstance->lock((residentInstance->getActorTypeFromString(msg.actor_name)), msg.robot_id);
+
+      // Publish the message
+      residentInstance->publisherLockStatus.publish(lockStatusMessage2);
     }
     else
     {
       // The robot with the lock has the same or higher priority than the one requesting it, you cannot have the lock m8
+      msg_pkg::LockStatus lockStatusMessage;
 
+      lockStatusMessage.robot_id = msg.robot_id;
+      lockStatusMessage.has_lock = false;
+
+      residentInstance->publisherLockStatus.publish(lockStatusMessage);
     }
   }
   else
   {
-    residentInstance->lock(residentInstance->getActorTypeFromString(msg.actor_name));
+    residentInstance->lock(residentInstance->getActorTypeFromString(msg.actor_name), msg.robot_id);
+    msg_pkg::LockStatus lockStatusMessage;
+
+    lockStatusMessage.robot_id = msg.robot_id;
+    lockStatusMessage.has_lock = true;
+
+    residentInstance->publisherLockStatus.publish(lockStatusMessage);
   }
 }
 

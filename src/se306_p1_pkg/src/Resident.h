@@ -9,12 +9,13 @@
 #include "ros/ros.h"
 #include <ctime>
 #include <time.h>
+#include "Actor.h"
 
 class Resident : public Human
 {
 public:
   virtual bool isLocked();
-  virtual void lock(ActorType type);
+  virtual void lock(ActorType type, string id);
   virtual void unlock();
   
   virtual void doInitialSetup();
@@ -25,6 +26,7 @@ public:
   
   bool lock_;
   ActorType lock_type_;
+  string lock_id_;
 
   // Demo paramters to gradually reduce levels
   int morale_count_;

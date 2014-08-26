@@ -6,4 +6,5 @@
 # Visitor (friend and relative)
 # Robot (any robot assistant)
 
+string robot_id
 string actor_name

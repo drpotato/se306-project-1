@@ -70,6 +70,10 @@ protected:
 	ros::Subscriber subscriberStageLaserScan;
 	ros::Subscriber subscriberLocation;
 
+	ros::Publisher publisherRequestLock;
+	ros::Subscriber subscriberLockStatus;
+	void requestLock(std::string actor_name);
+
 	std::string rosName;
 	std::string stageName;
 
