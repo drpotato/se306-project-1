@@ -26,62 +26,62 @@ void CookingRobot::doInitialSetup()
 
 void CookingRobot::doExecuteLoop()
 {
-	if (returningHome){
-		//ROS_INFO("MOVEING TO HOME");
+	// if (returningHome){
+	// 	//ROS_INFO("MOVEING TO HOME");
 
-		if (returningHome_first){
-			returningHome_first = false;
-			//TODO: Matt fix this shit (Target node reset upon reach destination)
-			//targetNode = 0;
-		}
+	// 	if (returningHome_first){
+	// 		returningHome_first = false;
+	// 		//TODO: Matt fix this shit (Target node reset upon reach destination)
+	// 		//targetNode = 0;
+	// 	}
 
-        return;
+ //        return;
 
-	}
+	// }
 
-	if (!entertaining)
-	{
-		if (!checkCookingLevel())
-		{
-			if (first_call)
-			{
-				//this->activeNode = &node5;
-				this->startMovingToResident();
-				first_call = false;
-			}
-	    	if (!(this->movingToResident) )
-	    	{
-	    		//CookingRobot::doResponse("entertaining");
-	    		ROS_INFO("CHANGED TO ENTERTAINING");
-	    		entertaining=true;
-	    		first = false;
-	    	}
-		}
-	}
-	else
-	{
-		if (moraleLevel == 5)
-		{
-			//Add do last desponse call that kurt implimented
-			CookingRobot::stopResponse("entertaining");
-			entertaining = false;
-			returningHome = true;
+	// if (!entertaining)
+	// {
+	// 	if (!checkCookingLevel())
+	// 	{
+	// 		if (first_call)
+	// 		{
+	// 			//this->activeNode = &node5;
+	// 			//this->startMovingToResident();
+	// 			first_call = false;
+	// 		}
+	//     	if (!(this->movingToResident) )
+	//     	{
+	//     		//CookingRobot::doResponse("entertaining");
+	//     		ROS_INFO("CHANGED TO ENTERTAINING");
+	//     		entertaining=true;
+	//     		first = false;
+	//     	}
+	// 	}
+	// }
+	// else
+	// {
+	// 	if (moraleLevel == 5)
+	// 	{
+	// 		//Add do last desponse call that kurt implimented
+	// 		CookingRobot::stopResponse("entertaining");
+	// 		entertaining = false;
+	// 		returningHome = true;
 
-		}
-		else
-		{
+	// 	}
+	// 	else
+	// 	{
 
-			if (y == 40)
-			{
-				CookingRobot::doResponse("entertaining");
-				y=0;
-			}
-			else
-			{
-				y++;
-			}
-		}
-	}
+	// 		if (y == 40)
+	// 		{
+	// 			CookingRobot::doResponse("entertaining");
+	// 			y=0;
+	// 		}
+	// 		else
+	// 		{
+	// 			y++;
+	// 		}
+	// 	}
+	// }
 }
 
 // TODO: SHOULD BE COOKING/FOOD ########################################################################################################################
