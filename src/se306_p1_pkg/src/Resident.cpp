@@ -5,6 +5,7 @@
 #include <msg_pkg/Morale.h>
 #include <msg_pkg/Time.h>
 #include <msg_pkg/RequestLock.h>
+#include <msg_pkg/Telephone.h>
 #include "Actor.h"
 #include "ActorSpawner.h"
 #include <ctime>
@@ -43,6 +44,7 @@ void Resident::doInitialSetup()
   publisherSocialness = nodeHandle->advertise<msg_pkg::Socialness>("socialness", 1000);
   publisherMorale = nodeHandle->advertise<msg_pkg::Morale>("morale", 1000);
   publisherLockStatus = nodeHandle->advertise<msg_pkg::LockStatus>("lockStatus", 1000);
+  publisherTelephone = nodeHandle->advertise<msg_pkg::Telephone>("telephone", 1000);
 
   // Set up subscriptions.
   subscriberInteraction = nodeHandle->subscribe("interaction", 1000, Resident::interactionCallback);
@@ -106,8 +108,16 @@ void Resident::doExecuteLoop()
   //###################################################################################################################################################
 }
 
-
-
+// PHONE CALLING -------------------------------------------------------------------------------------------------//
+/*
+ * personType should be one of the following: doctor, relative, friend (are there more???) (note the lowercase)
+ */ 
+void Resident::call(string personType)
+{
+  msg_pkg::Telephone phonecall;
+  phonecall.contact = personType;
+  publisherTelephone.publish(phonecall);
+}
 
 
 // INTERACTION RELATED --------------------------------------------------------------------------------------------//
@@ -127,40 +137,40 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   {
     // Get new level
     int newLevel = getNewLevel(amount, residentInstance->socialness_level_);
-  // Update the residents socialness level
-  residentInstance->socialness_level_ = newLevel;
-  //Create a socialness message to publish
-  msg_pkg::Socialness socialnessMessage;
-  //Assign current socialness level to the message
-  socialnessMessage.level = newLevel;
+    // Update the residents socialness level
+    residentInstance->socialness_level_ = newLevel;
+    //Create a socialness message to publish
+    msg_pkg::Socialness socialnessMessage;
+    //Assign current socialness level to the message
+    socialnessMessage.level = newLevel;
 
-  if (newLevel == 5)
-  {
-    residentInstance->stopRobotSpinning();
-  }
+    if (newLevel == 5)
+    {
+      residentInstance->stopRobotSpinning();
+    }
 
-  //Publish the message
-  residentInstance->publisherSocialness.publish(socialnessMessage);
+    //Publish the message
+    residentInstance->publisherSocialness.publish(socialnessMessage);
   } 
   else if (attribute == "entertaining")
   {
-  // Get new level
-  int newLevel = getNewLevel(amount, residentInstance->morale_level_);
-  // Update the residents socialness level
-  residentInstance->morale_level_ = newLevel;
-  //Create a socialness message to publish
-  msg_pkg::Morale moraleMessage;
-  //Assign current socialness level to the message
-  moraleMessage.level = newLevel;
+    // Get new level
+    int newLevel = getNewLevel(amount, residentInstance->morale_level_);
+    // Update the residents socialness level
+    residentInstance->morale_level_ = newLevel;
+    //Create a socialness message to publish
+    msg_pkg::Morale moraleMessage;
+    //Assign current socialness level to the message
+    moraleMessage.level = newLevel;
 
-  if (newLevel == 5)
-  {
-    residentInstance->stopRobotSpinning();
-    residentInstance->m_replenished_ = true;
-  }
+    if (newLevel == 5)
+    {
+      residentInstance->stopRobotSpinning();
+      residentInstance->m_replenished_ = true;
+    }
 
-  //Publish the message
-  residentInstance->publisherMorale.publish(moraleMessage);
+    //Publish the message
+    residentInstance->publisherMorale.publish(moraleMessage);
   }
   // TODO: put others in when implemented
 }
