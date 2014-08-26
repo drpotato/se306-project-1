@@ -26,7 +26,6 @@ protected:
 	int y;
 	int x;
 	bool first;
-	bool first_call;
 	bool returningHome;
 	bool returningHome_first;
 	bool waiting_to_entertain;

@@ -19,7 +19,6 @@ void EntertainmentRobot::doInitialSetup()
 	y = 0;
 	x = 0;
 	first = true;
-	first_call = true;
 	returningHome = false;
 	returningHome_first = true;
 	waiting_to_entertain = false;
