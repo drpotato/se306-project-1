@@ -24,6 +24,10 @@ void Relative::doInitialSetup()
 
 void Relative::doExecuteLoop()
 {
+    if (RCmode == "relative1")
+    {
+        Relative::controlRobot();
+    }
     if (returningHome){
         //ROS_INFO("MOVING TO HOME");
 

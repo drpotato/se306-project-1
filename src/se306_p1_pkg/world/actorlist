@@ -4,12 +4,11 @@
 # Column 3 = Rotation (degrees)
 # Column 4 = Colour
 Resident	-5	3	0	red
-R1	-6	-3	0	yellow
 #Resident -3	4	0	green
 EntertainmentRobot -2.5 -3 0 wheat3
 Relative 2.75 5 0 pink
-RCActor 2.75 3 0 grey
 Friend 2.75 6 0 purple
+#RCActor -6 -3 0 grey
 Clock 6 -4.6 0 grey30
 MedicationRobot -7.3 0 0 grey30
 CompanionRobot -6.8 0 0 grey30

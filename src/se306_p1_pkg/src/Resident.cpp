@@ -55,11 +55,16 @@ void Resident::doInitialSetup()
 
 void Resident::doExecuteLoop()
 {    
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+  if (residentInstance->RCmode == "resident")
+  {
+    residentInstance->controlRobot();
+  }
 
   //TODO: REMOVE THIS WHEN RANDOMNESS AND DAY LOGIC IS IMPLEMENTED##################################################################################
   if (morale_count_ >= WAIT_TIME && !m_dropped_)
   {
-    Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+    
     if(residentInstance->morale_level_ <= 1)
     {
       // don't drop the value any more, it's being tended to or has been already
