@@ -109,6 +109,9 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	pxInitial = px;
 	pyInitial = py;
 	thetaInitial = theta;
+    haveLock = false;
+    deniedLock = false;
+    otherUnlocked = false;
 
 	// ros::init needs L-values, so we can't just directly pass (0, ...)
 	int fakeArgC = 0;
@@ -124,10 +127,16 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
     publisherRequestLock = nodeHandle->advertise<msg_pkg::RequestLock>("requestLock", 1000);
     publisherUnlock = nodeHandle->advertise<msg_pkg::Unlock>("unlock", 1000);
 
+    subscriberLockStatus = nodeHandle->subscribe("lockStatus", 1000, Actor::lockStatusCallback);
+    subscriberUnlock = nodeHandle->subscribe("unlock", 1000, Actor::unlockCallback);
+
 	// Put custom init stuff here (or make a method and call it from here)
 	KeyboardListener::init();
 	initialSetupStage();
 	doInitialSetup();
+
+    RCmode = "";
+    
 }
 
 bool Actor::executeLoop()
@@ -138,6 +147,8 @@ bool Actor::executeLoop()
 		// Put custom loop stuff here (or make a method and call it from here)
 
 		publishLocation();
+
+        checkKeyboardPress();
 
         moveToResident();
 
@@ -180,6 +191,41 @@ void Actor::locationCallback(msg_pkg::Location msg)
 
 }
 
+void Actor::lockStatusCallback(msg_pkg::LockStatus msg)
+{
+    Actor *actorPtr = ActorSpawner::getInstance().getActor();
+    if (0 == (strcmp(msg.robot_id.c_str(), actorPtr->rosName.c_str())) && (msg.has_lock == true))
+    {
+        if (msg.has_lock)
+        {
+            actorPtr->deniedLock = false;
+            actorPtr->haveLock=true;
+            ROS_INFO("I HAVE THE LOCK %s",actorPtr->rosName.c_str() );
+        } else
+        {
+            actorPtr->haveLock = false;
+            actorPtr->deniedLock = true;
+            ROS_INFO("I WAS DENIED THE LOCK %s",actorPtr->rosName.c_str() );
+        }
+    }
+
+}
+
+void Actor::unlockCallback(msg_pkg::Unlock msg)
+{
+    Actor *actorPtr = ActorSpawner::getInstance().getActor();
+    if (0 == (strcmp(msg.robot_id.c_str(), actorPtr->rosName.c_str())))
+    {
+        actorPtr->haveLock=false;
+        actorPtr->deniedLock = false;
+        ROS_INFO("I LOST THE LOCK %s", actorPtr->rosName.c_str());
+    } else if (actorPtr->deniedLock)
+    {
+        actorPtr->otherUnlocked = true;
+    }
+
+}
+
 // Publish a message containing own x and y coordinates to the 'location' topic.
 void Actor::publishLocation()
 {
@@ -192,6 +238,147 @@ void Actor::publishLocation()
 	locationMessage.id = rosName;
 	// Publish the message.
 	publisherLocation.publish(locationMessage);
+}
+
+// Check to see if any keys are pressed and set the mode appropriately
+void Actor::checkKeyboardPress()
+{
+    KeyboardListener &keyboardListener = KeyboardListener::getInstance();
+    if (keyboardListener.isKeyTapped(ups::KEY_D_CODE))
+    {
+        //doctor
+        toggleMode("doctor");
+        ROS_INFO("hello doctor");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_N_CODE))
+    {
+        //nurse1
+        toggleMode("nurse1");
+    }
+    else if ((keyboardListener.isKeyTapped(ups::KEY_N_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
+    {
+        //nurse2
+        toggleMode("nurse2");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_F_CODE))
+    {
+        //friend1
+        toggleMode("friend1");
+    }
+    else if ((keyboardListener.isKeyTapped(ups::KEY_F_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
+    {
+        //friend2
+        toggleMode("friend2");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_R_CODE))
+    {
+        //relative1
+        toggleMode("relative1");
+    }
+    else if ((keyboardListener.isKeyTapped(ups::KEY_R_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
+    {
+        //relative2
+        toggleMode("relative2");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_C_CODE))
+    {
+        //caregiver1
+        toggleMode("caregiver1");
+    }
+    else if ((keyboardListener.isKeyTapped(ups::KEY_C_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
+    {
+        //caregiver2
+        toggleMode("caregiver2");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_M_CODE))
+    {
+        //medicationRobot
+        toggleMode("medicationRobot");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_E_CODE))
+    {
+        //entertainmentRobot
+        toggleMode("entertainmentRobot");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_T_CODE))
+    {
+        //companionRobot
+        toggleMode("companionRobot");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_B_CODE))
+    {
+        //cookingRobot
+        toggleMode("cookingRobot");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_ENTER_CODE))
+    {
+        //resident
+        toggleMode("resident");
+    }
+}
+
+// Checks if there is any mode currently set
+bool Actor::modeSet()
+{
+    if (RCmode == "")
+    {
+        return false;
+    }
+    return true;
+}
+
+// Checks whether we are in a certain mode or not
+bool Actor::inMode(string mode)
+{
+    if (RCmode == mode)
+    {
+        return true;
+    }
+    return false;
+}
+
+// Turns a mode on or off
+void Actor::toggleMode(string mode)
+{
+    // If we are in this mode, turn the mode off
+    if (inMode(mode)) 
+    {
+        RCmode = "";
+    }
+    // If there is no current mode, we are free to put it in this mode
+    else if (!modeSet())
+    {
+        RCmode = mode;
+    }
+    // Cannot set the mode on or off if it is currently in another mode
+}
+
+// Only call this method from the subclass IF it is in your corresponding mode (RCmode)
+void Actor::controlRobot()
+{
+    KeyboardListener &keyboardListener = KeyboardListener::getInstance();
+    velRotational = 0.0;
+    velLinear = 0.0;
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_UP_CODE))
+    {
+        velLinear += 1.0;
+    }
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_DOWN_CODE))
+    {
+        velLinear -= 1.0;
+    }
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_LEFT_CODE))
+    {
+        velRotational += 1.0;
+    }
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_RIGHT_CODE))
+    {
+        velRotational -= 1.0;
+    }
 }
 
 // Request the lock for the resident

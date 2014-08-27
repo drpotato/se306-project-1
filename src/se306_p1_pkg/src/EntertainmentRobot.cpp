@@ -15,7 +15,7 @@ void EntertainmentRobot::doInitialSetup()
 	entertaining = false;
 	residentName = "RobotNode2";
 	subscriberMorale = nodeHandle->subscribe("morale", 1000, EntertainmentRobot::moraleCallback);
-	subscriberLockStatus = nodeHandle->subscribe("lockStatus", 1000, EntertainmentRobot::lockStatusCallback);
+	//subscriberLockStatus = nodeHandle->subscribe("lockStatus", 1000, EntertainmentRobot::lockStatusCallback);
 	y = 0;
 	x = 0;
 	first = true;
@@ -27,6 +27,11 @@ void EntertainmentRobot::doInitialSetup()
 
 void EntertainmentRobot::doExecuteLoop()
 {
+	
+	if (RCmode == "entertainmentRobot")
+  	{
+    	EntertainmentRobot::controlRobot();
+  	}
 	if (returningHome){
 		//ROS_INFO("MOVING TO HOME");
 
@@ -49,8 +54,10 @@ void EntertainmentRobot::doExecuteLoop()
 	    EntertainmentRobot::requestLock("Robot");
 	}
 	// If it has the lock:
-	else if (this->has_lock)
+	else if (haveLock)
 	{
+		waiting_to_entertain = false;
+		entertaining=true;
 		// If it has reached the maximum level
 		if (moraleLevel == 5)
 		{
@@ -75,25 +82,19 @@ void EntertainmentRobot::doExecuteLoop()
 			}	
 		}
 	}
+	else if (deniedLock)
+	{
+		if (otherUnlocked)
+		{
+			EntertainmentRobot::requestLock("Robot");
+			//Set back to false so only requests again once
+			deniedLock = false;
+			otherUnlocked = false;
+		}
+	}
 }
 
-void EntertainmentRobot::lockStatusCallback(msg_pkg::LockStatus msg)
-{
-	EntertainmentRobot* temp = dynamic_cast<EntertainmentRobot*>( ActorSpawner::getInstance().getActor());
-	if ((msg.has_lock) && (msg.robot_id == temp->rosName))
-	{
-		ROS_INFO("EntertainmentRobot has the lock");
-		ROS_INFO("CHANGED TO ENTERTAINING");
-		temp->waiting_to_entertain = false;
-		temp->entertaining=true;
-		temp->has_lock = true;
-	}
-	else if ((!(msg.has_lock)) && (msg.robot_id == temp->rosName))
-	{
-		ROS_INFO("EntertainmentRobot does not have the lock");
-		temp->has_lock = false;
-	}
-}
+
 
 
 // Upon receiving a message published to the 'entertainedness' topic, respond appropriately.

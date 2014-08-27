@@ -26,6 +26,10 @@ void CookingRobot::doInitialSetup()
 
 void CookingRobot::doExecuteLoop()
 {
+	if (RCmode == "cookingRobot")
+  	{
+    	CookingRobot::controlRobot();
+  	}
 	if (returningHome){
 		//ROS_INFO("MOVEING TO HOME");
 

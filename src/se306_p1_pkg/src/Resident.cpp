@@ -110,69 +110,64 @@ void Resident::doInitialSetup()
 }
 
 void Resident::doExecuteLoop()
-{
-	//PathPlannerNode *target = this->pathPlanner.getNode(&node4Name);
-  //vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-  //this->goToNode(path);
+{  
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+  if (residentInstance->RCmode == "resident")
+  {
+    residentInstance->controlRobot();
+  }
 
-	//TODO: REMOVE THIS WHEN RANDOMNESS AND DAY LOGIC IS IMPLEMENTED
+  //TODO: REMOVE THIS WHEN RANDOMNESS AND DAY LOGIC IS IMPLEMENTED##################################################################################
+  if (morale_count_ >= WAIT_TIME && !m_dropped_)
+  {
+    
+    if(residentInstance->morale_level_ <= 1)
+    {
+      // don't drop the value any more, it's being tended to or has been already
+      m_dropped_ = true;
+    }
+    else 
+    {
+      // Reduce the level every 1000 counts
+      residentInstance->morale_level_--;
+      // Create a socialness message to publish
+      msg_pkg::Morale moraleMessage;
+      // Assign current socialness level to the message
+      moraleMessage.level = residentInstance->morale_level_;
+      // Publish the message
+      residentInstance->publisherMorale.publish(moraleMessage);
+    }
+    morale_count_ = 0;
+  }
+  else if (morale_count_ < WAIT_TIME && !m_dropped_) {
+    morale_count_++;
+  }
 
-	if (morale_count_ >= WAIT_TIME && !m_dropped_)
-	{
-		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
-		if(residentInstance->morale_level_ <= 1)
-		{
-			// don't drop the value any more, it's being tended to or has been already
-			m_dropped_ = true;
-		}
-		else 
-		{
-			// Reduce the level every 1000 counts
-			residentInstance->morale_level_--;
-			// Create a socialness message to publish
-			msg_pkg::Morale moraleMessage;
-			// Assign current socialness level to the message
-			moraleMessage.level = residentInstance->morale_level_;
-			// Publish the message
-			residentInstance->publisherMorale.publish(moraleMessage);
-		}
-		morale_count_ = 0;
-	}
-	else if (morale_count_ < WAIT_TIME && !m_dropped_) {
-		morale_count_++;
-	}
+  else if (m_replenished_ && (socialness_count_ >= WAIT_TIME) && !s_dropped_) {
+    Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
 
-	else if (m_replenished_ && (socialness_count_ >= WAIT_TIME) && !s_dropped_) {
-		Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
-		if(residentInstance->socialness_level_ <= 1) {
-			// don't drop the value any more, it's being tended to or has been already
-			s_dropped_ = true;
-		}
-		else {
-			// reduce the level every 1000 counts
-			residentInstance->socialness_level_--;
-			//Create a socialness message to publish
-			msg_pkg::Socialness socialnessMessage;
-			//Assign current socialness level to the message
-			socialnessMessage.level = residentInstance->socialness_level_;
-			//Publish the message
-			residentInstance->publisherSocialness.publish(socialnessMessage);
-		}
-		socialness_count_ = 0;
-	}
-	else if (m_replenished_ && (socialness_count_ < WAIT_TIME) && !s_dropped_)
-	{
-		socialness_count_++;
-	}
+    if(residentInstance->socialness_level_ <= 1) {
+      // don't drop the value any more, it's being tended to or has been already
+      s_dropped_ = true;
+    }
 
-// _REMOVE (when randomness implementation complete) 
-////////////////////////////////////////////////////
-
-	// Call random event for each iteration of the execution
-	// loop (not sure if this should happen at start or end
-	// of each loop; does this even matter?)
-
-	randomEventLoop();
+    else {
+      // reduce the level every 1000 counts
+      residentInstance->socialness_level_--;
+      //Create a socialness message to publish
+      msg_pkg::Socialness socialnessMessage;
+      //Assign current socialness level to the message
+      socialnessMessage.level = residentInstance->socialness_level_;
+      //Publish the message
+      residentInstance->publisherSocialness.publish(socialnessMessage);
+    }
+    socialness_count_ = 0;
+  }
+  else if (m_replenished_ && (socialness_count_ < WAIT_TIME) && !s_dropped_)
+  {
+    socialness_count_++;
+  }
+  //###################################################################################################################################################
 }
 
 // PHONE CALLING -------------------------------------------------------------------------------------------------//
