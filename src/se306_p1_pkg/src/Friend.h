@@ -32,6 +32,8 @@ protected:
   ros::Subscriber subscriberLockStatus;
   ros::Subscriber subscribeTelephone;
 
+  string getActorName();
+
   int8_t socialnessLevel;
   bool socialising;
 
