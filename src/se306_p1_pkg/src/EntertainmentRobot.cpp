@@ -79,23 +79,7 @@ void EntertainmentRobot::doExecuteLoop()
 	}
 }
 
-// void EntertainmentRobot::lockStatusCallback(msg_pkg::LockStatus msg)
-// {
-// 	EntertainmentRobot* temp = dynamic_cast<EntertainmentRobot*>( ActorSpawner::getInstance().getActor());
-// 	if ((msg.has_lock) && (msg.robot_id == temp->rosName))
-// 	{
-// 		ROS_INFO("EntertainmentRobot has the lock");
-// 		ROS_INFO("CHANGED TO ENTERTAINING");
-// 		temp->waiting_to_entertain = false;
-// 		temp->entertaining=true;
-// 		temp->has_lock = true;
-// 	}
-// 	else if ((!(msg.has_lock)) && (msg.robot_id == temp->rosName))
-// 	{
-// 		ROS_INFO("EntertainmentRobot does not have the lock");
-// 		temp->has_lock = false;
-// 	}
-// }
+
 
 
 // Upon receiving a message published to the 'entertainedness' topic, respond appropriately.
