@@ -20,6 +20,7 @@
 
 // Debug lines for changeLevel()
 #define DEBUG_CHANGE_LEVEL
+//#define NON_RANDOM // For testing (produces same sequence of 'random' numbers)
 
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/Socialness.h>
@@ -48,7 +49,15 @@ const float Resident::LEVEL_MIN = 0;
 // When they reach a certain level, messages are published to his assistant Robots and the VisitorController, requesting various services.
 void Resident::doInitialSetup()
 {
-
+	
+	// /dev/urandom
+	urandom = fopen("/dev/urandom", "r");
+	fread(&seed, sizeof (seed), 1, urandom);
+	#ifdef NON_RANDOM
+	srand(0);
+	#else
+	srand(seed);
+	#endif
 
   velLinear = 0;
   velRotational = 0.0;
@@ -367,12 +376,22 @@ void Resident::randomEventLoop()
 
 	// Health drops in two ways, either almost slowly and almost 
 	// completely linearly or in a random, drastic fashion.
-	// On average, it should drop by 1 every 2.5 seconds
+	// On average, it should drop by 1 every 2.5 seconds. 
+	// As well as this, to simulate an 'emergency', the resident 
+	// can face a sudden drop in health, which is rare (every 6 minutes
+	// on average)
 	randNum = getRandom(float(0), float(2.5 * FREQUENCY));
 	if (randNum > ((2.5 * FREQUENCY) - 1)) {
 		changeLevel(-1, HEALTH);
 		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("EVENT: slow, near-linear hunger drop here (rand = %.3f)\n", randNum);
+		ROS_INFO("EVENT: health drop -1 (rand = %.3f)\n", randNum);
+		#endif
+	}
+	randNum = getRandom(float(0), float(360 * FREQUENCY));
+	if (randNum > ((360 * FREQUENCY) - 1)) {
+		changeLevel(-95, HEALTH);
+		#ifdef DEBUG_CHANGE_LEVEL
+		ROS_INFO("EVENT: EMERGENCY= health drop -95 (rand = %.3f)\n", randNum);
 		#endif
 	}	
 
@@ -414,7 +433,7 @@ void Resident::randomEventLoop()
 	if (randNum > ((4 * FREQUENCY) - 1)) {
 		changeLevel(-1, FITNESS);
 		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("EVENT: thirst drop -1 (rand = %.3f)\n", randNum);
+		ROS_INFO("EVENT: fitness drop -1 (rand = %.3f)\n", randNum);
 		#endif
 	}
 

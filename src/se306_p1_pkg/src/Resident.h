@@ -44,6 +44,9 @@ public:
   int changeLevel(float, Level); 
   void randomEventLoop();
 
+	unsigned int seed;
+	FILE *urandom;
+
   static void timeCallback(msg_pkg::Time msg);
   static void requestLockCallback(msg_pkg::RequestLock msg);
   static void unlockCallback(msg_pkg::Unlock msg);
