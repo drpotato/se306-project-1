@@ -4,57 +4,120 @@ define Nurse position
 	# Left Leg
 	model
 	(
-		size [0.08 0.08 0.15]
-		pose [0.0 -0.13 0.0 0.0]
-		color "grey45"
+		size [0.12 0.12 0.348]
+		pose [0.0 -0.1 0.0 0.0]
+		color "PeachPuff3"
 	)
 
 	# Right leg
 	model
 	(
-		size [0.08 0.08 0.15]
-		pose [0.0 0.13 0.0 0.0]
-		color "grey45"
+		size [0.12 0.12 0.348]
+		pose [0.0 0.1 0.0 0.0]
+		color "PeachPuff3"
 	)
 
 	
 	# Torso
 	model
 	(
-		size [0.3 0.4 0.7]
-		pose [0.0 0.0 0.15 0.0]
-		color "black"
+		size [0.25 0.4 0.45]
+		pose [0.0 0.0 0.348 0.0] 
+		color "PaleTurquoise"
 	)
-
-	# Left arm
 	model
 	(
-		size [0.08 0.08 0.3]
-		pose [0.0 0.24 0.4 0.0]
-		color "grey45"
+		size [0.25 0.4 0.05]
+		pose [0.0 0.0 0.798 0.0] 
+		color "grey30"
 	)
-
-	# Right arm
 	model
 	(
-		size [0.08 0.08 0.3]
-		pose [0.0 -0.24 0.4 0.0]
-		color "grey45"
+		size [0.25 0.4 0.5]
+		pose [0.0 0.0 0.848 0.0] 
+		color "PaleTurquoise"
+	)
+
+	# Health symbol
+	# Horizontal
+	model
+	(
+		size [0.01 0.2 0.05]
+		pose [0.15 0.0 1.1 0.0]
+		color "grey30"
+	)
+	# Vertical top
+	model
+	(
+		size [0.01 0.05 0.08]
+		pose [0.15 0.0 1.15 0.0]
+		color "grey30"
+	)
+	# Vertical bottom
+	model
+	(
+		size [0.01 0.05 0.08]
+		pose [0.15 0.0 1.02 0.0]
+		color "grey30"
 	)
 
 	# Head
 	model
 	(
-		size [0.25 0.25 0.25]
-		pose [0.0 0.0 0.85 0.0]
-		color "LemonChiffon"
+		size [0.25 0.18 0.03] 
+		pose [0.0 0.0 1.348 0.0] 
+		color "PeachPuff3"
+	)
+	model
+	(
+		size [0.25 0.21 0.05] 
+		pose [0.0 0.0 1.378 0.0] 
+		color "PeachPuff3"
+	)	
+	model
+	(
+		size [0.25 0.24 0.05] 
+		pose [0.0 0.0 1.428 0.0] 
+		color "PeachPuff3"
+	)
+	model
+	(
+		size [0.25 0.27 0.05] 
+		pose [0.0 0.0 1.478 0.0] 
+		color "PeachPuff3"
+	)
+	model
+	(
+		size [0.25 0.24 0.05] 
+		pose [0.0 0.0 1.528 0.0] 
+		color "PeachPuff3"
+	)
+	model
+	(
+		size [0.25 0.21 0.05] 
+		pose [0.0 0.0 1.578 0.0] 
+		color "PeachPuff3"
+	)
+
+	# Hat
+	model
+	(
+		size [0.25 0.21 0.1] 
+		pose [0.0 0.0 1.628 0.0] 
+		color "PaleTurquoise"
+	)
+	model
+	(
+		size [0.1 0.1 0.1] 
+		pose [-0.175 0.0 1.6 0.0] 
+		color "PaleTurquoise"
 	)
 
 	# Left eye
 	model
 	(
 		size [0.01 0.05 0.05]
-		pose [0.125 0.0625 0.93 0.0]
+		pose [0.125 0.0625 1.528 0.0]
 		color "grey30"
 	)
 
@@ -62,75 +125,40 @@ define Nurse position
 	model
 	(
 		size [0.01 0.05 0.05]
-		pose [0.125 -0.0625 0.93 0.0]
+		pose [0.125 -0.0625 1.528 0.0]
 		color "grey30"
 	)
 
-	# Headband thing
-	# Middle thingy
+	# Left sleeve
 	model
 	(
-		size [0.01 0.06 0.06]
-		pose [0.125 0.0 1.0 0.0]
-		color "red3"
-	)
-	# Front left
-	model
-	(
-		size [0.01 0.09 0.05]
-		pose [0.125 0.0775 1.0 0.0]
-		color "white"
-	)
-	# Front right
-	model
-	(
-		size [0.01 0.09 0.05]
-		pose [0.125 -0.0775 1.0 0.0]
-		color "white"
-	)
-	# Back
-	model
-	(
-		size [0.01 0.25 0.05]
-		pose [-0.125 0.0 1.0 0.0]
-		color "white"
-	)
-	# Right side
-	model
-	(
-		size [0.25 0.01 0.05]
-		pose [0.0 0.125 1.0 0.0]
-		color "white"
-	)
-	# Left side
-	model
-	(
-		size [0.25 0.01 0.05]
-		pose [0.0 -0.125 1.0 0.0]
-		color "white"
+		size [0.12 0.12 0.25]
+		pose [0.0 0.26 1.098 0.0]
+		color "PaleTurquoise"
 	)
 
-	# Health symbol
-	# Horizontal
+	# Right sleeve
 	model
 	(
-		size [0.01 0.25 0.05]
-		pose [0.15 0.0 0.6 0.0]
-		color "white"
+		size [0.12 0.12 0.25]
+		pose [0.0 -0.26 1.098 0.0]
+		color "PaleTurquoise"
 	)
-	# Vertical top
+
+	# Left arm
 	model
 	(
-		size [0.01 0.05 0.1]
-		pose [0.15 0.0 0.65 0.0]
-		color "white"
+		size [0.1 0.1 0.45]
+		pose [0.0 0.26 0.648 0.0]
+		color "PeachPuff3"
 	)
-	# Vertical bottom
+
+	# Right arm
 	model
 	(
-		size [0.01 0.05 0.1]
-		pose [0.15 0.0 0.5 0.0]
-		color "white"
+		size [0.1 0.1 0.45]
+		pose [0.0 -0.26 0.648 0.0]
+		color "PeachPuff3"
 	)
 
 	# Base
