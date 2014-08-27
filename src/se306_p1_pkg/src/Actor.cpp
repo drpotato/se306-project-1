@@ -109,6 +109,7 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	pxInitial = px;
 	pyInitial = py;
 	thetaInitial = theta;
+    haveLock = false;
 
 	// ros::init needs L-values, so we can't just directly pass (0, ...)
 	int fakeArgC = 0;
@@ -124,10 +125,14 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
     publisherRequestLock = nodeHandle->advertise<msg_pkg::RequestLock>("requestLock", 1000);
     publisherUnlock = nodeHandle->advertise<msg_pkg::Unlock>("unlock", 1000);
 
+    subscriberRequestLock = nodeHandle->subscribe("requestLock", 1000, Actor::requestLockCallback);
+    subscriberUnlock = nodeHandle->subscribe("unlock", 1000, Actor::unlockCallback);
+
 	// Put custom init stuff here (or make a method and call it from here)
 	KeyboardListener::init();
 	initialSetupStage();
 	doInitialSetup();
+    
 }
 
 bool Actor::executeLoop()
@@ -177,6 +182,25 @@ void Actor::StageOdom_callback(nav_msgs::Odometry msg)
 // These messages each contain the current location of a single Actor.
 void Actor::locationCallback(msg_pkg::Location msg)
 {
+
+}
+
+void Actor::requestLockCallback(msg_pkg::RequestLock msg)
+{
+    Actor *actorPtr = ActorSpawner::getInstance().getActor();
+    if (0 == (strcmp(msg.robot_id.c_str(), actorPtr->rosName.c_str())))
+    {
+        actorPtr->haveLock=true;
+    }
+}
+
+void Actor::unlockCallback(msg_pkg::Unlock msg)
+{
+    Actor *actorPtr = ActorSpawner::getInstance().getActor();
+    if (0 == (strcmp(msg.robot_id.c_str(), actorPtr->rosName.c_str())))
+    {
+        actorPtr->haveLock=false;
+    }
 
 }
 
