@@ -12,7 +12,7 @@ void CompanionRobot::doInitialSetup()
 	velLinear = 0.0;
 	velRotational = 0.0;
 	moraleLevel = 5;
-	entertaining = false;
+	giving_morale = false;
 	residentName = "RobotNode2";
 	subscriberMorale = nodeHandle->subscribe("morale", 1000, CompanionRobot::moraleCallback);
 	y = 0;
@@ -37,9 +37,9 @@ void CompanionRobot::doExecuteLoop()
         return;
 	}
 
-	if (!entertaining)
+	if (!giving_morale)
 	{
-		if (!checkCompanionLevel())
+		if (!checkMoraleLevel())
 		{
 			if (first_call)
 			{
@@ -49,13 +49,13 @@ void CompanionRobot::doExecuteLoop()
 			}
 	    	if (!(this->movingToResident) )
 	    	{
-	    		//CompanionRobot::doResponse("entertaining");
-	    		ROS_INFO("CHANGED TO ENTERTAINING");
-	    		entertaining=true;
+	    		//CompanionRobot::doResponse("socialising");
+	    		ROS_INFO("CHANGED TO socialising");
+	    		giving_morale=true;
 	    		first = false;
 	    	}
 
-			//After finished entertaining set entertaining to flase
+			//After finished socialising set socialising to flase
 
 		}
 	}
@@ -64,8 +64,8 @@ void CompanionRobot::doExecuteLoop()
 		if (moraleLevel == 5)
 		{
 			//Add do last desponse call that kurt implimented
-			CompanionRobot::stopResponse("entertaining");
-			entertaining = false;
+			CompanionRobot::stopResponse("giving morale");
+			giving_morale = false;
 			returningHome = true;
 
 		}
@@ -74,7 +74,7 @@ void CompanionRobot::doExecuteLoop()
 
 			if (y == 40)
 			{
-				CompanionRobot::doResponse("entertaining");
+				CompanionRobot::doResponse("socialising");
 				y=0;
 			}
 			else
@@ -94,7 +94,7 @@ void CompanionRobot::moraleCallback(msg_pkg::Morale msg)
  	//ROS_INFO("Changed value");
 }
 
-bool CompanionRobot::checkCompanionLevel()
+bool CompanionRobot::checkMoraleLevel()
 {
 	if (moraleLevel>=2 )
 	{

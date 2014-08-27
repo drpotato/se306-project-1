@@ -1,0 +1,246 @@
+define Clock position
+(
+	# Base additions ######################################
+	model
+	(
+		size [0.95 0.5 0.02]
+		pose [0.0 0.0 0.0 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.93 0.5 0.02]
+		pose [0.0 0.0 0.02 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.90 0.5 0.02]
+		pose [0.0 0.0 0.04 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.88 0.5 0.02]
+		pose [0.0 0.0 0.06 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.85 0.5 0.02]
+		pose [0.0 0.0 0.08 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.83 0.5 0.02]
+		pose [0.0 0.0 0.1 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.80 0.5 0.02]
+		pose [0.0 0.0 0.12 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.78 0.5 0.02]
+		pose [0.0 0.0 0.14 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.75 0.5 0.02]
+		pose [0.0 0.0 0.16 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.73 0.5 0.02]
+		pose [0.0 0.0 0.18 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.70 0.5 0.02]
+		pose [0.0 0.0 0.2 0.0]
+		color "grey30"
+	)
+
+	# Base end
+	model
+	(
+		size [0.73 0.5 0.05]
+		pose [0.0 0.0 0.22 0.0]
+		color "maroon"
+	)
+
+	# Poles #################################################
+	# Left front corner
+	model
+	(
+		size [0.1 0.1 1.5]
+		pose [0.3 0.2 0.27 0.0]
+		color "grey30"
+	)
+
+	# Left back corner
+	model
+	(
+		size [0.1 0.1 1.5]
+		pose [0.3 -0.15 0.27 0.0]
+		color "grey30"
+	)
+
+	# Right front corner
+	model
+	(
+		size [0.1 0.1 1.5]
+		pose [-0.3 0.2 0.27 0.0]
+		color "grey30"
+	)
+
+	# Right back corner
+	model
+	(
+		size [0.1 0.1 1.5]
+		pose [-0.3 -0.15 0.27 0.0]
+		color "grey30"
+	)
+
+
+	# Top start ####################################
+	model
+	(
+		size [0.73 0.5 0.05]
+		pose [0.0 0.0 1.77 0.0]
+		color "maroon"
+	)
+	model
+	(
+		size [0.70 0.5 0.02]
+		pose [0.0 0.0 1.82 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.73 0.5 0.02]
+		pose [0.0 0.0 1.84 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.75 0.5 0.02]
+		pose [0.0 0.0 1.86 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.78 0.5 0.02]
+		pose [0.0 0.0 1.88 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.80 0.5 0.02]
+		pose [0.0 0.0 1.90 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.83 0.5 0.02]
+		pose [0.0 0.0 1.92 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.85 0.5 0.02]
+		pose [0.0 0.0 1.94 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.88 0.5 0.02]
+		pose [0.0 0.0 1.96 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.90 0.5 0.02]
+		pose [0.0 0.0 1.98 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.93 0.5 0.02]
+		pose [0.0 0.0 2.0 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.95 0.5 0.02]
+		pose [0.0 0.0 2.02 0.0]
+		color "grey30"
+	)
+	# Top end ###########################################
+
+	# Ticker arm
+	model
+	(
+		size [0.05 0.05 1.0]
+		pose [0.0 0.0 0.77 0.0]
+		color "maroon"
+	)
+
+	# Ticker end
+	model
+	(
+		size [0.1 0.05 0.025]
+		pose [0.0 0.0 0.745 0.0]
+		color "maroon"
+	)	
+	model
+	(
+		size [0.133 0.05 0.025]
+		pose [0.0 0.0 0.72 0.0]
+		color "maroon"
+	)	
+	model
+	(
+		size [0.166 0.05 0.025]
+		pose [0.0 0.0 0.695 0.0]
+		color "maroon"
+	)	
+	model
+	(
+		size [0.2 0.05 0.025]
+		pose [0.0 0.0 0.67 0.0]
+		color "maroon"
+	)
+	model
+	(
+		size [0.166 0.05 0.025]
+		pose [0.0 0.0 0.645 0.0]
+		color "maroon"
+	)	
+	model
+	(
+		size [0.133 0.05 0.025]
+		pose [0.0 0.0 0.62 0.0]
+		color "maroon"
+	)	
+	model
+	(
+		size [0.1 0.05 0.025]
+		pose [0.0 0.0 0.595 0.0]
+		color "maroon"
+	)	
+
+	# Base
+	size [1 0.5 0.02]
+	drive "diff"
+	color "yellow"
+	stack_children 0
+    gui_nose 0
+)
