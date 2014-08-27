@@ -50,6 +50,7 @@ public:
 
     static vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
     static void addNode(PathPlannerNode);
+    static bool hasNode(string);
     static void removeNode(string*);
     static PathPlannerNode* getNode(string);
     static void updateNode(string, double, double);

@@ -22,7 +22,6 @@ class PathPlannerNode{
         PathPlannerNode(string*,double,double);
         PathPlannerNode();
         PathPlannerNode(const PathPlannerNode &other);
-        ~PathPlannerNode();
         void addNeighbour(PathPlannerNode*);
         void removeNeighbour(PathPlannerNode*);
         string* getName();

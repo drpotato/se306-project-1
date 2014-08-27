@@ -76,11 +76,7 @@ void PathPlanner::locationCallback(msg_pkg::Location msg)
     string name = msg.id;
     double x = msg.xpos;
     double y = msg.ypos;
-
-    ROS_INFO("Got callback from %s",name.c_str());
-
-    if (getNode(name) != NULL) {
-        ROS_INFO_STREAM("Updating Node!");
+    if (hasNode(name)) {
         updateNode(name, x, y);
     } else {
         ROS_INFO_STREAM("Node does not exist; create it");
@@ -157,7 +153,6 @@ void PathPlanner::removeNode(string* name) {
 void PathPlanner::addNode(PathPlannerNode p) {
     nodes.push_back(p);
     int num = nodes.size();
-    ROS_INFO("Size of graph is now: %d", num);
 }
 
 // Returns the PathPlannerNode with the given name (if any).
@@ -171,13 +166,23 @@ PathPlannerNode* PathPlanner::getNode(string name) {
     return NULL;
 }
 
+
+bool PathPlanner::hasNode(string name){
+  for (int i = 0; i < nodes.size(); i++) {
+      PathPlannerNode* node = &nodes[i];
+      if (node->getName()->compare(name) == 0) {
+          return true;
+      }
+  }
+  return false;
+}
+
 // Updates the PathPlannerNode's location with the given x and y, and refinds its closest neighbour.
 void PathPlanner::updateNode(string name, double x, double y) {
     for (int i = 0; i < nodes.size(); i++){
         PathPlannerNode* node = &nodes[i];
-
-
         if (node->getName()->compare(name) == 0) {
+            ROS_INFO("Updating Node %s at index %d",name.c_str(),i);
             // This node represents an Actor, and so will only have one neighbour.
             PathPlannerNode* neighbour = node->neighbours[0];
             neighbour->removeNeighbour(node);
