@@ -61,16 +61,14 @@ PathPlanner::PathPlanner() {
 // When a location message is received, updates the graph with that Actor's new location.
 void PathPlanner::locationCallback(msg_pkg::Location msg)
 {
-    ROS_INFO_STREAM("LOCATIONCALLBACK WAS CALLED!");
-
     // Find Actor of this name in graph and remove it.
     string name = msg.id;
-    PathPlannerNode* actorNode = removeNode(&name);
+    double x = msg.xpos;
+    double y = msg.ypos;
+    removeNode(&name);
     
-    if (actorNode) {
-        // Find the actor's neighbour at its new location, and add it back into the graph.
-        addActorNode(actorNode);
-    }
+    PathPlannerNode* newNode = new PathPlannerNode(&name, x, y);
+    addActorNode(newNode);
 }
 
 // Returns the shortest path between the two given nodes.
@@ -118,7 +116,7 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
 }
 
 // Removes a node from the graph, and removes it from all its' neighbours' lists of neighbours.
-PathPlannerNode* PathPlanner::removeNode(string* name) {
+void PathPlanner::removeNode(string* name) {
     for (vector<PathPlannerNode*>::iterator itr = nodes.begin(); itr != nodes.end();) {
         PathPlannerNode* currentNode = *itr;
         if (currentNode->getName()->compare(*name) == 0) {
@@ -126,13 +124,12 @@ PathPlannerNode* PathPlanner::removeNode(string* name) {
             for (int j = 0; j < currentNode->neighbours.size(); j++) {
                 PathPlannerNode* neighbour = currentNode->neighbours[j];
                 neighbour->removeNeighbour(currentNode);
-                itr = nodes.erase(itr);
             }
-        return currentNode;
+            nodes.erase(itr);
+            return;
         }
         itr++;
     }
-    return NULL;
 }
 
 // Adds an Actor to the graph.

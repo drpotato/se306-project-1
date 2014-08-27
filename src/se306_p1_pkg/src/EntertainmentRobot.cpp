@@ -13,7 +13,7 @@ void EntertainmentRobot::doInitialSetup()
 	velRotational = 0.0;
 	moraleLevel = 5;
 	entertaining = false;
-	residentName = "RobotNode2";
+	residentName = "RobotNode0";
 	subscriberMorale = nodeHandle->subscribe("morale", 1000, EntertainmentRobot::moraleCallback);
 	y = 0;
 	x = 0;
@@ -38,7 +38,7 @@ void EntertainmentRobot::doExecuteLoop() {
 	if (!entertaining) {
 		if (!checkMoraleLevel()) {
 			
-	    	if (!(this->goToNode("Resident"))) {
+	    	if (!(this->goToNode(residentName))) {
 	    		ROS_INFO("CHANGED TO ENTERTAINING");
 	    		entertaining=true;
 	    	}
