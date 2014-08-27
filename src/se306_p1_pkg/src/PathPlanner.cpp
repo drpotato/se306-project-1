@@ -53,11 +53,12 @@ void PathPlanner::locationCallback(msg_pkg::Location msg)
         updateNode(name, x, y);
     } else {
         ROS_INFO_STREAM("Node does not exist; create it");
-        PathPlannerNode* newNode = new PathPlannerNode(name, x, y);
+        PathPlannerNode newNode = PathPlannerNode(name, x, y);
         PathPlannerNode* closestNode = getClosestNode(x, y);
-        newNode->addNeighbour(closestNode);
-        closestNode->addNeighbour(newNode);
-        addNode(*newNode);
+        newNode.addNeighbour(closestNode);
+        closestNode->addNeighbour(&newNode);
+        ROS_INFO("Adding node %s", newNode.getName().c_str());
+        addNode(newNode);
     }
 }
 
@@ -126,6 +127,7 @@ void PathPlanner::removeNode(string* name) {
 void PathPlanner::addNode(PathPlannerNode p) {
     nodes.push_back(p);
     int num = nodes.size();
+    ROS_INFO("New size of nodes list: %i", num);
 }
 
 // Returns the PathPlannerNode with the given name (if any).
@@ -139,15 +141,15 @@ PathPlannerNode* PathPlanner::getNode(string name) {
     return NULL;
 }
 
-
 bool PathPlanner::hasNode(string name){
-  for (int i = 0; i < nodes.size(); i++) {
-      PathPlannerNode* node = &nodes[i];
-      if (node->getName().compare(name) == 0) {
-          return true;
-      }
-  }
-  return false;
+    for (int i = 0; i < nodes.size(); i++) {
+        PathPlannerNode* node = &nodes[i];
+        if (node->getName().compare(name) == 0) {
+            ROS_INFO("node1 name is %s, node 2 name is %s", node->getName().c_str(), name.c_str());
+            return true;
+        }
+    }
+    return false;
 }
 
 // Updates the PathPlannerNode's location with the given x and y, and refinds its closest neighbour.
