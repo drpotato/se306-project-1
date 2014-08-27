@@ -44,7 +44,10 @@ class FooTest : public ::testing::Test {
 };
 
 
-
+/*
+ * When using a fixture, use TEST_F() instead of TEST() as it allows you to access objects and subroutines in the test 
+ * fixture 
+ */
 TEST_F(FooTest, testResidentInteration)
 {
   //system("source devel/setup.bash; roscore &");
