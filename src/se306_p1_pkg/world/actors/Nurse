@@ -21,7 +21,7 @@ define Nurse position
 	# Torso
 	model
 	(
-		size [0.3 0.4 0.4]
+		size [0.3 0.4 0.7]
 		pose [0.0 0.0 0.15 0.0]
 		color "black"
 	)
@@ -30,7 +30,7 @@ define Nurse position
 	model
 	(
 		size [0.08 0.08 0.3]
-		pose [0.0 0.24 0.25 0.0]
+		pose [0.0 0.24 0.4 0.0]
 		color "grey45"
 	)
 
@@ -38,7 +38,7 @@ define Nurse position
 	model
 	(
 		size [0.08 0.08 0.3]
-		pose [0.0 -0.24 0.25 0.0]
+		pose [0.0 -0.24 0.4 0.0]
 		color "grey45"
 	)
 
@@ -46,7 +46,7 @@ define Nurse position
 	model
 	(
 		size [0.25 0.25 0.25]
-		pose [0.0 0.0 0.55 0.0]
+		pose [0.0 0.0 0.85 0.0]
 		color "LemonChiffon"
 	)
 
@@ -54,7 +54,7 @@ define Nurse position
 	model
 	(
 		size [0.01 0.05 0.05]
-		pose [0.125 0.0625 0.63 0.0]
+		pose [0.125 0.0625 0.93 0.0]
 		color "grey30"
 	)
 
@@ -62,7 +62,7 @@ define Nurse position
 	model
 	(
 		size [0.01 0.05 0.05]
-		pose [0.125 -0.0625 0.63 0.0]
+		pose [0.125 -0.0625 0.93 0.0]
 		color "grey30"
 	)
 
@@ -71,42 +71,42 @@ define Nurse position
 	model
 	(
 		size [0.01 0.06 0.06]
-		pose [0.125 0.0 0.710 0.0]
+		pose [0.125 0.0 1.0 0.0]
 		color "red3"
 	)
 	# Front left
 	model
 	(
 		size [0.01 0.09 0.05]
-		pose [0.125 0.0775 0.715 0.0]
+		pose [0.125 0.0775 1.0 0.0]
 		color "white"
 	)
 	# Front right
 	model
 	(
 		size [0.01 0.09 0.05]
-		pose [0.125 -0.0775 0.715 0.0]
+		pose [0.125 -0.0775 1.0 0.0]
 		color "white"
 	)
 	# Back
 	model
 	(
 		size [0.01 0.25 0.05]
-		pose [-0.125 0.0 0.715 0.0]
+		pose [-0.125 0.0 1.0 0.0]
 		color "white"
 	)
 	# Right side
 	model
 	(
 		size [0.25 0.01 0.05]
-		pose [0.0 0.125 0.715 0.0]
+		pose [0.0 0.125 1.0 0.0]
 		color "white"
 	)
 	# Left side
 	model
 	(
 		size [0.25 0.01 0.05]
-		pose [0.0 -0.125 0.715 0.0]
+		pose [0.0 -0.125 1.0 0.0]
 		color "white"
 	)
 
@@ -115,21 +115,21 @@ define Nurse position
 	model
 	(
 		size [0.01 0.25 0.05]
-		pose [0.15 0.0 0.35 0.0]
+		pose [0.15 0.0 0.6 0.0]
 		color "white"
 	)
 	# Vertical top
 	model
 	(
 		size [0.01 0.05 0.1]
-		pose [0.15 0.0 0.4 0.0]
+		pose [0.15 0.0 0.65 0.0]
 		color "white"
 	)
 	# Vertical bottom
 	model
 	(
 		size [0.01 0.05 0.1]
-		pose [0.15 0.0 0.25 0.0]
+		pose [0.15 0.0 0.5 0.0]
 		color "white"
 	)
 
