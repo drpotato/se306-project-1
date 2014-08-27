@@ -154,7 +154,6 @@ bool Actor::executeLoop()
 
 		doExecuteLoop();
 		executeLoopStagePublication();
-        ROS_DEBUG("loop");
 
 		ros::spinOnce();
 		loopRate->sleep();
@@ -475,7 +474,7 @@ bool Actor::gotoPosition(double x,double y){
     if (faceDirection(x,y) < 0.1){
         double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
 
-        ROS_DEBUG("Distance is %f",distance);
+        //ROS_DEBUG("Distance is %f",distance);
 
         if (distance > 0.01){
             faceDirection(x,y);
@@ -486,7 +485,7 @@ bool Actor::gotoPosition(double x,double y){
             return false;
         }
     }else{
-        ROS_DEBUG("Target: %f",faceDirection(x,y));
+        //ROS_DEBUG("Target: %f",faceDirection(x,y));
         this->velLinear = 0;
         return true;
     }
@@ -505,7 +504,7 @@ bool Actor::goToNode(vector<PathPlannerNode*> &path){
         this->activeNode = path[targetNode];
         targetNode++;
     }else{
-        ROS_DEBUG("current position %f %f",px,py);
+        //ROS_DEBUG("current position %f %f",px,py);
     }
     return false;
 }
