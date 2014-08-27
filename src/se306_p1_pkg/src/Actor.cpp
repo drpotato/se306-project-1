@@ -134,6 +134,8 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	KeyboardListener::init();
 	initialSetupStage();
 	doInitialSetup();
+
+    RCmode = "";
     
 }
 
@@ -145,6 +147,8 @@ bool Actor::executeLoop()
 		// Put custom loop stuff here (or make a method and call it from here)
 
 		publishLocation();
+
+        checkKeyboardPress();
 
         moveToResident();
 
@@ -234,6 +238,118 @@ void Actor::publishLocation()
 	locationMessage.id = rosName;
 	// Publish the message.
 	publisherLocation.publish(locationMessage);
+}
+
+// Check to see if any keys are pressed and set the mode appropriately
+void Actor::checkKeyboardPress()
+{
+    KeyboardListener &keyboardListener = KeyboardListener::getInstance();
+    if (keyboardListener.isKeyPressed(ups::KEY_D_CODE))
+    {
+        //doctor
+        toggleMode("doctor");
+    }
+    else if (keyboardListener.isKeyPressed(ups::KEY_N_CODE))
+    {
+        //nurse1
+        toggleMode("nurse1");
+    }
+    else if ((keyboardListener.isKeyPressed(ups::KEY_N_CODE)) && (keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
+    {
+        //nurse2
+        toggleMode("nurse2");
+    }
+    else if (keyboardListener.isKeyPressed(ups::KEY_F_CODE))
+    {
+        //friend1
+        toggleMode("friend1");
+    }
+    else if ((keyboardListener.isKeyPressed(ups::KEY_F_CODE)) && (keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
+    {
+        //friend2
+        toggleMode("friend2");
+    }
+    else if (keyboardListener.isKeyPressed(ups::KEY_R_CODE))
+    {
+        //relative1
+        toggleMode("relative1");
+    }
+    else if ((keyboardListener.isKeyPressed(ups::KEY_R_CODE)) && (keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
+    {
+        //relative2
+        toggleMode("relative2");
+    }
+    else if (keyboardListener.isKeyPressed(ups::KEY_C_CODE))
+    {
+        //caregiver1
+        toggleMode("caregiver1");
+    }
+    else if ((keyboardListener.isKeyPressed(ups::KEY_C_CODE)) && (keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
+    {
+        //caregiver2
+        toggleMode("caregiver2");
+    }
+    else if (keyboardListener.isKeyPressed(ups::KEY_M_CODE))
+    {
+        //medicationRobot
+        toggleMode("medicationRobot");
+    }
+    else if (keyboardListener.isKeyPressed(ups::KEY_E_CODE))
+    {
+        //entertainmentRobot
+        toggleMode("entertainmentRobot");
+    }
+    else if (keyboardListener.isKeyPressed(ups::KEY_T_CODE))
+    {
+        //companionRobot
+        toggleMode("companionRobot");
+    }
+    else if (keyboardListener.isKeyPressed(ups::KEY_B_CODE))
+    {
+        //cookingRobot
+        toggleMode("cookingRobot");
+    }
+    else if (keyboardListener.isKeyPressed(ups::KEY_ENTER_CODE))
+    {
+        //resident
+        toggleMode("resident");
+    }
+}
+
+// Checks if there is any mode currently set
+bool Actor::modeSet()
+{
+    if (RCmode == "")
+    {
+        return false;
+    }
+    return true;
+}
+
+// Checks whether we are in a certain mode or not
+bool Actor::inMode(string mode)
+{
+    if (RCmode == mode)
+    {
+        return true;
+    }
+    return true;
+}
+
+// Turns a mode on or off
+void Actor::toggleMode(string mode)
+{
+    // If we are in this mode, turn the mode off
+    if (inMode(mode)) 
+    {
+        RCmode = "";
+    }
+    // If there is no current mode, we are free to put it in this mode
+    else if (!modeSet())
+    {
+        RCmode = "doctor";
+    }
+    // Cannot set the mode on or off if it is currently in another mode
 }
 
 // Request the lock for the resident

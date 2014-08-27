@@ -95,6 +95,8 @@ protected:
 
     bool movingToResident;
 
+    string RCmode;
+
 private:
     
     PathPlanner pathPlanner;
@@ -114,6 +116,11 @@ private:
     string node4Name;
     string node5Name;
     string nodeDoorName;
+
+    void checkKeyboardPress();
+    bool modeSet();
+    bool inMode(string mode);
+    void toggleMode(string mode);
    
 };
 
