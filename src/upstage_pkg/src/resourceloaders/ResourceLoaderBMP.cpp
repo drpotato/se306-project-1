@@ -169,11 +169,6 @@ namespace ups
 			bmpPaletteLength = 1 << bmpBitsPerPixel;
 			bmpPalette = new uint8[bmpPaletteLength * bmpPaletteEntrySize];
 			std::fread(bmpPalette, 1, bmpPaletteLength * bmpPaletteEntrySize, f);
-			
-			for (int i = 0; i < bmpPaletteLength; ++i)
-			{
-				std::printf("PAL %d %d %d\n", bmpPalette[i * bmpPaletteEntrySize], bmpPalette[i * bmpPaletteEntrySize + 1], bmpPalette[i * bmpPaletteEntrySize + 2]);
-			}
 		}
 
 		// Calculate the size of each bitmap line, including padding (it's padded to a multiple of 4 bytes)
@@ -186,23 +181,34 @@ namespace ups
 		// Go to the bitmap data, and start reading into an image object
 		Texture *outputTexture = new Texture(Texture::TT_RGBA8, outputWidth, outputHeight);
 		std::fseek(f, bmpBitmapOffset, SEEK_SET);
-		printf("bmpBitmapOffset %d\n", bmpBitmapOffset);
 		uint8 bitStart = (8 - (bmpBitsPerPixel & 0x07)) & 0x07;
 		uint32 bitMask = (uint64(1) << bmpBitsPerPixel) - 1;
 		
 		uint8 *outputImage = new uint8[outputWidth * outputHeight * 4];
 		uint8 *lineData = new uint8[bmpByteWidth];
-		for (int32 bmpY = 0; bmpY < bmpHeight; ++bmpY)
+		for (int32 bmpY = 0; bmpY < outputHeight; ++bmpY)
 		{
 			std::fread(lineData, 1, bmpByteWidth, f);
 			int32 y = bmpFlippedY ? bmpHeight - 1 - bmpY : bmpY;
+			y = (y + outputHeight) % outputHeight;
 
 			unsigned int reverseBit = 0;
 			unsigned int lineOffset = 0;
-			for (int32 x = 0; x < bmpWidth; ++x)
+			for (int32 x = 0; x < outputWidth; ++x)
 			{
+				uint32 outputImageIndex = (y * outputWidth + x) * 4;
 				uint8 valueR, valueG, valueB, valueA;
 				uint8 bit = bitStart - reverseBit;
+				
+				// Escape early if we're off the input bitmap
+				if (x >= bmpWidth || y >= bmpHeight)
+				{
+					outputImage[  outputImageIndex] = 0;
+					outputImage[++outputImageIndex] = 0;
+					outputImage[++outputImageIndex] = 0;
+					outputImage[++outputImageIndex] = 0;
+					continue;
+				}
 
 				if (bmpPaletteLength == 0)
 				{
@@ -234,7 +240,6 @@ namespace ups
 				{
 					// Palette
 					uint8 paletteEntryIndex = (lineData[lineOffset] >> bit) & bitMask;
-					printf("PE:%d\n", paletteEntryIndex);
 
 					if (bmpPaletteEntrySize == 3)
 					{
@@ -254,7 +259,6 @@ namespace ups
 					}
 				}
 
-				uint32 outputImageIndex = (y * outputWidth + x) * 4;
 				outputImage[  outputImageIndex] = valueR;
 				outputImage[++outputImageIndex] = valueG;
 				outputImage[++outputImageIndex] = valueB;
@@ -268,12 +272,6 @@ namespace ups
 				}
 			}
 		}
-		
-		FILE *fTest = std::fopen("ftest.raw", "wb");
-		std::fwrite(outputImage, 1, outputWidth * outputHeight * 4, fTest);
-		std::fclose(fTest);
-		
-		printf("oh wow, we made it!\n\n\n\n\n\n\n\n\n\n\n\n\n");
 		outputTexture->setData(outputImage);
 		
 		// Clean up
