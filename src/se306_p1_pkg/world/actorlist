@@ -8,10 +8,10 @@ R1	-6	-3	0	yellow
 #Resident -3	4	0	green
 EntertainmentRobot -2.5 -3 0 wheat3
 Relative 2.75 5 0 pink
-Doctor 2.75 6 0 black
+Doctor 2.75 7 0 black
 RCActor 2.75 3 0 grey
-Nurse 4 6 0 white
-Nurse 5 6 0 white
+Nurse 3.75 8 0 white
+Nurse 1.75 8 0 white
 Clock 6 -4.6 0 grey30
 MedicationRobot -7.3 0 0 grey30
 CompanionRobot -6.8 0 0 grey30
