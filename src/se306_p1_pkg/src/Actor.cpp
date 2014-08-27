@@ -343,13 +343,11 @@ void Actor::toggleMode(string mode)
     // If we are in this mode, turn the mode off
     if (inMode(mode)) 
     {
-        ROS_INFO("In mode");
         RCmode = "";
     }
     // If there is no current mode, we are free to put it in this mode
     else if (!modeSet())
     {
-        ROS_INFO("Set mode to something");
         RCmode = mode;
     }
     // Cannot set the mode on or off if it is currently in another mode
