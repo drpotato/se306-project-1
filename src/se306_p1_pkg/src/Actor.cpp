@@ -244,73 +244,73 @@ void Actor::publishLocation()
 void Actor::checkKeyboardPress()
 {
     KeyboardListener &keyboardListener = KeyboardListener::getInstance();
-    if (keyboardListener.isKeyPressed(ups::KEY_D_CODE))
+    if (keyboardListener.isKeyTapped(ups::KEY_D_CODE))
     {
         //doctor
         toggleMode("doctor");
         ROS_INFO("hello doctor");
     }
-    else if (keyboardListener.isKeyPressed(ups::KEY_N_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_N_CODE))
     {
         //nurse1
         toggleMode("nurse1");
     }
-    else if ((keyboardListener.isKeyPressed(ups::KEY_N_CODE)) && (keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
+    else if ((keyboardListener.isKeyTapped(ups::KEY_N_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
     {
         //nurse2
         toggleMode("nurse2");
     }
-    else if (keyboardListener.isKeyPressed(ups::KEY_F_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_F_CODE))
     {
         //friend1
         toggleMode("friend1");
     }
-    else if ((keyboardListener.isKeyPressed(ups::KEY_F_CODE)) && (keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
+    else if ((keyboardListener.isKeyTapped(ups::KEY_F_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
     {
         //friend2
         toggleMode("friend2");
     }
-    else if (keyboardListener.isKeyPressed(ups::KEY_R_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_R_CODE))
     {
         //relative1
         toggleMode("relative1");
     }
-    else if ((keyboardListener.isKeyPressed(ups::KEY_R_CODE)) && (keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
+    else if ((keyboardListener.isKeyTapped(ups::KEY_R_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
     {
         //relative2
         toggleMode("relative2");
     }
-    else if (keyboardListener.isKeyPressed(ups::KEY_C_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_C_CODE))
     {
         //caregiver1
         toggleMode("caregiver1");
     }
-    else if ((keyboardListener.isKeyPressed(ups::KEY_C_CODE)) && (keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
+    else if ((keyboardListener.isKeyTapped(ups::KEY_C_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
     {
         //caregiver2
         toggleMode("caregiver2");
     }
-    else if (keyboardListener.isKeyPressed(ups::KEY_M_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_M_CODE))
     {
         //medicationRobot
         toggleMode("medicationRobot");
     }
-    else if (keyboardListener.isKeyPressed(ups::KEY_E_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_E_CODE))
     {
         //entertainmentRobot
         toggleMode("entertainmentRobot");
     }
-    else if (keyboardListener.isKeyPressed(ups::KEY_T_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_T_CODE))
     {
         //companionRobot
         toggleMode("companionRobot");
     }
-    else if (keyboardListener.isKeyPressed(ups::KEY_B_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_B_CODE))
     {
         //cookingRobot
         toggleMode("cookingRobot");
     }
-    else if (keyboardListener.isKeyPressed(ups::KEY_ENTER_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_ENTER_CODE))
     {
         //resident
         toggleMode("resident");
@@ -334,7 +334,7 @@ bool Actor::inMode(string mode)
     {
         return true;
     }
-    return true;
+    return false;
 }
 
 // Turns a mode on or off
@@ -343,6 +343,7 @@ void Actor::toggleMode(string mode)
     // If we are in this mode, turn the mode off
     if (inMode(mode)) 
     {
+        ROS_INFO("In mode");
         RCmode = "";
     }
     // If there is no current mode, we are free to put it in this mode
