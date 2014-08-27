@@ -13,7 +13,7 @@ using namespace std;
 
 class PathPlanner {
 private:
-    static vector<PathPlannerNode*> nodes;
+    static vector<PathPlannerNode> nodes;
     static ros::Subscriber subscriberLocation;
     static ros::NodeHandle *nodeHandle;
 
@@ -25,7 +25,7 @@ private:
     string nodeGuestBedroomCentreName;
     string nodeHouseDoorName;
 
-    PathPlannerNode* nodeBedroomCentre;
+    PathPlannerNode nodeBedroomCentre;
     PathPlannerNode nodeHallwayByBedroom;
     PathPlannerNode nodeHalllwayByLivingRoom;
     PathPlannerNode nodeGuestBedroomCentre;

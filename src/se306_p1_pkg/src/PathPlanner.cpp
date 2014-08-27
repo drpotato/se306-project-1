@@ -2,7 +2,7 @@
 #include "ros/ros.h"
 #include <msg_pkg/Location.h>
 
-vector<PathPlannerNode*> PathPlanner::nodes;
+vector<PathPlannerNode> PathPlanner::nodes;
 ros::Subscriber PathPlanner::subscriberLocation;
 ros::NodeHandle* PathPlanner::nodeHandle;
 
@@ -60,26 +60,26 @@ PathPlanner::PathPlanner() {
     addNode(nodeHalllwayByLivingRoom);
     addNode(nodeGuestBedroomCentre);
     addNode(nodeHouseDoor);
-
+    /*
     addNode(nodeResident);
     addNode(nodeEntertainmentRobot);
     addNode(nodeRelative);
     addNode(nodeMedicationRobot);
     addNode(nodeCompanionRobot);
-    addNode(nodeCookingRobot);
+    addNode(nodeCookingRobot);*/
 }
 
 // When a location message is received, updates the graph with that Actor's new location.
 void PathPlanner::locationCallback(msg_pkg::Location msg)
 {
-    ROS_INFO_STREAM("LocationCallback called!");
     // Find Actor of this name in graph and remove it.
     string name = msg.id;
     double x = msg.xpos;
     double y = msg.ypos;
 
-    if (getNode(name)) {
-        ROS_INFO_STREAM("Node exists; should update it");
+    ROS_INFO("Got callback from %s",name.c_str());
+
+    if (getNode(name) != NULL) {
         updateNode(name, x, y);
     } else {
         ROS_INFO_STREAM("Node does not exist; create it");
@@ -89,7 +89,6 @@ void PathPlanner::locationCallback(msg_pkg::Location msg)
         closestNode->addNeighbour(newNode);
         addNode(*newNode);
     }
-    ROS_INFO_STREAM("LocationCallback ended!");
 }
 
 // Returns the shortest path between the two given nodes.
@@ -100,7 +99,7 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
     s.push(startNode);
 
     for (int i = 0; i < nodes.size(); i++){
-        nodes[i]->visited = false;
+        nodes[i].visited = false;
     }
 
     startNode->setVisited(true);
@@ -140,15 +139,13 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
 void PathPlanner::removeNode(string* name) {
 
     for(int i=0;i<nodes.size();i++) {
-        PathPlannerNode* currentNode = nodes[i];
-        ROS_INFO_STREAM(*(currentNode->getName()));
+        PathPlannerNode* currentNode = &nodes[i];
         if (currentNode->getName()->compare(*name) == 0) {
             // For each of its neighbours
             for (int j = 0; j < currentNode->neighbours.size(); j++) {
                 PathPlannerNode* neighbour = currentNode->neighbours[j];
                 neighbour->removeNeighbour(currentNode);
             }
-          ROS_INFO_STREAM("Removing node!");
           nodes.erase(nodes.begin()+i);
           return;
         }
@@ -157,54 +154,47 @@ void PathPlanner::removeNode(string* name) {
 
 // Adds a PathPlannerNode to the graph.
 void PathPlanner::addNode(PathPlannerNode p) {
-    nodes.push_back(&p);
+    nodes.push_back(p);
     int num = nodes.size();
     ROS_INFO("Size of graph is now: %d", num);
 }
 
 // Returns the PathPlannerNode with the given name (if any).
 PathPlannerNode* PathPlanner::getNode(string name) {
-    ROS_INFO("Getnode called, %d nodes, looking for %s",nodes.size(),name.c_str());
     for (int i = 0; i < nodes.size(); i++) {
-        PathPlannerNode* node = nodes[i];
-        
-        ROS_INFO_STREAM(*(node->getName()));
+        PathPlannerNode* node = &nodes[i];
         if (node->getName()->compare(name) == 0) {
             return node;
         }
     }
-    ROS_INFO_STREAM("Return null");
     return NULL;
 }
 
 // Updates the PathPlannerNode's location with the given x and y, and refinds its closest neighbour.
 void PathPlanner::updateNode(string name, double x, double y) {
     for (int i = 0; i < nodes.size(); i++){
-        PathPlannerNode* node = nodes[i];
+        PathPlannerNode* node = &nodes[i];
 
 
         if (node->getName()->compare(name) == 0) {
             // This node represents an Actor, and so will only have one neighbour.
             PathPlannerNode* neighbour = node->neighbours[0];
             neighbour->removeNeighbour(node);
-            ROS_INFO_STREAM("Reference to node removed from neighbours");
         }
         PathPlannerNode* closestNode = getClosestNode(x, y);
         node->addNeighbour(closestNode);
         closestNode->addNeighbour(node);
-        ROS_INFO_STREAM("Node updated");
     }
     int num = nodes.size();
-    ROS_INFO("Size of graph is now: %d", num);
 }
 
 // Returns a pointer to the waypoint closest to the given set of coordinates.
 // Does not check for walls or collisions, so we will need sufficient coverage of waypoints to ensure this does not become a problem.
 PathPlannerNode* PathPlanner::getClosestNode(double x, double y) {
-    PathPlannerNode * closestNode = nodes[0];
+    PathPlannerNode * closestNode = &nodes[0];
 
     for (int i = 1; i < nodes.size(); i++){
-        PathPlannerNode* nodeToCompare = nodes[i];
+        PathPlannerNode* nodeToCompare = &nodes[i];
         double distanceToOld = sqrtf(pow(x - closestNode->px, 2) + pow(y - closestNode->py, 2));
         double distanceToNew = sqrtf(pow(x - nodeToCompare->px, 2) + pow(y - nodeToCompare->py, 2));
         if (distanceToNew < distanceToOld) {
