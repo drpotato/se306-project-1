@@ -28,6 +28,7 @@ add_library(UpstageLibrary
   src/maths/Quaternion.cpp
   src/renderer/Renderer.cpp
   src/renderer/Texture.cpp
+  src/renderer/opengl/glloader.cpp
   src/resourceloaders/ResourceLoaderGenericXML.cpp
   src/resourceloaders/ResourceLoaderStageWorld.cpp
   src/resourceloaders/ResourceLoaderUpstageEnv.cpp

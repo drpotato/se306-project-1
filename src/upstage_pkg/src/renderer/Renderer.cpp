@@ -2,10 +2,13 @@
 #include "../Context.hpp"
 #include "../Debug.hpp"
 
+#define LOAD_GL_VERSION_2_1
+#include "opengl/glloader.hpp"
+
 namespace
 {
 	const static int GL_MIN_MAJOR = 2;
-	const static int GL_MIN_MINOR = 0;
+	const static int GL_MIN_MINOR = 1;
 	const static size_t FRAME_ALLOC_SIZE = 4 * 1024 * 1024; // 4 MiB
 }
 
@@ -28,10 +31,17 @@ ups::Renderer::Renderer(ups::Context &context) :
 		"If nothing works, please contact jpet987@aucklanduni.ac.nz",
 		GL_MIN_MAJOR, GL_MIN_MINOR, glMaj, glMin);
 	
+	// Create the render task slots
 	for (int slot = 0; slot < _TLS_NTypes; ++slot)
 	{
 		_renderTaskSlots.push_back(std::vector<RenderTask *>());
 	}
+	
+	// Set up the GL context, including loading function pointers
+	loadOpenGL();
+	
+	UPS_LOGF("glCompileShader:%p", (void*)glCompileShader);
+	glEnable(GL_TEXTURE_2D);
 }
 ups::Renderer::~Renderer()
 {
