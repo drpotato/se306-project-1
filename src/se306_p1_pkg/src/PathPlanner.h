@@ -38,7 +38,8 @@ public:
     static void addNode(PathPlannerNode*);
     static void removeNode(string*);
     static PathPlannerNode* getNode(string);
-    static PathPlannerNode* getClosestNode(int, int);
+    static void updateNode(string, double, double);
+    static PathPlannerNode* getClosestNode(double, double);
     static void locationCallback(msg_pkg::Location msg);
 };
 
