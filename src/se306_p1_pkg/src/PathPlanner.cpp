@@ -40,7 +40,7 @@ PathPlanner::PathPlanner() {
 
     nodeGuestBedroomCentre.addNeighbour(&nodeHallwayByBedroom);
     nodeGuestBedroomCentre.addNeighbour(&nodeBedroomCentre);
-    
+
     nodeHouseDoor.addNeighbour(&nodeHalllwayByLivingRoom);
 
     // Add the nodes to the path planner's graph of nodes and connections.
@@ -66,9 +66,12 @@ void PathPlanner::locationCallback(msg_pkg::Location msg)
     double x = msg.xpos;
     double y = msg.ypos;
     removeNode(&name);
-    
+
     PathPlannerNode* newNode = new PathPlannerNode(&name, x, y);
-    addActorNode(newNode);
+    PathPlannerNode* closestNode = getClosestNode(x,y);
+    newNode->addNeighbour(closestNode);
+    closestNode->addNeighbour(newNode);
+    addNode(newNode);
 }
 
 // Returns the shortest path between the two given nodes.
@@ -117,38 +120,29 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
 
 // Removes a node from the graph, and removes it from all its' neighbours' lists of neighbours.
 void PathPlanner::removeNode(string* name) {
-    for (vector<PathPlannerNode*>::iterator itr = nodes.begin(); itr != nodes.end();) {
-        PathPlannerNode* currentNode = *itr;
-        if (currentNode->getName()->compare(*name) == 0) {
-            // For each of its neighbours
-            for (int j = 0; j < currentNode->neighbours.size(); j++) {
-                PathPlannerNode* neighbour = currentNode->neighbours[j];
-                neighbour->removeNeighbour(currentNode);
-            }
-            nodes.erase(itr);
-            return;
-        }
-        itr++;
+
+    for(int i=0;i<nodes.size();i++){
+      PathPlannerNode* currentNode = nodes[i];
+      ROS_INFO_STREAM(*(currentNode->getName()));
+      if (currentNode->getName()->compare(*name) == 0) {
+          // For each of its neighbours
+          for (int j = 0; j < currentNode->neighbours.size(); j++) {
+              PathPlannerNode* neighbour = currentNode->neighbours[j];
+              neighbour->removeNeighbour(currentNode);
+          }
+          ROS_INFO_STREAM("Removing node!");
+          nodes.erase(nodes.begin()+i);
+          return;
+      }
     }
 }
 
-// Adds an Actor to the graph.
-void PathPlanner::addActorNode(PathPlannerNode* p) {
-    ROS_INFO("About to add Actor: %s", p->getName()->c_str());
-
-    // Actors have only a single neighbour, the closest waypoint node to them.
-    p->addNeighbour(getClosestNode(p->px, p->py));
-    addNode(p);
-}
 
 // Adds a PathPlannerNode to the graph.
 void PathPlanner::addNode(PathPlannerNode* p) {
-    ROS_INFO("Node added: %s", p->getName()->c_str());
 
     nodes.push_back(p);
-
-    int size = nodes.size();
-    ROS_INFO("Size of graph is now: %i", size);
+    ROS_INFO("Size of graph is now: %d", nodes.size());
 }
 
 // Returns the PathPlannerNode with the given name (if any).

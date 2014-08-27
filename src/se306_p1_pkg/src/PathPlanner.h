@@ -18,7 +18,7 @@ private:
     static ros::NodeHandle *nodeHandle;
 
     typedef boost::unordered_map<string,string> map;
-  
+
     PathPlannerNode  nodeBedroomCentre;
     PathPlannerNode  nodeHallwayByBedroom;
     PathPlannerNode  nodeHalllwayByLivingRoom;
@@ -35,7 +35,6 @@ public:
     PathPlanner();
 
     static vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
-    static void addActorNode(PathPlannerNode*);
     static void addNode(PathPlannerNode*);
     static void removeNode(string*);
     static PathPlannerNode* getNode(string);
