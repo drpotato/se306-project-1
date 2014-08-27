@@ -95,6 +95,7 @@ public:
 
   // Phone call
   void call(string personType);
+  bool called_friend_today_;
 
   // Enum conversions
   ActorType getActorTypeFromString(string actorType);

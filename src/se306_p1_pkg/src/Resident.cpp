@@ -51,6 +51,8 @@ void Resident::doInitialSetup()
   subscriberTime = nodeHandle->subscribe("time", 1000, Resident::timeCallback);
   subscriberRequestLock = nodeHandle->subscribe("requestLock", 1000, Resident::requestLockCallback);
   subscriberUnlock = nodeHandle->subscribe("unlock", 1000, Resident::unlockCallback);
+  
+  called_friend_today_ = false;
 }
 
 void Resident::doExecuteLoop()
@@ -109,6 +111,13 @@ void Resident::doExecuteLoop()
   else if (m_replenished_ && (socialness_count_ < WAIT_TIME) && !s_dropped_)
   {
     socialness_count_++;
+  }
+  
+  /* Call a friend if socialness gets too low but only call once per day */
+  if (residentInstance->socialness_level_ <= 1 && !called_friend_today_)
+  {
+    call("friend");
+    called_friend_today_ = true;
   }
   //###################################################################################################################################################
 }
@@ -254,6 +263,8 @@ void Resident::goToSleep()
   has_woken_ = false;
 
   has_gone_to_bed_ = true;
+  
+  called_friend_today_ = false;
 }
 bool Resident::hasWoken()
 {

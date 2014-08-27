@@ -13,6 +13,7 @@ void Friend::doInitialSetup()
   subscriberMorale = nodeHandle->subscribe("morale", 1000, Friend::moraleCallback);
   subscriberTime = nodeHandle->subscribe("time", 1000, Friend::timeCallback);
   subscriberLockStatus = nodeHandle->subscribe("lockStatus", 1000, Friend::lockStatusCallback);
+  subscribeTelephone = nodeHandle->subscribe("telephone", 1000, Friend::telephoneCallback);
   
   velLinear = 0.0;
   velRotational = 0.0;
@@ -65,6 +66,7 @@ void Friend::doExecuteLoop()
     {
       if (y == 40)
       {
+        // Called ever 40 cycles
         Friend::doResponse("socialising");
         y=0;
       } 
@@ -82,12 +84,22 @@ void Friend::socialnessCallback(msg_pkg::Socialness msg)
   Friend *temp = Friend::getFriendInstance();
   temp->socialnessLevel = msg.level;
   ROS_DEBUG_STREAM("Friend socialnessCallback with level " << (int)msg.level);
- 
-  // If it has reached level 1:
-  if (!(temp->socialnessLevel >= 2))
+}
+
+void Friend::telephoneCallback(msg_pkg::Telephone msg)
+{
+  ROS_DEBUG_STREAM("Friend telephoneCallback with contact " << msg.contact);
+  Friend *temp = Friend::getFriendInstance();
+  
+  if (msg.contact.compare("friend") == 0)
   {
-    temp->startMovingToResident();
-    temp->waiting_to_socialise = true;
+    ROS_DEBUG_STREAM("Friend telephoneCallback contact is friend!!!");
+    // If it has reached level 1 and resident has called friend should probably socialise with resident
+    if (temp->socialnessLevel <= 1)
+    {
+      temp->startMovingToResident();
+      temp->waiting_to_socialise = true;
+    }
   }
 }
 
