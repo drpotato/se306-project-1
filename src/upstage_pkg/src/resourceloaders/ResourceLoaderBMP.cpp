@@ -179,7 +179,7 @@ namespace ups
 		uint32 outputHeight = potAbove(bmpHeight);
 
 		// Go to the bitmap data, and start reading into an image object
-		Texture *outputTexture = new Texture(Texture::TT_RGBA8, outputWidth, outputHeight);
+		Texture *outputTexture = new Texture(Texture::TT_RGBA8, outputWidth, outputHeight, bmpWidth, bmpHeight);
 		std::fseek(f, bmpBitmapOffset, SEEK_SET);
 		uint8 bitStart = (8 - (bmpBitsPerPixel & 0x07)) & 0x07;
 		uint32 bitMask = (uint64(1) << bmpBitsPerPixel) - 1;
@@ -279,6 +279,6 @@ namespace ups
 		delete[] bmpPalette;
 		fclose(f);
 
-		return new Resource();
+		return outputTexture;
 	}
 }

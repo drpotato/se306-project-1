@@ -1,6 +1,7 @@
 #include "Renderer.hpp"
 #include "Texture.hpp"
 #include "../Debug.hpp"
+#include "../ResourceManager.hpp"
 
 #define LOAD_GL_VERSION_2_1
 #include "opengl/glloader.hpp"
@@ -40,7 +41,6 @@ ups::Renderer::Renderer(ups::Context &context) :
 	// Set up the GL context, including loading function pointers
 	loadOpenGL();
 	
-	UPS_LOGF("glCompileShader:%p", (void*)glCompileShader);
 	glEnable(GL_TEXTURE_2D);
 }
 ups::Renderer::~Renderer()
@@ -131,9 +131,11 @@ void ups::Renderer::doTask(RenderTask *task)
 {
 	switch (task->type)
 	{
+	
 	case RenderTask::RT_Clear:
 		glClearColor(task->clear.col.r, task->clear.col.g, task->clear.col.b, task->clear.col.a);
 		break;
+		
 	case RenderTask::RT_TestQuad:
 		glColor4f(task->testQuad.col.r, task->testQuad.col.g, task->testQuad.col.b, task->testQuad.col.a);
 		glBegin(GL_QUADS);
@@ -144,6 +146,26 @@ void ups::Renderer::doTask(RenderTask *task)
 		glEnd();
 		glColor4f(1.f,1.f,1.f,1.f);
 		break;
+		
+	case RenderTask::RT_TexQuad:
+		
+		glBindTexture(GL_TEXTURE_2D, task->texQuad.texHandle);
+		glEnable(GL_TEXTURE_2D);
+		glColor4f(task->texQuad.col.r, task->texQuad.col.g, task->texQuad.col.b, task->texQuad.col.a);
+		glBegin(GL_QUADS);
+		glTexCoord2f(0.f, task->texQuad.maxV);
+		glVertex2f(task->texQuad.x, task->texQuad.y);
+		glTexCoord2f(0.f, 0.f);
+		glVertex2f(task->texQuad.x, task->texQuad.y + task->texQuad.h);
+		glTexCoord2f(task->texQuad.maxU, 0.f);
+		glVertex2f(task->texQuad.x + task->texQuad.w, task->texQuad.y + task->texQuad.h);
+		glTexCoord2f(task->texQuad.maxU, task->texQuad.maxV);
+		glVertex2f(task->texQuad.x + task->texQuad.w, task->texQuad.y);
+		glEnd();
+		glColor4f(1.f,1.f,1.f,1.f);
+		glDisable(GL_TEXTURE_2D);
+		break;
+		
 	default:
 		break;
 	}
@@ -171,14 +193,46 @@ void ups::Renderer::drawTestQuad(const ups::Colour &colour, float x, float y, fl
 	addToTaskList(rt, TLS_2D);
 }
 
+void ups::Renderer::drawTexQuad(const ups::Colour &colour, const std::string &texName, float x, float y, float w, float h)
+{
+	RenderTask *rt = _frameAlloc.allocate<RenderTask>();
+	ups::Texture *quadTex = ResourceManager::getInstance().fetch<ups::Texture>(texName);
+	
+	rt->type = RenderTask::RT_TexQuad;
+	rt->texQuad.col = colour;
+	if (quadTex)
+	{
+		rt->texQuad.texHandle = quadTex->getRendererHandle(*this);
+		rt->texQuad.maxU = quadTex->getMaxTexX();
+		rt->texQuad.maxV = quadTex->getMaxTexY();
+	}
+	else
+	{
+		rt->texQuad.texHandle = 0;
+		rt->texQuad.maxU = 0.f;
+		rt->texQuad.maxV = 0.f;
+	}
+	rt->texQuad.x = x;
+	rt->texQuad.y = y;
+	rt->texQuad.w = w;
+	rt->texQuad.h = h;
+	
+	addToTaskList(rt, TLS_2D);
+}
+
+void ups::Renderer::drawTexQuad(const std::string &texName, float x, float y, float w, float h)
+{
+	drawTexQuad(ups::Colour::rgb(1.f,1.f,1.f), texName, x, y, w, h);
+}
+
 ups::TexHandle ups::Renderer::makeTexHandle(ups::Texture &tex)
 {
 	GLuint texHandle;
 	glGenTextures(1, &texHandle);
 	
 	glBindTexture(GL_TEXTURE_2D, texHandle);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	
 	switch (tex.getTextureType())
 	{

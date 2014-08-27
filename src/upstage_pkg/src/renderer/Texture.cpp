@@ -1,14 +1,16 @@
 #include "Texture.hpp"
 #include "Renderer.hpp"
-#include <cstdlib>
+#include "../Util.hpp"
 
-ups::Texture::Texture(ups::Texture::Texture::TextureType tt, unsigned int width, unsigned int height) :
+ups::Texture::Texture(ups::Texture::Texture::TextureType tt, unsigned int width, unsigned int height, unsigned int innerWidth, unsigned int innerHeight) :
 	_tt(tt),
 	_width(width),
 	_height(height),
 	_isInRenderer(false),
 	_data(0)
 {
+	_innerWidth = (innerWidth) ? innerWidth : potAbove(width);
+	_innerHeight = (innerHeight) ? innerHeight : potAbove(height);
 }
 
 ups::Texture::~Texture()

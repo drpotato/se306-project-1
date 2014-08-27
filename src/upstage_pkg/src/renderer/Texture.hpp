@@ -17,7 +17,7 @@ namespace ups
 			TT_EMPTY
 		};
 		
-		Texture(TextureType tt, unsigned int width, unsigned int height);
+		Texture(TextureType tt, unsigned int width, unsigned int height, unsigned int innerWidth = 0, unsigned int innerHeight = 0);
 		~Texture();
 		void setData(unsigned char *data);
 		
@@ -25,10 +25,14 @@ namespace ups
 		const TextureType &getTextureType() const;
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;
+		float getMaxTexX() const;
+		float getMaxTexY() const;
 		const unsigned char *getData() const;
 		
 	private:
 		TextureType _tt;
+		unsigned int _innerWidth;
+		unsigned int _innerHeight;
 		unsigned int _width;
 		unsigned int _height;
 		unsigned char *_data;
@@ -50,6 +54,16 @@ namespace ups
 	inline unsigned int Texture::getHeight() const
 	{
 		return _height;
+	}
+	
+	inline float Texture::getMaxTexX() const
+	{
+		return static_cast<float>(_innerWidth) / _width;
+	}
+	
+	inline float Texture::getMaxTexY() const
+	{
+		return static_cast<float>(_innerHeight) / _height;
 	}
 
 	inline void Texture::setData(unsigned char *data)

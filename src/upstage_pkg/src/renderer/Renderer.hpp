@@ -5,6 +5,7 @@
 #include "RenderTask.hpp"
 #include "../Context.hpp"
 #include "../StackAllocator.hpp"
+#include <string>
 #include <vector>
 
 namespace ups
@@ -21,6 +22,8 @@ namespace ups
 		// Functionality
 		void setEnvClearColour(const Colour &colour);
 		void drawTestQuad(const Colour &colour, float x, float y, float w, float h);
+		void drawTexQuad(const Colour &colour, const std::string &texName, float x, float y, float w, float h);
+		void drawTexQuad(const std::string &texName, float x, float y, float w, float h);
 		TexHandle makeTexHandle(Texture &tex);
 		
 		int getWidth() const;

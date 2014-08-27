@@ -16,13 +16,11 @@ include_directories(
 )
 
 add_library(UpstageLibrary
-  src/Actor.cpp
   src/Context.cpp
   src/Keyboard.cpp
   src/Resource.cpp
   src/ResourceLoader.cpp
   src/ResourceManager.cpp
-  src/ROSComm.cpp
   src/UpstageEnvironment.cpp
   src/geom/Mesh.cpp
   src/geom/Model.cpp
@@ -34,6 +32,8 @@ add_library(UpstageLibrary
   src/resourceloaders/ResourceLoaderGenericXML.cpp
   src/resourceloaders/ResourceLoaderStageWorld.cpp
   src/resourceloaders/ResourceLoaderUpstageEnv.cpp
+  src/rosworld/Actor.cpp
+  src/rosworld/ROSComm.cpp
   src/xml/XML.cpp
 )
 

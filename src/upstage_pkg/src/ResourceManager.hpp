@@ -2,6 +2,7 @@
 #define SE306P1_UPSTAGE_RESOURCEMANAGER_HPP_DEFINED
 
 #include "ResourceLoader.hpp"
+#include <cstdio>
 #include <map>
 #include <list>
 #include <string>

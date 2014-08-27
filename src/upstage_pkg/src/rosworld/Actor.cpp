@@ -1,5 +1,5 @@
 #include "Actor.hpp"
-#include "renderer/Renderer.hpp"
+#include "../renderer/Renderer.hpp"
 
 ups::Actor::Actor():
 	_x(0.f),
