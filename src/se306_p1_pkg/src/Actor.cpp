@@ -248,6 +248,7 @@ void Actor::checkKeyboardPress()
     {
         //doctor
         toggleMode("doctor");
+        ROS_INFO("hello doctor");
     }
     else if (keyboardListener.isKeyPressed(ups::KEY_N_CODE))
     {
@@ -347,9 +348,38 @@ void Actor::toggleMode(string mode)
     // If there is no current mode, we are free to put it in this mode
     else if (!modeSet())
     {
-        RCmode = "doctor";
+        ROS_INFO("Set mode to something");
+        RCmode = mode;
     }
     // Cannot set the mode on or off if it is currently in another mode
+}
+
+// Only call this method from the subclass IF it is in your corresponding mode (RCmode)
+void Actor::controlRobot()
+{
+    KeyboardListener &keyboardListener = KeyboardListener::getInstance();
+    velRotational = 0.0;
+    velLinear = 0.0;
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_UP_CODE))
+    {
+        velLinear += 1.0;
+    }
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_DOWN_CODE))
+    {
+        velLinear -= 1.0;
+    }
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_LEFT_CODE))
+    {
+        velRotational += 1.0;
+    }
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_RIGHT_CODE))
+    {
+        velRotational -= 1.0;
+    }
 }
 
 // Request the lock for the resident

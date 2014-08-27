@@ -96,6 +96,7 @@ protected:
     bool movingToResident;
 
     string RCmode;
+    void controlRobot();
 
 private:
     
@@ -121,7 +122,6 @@ private:
     bool modeSet();
     bool inMode(string mode);
     void toggleMode(string mode);
-   
 };
 
 
