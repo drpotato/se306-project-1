@@ -25,6 +25,10 @@ void CompanionRobot::doInitialSetup()
 
 void CompanionRobot::doExecuteLoop()
 {
+	if (RCmode == "companionRobot")
+  	{
+    	CompanionRobot::controlRobot();
+  	}
 	if (returningHome){
 		//ROS_INFO("MOVEING TO HOME");
 

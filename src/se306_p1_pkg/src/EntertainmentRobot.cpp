@@ -27,6 +27,11 @@ void EntertainmentRobot::doInitialSetup()
 
 void EntertainmentRobot::doExecuteLoop()
 {
+	
+	if (RCmode == "entertainmentRobot")
+  	{
+    	EntertainmentRobot::controlRobot();
+  	}
 	if (returningHome){
 		//ROS_INFO("MOVING TO HOME");
 

@@ -25,6 +25,10 @@ void MedicationRobot::doInitialSetup()
 
 void MedicationRobot::doExecuteLoop()
 {
+	if (RCmode == "medicationRobot")
+  	{
+    	MedicationRobot::controlRobot();
+  	}
 	if (returningHome){
 
 		if (returningHome_first){
