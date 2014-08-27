@@ -3,24 +3,32 @@
 
 #include "Human.h"
 #include <msg_pkg/Interaction.h>
+#include <msg_pkg/Time.h>
+#include <msg_pkg/RequestLock.h>
+#include <msg_pkg/LockStatus.h>
+#include <msg_pkg/Unlock.h>
 #include "ros/ros.h"
 #include <ctime>
 #include <time.h>
-#include <msg_pkg/Time.h>
+#include "Actor.h"
 
 class Resident : public Human
 {
 public:
   virtual bool isLocked();
-  virtual void lock();
-  virtual void unlock();
+  virtual void lock(ActorType type, string id);
+  virtual void unlock(std::string robot_id);
   
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg);
   static void timeCallback(msg_pkg::Time msg);
+  static void requestLockCallback(msg_pkg::RequestLock msg);
+  static void unlockCallback(msg_pkg::Unlock msg);
   
   bool lock_;
+  ActorType lock_type_;
+  string lock_id_;
 
   // Demo paramters to gradually reduce levels
   int morale_count_;
@@ -30,7 +38,7 @@ public:
   const static int WAIT_TIME = 50;
   bool m_replenished_;
 
-  // Event hours - c++ inverts 24hr time for some reason? - maybe just my machine does this
+  // Event hours
   const static int WAKE_TIME = 7;
   const static int BREAKFAST_TIME = 8;
   const static int LUNCH_TIME = 13;
@@ -58,11 +66,20 @@ public:
   ros::Publisher publisherSocialness;
   // Publisher for morale
   ros::Publisher publisherMorale;
+  // Publisher for lock status
+  ros::Publisher publisherLockStatus;
+  // Publisher for telephone
+  ros::Publisher publisherTelephone;
 
   // Subscriber for interactions
   ros::Subscriber subscriberInteraction;
   // Subscriber for time
   ros::Subscriber subscriberTime;
+  // Subscriber for requesting a lock
+  ros::Subscriber subscriberRequestLock;
+  // Subscriber for unlocking
+  ros::Subscriber subscriberUnlock;
+
 
   // Gets a new level with a maximum of 5 and minimum of 1
   static int getNewLevel(int amount, int oldValue);
@@ -75,6 +92,13 @@ public:
   void eat(int hour);
   void goToSleep();
   bool hasWoken();
+
+  // Phone call
+  void call(string personType);
+
+  // Enum conversions
+  ActorType getActorTypeFromString(string actorType);
+  string getStringFromActorType(ActorType actorType);
 };
 
 

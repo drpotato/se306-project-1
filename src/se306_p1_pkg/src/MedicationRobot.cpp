@@ -11,10 +11,10 @@ void MedicationRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
-	moraleLevel = 5;
-	entertaining = false;
+	healthLevel = 5;
+	healing = false;
 	residentName = "RobotNode2";
-	subscriberMorale = nodeHandle->subscribe("morale", 1000, MedicationRobot::moraleCallback);
+	subscriberHealth = nodeHandle->subscribe("health", 1000, MedicationRobot::healthCallback);
 	y = 0;
 	x = 0;
 	first = true;
@@ -27,72 +27,77 @@ void MedicationRobot::doExecuteLoop()
 {
 	if (returningHome){
 
-		// if (returningHome_first){
-		// 	returningHome_first = false;
-		// 	//TODO: Matt fix this shit (Target node reset upon reach destination)
-		// 	//targetNode = 0;
-		// }
+		if (returningHome_first){
+			returningHome_first = false;
+			//TODO: Matt fix this shit (Target node reset upon reach destination)
+			//targetNode = 0;
+		}
 
-  //       return;
+        return;
 
 	}
 
-	if (!entertaining)
+	if (!healing)
 	{
-		// if (!checkMedicationLevel())
-		// {
-		// 	if (first_call)
-		// 	{
-		// 		//this->startMovingToResident();
-		// 		first_call = false;
-		// 	}
+		if (checkHealthLevel())
+		{
+			//ROS_INFO("Nothing to do here");
+		}
+		else
+		{
+			if (first_call)
+			{
+				this->startMovingToResident();
+				first_call = false;
+			}
 
-	 //    	if (!(this->movingToResident) )
-	 //    	{
-	 //    		ROS_INFO("CHANGED TO ENTERTAINING");
-	 //    		entertaining=true;
-	 //    		first = false;
-	 //    	}
+	    	if (!(this->movingToResident) )
+	    	{
+	    		ROS_INFO("CHANGED TO ENTERTAINING");
+	    		healing=true;
+	    		first = false;
+	    	}
 
-		// }
+		}
 	}
 	else
 	{
-		// if (moraleLevel == 5)
-		// {
-		// 	//Add do last desponse call that kurt implimented
-		// 	MedicationRobot::stopResponse("entertaining");
-		// 	entertaining = false;
-		// 	returningHome = true;
+		if (healthLevel == 5)
+		{
+			//Add do last desponse call that kurt implimented
+			MedicationRobot::stopResponse("entertaining");
+			healing = false;
+			returningHome = true;
 
-		// }
-		// else
-		// {
+		}
+		else
+		{
 
-		// 	if (y == 40)
-		// 	{
-		// 		MedicationRobot::doResponse("entertaining");
-		// 		y=0;
-		// 	}
-		// 	else
-		// 	{
-		// 		y++;
-		// 	}
-		// }
+			if (y == 40)
+			{
+				MedicationRobot::doResponse("entertaining");
+				y=0;
+			}
+			else
+			{
+				y++;
+			}
+		}
 	}
 }
 
-// TODO: SHOULD BE MEDICATION ##################################################################################################################################
-void MedicationRobot::moraleCallback(msg_pkg::Morale msg)
+
+void MedicationRobot::healthCallback(msg_pkg::Health msg)
 {
  	MedicationRobot* temp = dynamic_cast<MedicationRobot*>( ActorSpawner::getInstance().getActor());
 
- 	temp->moraleLevel = msg.level;
+ 	temp->healthLevel = msg.level;
+ 	//ROS_INFO("Changed value");
 }
 
-bool MedicationRobot::checkMedicationLevel()
+bool MedicationRobot::checkHealthLevel()
 {
-	if (moraleLevel>=2 )
+	if (healthLevel>=2 )
 	{
 		return true;
 	}
