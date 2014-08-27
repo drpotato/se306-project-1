@@ -7,42 +7,17 @@
 
 void Caregiver::doInitialSetup()
 {
-    velLinear = 0.0;
-    velRotational = 0.0;
 
-    fitnessLevel = 5;
-    hungerLevel = 5;
-    hygieneLevel = 5;
-    moraleLevel = 5;
-    socialnessLevel = 5;
-
-    exercising = false;
-    feeding = false;
-    bathing = false;
-    moralesupporting = false;
-    talking = false;
-
-    subscriberFitness = nodeHandle->subscribe("fitness", 1000, Caregiver::fitnessCallback);
-    subscriberHunger = nodeHandle->subscribe("hunger", 1000, Caregiver::hungerCallback);
-    subscriberHygiene = nodeHandle->subscribe("hygiene", 1000, Caregiver::hygieneCallback);
-    subscriberMorale = nodeHandle->subscribe("Morale", 1000, Caregiver::moraleCallback);
-    subscriberSocialness = nodeHandle->subscribe("socialness", 1000, Caregiver::socialnessCallback);
-
-    caregiverName = "RobotNode 8";
-    y1 = 0;
-    y2 = 0;
-    y3 = 0;
-    y4 = 0;
-    y5 = 0;
-    x = 0;
-    first = true;
-    first_call = true;
-    returningHome = false;
-    returningHome_first = true;
 }
 
 
 void Caregiver::doExecuteLoop()
+{
+
+}
+
+
+void Caregiver::caring()
 {
     if (returningHome)
     {
@@ -61,7 +36,7 @@ void Caregiver::doExecuteLoop()
             {
                 this->startMovingToResident();
                 first_call = false;
-            }           
+            }
             if (!(this->movingToResident) )
             {
                 feeding=true;
@@ -149,7 +124,7 @@ void Caregiver::doExecuteLoop()
             if (hungerLevel == 5)
             {
                 //Add do last desponse call that kurt implimented
-                Caregiver::stopResponse("hunger");
+                stopResponse("hunger");
                 hungerLevel = false;
                 returningHome = true;
             }
@@ -157,7 +132,7 @@ void Caregiver::doExecuteLoop()
             {
                 if (y1 == 40)
                 {
-                    Caregiver::doResponse("hunger");
+                    doResponse("hunger");
                     y1 = 0;
                 }
                 else
@@ -171,7 +146,7 @@ void Caregiver::doExecuteLoop()
             if (hygieneLevel == 5)
             {
                 //Add do last desponse call that kurt implimented
-                Caregiver::stopResponse("hygiene");
+                stopResponse("hygiene");
                 hygieneLevel = false;
                 returningHome = true;
             }
@@ -179,7 +154,7 @@ void Caregiver::doExecuteLoop()
             {
                 if (y2 == 40)
                 {
-                    Caregiver::doResponse("hygiene");
+                    doResponse("hygiene");
                     y2 = 0;
                 }
                 else
@@ -193,7 +168,7 @@ void Caregiver::doExecuteLoop()
             if (fitnessLevel == 5)
             {
                 //Add do last desponse call that kurt implimented
-                Caregiver::stopResponse("fitness");
+                stopResponse("fitness");
                 fitnessLevel = false;
                 returningHome = true;
             }
@@ -201,7 +176,7 @@ void Caregiver::doExecuteLoop()
             {
                 if (y3 == 40)
                 {
-                    Caregiver::doResponse("fitness");
+                    doResponse("fitness");
                     y3 = 0;
                 }
                 else
@@ -215,7 +190,7 @@ void Caregiver::doExecuteLoop()
             if (socialnessLevel == 5)
             {
                 //Add do last desponse call that kurt implimented
-                Caregiver::stopResponse("socialness");
+                stopResponse("socialness");
                 socialnessLevel = false;
                 returningHome = true;
             }
@@ -223,7 +198,7 @@ void Caregiver::doExecuteLoop()
             {
                 if (y4 == 40)
                 {
-                    Caregiver::doResponse("socialness");
+                    doResponse("socialness");
                     y4 = 0;
                 }
                 else
@@ -237,7 +212,7 @@ void Caregiver::doExecuteLoop()
             if (moraleLevel == 5)
             {
                 //Add do last desponse call that kurt implimented
-                Caregiver::stopResponse("morale");
+                stopResponse("morale");
                 moraleLevel = false;
                 returningHome = true;
             }
@@ -245,7 +220,7 @@ void Caregiver::doExecuteLoop()
             {
                 if (y5 == 40)
                 {
-                    Caregiver::doResponse("morale");
+                    doResponse("morale");
                     y5 = 0;
                 }
                 else
@@ -257,8 +232,7 @@ void Caregiver::doExecuteLoop()
 
     }
 }
-
-
+/*
 void Caregiver::fitnessCallback(msg_pkg::Fitness msg)
 {
     Caregiver* temp = dynamic_cast<Caregiver*>( ActorSpawner::getInstance().getActor());
@@ -298,6 +272,23 @@ void Caregiver::socialnessCallback(msg_pkg::Socialness msg)
     temp->socialnessLevel = msg.level;
 }
 
+
+void Caregiver::timeCallback(msg_pkg::Time msg)
+{
+    Caregiver* temp = dynamic_cast<Caregiver*>( ActorSpawner::getInstance().getActor());
+
+    temp->hour = msg.hour;
+
+    if (msg.day % 2 != 0)
+    {
+        temp->odd = true;
+    }
+    else
+    {
+        temp->odd = false;
+    }
+}
+*/
 
 bool Caregiver::checkFitnessLevel()
 {
