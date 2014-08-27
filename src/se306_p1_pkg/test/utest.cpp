@@ -1,12 +1,12 @@
-// Bring in gtest
 #include <gtest/gtest.h>
 
 // Bring in my package's API, which is what I'm testing
 #include "../src/Resident.h"
 #include "../src/ActorSpawner.h"
 
-
-namespace {
+/*
+ * utest.cpp is an example file of how tests are structured for our 306 project
+ */
 
 // The fixture for testing class Foo.
 class FooTest : public ::testing::Test {
@@ -39,21 +39,8 @@ class FooTest : public ::testing::Test {
 
   // Objects declared here can be used by all tests in the test case for Foo.
 };
-}
 
-// Declare a test
-TEST(TestSuite, testCase1)
-{
-ASSERT_TRUE(1);
-}
-
-// Declare another test
-TEST(TestSuite, testCase2)
-{
-ASSERT_TRUE(1);
-}
-
-TEST(TestSuite, testCase3)
+TEST(TestSuite, testResidentInteration)
 {
   ActorSpawner &spawner = ActorSpawner::getInstance();
   Resident *actor = (Resident*)spawner.getActor("Resident");
