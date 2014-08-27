@@ -44,6 +44,7 @@ public:
 
     bool haveLock;
     bool deniedLock;
+    bool otherUnlocked;
 
 
 protected:

@@ -110,6 +110,8 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	pyInitial = py;
 	thetaInitial = theta;
     haveLock = false;
+    deniedLock = false;
+    otherUnlocked = false;
 
 	// ros::init needs L-values, so we can't just directly pass (0, ...)
 	int fakeArgC = 0;
@@ -213,6 +215,9 @@ void Actor::unlockCallback(msg_pkg::Unlock msg)
         actorPtr->haveLock=false;
         actorPtr->deniedLock = false;
         ROS_INFO("I LOST THE LOCK %s", actorPtr->rosName.c_str());
+    } else if (actorPtr->deniedLock)
+    {
+        actorPtr->otherUnlocked = true;
     }
 
 }

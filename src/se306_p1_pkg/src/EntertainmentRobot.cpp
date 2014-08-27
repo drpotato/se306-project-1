@@ -79,9 +79,13 @@ void EntertainmentRobot::doExecuteLoop()
 	}
 	else if (deniedLock)
 	{
-		EntertainmentRobot::requestLock("Robot");
-		//Set back to false so only requests again once
-		deniedLock = false;
+		if (otherUnlocked)
+		{
+			EntertainmentRobot::requestLock("Robot");
+			//Set back to false so only requests again once
+			deniedLock = false;
+			otherUnlocked = false;
+		}
 	}
 }
 
