@@ -190,8 +190,17 @@ void Actor::lockStatusCallback(msg_pkg::LockStatus msg)
     Actor *actorPtr = ActorSpawner::getInstance().getActor();
     if (0 == (strcmp(msg.robot_id.c_str(), actorPtr->rosName.c_str())) && (msg.has_lock == true))
     {
-        actorPtr->haveLock=true;
-        ROS_INFO("I HAVE THE LOCK %s",actorPtr->rosName.c_str() );
+        if (msg.has_lock)
+        {
+            actorPtr->deniedLock = false;
+            actorPtr->haveLock=true;
+            ROS_INFO("I HAVE THE LOCK %s",actorPtr->rosName.c_str() );
+        } else
+        {
+            actorPtr->haveLock = false;
+            actorPtr->deniedLock = true;
+            ROS_INFO("I WAS DENIED THE LOCK %s",actorPtr->rosName.c_str() );
+        }
     }
 
 }
@@ -202,6 +211,7 @@ void Actor::unlockCallback(msg_pkg::Unlock msg)
     if (0 == (strcmp(msg.robot_id.c_str(), actorPtr->rosName.c_str())))
     {
         actorPtr->haveLock=false;
+        actorPtr->deniedLock = false;
         ROS_INFO("I LOST THE LOCK %s", actorPtr->rosName.c_str());
     }
 

@@ -43,6 +43,7 @@ public:
     enum ActorType {Doctor=3, Nurse=2, Caregiver=2, Visitor=1, Robot=0};
 
     bool haveLock;
+    bool deniedLock;
 
 
 protected:
