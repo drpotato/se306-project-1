@@ -2,7 +2,7 @@
 #define SE306P1_ACTOR_COOKINGROBOT_H_DEFINED
 
 #include "Robot.h"
-#include <msg_pkg/Morale.h>
+#include <msg_pkg/Hunger.h>
 
 class CookingRobot : public Robot
 {
@@ -10,14 +10,14 @@ protected:
 	virtual void doInitialSetup();
 	virtual void doExecuteLoop();
 
-	bool checkCookingLevel();
+	bool checkHungerLevel();
 
-	static void moraleCallback(msg_pkg::Morale msg);
+	static void hungerCallback(msg_pkg::Hunger msg);
 
-	int8_t moraleLevel;
-	bool entertaining;
+	int8_t hungerLevel;
+	bool cooking;
 
-	ros::Subscriber subscriberMorale;
+	ros::Subscriber subscriberHunger;
 
 	string residentName;
 	int y;
