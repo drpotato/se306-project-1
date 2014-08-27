@@ -3,11 +3,14 @@
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/Socialness.h>
 #include <msg_pkg/Morale.h>
+#include <msg_pkg/Time.h>
+#include <msg_pkg/RequestLock.h>
+#include <msg_pkg/Telephone.h>
 #include "Actor.h"
 #include "ActorSpawner.h"
 #include <ctime>
 #include <time.h>
-#include <msg_pkg/Time.h>
+
 
 // The person living in our house. 
 // Has various attributes representing his needs/wants, which degrade over time.
@@ -40,10 +43,14 @@ void Resident::doInitialSetup()
   // Set up publishers.
   publisherSocialness = nodeHandle->advertise<msg_pkg::Socialness>("socialness", 1000);
   publisherMorale = nodeHandle->advertise<msg_pkg::Morale>("morale", 1000);
+  publisherLockStatus = nodeHandle->advertise<msg_pkg::LockStatus>("lockStatus", 1000);
+  publisherTelephone = nodeHandle->advertise<msg_pkg::Telephone>("telephone", 1000);
 
   // Set up subscriptions.
   subscriberInteraction = nodeHandle->subscribe("interaction", 1000, Resident::interactionCallback);
   subscriberTime = nodeHandle->subscribe("time", 1000, Resident::timeCallback);
+  subscriberRequestLock = nodeHandle->subscribe("requestLock", 1000, Resident::requestLockCallback);
+  subscriberUnlock = nodeHandle->subscribe("unlock", 1000, Resident::unlockCallback);
 }
 
 void Resident::doExecuteLoop()
@@ -101,30 +108,19 @@ void Resident::doExecuteLoop()
   //###################################################################################################################################################
 }
 
+// PHONE CALLING -------------------------------------------------------------------------------------------------//
 /*
- * A robot should not be able to interact with the resident if the resident is currently locked.
- */
-bool Resident::isLocked()
+ * personType should be one of the following: doctor, relative, friend (are there more???) (note the lowercase)
+ */ 
+void Resident::call(string personType)
 {
-  return lock_;
+  msg_pkg::Telephone phonecall;
+  phonecall.contact = personType;
+  publisherTelephone.publish(phonecall);
 }
 
-/*
- * Robots should only lock the resident if the resident is currently not locked
- */
-void Resident::lock()
-{
-  lock_ = true;
-}
 
-/*
- * Robots should unlock the resident after interation so that another robot may interact with the resident.
- */
-void Resident::unlock()
-{
-  lock_ = false;
-}
-
+// INTERACTION RELATED --------------------------------------------------------------------------------------------//
 /*
  * Upon receiving a message published to the 'interaction' topic, respond appropriately.
  */
@@ -141,71 +137,43 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   {
     // Get new level
     int newLevel = getNewLevel(amount, residentInstance->socialness_level_);
-  // Update the residents socialness level
-  residentInstance->socialness_level_ = newLevel;
-  //Create a socialness message to publish
-  msg_pkg::Socialness socialnessMessage;
-  //Assign current socialness level to the message
-  socialnessMessage.level = newLevel;
+    // Update the residents socialness level
+    residentInstance->socialness_level_ = newLevel;
+    //Create a socialness message to publish
+    msg_pkg::Socialness socialnessMessage;
+    //Assign current socialness level to the message
+    socialnessMessage.level = newLevel;
 
-  if (newLevel == 5)
-  {
-    residentInstance->stopRobotSpinning();
-  }
+    if (newLevel == 5)
+    {
+      residentInstance->stopRobotSpinning();
+    }
 
-  //Publish the message
-  residentInstance->publisherSocialness.publish(socialnessMessage);
+    //Publish the message
+    residentInstance->publisherSocialness.publish(socialnessMessage);
   } 
   else if (attribute == "entertaining")
   {
-  // Get new level
-  int newLevel = getNewLevel(amount, residentInstance->morale_level_);
-  // Update the residents socialness level
-  residentInstance->morale_level_ = newLevel;
-  //Create a socialness message to publish
-  msg_pkg::Morale moraleMessage;
-  //Assign current socialness level to the message
-  moraleMessage.level = newLevel;
+    // Get new level
+    int newLevel = getNewLevel(amount, residentInstance->morale_level_);
+    // Update the residents socialness level
+    residentInstance->morale_level_ = newLevel;
+    //Create a socialness message to publish
+    msg_pkg::Morale moraleMessage;
+    //Assign current socialness level to the message
+    moraleMessage.level = newLevel;
 
-  if (newLevel == 5)
-  {
-    residentInstance->stopRobotSpinning();
-    residentInstance->m_replenished_ = true;
-  }
+    if (newLevel == 5)
+    {
+      residentInstance->stopRobotSpinning();
+      residentInstance->m_replenished_ = true;
+    }
 
-  //Publish the message
-  residentInstance->publisherMorale.publish(moraleMessage);
+    //Publish the message
+    residentInstance->publisherMorale.publish(moraleMessage);
   }
-  // TODO: put others in when implemented ##################################################################################################################
+  // TODO: put others in when implemented
 }
-
-void Resident::timeCallback(msg_pkg::Time msg)
-{
-  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
-
-  // Check if its currently any event times
-  if ((msg.hour == residentInstance->WAKE_TIME) && (!residentInstance->has_woken_))
-  {
-    // WAKE THE FK UP
-    ROS_INFO("It is %d:00. Wake up!", msg.hour);
-    residentInstance->wakeUp();
-    ROS_INFO("%s", residentInstance->has_gone_to_bed_ ? "Sleeping" : "Awake");
-  }
-  else if ( ((msg.hour == residentInstance->BREAKFAST_TIME) && (!residentInstance->has_eaten_breakfast_)) || ((msg.hour == residentInstance->LUNCH_TIME) && (!residentInstance->has_eaten_lunch_)) || ((msg.hour == residentInstance->DINNER_TIME) && (!residentInstance->has_eaten_dinner_)))
-  {
-    // Here have some food
-    ROS_INFO("It is %d:00 - time to eat!", msg.hour);
-    residentInstance->eat(msg.hour);
-  }
-  else if ((msg.hour == residentInstance->SLEEP_TIME) && (!residentInstance->has_gone_to_bed_))
-  {
-    // Go to sleep yo
-    ROS_INFO("It is %d:00. Sleep time!", msg.hour);
-    residentInstance->goToSleep();
-    ROS_INFO("%s", residentInstance->has_gone_to_bed_ ? "Sleeping" : "Awake");
-  }
-}
-
 
 int Resident::getNewLevel(int amount, int oldLevel)
 {
@@ -217,6 +185,36 @@ void Resident::stopRobotSpinning()
 {
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
   residentInstance->velRotational = 0.0; // Stop rotation to show interaction finished
+}
+
+
+
+// DAILY EVENTS -----------------------------------------------------------------------------------------------------//
+void Resident::timeCallback(msg_pkg::Time msg)
+{
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+
+  // Check if its currently any event times
+  if ((msg.hour == residentInstance->WAKE_TIME) && (!residentInstance->has_woken_))
+  {
+    // WAKE UP
+    ROS_INFO("It is %d:00. Wake up!", msg.hour);
+    residentInstance->wakeUp();
+    ROS_INFO("%s", residentInstance->has_gone_to_bed_ ? "Sleeping" : "Awake");
+  }
+  else if ( ((msg.hour == residentInstance->BREAKFAST_TIME) && (!residentInstance->has_eaten_breakfast_)) || ((msg.hour == residentInstance->LUNCH_TIME) && (!residentInstance->has_eaten_lunch_)) || ((msg.hour == residentInstance->DINNER_TIME) && (!residentInstance->has_eaten_dinner_)))
+  {
+    // Have some food
+    ROS_INFO("It is %d:00 - time to eat!", msg.hour);
+    residentInstance->eat(msg.hour);
+  }
+  else if ((msg.hour == residentInstance->SLEEP_TIME) && (!residentInstance->has_gone_to_bed_))
+  {
+    // Go to sleep
+    ROS_INFO("It is %d:00. Sleep time!", msg.hour);
+    residentInstance->goToSleep();
+    ROS_INFO("%s", residentInstance->has_gone_to_bed_ ? "Sleeping" : "Awake");
+  }
 }
 
 void Resident::wakeUp()
@@ -262,4 +260,139 @@ bool Resident::hasWoken()
     return true;
   }
   return false;
+}
+
+
+// LOCK RELATED -------------------------------------------------------------------------------------------------//
+void Resident::requestLockCallback(msg_pkg::RequestLock msg)
+{
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+
+  if (residentInstance->isLocked())
+  {
+
+    Resident::ActorType type = residentInstance->getActorTypeFromString(msg.actor_name);
+
+    if (type > residentInstance->lock_type_)
+    {
+      // The robot requesting the lock has a higher priority than the current one. You can have the lock!
+      
+      // REMOVE LOCK FROM CURRENT ROBOT
+      residentInstance->unlock(residentInstance->lock_id_);
+
+      // SET NEW LOCK
+      residentInstance->lock((residentInstance->getActorTypeFromString(msg.actor_name)), msg.robot_id);
+    }
+    else
+    {
+      // The robot with the lock has the same or higher priority than the one requesting it, you cannot have the lock
+      msg_pkg::LockStatus lockStatusMessage;
+      lockStatusMessage.robot_id = msg.robot_id;
+      lockStatusMessage.has_lock = false;
+      residentInstance->publisherLockStatus.publish(lockStatusMessage);
+    }
+  }
+  else
+  {
+    // No one has the lock, give it to the requester
+    residentInstance->lock(residentInstance->getActorTypeFromString(msg.actor_name), msg.robot_id);
+  }
+}
+
+/*
+ * Unlock the resident when receiving an unlock callback
+ */
+void Resident::unlockCallback(msg_pkg::Unlock msg)
+{
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+  residentInstance->unlock(msg.robot_id);
+}
+
+/*
+ * A robot should not be able to interact with the resident if the resident is currently locked.
+ */
+bool Resident::isLocked()
+{
+  return lock_;
+}
+
+/*
+ * Robots should only lock the resident if the resident is currently not locked
+ */
+void Resident::lock(ActorType type, string id)
+{
+  lock_ = true;
+  lock_type_ = type;
+  lock_id_ = id;
+
+  msg_pkg::LockStatus lockStatusMessage;
+
+  lockStatusMessage.robot_id = id;
+  lockStatusMessage.has_lock = true;
+
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+  residentInstance->publisherLockStatus.publish(lockStatusMessage);
+}
+
+/*
+ * Robots should unlock the resident after interation so that another robot may interact with the resident.
+ */
+void Resident::unlock(string robot_id)
+{
+  lock_ = false;
+  msg_pkg::LockStatus lockStatusMessage;
+  lockStatusMessage.robot_id = robot_id;
+  lockStatusMessage.has_lock = false;
+  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+  residentInstance->publisherLockStatus.publish(lockStatusMessage);
+}
+
+
+
+// HELPER FUNCTIONS ---------------------------------------------------------------------------//
+Resident::ActorType Resident::getActorTypeFromString(string actorType)
+{
+  if (actorType == "Doctor")
+  {
+    return Doctor;
+  }
+  else if (actorType == "Nurse")
+  {
+    return Nurse;
+  }
+  else if (actorType == "Caregiver")
+  {
+    return Caregiver;
+  }
+  else if (actorType == "Visitor")
+  {
+    return Visitor;
+  }
+  else if (actorType == "Robot")
+  {
+    return Robot;
+  }
+}
+string Resident::getStringFromActorType(ActorType actorType)
+{
+  if (actorType == Doctor)
+  {
+    return "Doctor";
+  }
+  else if (actorType == Nurse)
+  {
+    return "Nurse";
+  }
+  else if (actorType == Caregiver)
+  {
+    return "Caregiver";
+  }
+  else if (actorType == Visitor)
+  {
+    return "Visitor";
+  }
+  else if (actorType == Robot)
+  {
+    return "Robot";
+  }
 }
