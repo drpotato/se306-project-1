@@ -50,6 +50,10 @@ PathPlanner::PathPlanner() {
     addNode(&nodeGuestBedroomCentre);
     addNode(&nodeHouseDoor);
 
+    // Add all Actors to the graph.
+    //TODO: GET ALL OF THE ACTORS (NOT JUST THEIR NAMES, REFERENCES TO THE ACTUAL NODES) FROM STAGE##################################################################################################################################################
+    //addActorNode();
+
     int size = nodes.size();
     ROS_INFO("Size of PathPlanner's graph: %i", size);
 }
@@ -58,27 +62,20 @@ PathPlanner::PathPlanner() {
 void PathPlanner::locationCallback(msg_pkg::Location msg)
 {
     ROS_INFO_STREAM("LOCATIONCALLBACK WAS CALLED!");
-    // Find actor of this name in graph and remove it.
+
+    // Find Actor of this name in graph and remove it.
     string name = msg.id;
-
-    //ROS_INFO("Attempting to add node: %s", name);
-
-    ROS_INFO_STREAM("About to call removeNode()");
     PathPlannerNode* actorNode = removeNode(&name);
-    ROS_INFO_STREAM("removeNode() has finished");
     
     if (actorNode) {
         // Find the actor's neighbour at its new location, and add it back into the graph.
         addActorNode(actorNode);
-    } else {
-        ROS_INFO_STREAM("removeNode() returned NULL!");
     }
 }
 
 // Returns the shortest path between the two given nodes.
 vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,PathPlannerNode *target)
 {
-    ROS_INFO_STREAM("Pathplanning!");
     PathPlannerNode *top;
     queue<PathPlannerNode*> s;
     s.push(startNode);
@@ -122,24 +119,19 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
 
 // Removes a node from the graph, and removes it from all its' neighbours' lists of neighbours.
 PathPlannerNode* PathPlanner::removeNode(string* name) {
-    ROS_INFO_STREAM("removeNode() started");
     for (vector<PathPlannerNode*>::iterator itr = nodes.begin(); itr != nodes.end();) {
         PathPlannerNode* currentNode = *itr;
-        ROS_INFO("Current node is: %s", currentNode->getName()->c_str());
         if (currentNode->getName()->compare(*name) == 0) {
             // For each of its neighbours
-            ROS_INFO_STREAM("Current node matches node to remove!");
             for (int j = 0; j < currentNode->neighbours.size(); j++) {
                 PathPlannerNode* neighbour = currentNode->neighbours[j];
                 neighbour->removeNeighbour(currentNode);
                 itr = nodes.erase(itr);
             }
-        ROS_INFO_STREAM("Current node removed from its neighbours' lists of neighbours");
         return currentNode;
         }
         itr++;
     }
-    ROS_INFO_STREAM("Node to remove not found in graph");
     return NULL;
 }
 
