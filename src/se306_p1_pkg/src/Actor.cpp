@@ -125,7 +125,7 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
     publisherRequestLock = nodeHandle->advertise<msg_pkg::RequestLock>("requestLock", 1000);
     publisherUnlock = nodeHandle->advertise<msg_pkg::Unlock>("unlock", 1000);
 
-    subscriberRequestLock = nodeHandle->subscribe("requestLock", 1000, Actor::requestLockCallback);
+    subscriberLockStatus = nodeHandle->subscribe("lockStatus", 1000, Actor::lockStatusCallback);
     subscriberUnlock = nodeHandle->subscribe("unlock", 1000, Actor::unlockCallback);
 
 	// Put custom init stuff here (or make a method and call it from here)
@@ -185,13 +185,15 @@ void Actor::locationCallback(msg_pkg::Location msg)
 
 }
 
-void Actor::requestLockCallback(msg_pkg::RequestLock msg)
+void Actor::lockStatusCallback(msg_pkg::LockStatus msg)
 {
     Actor *actorPtr = ActorSpawner::getInstance().getActor();
-    if (0 == (strcmp(msg.robot_id.c_str(), actorPtr->rosName.c_str())))
+    if (0 == (strcmp(msg.robot_id.c_str(), actorPtr->rosName.c_str())) && (msg.has_lock == true))
     {
         actorPtr->haveLock=true;
+        ROS_INFO("I HAVE THE LOCK %s",actorPtr->rosName.c_str() );
     }
+
 }
 
 void Actor::unlockCallback(msg_pkg::Unlock msg)
@@ -200,6 +202,7 @@ void Actor::unlockCallback(msg_pkg::Unlock msg)
     if (0 == (strcmp(msg.robot_id.c_str(), actorPtr->rosName.c_str())))
     {
         actorPtr->haveLock=false;
+        ROS_INFO("I LOST THE LOCK %s", actorPtr->rosName.c_str());
     }
 
 }

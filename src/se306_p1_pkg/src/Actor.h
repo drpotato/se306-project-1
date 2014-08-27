@@ -4,7 +4,7 @@
 #include <nav_msgs/Odometry.h>
 #include <msg_pkg/Location.h>
 #include <msg_pkg/Unlock.h>
-#include <msg_pkg/RequestLock.h>
+#include <msg_pkg/LockStatus.h>
 
 #include "ros/ros.h"
 #include "PathPlanner.h"
@@ -29,8 +29,8 @@ public:
 
 	static void StageOdom_callback(nav_msgs::Odometry msg);
 	static void locationCallback(msg_pkg::Location msg);
-	static void requestLockCallback(msg_pkg::RequestLock);
-	static void unlockCallback(msg_pkg::Unlock);
+	static void lockStatusCallback(msg_pkg::LockStatus msg);
+	static void unlockCallback(msg_pkg::Unlock msg);
 
     bool moveToResident();
     void startMovingToResident();
@@ -75,7 +75,7 @@ protected:
 	ros::Subscriber subscriberStageOdometry;
 	ros::Subscriber subscriberStageLaserScan;
 	ros::Subscriber subscriberLocation;
-	ros::Subscriber subscriberRequestLock;
+	ros::Subscriber subscriberlockStatus;
 	ros::Subscriber subscriberUnlock;
 
 	ros::Publisher publisherRequestLock;
