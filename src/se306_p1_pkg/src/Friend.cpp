@@ -28,6 +28,7 @@ void Friend::doInitialSetup()
   returningHome_first = true;
   
   waiting_to_socialise = false;
+  called_by_resident_ = false;
 }
 
 void Friend::doExecuteLoop()
@@ -39,6 +40,14 @@ void Friend::doExecuteLoop()
       returningHome_first = false;
     }
     return;
+  }
+  
+  // If socialness is 1 and has been called by resident should probably socialise with resident
+  if (socialnessLevel <= 1 && called_by_resident_)
+  {
+    startMovingToResident();
+    waiting_to_socialise = true;
+    called_by_resident_ = false;
   }
   
   // If we have finished moving to the resident and we need to socialise:
@@ -94,12 +103,7 @@ void Friend::telephoneCallback(msg_pkg::Telephone msg)
   if (msg.contact.compare("friend") == 0)
   {
     ROS_DEBUG_STREAM("Friend telephoneCallback contact is friend!!!");
-    // If it has reached level 1 and resident has called friend should probably socialise with resident
-    if (temp->socialnessLevel <= 1)
-    {
-      temp->startMovingToResident();
-      temp->waiting_to_socialise = true;
-    }
+    temp->called_by_resident_ = true;
   }
 }
 
