@@ -12,20 +12,26 @@ ros::NodeHandle* PathPlanner::nodeHandle;
 PathPlanner::PathPlanner() {
     ROS_INFO_STREAM("PATHPLANNER CONSTRUCTOR HAS BEEN CALLED");
 
-    subscriberLocation = nodeHandle->subscribe("location", 1000, PathPlanner::locationCallback);
     nodeHandle = new ros::NodeHandle();
+    subscriberLocation = nodeHandle->subscribe("location", 1000, PathPlanner::locationCallback);
+
+    ROS_INFO_STREAM("1");
 
     nodeBedroomCentreName = "nodeBedroomCentre";
     nodeHallwayByBedroomName = "nodeHallwayByBedroom";
     nodeHalllwayByLivingRoomName = "nodeHalllwayByLivingRoom";
     nodeGuestBedroomCentreName = "nodeGuestBedroomCentre";
-    nodeHouseDoorName = "nodeHouseDoorName";
+    nodeHouseDoorName = "nodeHouseDoor";
+
+    ROS_INFO_STREAM("2");
 
     nodeBedroomCentre = PathPlannerNode(&nodeBedroomCentreName, -2.5, 3);
     nodeHallwayByBedroom = PathPlannerNode(&nodeHallwayByBedroomName, -2.5, -0);
     nodeHalllwayByLivingRoom = PathPlannerNode(&nodeHalllwayByLivingRoomName, 3, 0);
     nodeGuestBedroomCentre = PathPlannerNode(&nodeGuestBedroomCentreName, -2.5, -3);
     nodeHouseDoor = PathPlannerNode(&nodeHouseDoorName, 2.8, 5);
+
+    ROS_INFO_STREAM("3");
 
     // Specify which nodes have a clear line of sight to each other.
     nodeBedroomCentre.addNeighbour(&nodeHallwayByBedroom);
@@ -43,6 +49,8 @@ PathPlanner::PathPlanner() {
     
     nodeHouseDoor.addNeighbour(&nodeHalllwayByLivingRoom);
 
+    ROS_INFO_STREAM("4");
+
     // Add the nodes to the path planner's graph of nodes and connections.
     addNode(&nodeBedroomCentre);
     addNode(&nodeHallwayByBedroom);
@@ -50,8 +58,11 @@ PathPlanner::PathPlanner() {
     addNode(&nodeGuestBedroomCentre);
     addNode(&nodeHouseDoor);
 
+    ROS_INFO_STREAM("5");
+
     ROS_INFO_STREAM("PATHPLANNER CONSTRUCTOR HAS FINISHED");
-    ROS_INFO("Size of PathPlanner's graph: %f", nodes.size());
+    int size = nodes.size();
+    ROS_INFO("Size of PathPlanner's graph: %i", size);
 }
 
 // When a location message is received, updates the graph with that Actor's new location.

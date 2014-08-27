@@ -23,64 +23,37 @@ void EntertainmentRobot::doInitialSetup()
 	returningHome_first = true;
 }
 
-void EntertainmentRobot::doExecuteLoop()
-{
-	if (returningHome){
+void EntertainmentRobot::doExecuteLoop() {
+	if (returningHome) {
 		//ROS_INFO("MOVEING TO HOME");
 
-		if (returningHome_first){
+		if (returningHome_first) {
 			returningHome_first = false;
 			//TODO: Matt fix this shit (Target node reset upon reach destination)
 			//targetNode = 0;
 		}
-        
         return;
-
 	}
 
-	if (!entertaining)
-	{
-		if (!checkMoraleLevel())
-		{
-			if (first_call)
-			{
-				//this->activeNode = &node5;
-                this->goToNode("Resident");
-				first_call = false;
-			}
-
-	    	if (!(true) )
-	    	{
-	    		//EntertainmentRobot::doResponse("entertaining");
+	if (!entertaining) {
+		if (!checkMoraleLevel()) {
+			
+	    	if (!(this->goToNode("Resident"))) {
 	    		ROS_INFO("CHANGED TO ENTERTAINING");
 	    		entertaining=true;
-	    		first = false;
 	    	}
-
-			//After finished entertaining set entertaining to flase
-
 		}
-	} 
-	else 
-	{
-		if (moraleLevel == 5)
-		{
+	} else {
+		if (moraleLevel == 5) {
 			//Add do last desponse call that kurt implimented
 			EntertainmentRobot::stopResponse("entertaining");
 			entertaining = false;
 			returningHome = true;
-
-		} 
-		else
-		{
-
-			if (y == 40)
-			{
+		} else {
+			if (y == 40) {
 				EntertainmentRobot::doResponse("entertaining");
-				y=0;
-			} 
-			else 
-			{
+				y = 0;
+			} else {
 				y++;
 			}	
 		}
