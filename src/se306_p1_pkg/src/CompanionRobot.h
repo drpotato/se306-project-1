@@ -10,12 +10,12 @@ protected:
 	virtual void doInitialSetup();
 	virtual void doExecuteLoop();
 
-	bool checkCompanionLevel();
+	bool checkMoraleLevel();
 
 	static void moraleCallback(msg_pkg::Morale msg);
 
 	int8_t moraleLevel;
-	bool entertaining;
+	bool giving_morale;
 
 	ros::Subscriber subscriberMorale;
 
