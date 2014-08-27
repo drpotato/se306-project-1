@@ -3,7 +3,7 @@
 
 // A single navigation system waypoint.
 // Has a name, an x and y position, a boolean indicating whether or not it has been visited, and a list of neighbouiring nodes to which it has a direct line of sight.
-PathPlannerNode::PathPlannerNode(string* inputName, double x, double y){
+PathPlannerNode::PathPlannerNode(string inputName, double x, double y){
     this->name = inputName;
     this->px = x;
     this->py = y;
@@ -11,7 +11,7 @@ PathPlannerNode::PathPlannerNode(string* inputName, double x, double y){
 
 PathPlannerNode::PathPlannerNode(){}
 
-string* PathPlannerNode::getName(){
+string PathPlannerNode::getName(){
     return this->name;
 }
 

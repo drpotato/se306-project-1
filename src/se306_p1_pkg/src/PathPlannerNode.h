@@ -8,23 +8,20 @@ using namespace std;
 class PathPlannerNode{
     friend class PathPlanner;
     private:
-        string* name;
-
+        string name;
         PathPlannerNode* previous;
-        //position
-
-    vector<PathPlannerNode*> neighbours;
+        vector<PathPlannerNode*> neighbours;
 
     public:
         bool visited;
         double px;
         double py;
-        PathPlannerNode(string*,double,double);
+        PathPlannerNode(string, double, double);
         PathPlannerNode();
         PathPlannerNode(const PathPlannerNode &other);
         void addNeighbour(PathPlannerNode*);
         void removeNeighbour(PathPlannerNode*);
-        string* getName();
+        string getName();
         bool isVisited();
         void setVisited(bool newVisited);
 };

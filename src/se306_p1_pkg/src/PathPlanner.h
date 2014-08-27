@@ -31,20 +31,6 @@ private:
     PathPlannerNode nodeGuestBedroomCentre;
     PathPlannerNode nodeHouseDoor;
 
-    string nodeResidentName;
-    string nodeEntertainmentRobotName;
-    string nodeRelativeName;
-    string nodeMedicationRobotName;
-    string nodeCompanionRobotName;
-    string nodeCookingRobotName;
-
-    PathPlannerNode nodeResident;
-    PathPlannerNode nodeEntertainmentRobot;
-    PathPlannerNode nodeRelative;
-    PathPlannerNode nodeMedicationRobot;
-    PathPlannerNode nodeCompanionRobot;
-    PathPlannerNode nodeCookingRobot;
-
 public:
     PathPlanner();
 

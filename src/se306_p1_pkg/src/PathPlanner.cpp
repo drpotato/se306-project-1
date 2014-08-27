@@ -18,26 +18,6 @@ PathPlanner::PathPlanner() {
     nodeGuestBedroomCentreName = "nodeGuestBedroomCentre";
     nodeHouseDoorName = "nodeHouseDoor";
 
-    string nodeResidentName = "RobotNode0";
-    string nodeEntertainmentRobotName = "RobotNode2";
-    string nodeRelativeName = "RobotNode3";
-    string nodeMedicationRobotName = "RobotNode6";
-    string nodeCompanionRobotName = "RobotNode7";
-    string nodeCookingRobotName = "RobotNode8";
-
-    nodeResident = PathPlannerNode(&nodeResidentName, 0, 0);
-    nodeEntertainmentRobot = PathPlannerNode(&nodeEntertainmentRobotName, 0, 0);
-    nodeRelative = PathPlannerNode(&nodeRelativeName, 0, 0);
-    nodeMedicationRobot = PathPlannerNode(&nodeMedicationRobotName, 0, 0);
-    nodeCompanionRobot = PathPlannerNode(&nodeCompanionRobotName, 0, 0);
-    nodeCookingRobot = PathPlannerNode(&nodeCookingRobotName, 0, 0);
-
-    nodeBedroomCentre = PathPlannerNode(&nodeBedroomCentreName, -2.5, 3);
-    nodeHallwayByBedroom = PathPlannerNode(&nodeHallwayByBedroomName, -2.5, -0);
-    nodeHalllwayByLivingRoom = PathPlannerNode(&nodeHalllwayByLivingRoomName, 3, 0);
-    nodeGuestBedroomCentre = PathPlannerNode(&nodeGuestBedroomCentreName, -2.5, -3);
-    nodeHouseDoor = PathPlannerNode(&nodeHouseDoorName, 2.8, 5);
-
     // Specify which nodes have a clear line of sight to each other.
     nodeBedroomCentre.addNeighbour(&nodeHallwayByBedroom);
     nodeBedroomCentre.addNeighbour(&nodeGuestBedroomCentre);
@@ -60,13 +40,6 @@ PathPlanner::PathPlanner() {
     addNode(nodeHalllwayByLivingRoom);
     addNode(nodeGuestBedroomCentre);
     addNode(nodeHouseDoor);
-    /*
-    addNode(nodeResident);
-    addNode(nodeEntertainmentRobot);
-    addNode(nodeRelative);
-    addNode(nodeMedicationRobot);
-    addNode(nodeCompanionRobot);
-    addNode(nodeCookingRobot);*/
 }
 
 // When a location message is received, updates the graph with that Actor's new location.
@@ -80,8 +53,8 @@ void PathPlanner::locationCallback(msg_pkg::Location msg)
         updateNode(name, x, y);
     } else {
         ROS_INFO_STREAM("Node does not exist; create it");
-        PathPlannerNode* newNode = new PathPlannerNode(&name, x, y);
-        PathPlannerNode* closestNode = getClosestNode(x,y);
+        PathPlannerNode* newNode = new PathPlannerNode(name, x, y);
+        PathPlannerNode* closestNode = getClosestNode(x, y);
         newNode->addNeighbour(closestNode);
         closestNode->addNeighbour(newNode);
         addNode(*newNode);
@@ -105,7 +78,7 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
     while (s.empty() == false){
         top = s.front();
         s.pop();
-        if (top->getName()->compare(*(target->getName())) == 0) {
+        if (top->getName().compare(target->getName()) == 0) {
             //found it!
             break;
         }
@@ -120,7 +93,7 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
 
     vector<PathPlannerNode*> path;
     PathPlannerNode* iter = top;
-    while (iter->getName()->compare(*(startNode->getName())) != 0) {
+    while (iter->getName().compare(startNode->getName()) != 0) {
         path.insert(path.begin(),iter);
         iter = iter->previous;
     }
@@ -137,7 +110,7 @@ void PathPlanner::removeNode(string* name) {
 
     for(int i=0;i<nodes.size();i++) {
         PathPlannerNode* currentNode = &nodes[i];
-        if (currentNode->getName()->compare(*name) == 0) {
+        if (currentNode->getName().compare(*name) == 0) {
             // For each of its neighbours
             for (int j = 0; j < currentNode->neighbours.size(); j++) {
                 PathPlannerNode* neighbour = currentNode->neighbours[j];
@@ -159,7 +132,7 @@ void PathPlanner::addNode(PathPlannerNode p) {
 PathPlannerNode* PathPlanner::getNode(string name) {
     for (int i = 0; i < nodes.size(); i++) {
         PathPlannerNode* node = &nodes[i];
-        if (node->getName()->compare(name) == 0) {
+        if (node->getName().compare(name) == 0) {
             return node;
         }
     }
@@ -170,7 +143,7 @@ PathPlannerNode* PathPlanner::getNode(string name) {
 bool PathPlanner::hasNode(string name){
   for (int i = 0; i < nodes.size(); i++) {
       PathPlannerNode* node = &nodes[i];
-      if (node->getName()->compare(name) == 0) {
+      if (node->getName().compare(name) == 0) {
           return true;
       }
   }
@@ -181,7 +154,7 @@ bool PathPlanner::hasNode(string name){
 void PathPlanner::updateNode(string name, double x, double y) {
     for (int i = 0; i < nodes.size(); i++){
         PathPlannerNode* node = &nodes[i];
-        if (node->getName()->compare(name) == 0) {
+        if (node->getName().compare(name) == 0) {
             ROS_INFO("Updating Node %s at index %d",name.c_str(),i);
             // This node represents an Actor, and so will only have one neighbour.
             PathPlannerNode* neighbour = node->neighbours[0];
