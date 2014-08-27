@@ -18,6 +18,20 @@ PathPlanner::PathPlanner() {
     nodeGuestBedroomCentreName = "nodeGuestBedroomCentre";
     nodeHouseDoorName = "nodeHouseDoor";
 
+    string nodeResidentName = "RobotNode0";
+    string nodeEntertainmentRobotName = "RobotNode2";
+    string nodeRelativeName = "RobotNode3";
+    string nodeMedicationRobotName = "RobotNode6";
+    string nodeCompanionRobotName = "RobotNode7";
+    string nodeCookingRobotName = "RobotNode8";
+
+    nodeResident = PathPlannerNode(&nodeResidentName, 0, 0);
+    nodeEntertainmentRobot = PathPlannerNode(&nodeEntertainmentRobotName, 0, 0);
+    nodeRelative = PathPlannerNode(&nodeRelativeName, 0, 0);
+    nodeMedicationRobot = PathPlannerNode(&nodeMedicationRobotName, 0, 0);
+    nodeCompanionRobot = PathPlannerNode(&nodeCompanionRobotName, 0, 0);
+    nodeCookingRobot = PathPlannerNode(&nodeCookingRobotName, 0, 0);
+
     nodeBedroomCentre = PathPlannerNode(&nodeBedroomCentreName, -2.5, 3);
     nodeHallwayByBedroom = PathPlannerNode(&nodeHallwayByBedroomName, -2.5, -0);
     nodeHalllwayByLivingRoom = PathPlannerNode(&nodeHalllwayByLivingRoomName, 3, 0);
@@ -46,11 +60,19 @@ PathPlanner::PathPlanner() {
     addNode(&nodeHalllwayByLivingRoom);
     addNode(&nodeGuestBedroomCentre);
     addNode(&nodeHouseDoor);
+
+    addNode(&nodeResident);
+    addNode(&nodeEntertainmentRobot);
+    addNode(&nodeRelative);
+    addNode(&nodeMedicationRobot);
+    addNode(&nodeCompanionRobot);
+    addNode(&nodeCookingRobot);
 }
 
 // When a location message is received, updates the graph with that Actor's new location.
 void PathPlanner::locationCallback(msg_pkg::Location msg)
 {
+    ROS_INFO_STREAM("LocationCallback called!");
     // Find Actor of this name in graph and remove it.
     string name = msg.id;
     double x = msg.xpos;

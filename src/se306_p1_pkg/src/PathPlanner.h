@@ -19,17 +19,31 @@ private:
 
     typedef boost::unordered_map<string,string> map;
 
-    PathPlannerNode  nodeBedroomCentre;
-    PathPlannerNode  nodeHallwayByBedroom;
-    PathPlannerNode  nodeHalllwayByLivingRoom;
-    PathPlannerNode  nodeGuestBedroomCentre;
-    PathPlannerNode  nodeHouseDoor;
-
     string nodeBedroomCentreName;
     string nodeHallwayByBedroomName;
     string nodeHalllwayByLivingRoomName;
     string nodeGuestBedroomCentreName;
     string nodeHouseDoorName;
+
+    PathPlannerNode nodeBedroomCentre;
+    PathPlannerNode nodeHallwayByBedroom;
+    PathPlannerNode nodeHalllwayByLivingRoom;
+    PathPlannerNode nodeGuestBedroomCentre;
+    PathPlannerNode nodeHouseDoor;
+
+    string nodeResidentName;
+    string nodeEntertainmentRobotName;
+    string nodeRelativeName;
+    string nodeMedicationRobotName;
+    string nodeCompanionRobotName;
+    string nodeCookingRobotName;
+
+    PathPlannerNode nodeResident;
+    PathPlannerNode nodeEntertainmentRobot;
+    PathPlannerNode nodeRelative;
+    PathPlannerNode nodeMedicationRobot;
+    PathPlannerNode nodeCompanionRobot;
+    PathPlannerNode nodeCookingRobot;
 
 public:
     PathPlanner();
