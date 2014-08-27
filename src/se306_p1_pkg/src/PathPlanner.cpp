@@ -45,6 +45,7 @@ PathPlanner::PathPlanner() {
 // When a location message is received, updates the graph with that Actor's new location.
 void PathPlanner::locationCallback(msg_pkg::Location msg)
 {
+    ROS_INFO_STREAM("LocationCallback called!");
     // Find Actor of this name in graph and remove it.
     string name = msg.id;
     double x = msg.xpos;
@@ -154,19 +155,22 @@ bool PathPlanner::hasNode(string name){
 
 // Updates the PathPlannerNode's location with the given x and y, and refinds its closest neighbour.
 void PathPlanner::updateNode(string name, double x, double y) {
-    for (int i = 0; i < nodes.size(); i++){
+    for (int i = 0; i < nodes.size(); i++) {
         PathPlannerNode* node = &nodes[i];
         if (node->getName().compare(name) == 0) {
-            ROS_INFO("Updating Node %s at index %d",name.c_str(),i);
+            ROS_INFO("Updating Node %s at index %d", name.c_str(),i);
+
             // This node represents an Actor, and so will only have one neighbour.
             PathPlannerNode* neighbour = node->neighbours[0];
             neighbour->removeNeighbour(node);
+
+            ROS_INFO_STREAM("Neighbourship removed");
+            PathPlannerNode* closestNode = getClosestNode(x, y);
+            node->addNeighbour(closestNode);
+            closestNode->addNeighbour(node);
+            ROS_INFO_STREAM("Neighbourship updated");
         }
-        PathPlannerNode* closestNode = getClosestNode(x, y);
-        node->addNeighbour(closestNode);
-        closestNode->addNeighbour(node);
     }
-    int num = nodes.size();
 }
 
 // Returns a pointer to the waypoint closest to the given set of coordinates.
