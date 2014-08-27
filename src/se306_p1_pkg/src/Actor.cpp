@@ -212,6 +212,7 @@ bool Actor::goToNode(string nodeName) {
 
     PathPlannerNode* goingToNode = PathPlanner::getNode(nodeName);
 
+
     vector <PathPlannerNode*> path = PathPlanner::pathToNode(this, goingToNode);
 
     int nextNode = 0;
