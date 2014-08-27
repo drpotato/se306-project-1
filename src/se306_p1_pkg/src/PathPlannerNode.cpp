@@ -35,3 +35,16 @@ void PathPlannerNode::removeNeighbour(PathPlannerNode* deleteNode){
         }
     }
 }
+
+PathPlannerNode::~PathPlannerNode(){
+  //delete name;
+  //delete &px;
+  //delete &py;
+}
+
+//Copy Constructor
+PathPlannerNode::PathPlannerNode(const PathPlannerNode &other){
+  this->name = other.name;
+  this->px = other.px;
+  this->py = other.py;
+}

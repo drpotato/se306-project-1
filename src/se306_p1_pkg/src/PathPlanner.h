@@ -25,7 +25,7 @@ private:
     string nodeGuestBedroomCentreName;
     string nodeHouseDoorName;
 
-    PathPlannerNode nodeBedroomCentre;
+    PathPlannerNode* nodeBedroomCentre;
     PathPlannerNode nodeHallwayByBedroom;
     PathPlannerNode nodeHalllwayByLivingRoom;
     PathPlannerNode nodeGuestBedroomCentre;
@@ -49,7 +49,7 @@ public:
     PathPlanner();
 
     static vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
-    static void addNode(PathPlannerNode*);
+    static void addNode(PathPlannerNode);
     static void removeNode(string*);
     static PathPlannerNode* getNode(string);
     static void updateNode(string, double, double);

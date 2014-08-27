@@ -55,18 +55,18 @@ PathPlanner::PathPlanner() {
     nodeHouseDoor.addNeighbour(&nodeHalllwayByLivingRoom);
 
     // Add the nodes to the path planner's graph of nodes and connections.
-    addNode(&nodeBedroomCentre);
-    addNode(&nodeHallwayByBedroom);
-    addNode(&nodeHalllwayByLivingRoom);
-    addNode(&nodeGuestBedroomCentre);
-    addNode(&nodeHouseDoor);
+    addNode(nodeBedroomCentre);
+    addNode(nodeHallwayByBedroom);
+    addNode(nodeHalllwayByLivingRoom);
+    addNode(nodeGuestBedroomCentre);
+    addNode(nodeHouseDoor);
 
-    addNode(&nodeResident);
-    addNode(&nodeEntertainmentRobot);
-    addNode(&nodeRelative);
-    addNode(&nodeMedicationRobot);
-    addNode(&nodeCompanionRobot);
-    addNode(&nodeCookingRobot);
+    addNode(nodeResident);
+    addNode(nodeEntertainmentRobot);
+    addNode(nodeRelative);
+    addNode(nodeMedicationRobot);
+    addNode(nodeCompanionRobot);
+    addNode(nodeCookingRobot);
 }
 
 // When a location message is received, updates the graph with that Actor's new location.
@@ -87,8 +87,9 @@ void PathPlanner::locationCallback(msg_pkg::Location msg)
         PathPlannerNode* closestNode = getClosestNode(x,y);
         newNode->addNeighbour(closestNode);
         closestNode->addNeighbour(newNode);
-        addNode(newNode);
+        addNode(*newNode);
     }
+    ROS_INFO_STREAM("LocationCallback ended!");
 }
 
 // Returns the shortest path between the two given nodes.
@@ -155,20 +156,24 @@ void PathPlanner::removeNode(string* name) {
 }
 
 // Adds a PathPlannerNode to the graph.
-void PathPlanner::addNode(PathPlannerNode* p) {
-    nodes.push_back(p);
+void PathPlanner::addNode(PathPlannerNode p) {
+    nodes.push_back(&p);
     int num = nodes.size();
     ROS_INFO("Size of graph is now: %d", num);
 }
 
 // Returns the PathPlannerNode with the given name (if any).
 PathPlannerNode* PathPlanner::getNode(string name) {
+    ROS_INFO("Getnode called, %d nodes, looking for %s",nodes.size(),name.c_str());
     for (int i = 0; i < nodes.size(); i++) {
         PathPlannerNode* node = nodes[i];
+        
+        ROS_INFO_STREAM(*(node->getName()));
         if (node->getName()->compare(name) == 0) {
             return node;
         }
     }
+    ROS_INFO_STREAM("Return null");
     return NULL;
 }
 
@@ -176,6 +181,8 @@ PathPlannerNode* PathPlanner::getNode(string name) {
 void PathPlanner::updateNode(string name, double x, double y) {
     for (int i = 0; i < nodes.size(); i++){
         PathPlannerNode* node = nodes[i];
+
+
         if (node->getName()->compare(name) == 0) {
             // This node represents an Actor, and so will only have one neighbour.
             PathPlannerNode* neighbour = node->neighbours[0];

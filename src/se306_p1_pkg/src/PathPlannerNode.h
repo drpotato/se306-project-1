@@ -9,18 +9,20 @@ class PathPlannerNode{
     friend class PathPlanner;
     private:
         string* name;
-    
+
         PathPlannerNode* previous;
         //position
-    
+
     vector<PathPlannerNode*> neighbours;
-    
+
     public:
         bool visited;
         double px;
         double py;
         PathPlannerNode(string*,double,double);
         PathPlannerNode();
+        PathPlannerNode(const PathPlannerNode &other);
+        ~PathPlannerNode();
         void addNeighbour(PathPlannerNode*);
         void removeNeighbour(PathPlannerNode*);
         string* getName();
@@ -29,4 +31,3 @@ class PathPlannerNode{
 };
 
 #endif // #ifndef SE306P1_ACTOR_VISITOR_H_DEFINED
-
