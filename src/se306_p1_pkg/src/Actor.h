@@ -3,6 +3,8 @@
 
 #include <nav_msgs/Odometry.h>
 #include <msg_pkg/Location.h>
+#include <msg_pkg/Unlock.h>
+#include <msg_pkg/LockStatus.h>
 
 #include "ros/ros.h"
 #include "PathPlanner.h"
@@ -27,6 +29,8 @@ public:
 
 	static void StageOdom_callback(nav_msgs::Odometry msg);
 	static void locationCallback(msg_pkg::Location msg);
+	static void lockStatusCallback(msg_pkg::LockStatus msg);
+	static void unlockCallback(msg_pkg::Unlock msg);
 
     bool moveToResident();
     void startMovingToResident();
@@ -37,6 +41,10 @@ public:
     const static int LOOP_RATE = 10;
 
     enum ActorType {Doctor=3, Nurse=2, Caregiver=2, Visitor=1, Robot=0};
+
+    bool haveLock;
+    bool deniedLock;
+    bool otherUnlocked;
 
 
 protected:
@@ -69,6 +77,8 @@ protected:
 	ros::Subscriber subscriberStageOdometry;
 	ros::Subscriber subscriberStageLaserScan;
 	ros::Subscriber subscriberLocation;
+	ros::Subscriber subscriberlockStatus;
+	ros::Subscriber subscriberUnlock;
 
 	ros::Publisher publisherRequestLock;
 	ros::Subscriber subscriberLockStatus;
