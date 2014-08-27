@@ -8,6 +8,18 @@
 
 namespace ups
 {
+	typedef char int8;
+	typedef short int16;
+	typedef int int32;
+	typedef long long int64;
+	typedef unsigned char uint8;
+	typedef unsigned short uint16;
+	typedef unsigned int uint32;
+	typedef unsigned long long uint64;
+	
+	unsigned char log2(unsigned int baseValue);
+	unsigned int potAbove(unsigned int baseValue);
+	unsigned int potBelow(unsigned int baseValue);
 	long getFileSize(std::FILE *f);
 	std::vector<char> readAll(std::FILE *f);
 	bool canOpen(const std::string &fname, const char *openMode);
@@ -17,6 +29,9 @@ namespace ups
 	
 	bool isWhitespace(char testChar);
 	bool isDigit(char testChar);
+	
+	template<typename t>
+	t &readRaw(FILE * f, t &destination);
 	
 	// Converts the string str to the given number type,
 	// setting strPtr to point to the first position after the number, if it's not null.
@@ -31,6 +46,62 @@ namespace ups
 	template<typename t>
 	bool s2num(t &output, const char *str);
 	
+	// I don't really know if it's fast at all - it's just funny to look at.
+	// It does have a nice O(log(n)) time complexity though, where n is the number of digits.
+	inline unsigned char log2(unsigned int baseValue)
+	{
+		char shifts[] = {0, 1, 2, 4, 8, 16};
+		unsigned char out = 0;
+		
+		for (char shiftIndex = 5; shiftIndex >= 0; --shiftIndex)
+		{
+			unsigned char shift = shifts[shiftIndex];
+			unsigned int testVal = 1 << shift;
+			
+			unsigned int doMask = 0xffffffffu * (baseValue >= testVal);
+			out |= shift & doMask;
+			baseValue = baseValue ^ (doMask & (baseValue ^ (baseValue >> shift)));
+		}
+		
+		return out;
+	}
+	
+	inline unsigned int potAbove(unsigned int baseValue)
+	{
+		// Special case: zero
+		if (baseValue)
+		{
+			// Fill with 1s to the right of the first 1.
+			unsigned int outValue = baseValue;
+			outValue |= outValue >> 16;
+			outValue |= outValue >> 8;
+			outValue |= outValue >> 4;
+			outValue |= outValue >> 2;
+			outValue |= outValue >> 1;
+		
+			outValue = (outValue >> 1) + 1;
+			return outValue << (baseValue != outValue);
+		}
+		return 1;
+	}
+	
+	inline unsigned int potBelow(unsigned int baseValue)
+	{
+		// Special case: zero
+		if (baseValue)
+		{
+			// Fill with 1s to the right of the first 1.
+			baseValue |= baseValue >> 16;
+			baseValue |= baseValue >> 8;
+			baseValue |= baseValue >> 4;
+			baseValue |= baseValue >> 2;
+			baseValue |= baseValue >> 1;
+		
+
+			return (baseValue >> 1) + 1;
+		}
+		return 0;
+	}
 	
 	inline long getFileSize(std::FILE *f)
 	{
@@ -66,10 +137,10 @@ namespace ups
 	
 	inline bool canOpen(const std::string &fname, const char *openMode)
 	{
-		FILE *f = fopen(fname.c_str(), openMode);
+		FILE *f = std::fopen(fname.c_str(), openMode);
 		
 		if (f)
-		{	fclose(f);
+		{	std::fclose(f);
 			return true;
 		}
 		return false;
@@ -95,6 +166,13 @@ namespace ups
 		}
 		
 		return fileName.substr(dotPos + 1);
+	}
+	
+	template<typename t>
+	t &readRaw(FILE * f, t &destination)
+	{
+		std::fread(&destination, sizeof(t), 1, f);
+		return destination;
 	}
 	
 	inline bool isWhitespace(char testChar)

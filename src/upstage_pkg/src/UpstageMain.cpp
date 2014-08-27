@@ -6,6 +6,7 @@
 #include "UpstageEnvironment.hpp"
 #include "renderer/Renderer.hpp"
 #include "maths/Quaternion.hpp"
+#include "renderer/Texture.hpp"
 
 int main(int argc, char **argv)
 {
@@ -16,6 +17,7 @@ int main(int argc, char **argv)
 	resMan.addPriorityPath("upstage");
 	
 	ups::UpstageEnvironment *env = resMan.fetch<ups::UpstageEnvironment>("upstageenv.unv");
+	ups::Texture *testBMP = resMan.fetch<ups::Texture>("src/se306_p1_pkg/world/worldmaps/worldwalls.bmp");
 	
 	ups::Quaternion q = ups::Quaternion::fromEulerDegrees(45.f, 0.f, 45.f);
 	ups::Quaternion::qUnit mat[16];
@@ -39,8 +41,8 @@ int main(int argc, char **argv)
 		// Update positions etc. here
 		env->step();
 		env->draw(renderer);
-		ups::Colour c0; c0.r = 1.f; c0.g = 0.f; c0.b = 0.f; c0.a = 1.f;
-		ups::Colour c1; c1.r = 0.f; c1.g = 1.f; c1.b = 0.f; c1.a = 1.f;
+		ups::Colour c0 = ups::Colour::rgb(1.f, 0.f, 0.f, 1.f);
+		ups::Colour c1 = ups::Colour::rgb(0.f, 1.f, 0.f, 1.f);
 		renderer.drawTestQuad(c0, 32.f, 32.f, 64.f, 64.f);
 		renderer.drawTestQuad(c1, 32.f, 96.f, 64.f, 64.f);
 		//renderer.drawTestQuad(c1, 0.0, 1.0, 1.0, -0.5);

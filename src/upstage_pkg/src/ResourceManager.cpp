@@ -35,7 +35,15 @@ std::string ups::ResourceManager::resolvePath(const std::string &resName) const
 	std::string resolvedPath;
 	for (ups::PathList::const_iterator it = _paths.begin(); it != _paths.end(); ++it)
 	{
-		std::string testPath = *it + "/" + resName;
+		std::string testPath = *it;
+		if (!testPath.empty())
+		{
+			// Don't add "/" if the path is empty, because that makes it into an absolute path.
+			testPath += "/";
+		}
+		testPath+= resName;
+		
+		printf("SEARCHING IN %s\n", testPath.c_str());
 		
 		if (canRead(testPath))
 		{

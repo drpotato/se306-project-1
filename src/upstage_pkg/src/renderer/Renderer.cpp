@@ -1,5 +1,5 @@
 #include "Renderer.hpp"
-#include "../Context.hpp"
+#include "Texture.hpp"
 #include "../Debug.hpp"
 
 #define LOAD_GL_VERSION_2_1
@@ -169,4 +169,23 @@ void ups::Renderer::drawTestQuad(const ups::Colour &colour, float x, float y, fl
 	rt->testQuad.h = h;
 	
 	addToTaskList(rt, TLS_2D);
+}
+
+ups::TexHandle ups::Renderer::makeTexHandle(ups::Texture &tex)
+{
+	GLuint texHandle;
+	glGenTextures(1, &texHandle);
+	
+	glBindTexture(GL_TEXTURE_2D, texHandle);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	
+	switch (tex.getTextureType())
+	{
+	case ups::Texture::TT_RGBA8:
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.getWidth(), tex.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.getData());
+		break;
+	}	
+	
+	return texHandle;
 }

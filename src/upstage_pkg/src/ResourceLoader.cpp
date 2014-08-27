@@ -34,6 +34,8 @@ ups::Resource *ups::ResourceLoader::loadFrom(const std::string &filePath) const
 	
 	switch (it->second)
 	{
+	case RL_LT_BMP:
+		return ups::ResourceLoader::loadFrom<RL_LT_BMP>(filePath);
 	case RL_LT_GenericXML:
 		return ups::ResourceLoader::loadFrom<RL_LT_GenericXML>(filePath);
 	case RL_LT_UpstageEnv:
@@ -55,6 +57,7 @@ namespace
 			return;
 		}
 
+		typeMap["bmp"] = ups::ResourceLoader::RL_LT_BMP;
 		typeMap["xml"] = ups::ResourceLoader::RL_LT_GenericXML;
 		typeMap["unv"] = ups::ResourceLoader::RL_LT_UpstageEnv;
 		typeMap["world"] = ups::ResourceLoader::RL_LT_StageWorld;

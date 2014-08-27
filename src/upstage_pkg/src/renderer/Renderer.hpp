@@ -3,12 +3,13 @@
 
 #include "Types.hpp"
 #include "RenderTask.hpp"
+#include "../Context.hpp"
 #include "../StackAllocator.hpp"
 #include <vector>
 
 namespace ups
 {
-	class Context;
+	class Texture;
 	class Renderer
 	{
 	public:
@@ -20,6 +21,10 @@ namespace ups
 		// Functionality
 		void setEnvClearColour(const Colour &colour);
 		void drawTestQuad(const Colour &colour, float x, float y, float w, float h);
+		TexHandle makeTexHandle(Texture &tex);
+		
+		int getWidth() const;
+		int getHeight() const;
 	protected:
 		
 		
@@ -53,6 +58,17 @@ namespace ups
 	inline void Renderer::addToTaskList(RenderTask *task, TaskListSlot slot)
 	{
 		_renderTaskSlots[slot].push_back(task);
+	}
+	
+	
+	inline int Renderer::getWidth() const
+	{
+		return _context->getWidth();
+	}
+	
+	inline int Renderer::getHeight() const
+	{
+		return _context->getHeight();
 	}
 }
 #endif // #ifndef SE306P1_UPSTAGE_RENDERER_HPP_DEFINED

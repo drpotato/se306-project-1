@@ -16,6 +16,7 @@ include_directories(
 )
 
 add_library(UpstageLibrary
+  src/Actor.cpp
   src/Context.cpp
   src/Keyboard.cpp
   src/Resource.cpp
@@ -29,6 +30,7 @@ add_library(UpstageLibrary
   src/renderer/Renderer.cpp
   src/renderer/Texture.cpp
   src/renderer/opengl/glloader.cpp
+  src/resourceloaders/ResourceLoaderBMP.cpp
   src/resourceloaders/ResourceLoaderGenericXML.cpp
   src/resourceloaders/ResourceLoaderStageWorld.cpp
   src/resourceloaders/ResourceLoaderUpstageEnv.cpp
