@@ -5,6 +5,7 @@
 #include <msg_pkg/Socialness.h>
 #include <msg_pkg/Morale.h>
 #include <msg_pkg/Time.h>
+#include <msg_pkg/LockStatus.h>
 #include "ActorSpawner.h"
 
 class Friend : public Visitor
@@ -20,10 +21,13 @@ protected:
   static void socialnessCallback(msg_pkg::Socialness msg);
   static void moraleCallback(msg_pkg::Morale msg);
   static void timeCallback(msg_pkg::Time msg);
+  static void lockStatusCallback(msg_pkg::LockStatus msg);
   
+  /* Subscribers */
   ros::Subscriber subscriberSocialness;
   ros::Subscriber subscriberMorale;
   ros::Subscriber subscriberTime;
+  ros::Subscriber subscriberLockStatus;
 
   int8_t socialnessLevel;
   bool socialising;
@@ -34,6 +38,9 @@ protected:
   bool first_call;
   bool returningHome;
   bool returningHome_first;
+  bool waiting_to_socialise;
+  
+  bool has_lock;
 };
 
 

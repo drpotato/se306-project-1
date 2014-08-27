@@ -12,6 +12,7 @@ void Friend::doInitialSetup()
   subscriberSocialness = nodeHandle->subscribe("socialness", 1000, Friend::socialnessCallback);
   subscriberMorale = nodeHandle->subscribe("morale", 1000, Friend::moraleCallback);
   subscriberTime = nodeHandle->subscribe("time", 1000, Friend::timeCallback);
+  subscriberLockStatus = nodeHandle->subscribe("lockStatus", 1000, Friend::lockStatusCallback);
   
   velLinear = 0.0;
   velRotational = 0.0;
@@ -24,6 +25,8 @@ void Friend::doInitialSetup()
   first_call = true;
   returningHome = false;
   returningHome_first = true;
+  
+  waiting_to_socialise = false;
 }
 
 void Friend::doExecuteLoop()
@@ -36,45 +39,39 @@ void Friend::doExecuteLoop()
     }
     return;
   }
-
-  if (!socialising)
+  
+  // If we have finished moving to the resident and we need to socialise:
+  if ((!(this->movingToResident)) && (waiting_to_socialise) && first)
   {
-    if (socialnessLevel < 2) // If the socialness level is too low
-    {
-      if (first_call)
-      {
-        this->startMovingToResident();
-        first_call = false;
-      }
-      if (!(this->movingToResident) )
-      {
-        //Relative::doResponse("socialising");
-        ROS_INFO("CHANGED TO SOCIALISING");
-        socialising=true;
-        first = false;
-      }
-    }
+    // Request the lock
+    ROS_INFO("Requesting lock...");
+    first = false;
+    Friend::requestLock("Friend");
   }
-  else
+  // If it has the lock:
+  else if (this->has_lock)
   {
+    // If it has reached the maximum level
     if (socialnessLevel == 5)
     {
-      //Add do last desponse call that kurt implimented
+      // Stop socialising and unlock the resident
       Friend::stopResponse("socialising");
+      Friend::unlock();
       socialising = false;
+      first = false;
       returningHome = true;
-    }
+    } 
     else
     {
       if (y == 40)
       {
         Friend::doResponse("socialising");
         y=0;
-      }
+      } 
       else 
       {
         y++;
-      }   
+      }       
     }
   }
 }
@@ -85,14 +82,39 @@ void Friend::socialnessCallback(msg_pkg::Socialness msg)
   Friend *temp = Friend::getFriendInstance();
   temp->socialnessLevel = msg.level;
   ROS_DEBUG_STREAM("Friend socialnessCallback with level " << (int)msg.level);
+ 
+  // If it has reached level 1:
+  if (!(temp->socialnessLevel >= 2))
+  {
+    temp->startMovingToResident();
+    temp->waiting_to_socialise = true;
+  }
 }
 
 void Friend::moraleCallback(msg_pkg::Morale msg)
 {
-  ROS_DEBUG_STREAM("Friend moraleCallback with level " << (int)msg.level);
+
 }
 
 void Friend::timeCallback(msg_pkg::Time msg)
 {
   //ROS_DEBUG_STREAM("Friend timeCallback with time " << (int)msg.hour << ":" << (int)msg.minutes << ":" << (int)msg.seconds);
+}
+
+void Friend::lockStatusCallback(msg_pkg::LockStatus msg)
+{
+        Friend* temp = Friend::getFriendInstance();
+        if ((msg.has_lock) && (msg.robot_id == temp->rosName))
+        {
+                ROS_INFO("Friend has the lock");
+                ROS_INFO("CHANGED TO SOCIALISING");
+                //temp->waiting_to_entertain = false;
+                //temp->entertaining=true;
+                temp->has_lock = true;
+        }
+        else if ((!(msg.has_lock)) && (msg.robot_id == temp->rosName))
+        {
+                ROS_INFO("Friend does not have the lock");
+                temp->has_lock = false;
+        }
 }
