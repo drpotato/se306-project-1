@@ -80,6 +80,7 @@ void PathPlanner::locationCallback(msg_pkg::Location msg)
     ROS_INFO("Got callback from %s",name.c_str());
 
     if (getNode(name) != NULL) {
+        ROS_INFO_STREAM("Updating Node!");
         updateNode(name, x, y);
     } else {
         ROS_INFO_STREAM("Node does not exist; create it");
