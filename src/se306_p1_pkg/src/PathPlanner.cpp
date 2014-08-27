@@ -18,6 +18,13 @@ PathPlanner::PathPlanner() {
     nodeGuestBedroomCentreName = "nodeGuestBedroomCentre";
     nodeHouseDoorName = "nodeHouseDoor";
 
+    nodeBedroomCentre = PathPlannerNode(nodeBedroomCentreName, -2.5, 3);
+    nodeHallwayByBedroom = PathPlannerNode(nodeHallwayByBedroomName, -2.5, -0);
+    nodeHalllwayByLivingRoom = PathPlannerNode(nodeHalllwayByLivingRoomName, 3, 0);
+    nodeGuestBedroomCentre = PathPlannerNode(nodeGuestBedroomCentreName, -2.5, -3);
+    nodeHouseDoor = PathPlannerNode(nodeHouseDoorName, 2.8, 5);
+
+
     // Specify which nodes have a clear line of sight to each other.
     nodeBedroomCentre.addNeighbour(&nodeHallwayByBedroom);
     nodeBedroomCentre.addNeighbour(&nodeGuestBedroomCentre);
@@ -51,15 +58,16 @@ void PathPlanner::locationCallback(msg_pkg::Location msg)
     double x = msg.xpos;
     double y = msg.ypos;
     if (hasNode(name)) {
+        ROS_INFO_STREAM("update node");
         updateNode(name, x, y);
     } else {
         ROS_INFO_STREAM("Node does not exist; create it");
         PathPlannerNode newNode = PathPlannerNode(name, x, y);
         PathPlannerNode* closestNode = getClosestNode(x, y);
-        newNode.addNeighbour(closestNode);
-        closestNode->addNeighbour(&newNode);
-        ROS_INFO("Adding node %s", newNode.getName().c_str());
         addNode(newNode);
+        getNode(name)->addNeighbour(closestNode);
+        closestNode->addNeighbour(getNode(name));
+
     }
 }
 
@@ -146,7 +154,6 @@ bool PathPlanner::hasNode(string name){
     for (int i = 0; i < nodes.size(); i++) {
         PathPlannerNode* node = &nodes[i];
         if (node->getName().compare(name) == 0) {
-            ROS_INFO("node1 name is %s, node 2 name is %s", node->getName().c_str(), name.c_str());
             return true;
         }
     }
@@ -155,22 +162,29 @@ bool PathPlanner::hasNode(string name){
 
 // Updates the PathPlannerNode's location with the given x and y, and refinds its closest neighbour.
 void PathPlanner::updateNode(string name, double x, double y) {
+    PathPlannerNode* node = getNode(name);
+    node->removeAllNeighbours();
+    ROS_INFO_STREAM("all neighbours removed");
+    PathPlannerNode* closestNode = getClosestNode(x, y);
+    node->addNeighbour(closestNode);
+    closestNode->addNeighbour(node);
+    /*
     for (int i = 0; i < nodes.size(); i++) {
         PathPlannerNode* node = &nodes[i];
         if (node->getName().compare(name) == 0) {
             ROS_INFO("Updating Node %s at index %d", name.c_str(),i);
-
+            PathPlannerNode* neighbour;
             // This node represents an Actor, and so will only have one neighbour.
-            PathPlannerNode* neighbour = node->neighbours[0];
-            neighbour->removeNeighbour(node);
 
-            ROS_INFO_STREAM("Neighbourship removed");
-            PathPlannerNode* closestNode = getClosestNode(x, y);
-            node->addNeighbour(closestNode);
-            closestNode->addNeighbour(node);
+            if (node->neighbours.size() > 0){
+              ROS_INFO_STREAM("Node has neighbours to remove");
+              node->removeAllNeighbours();
+            }
+
+
             ROS_INFO_STREAM("Neighbourship updated");
         }
-    }
+    }*/
 }
 
 // Returns a pointer to the waypoint closest to the given set of coordinates.

@@ -21,6 +21,7 @@ class PathPlannerNode{
         PathPlannerNode(const PathPlannerNode &other);
         void addNeighbour(PathPlannerNode*);
         void removeNeighbour(PathPlannerNode*);
+        void removeAllNeighbours();
         string getName();
         bool isVisited();
         void setVisited(bool newVisited);
