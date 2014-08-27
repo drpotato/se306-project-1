@@ -9,12 +9,15 @@
 #include <msg_pkg/Morale.h>
 #include <msg_pkg/Socialness.h>
 #include <msg_pkg/Interaction.h>
+#include <msg_pkg/Time.h>
 
 class Caregiver : public Visitor
 {
 protected:
     virtual void doInitialSetup();
     virtual void doExecuteLoop();
+
+    void caring();
 
     bool checkFitnessLevel();
     bool checkHungerLevel();
@@ -33,18 +36,13 @@ protected:
     bool bathing;  // Increase hygieneLevel
     bool moralesupporting;  // Increase moraleLevel
     bool talking;  // Increase socialnessLevel
-
-    static void fitnessCallback(msg_pkg::Fitness msg);
-    static void hungerCallback(msg_pkg::Hunger msg);
-    static void hygieneCallback(msg_pkg::Hygiene msg);
-    static void moraleCallback(msg_pkg::Morale msg);
-    static void socialnessCallback(msg_pkg::Socialness msg);
-    
+ 
     ros::Subscriber subscriberFitness;
     ros::Subscriber subscriberHunger;
     ros::Subscriber subscriberHygiene;
     ros::Subscriber subscriberMorale;
     ros::Subscriber subscriberSocialness;
+    ros::Subscriber subscriberTime;
 
     string caregiverName;
     int y1;
@@ -57,6 +55,8 @@ protected:
     bool first_call;
     bool returningHome;
     bool returningHome_first;
+    int hour;
+    bool odd;
 };
 
 
