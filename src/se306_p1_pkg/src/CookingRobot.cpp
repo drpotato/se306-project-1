@@ -6,6 +6,10 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 
+string CookingRobot::getActorName()
+{
+  return "CookingRobot";
+}
 
 // A Robot to cook meals for the Resident. Meals happen according to a regular schedule and can[not] be interrupted.
 void CookingRobot::doInitialSetup()

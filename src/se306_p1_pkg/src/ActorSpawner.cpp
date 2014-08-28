@@ -14,6 +14,7 @@
 #include "__autogen__actorlist__"
 #undef SE306P1___AUTOGEN__ACTORLIST___INCLUDE
 
+//TODO: Update this comment?
 // A 'Factory' class to control the arrival and departure of Visitors.
 // As we cannot dynamically create and remove Actors from the world, they will simply sit (or mill about/circle) outside the door of the house until needed.
 // When the Resident requests a Visitor, the ActorController notifies that Visitor.

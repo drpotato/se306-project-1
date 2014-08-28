@@ -5,6 +5,12 @@
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 
+
+string Relative::getActorName()
+{
+  return "Relative";
+}
+
 // A Visitor who provides Socialness.
 void Relative::doInitialSetup()
 {

@@ -3,6 +3,7 @@
 
 #include "Robot.h"
 #include <msg_pkg/Morale.h>
+#include <msg_pkg/Hunger.h>
 
 class CookingRobot : public Robot
 {
@@ -13,6 +14,8 @@ protected:
 	bool checkCookingLevel();
 
 	static void moraleCallback(msg_pkg::Morale msg);
+	static void hungerCallback(msg_pkg::Hunger msg);
+	string getActorName();
 
 	int8_t moraleLevel;
 	bool entertaining;
