@@ -16,6 +16,8 @@ protected:
 
 	string getActorName();
 
+	string getActorName();
+
 	int8_t moraleLevel;
 	bool entertaining;
 
