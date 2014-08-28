@@ -25,6 +25,8 @@ public:
   static void timeCallback(msg_pkg::Time msg);
   static void requestLockCallback(msg_pkg::RequestLock msg);
   static void unlockCallback(msg_pkg::Unlock msg);
+
+  string getActorName();
   
   bool lock_;
   ActorType lock_type_;

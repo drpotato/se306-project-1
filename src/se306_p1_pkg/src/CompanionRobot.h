@@ -15,6 +15,7 @@ protected:
 	bool checkMoraleLevel();
 
 	static void moraleCallback(msg_pkg::Morale msg);
+	string getActorName();
 
 	int8_t moraleLevel;
 	bool giving_morale;
