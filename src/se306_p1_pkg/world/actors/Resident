@@ -4,50 +4,219 @@ define Resident position
 	# Left Leg
 	model
 	(
-		size [0.2 0.2 0.678]
-		pose [0.0 -0.15 0.0 0.0]
-		color "ivory2"
+		size [0.17 0.17 0.648]
+		pose [0.0 -0.13 0.0 0.0]
+		color "firebrick1"
+	)
+
+	# Crotch
+	model
+	(
+		size [0.17 0.09 0.15]
+		pose [0.0 0.0 0.498 0.0]
+		color "firebrick1"
 	)
 
 	# Right leg
 	model
 	(
-		size [0.2 0.2 0.678]
-		pose [0.0 0.15 0.0 0.0]
-		color "ivory2"
+		size [0.17 0.17 0.648]
+		pose [0.0 0.13 0.0 0.0]
+		color "firebrick1"
 	)
-
-	# Belt
-	model
-	(
-		size [0.21 0.5 0.0339]
-		pose [0.0 0.0 0.678 0.0]
-		color "chocolate2"
-	)
-
 	
 	# Torso
 	model
 	(
-		size [0.2 0.5 0.7571]
-		pose [0.0 0.0 0.7119 0.0]
-		color "dark slate gray"
+		size [0.25 0.5 0.7]
+		pose [0.0 0.0 0.648 0.0] 
+		color "DodgerBlue4"
 	)
 
+	# Ultron symbol
+	# Horizontal
+	model
+	(
+		size [0.01 0.02 0.09]
+		pose [0.15 0.0 1.0 0.0]
+		color "grey30"
+	)
+
+	#red
+	model
+	(
+		size [0.01 0.02 0.09]
+		pose [0.15 0.0 1.09 0.0]
+		color "red"
+	)
+	model
+	(
+		size [0.01 0.02 0.08]
+		pose [0.15 0.02 1.09 0.0]
+		color "red"
+	)
+	model
+	(
+		size [0.01 0.02 0.07]
+		pose [0.15 0.04 1.09 0.0]
+		color "red"
+	)
+	model
+	(
+		size [0.01 0.02 0.06]
+		pose [0.15 0.06 1.09 0.0]
+		color "red"
+	)
+	model
+	(
+		size [0.01 0.01 0.05]
+		pose [0.15 0.075 1.09 0.0]
+		color "red"
+	)
+	model
+	(
+		size [0.01 0.01 0.04]
+		pose [0.15 0.085 1.09 0.0]
+		color "red"
+	)
+
+
+	model
+	(
+		size [0.01 0.02 0.08]
+		pose [0.15 0.02 1.005 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.01 0.02 0.08]
+		pose [0.15 -0.02 1.005 0.0]
+		color "grey30"
+	)
+
+	# red
+	model
+	(
+		size [0.01 0.02 0.085]
+		pose [0.15 -0.02 1.085 0.0]
+		color "red"
+	)
+	model
+	(
+		size [0.01 0.01 0.09]
+		pose [0.15 -0.035 1.07 0.0]
+		color "red"
+	)
+	model
+	(
+		size [0.01 0.01 0.115]
+		pose [0.15 -0.045 1.045 0.0]
+		color "red"
+	)
+
+
+	model
+	(
+		size [0.01 0.01 0.05]
+		pose [0.15 -0.035 1.02 0.0]
+		color "grey30"
+	)
+	model
+	(
+		size [0.01 0.01 0.05]
+		pose [0.15 0.035 1.02 0.0]
+		color "grey30"
+	)
 
 	# Head
 	model
 	(
-		size [0.25 0.25 0.226]
-		pose [0.0 0.0 1.469 0.0]
-		color "yellow"
+		size [0.25 0.18 0.03] 
+		pose [0.0 0.0 1.348 0.0] 
+		color "PeachPuff3"
+	)
+	model
+	(
+		size [0.25 0.21 0.05] 
+		pose [0.0 0.0 1.378 0.0] 
+		color "PeachPuff3"
 	)	
+	model
+	(
+		size [0.25 0.24 0.05] 
+		pose [0.0 0.0 1.428 0.0] 
+		color "PeachPuff3"
+	)
+	model
+	(
+		size [0.25 0.27 0.05] 
+		pose [0.0 0.0 1.478 0.0] 
+		color "PeachPuff3"
+	)
+	model
+	(
+		size [0.25 0.24 0.05] 
+		pose [0.0 0.0 1.528 0.0] 
+		color "PeachPuff3"
+	)
+	model
+	(
+		size [0.25 0.21 0.05] 
+		pose [0.0 0.0 1.578 0.0] 
+		color "PeachPuff3"
+	)
 
+	# Left eye
+	model
+	(
+		size [0.01 0.05 0.05]
+		pose [0.125 0.0625 1.528 0.0]
+		color "grey30"
+	)
 
-	
+	# Right eye
+	model
+	(
+		size [0.01 0.05 0.05]
+		pose [0.125 -0.0625 1.528 0.0]
+		color "grey30"
+	)
+
+	# Left sleeve
+	model
+	(
+		size [0.12 0.12 0.6]
+		pose [0.0 0.31 0.748 0.0]
+		color "DodgerBlue4"
+	)
+
+	# Right sleeve
+	model
+	(
+		size [0.12 0.12 0.6]
+		pose [0.0 -0.31 0.748 0.0]
+		color "DodgerBlue4"
+	)
+
+	# Left arm
+	model
+	(
+		size [0.1 0.1 0.05]
+		pose [0.0 0.31 0.698 0.0]
+		color "PeachPuff3"
+	)
+
+	# Right arm
+	model
+	(
+		size [0.1 0.1 0.05]
+		pose [0.0 -0.31 0.698 0.0]
+		color "PeachPuff3"
+	)
+
 
 	# Base
-	size [.5 .5 0.02]
+	size [0.0 0.0 0.0]
     drive "diff"
 	color "ivory2"
 	stack_children 0

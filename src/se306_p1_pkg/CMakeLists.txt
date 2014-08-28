@@ -161,7 +161,7 @@ target_link_libraries(
 catkin_add_gtest(${PROJECT_NAME}-test
   test/utest.cpp
   test/resident_test.cpp
-  test/path_planner_test.cpp
+  ##test/path_planner_test.cpp
   test/path_planner_node_test.cpp
 )
 
