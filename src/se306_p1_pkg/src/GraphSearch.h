@@ -18,6 +18,11 @@ public:
 		double y;
 		string name;
 	};
+        
+        struct edge {
+          point *p1;
+          point *p2;
+        };
 
 	point* nodeBedroomCentre;
     point* nodeHallwayByBedroom;
@@ -45,5 +50,8 @@ public:
 private:
   void addPointToSeen(point *p, vector<point> *list);
   bool checkIfInList(point *p, vector<point> *list);
+  bool comparePointer(point *a, point *b);
+  vector<edge>* getAdjacentEdges(point *t);
+  point* getAdjacentVertex(point *t, edge *e);
   GraphSearch();
 };

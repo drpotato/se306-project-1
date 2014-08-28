@@ -147,8 +147,55 @@ void GraphSearch::addPointToSeen(point *p, vector<point> *list)
   }
 }
 
+bool GraphSearch::comparePointer(point *a, point *b)
+{
+  return a->x == b->x && a->y == b->y;
+}
+
+vector<GraphSearch::edge>* GraphSearch::getAdjacentEdges(point *t)
+{
+  vector<edge>* listEdges = new vector<edge>();
+  int i;
+  int j;
+  for (i = 0; i < theGraph->size(); i++)
+  {
+    for(j = 1; j < (*theGraph)[i].size(); j++)
+    {
+      point *p1 = &(*theGraph)[i][0];
+      point *p2 = &(*theGraph)[i][j];
+      
+      if (comparePointer(p1, t) || comparePointer(p2, t))
+      {
+        edge *e = (edge*) malloc(sizeof(edge));
+        listEdges->push_back(*e);
+      }
+    }
+  }
+  return listEdges;
+}
+
+GraphSearch::point* GraphSearch::getAdjacentVertex(point *t, edge *e)
+{
+  if (comparePointer(e->p1, t))
+  {
+    return e->p2;
+  }
+  else// if (comparePointer(e->p2, t))
+  {
+    return e->p1;
+  }
+}
+
 vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2, double y2)
 {
+  struct backPointer {
+    point *p;
+    backPointer *previous;
+  };
+  
+  
+  bool foundVertex = false;
+  
 	queue<point> *Q = new queue<point>();
 	vector<point> *V = new vector<point>();
         
@@ -162,8 +209,38 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
         f->x = x2;
         f->y = y2;
         
-        return *(new vector<point>());
+        // temporary pointer
+        point *t;
+        
+        addPointToSeen(v, V);
+        Q->push(*v);
+        
+        while (!Q->empty()) {
+          t = &Q->front();
+          Q->pop();  
+          
+          if (comparePointer(t, f))
+          {
+            
+            break;
+          }
+          
+          vector<edge> *E = getAdjacentEdges(t);
+          int i;
+          for (i = 0; i < E->size(); i++)
+          {
+            point *u = getAdjacentVertex(t, &(*E)[i]);
+            if (checkIfInList(u, V))
+            {
+              addPointToSeen(u, V);
+              Q->push(*u);
+            }          
+          }
+        }
+        
+        // Build path
 }
+
 vector<GraphSearch::point> GraphSearch::getPath(double x, double y, string name1)
 {
 	point *p1 = (point*)malloc(sizeof(point));
