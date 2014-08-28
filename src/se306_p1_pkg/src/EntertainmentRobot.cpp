@@ -20,7 +20,7 @@ void EntertainmentRobot::doInitialSetup()
 	entertaining = false;
 	residentName = "Resident0";
 	subscriberMorale = nodeHandle->subscribe("morale", 1000, EntertainmentRobot::moraleCallback);
-	//subscriberLockStatus = nodeHandle->subscribe("lockStatus", 1000, EntertainmentRobot::lockStatusCallback);
+	
 	y = 0;
 	x = 0;
 	first = true;
