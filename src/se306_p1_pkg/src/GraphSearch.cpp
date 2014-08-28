@@ -2,6 +2,20 @@
 #include <stdlib.h>
 #include <queue>
 
+
+//ActorController should act as a Singleton.
+GraphSearch &GraphSearch::getInstance()
+{
+  static GraphSearch *graphSearchInstance;
+
+  if (!graphSearchInstance)
+  {
+    graphSearchInstance = new GraphSearch();
+  }
+
+  return *graphSearchInstance;
+}
+
 GraphSearch::GraphSearch()
 {
 	theGraph = new vector< vector<point> > ();
@@ -93,8 +107,7 @@ vector<GraphSearch::point> GraphSearch::getPath(string name1, double x, double y
 }
 vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2, double y2)
 {
-	queue<point> Q = new queue<point>();
-	set<point> V = new set<point>();
+	
 }
 vector<GraphSearch::point> GraphSearch::getPath(double x, double y, string name1)
 {

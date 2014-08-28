@@ -7,8 +7,10 @@ using namespace std;
 class GraphSearch
 {
 public:
-	GraphSearch();
+	
 	~GraphSearch();
+
+	static GraphSearch &getInstance();
 
 
 	struct point {
@@ -31,5 +33,6 @@ public:
 	point* getPoint(string name);
 
 	vector< vector<point> > *theGraph;
-
+private:
+	GraphSearch();
 };
