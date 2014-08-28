@@ -17,10 +17,12 @@ int main(int argc, char **argv)
 	ups::ResourceManager &resMan = ups::ResourceManager::getInstance();
 	resMan.addPriorityPath("upstage");
 	
-	ups::Font *font = resMan.fetch<ups::Font>("fonts/ubuntu_mono.fnt");
 	ups::UpstageEnvironment *env = resMan.fetch<ups::UpstageEnvironment>("upstageenv.unv");
+	ups::Font *font = resMan.fetch<ups::Font>("fonts/tiny.fnt");
+	ups::Font *font2 = resMan.fetch<ups::Font>("fonts/ubuntu_mono.fnt");
 
 	ups::Text textTest("Testing testing testing", *font, 80.f, 256.f, 480.f);
+	ups::Text textTest2("Testing testing testing", *font2, 80.f, 384.f, 480.f);
 	
 	bool isContinuing = true;
 	while (isContinuing)
@@ -34,6 +36,7 @@ int main(int argc, char **argv)
 		env->step();
 		env->draw(renderer);
 		textTest.draw(renderer);
+		textTest2.draw(renderer);
 		// ups::Colour c0 = ups::Colour::rgb(1.f, 0.f, 0.f, 1.f);
 		// ups::Colour c1 = ups::Colour::rgb(0.f, 1.f, 0.f, 1.f);
 		// renderer.drawTestQuad(c0, 32.f, 32.f, 64.f, 64.f);

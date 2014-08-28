@@ -249,6 +249,7 @@ void ups::Renderer::drawTextGlyph(const ups::Colour &colour, const std::string &
 	RenderTask *rt = _frameAlloc.allocate<RenderTask>();
 	ups::Texture *quadTex = ResourceManager::getInstance().fetch<ups::Texture>(texName);
 	if (!quadTex) return;
+
 	
 	rt->type = RenderTask::RT_TextGlyph;
 	rt->textGlyph.col = colour;

@@ -43,6 +43,7 @@ namespace ups
 		void addChild(XML *child);
 		void addAttribute(const std::string &name, const std::string &value);
 		
+		const ChildList &getAllChildren() const;
 		std::vector<const XML *>getChildren(const std::string &childName) const;
 		const XML &getChild(const std::string &childName) const;
 		template<typename t>
@@ -78,6 +79,11 @@ namespace ups
 	inline void XML::addAttribute(const std::string &name, const std::string &value)
 	{
 		_attributes[name] = value;
+	}
+	
+	inline const XML::ChildList &XML::getAllChildren() const
+	{
+		return _children;
 	}
 	
 	inline std::vector<const XML *>XML::getChildren(const std::string &childName) const

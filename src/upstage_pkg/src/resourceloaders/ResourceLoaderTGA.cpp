@@ -86,11 +86,12 @@ namespace ups
 				
 				if (yRaw >= tgaHeight || xRaw >= tgaWidth)
 				{
+					uint8 *outputImageOffset = outputImage + 4 * (yRaw * outputHeight + xRaw);
 					*(  outputImageOffset) = 0;
 					*(++outputImageOffset) = 1;
 					*(++outputImageOffset) = 2;
 					*(++outputImageOffset) = 3;
-					break;
+					continue;
 				}
 				
 				switch (imageDataType)
