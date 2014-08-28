@@ -6,7 +6,7 @@
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/LaserScan.h>
-
+#include "PathPlannerListener.h"
 // Load the actor subclasses
 #define SE306P1___AUTOGEN__ACTORLIST___INCLUDE
 #include "__autogen__actorlist__"
@@ -74,6 +74,7 @@ int main(int argc, char **argv)
   std::sscanf(argv[5], "%lf", &theta);
 
   actor->initialSetup(robotID, px, py, theta);
+  PathPlannerListener();
   while (actor->executeLoop());
 
   return 0;

@@ -17,7 +17,7 @@
 /* Macros */
 #define CRITICAL_LEVEL 90
 
-class Actor : public PathPlannerNode
+class Actor
 {
 public:
 	Actor();
@@ -97,8 +97,8 @@ protected:
 	std::string stageName;
 
     //Path Planner
-    bool goToNode(string*);
-    PathPlannerNode* getActiveNode();
+	//Path Planner
+    bool goToNode(string);
 
     bool movingToResident;
 
@@ -106,25 +106,12 @@ protected:
     void controlRobot();
 
 private:
-    PathPlannerNode* activeNode;
-    PathPlannerNode* targetNode;
-
+    
     double faceDirection(double,double);
     bool gotoPosition(double x,double y);
-
-    PathPlannerNode node1;
-    PathPlannerNode node2;
-    PathPlannerNode node3;
-    PathPlannerNode node4;
-    PathPlannerNode node5;
-    PathPlannerNode nodeDoor;
-
-    string node1Name;
-    string node2Name;
-    string node3Name;
-    string node4Name;
-    string node5Name;
-    string nodeDoorName;
+	PathPlanner pathPlanner;
+	string currentNode;
+	int currentNodeIndex;
 
     void checkKeyboardPress();
     bool modeSet();

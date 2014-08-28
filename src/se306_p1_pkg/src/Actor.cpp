@@ -41,61 +41,7 @@ Actor::Actor():
 	loopRate(0)
 
 {
-    // Setup navigation waypoint nodes.
-    this->targetNode = 0;
-
-    // Next to the Resident.
-    node1Name = "testnode1";
-
-    node2Name = "testnode2";
-    node3Name = "testnode3";
-    node4Name = "testnode4";
-
-    // Next to the Entertainment Robot.
-
-    node5Name = "testnode5";
-    // At the door to the house
-    nodeDoorName = "nodeDoorName";
-
-    node1 = PathPlannerNode(&node1Name,-2.5,3);
-    node2 = PathPlannerNode(&node2Name,-2.5,-0);
-    node3 = PathPlannerNode(&node3Name,3,0);
-    node4 = PathPlannerNode(&node4Name,3,3);
-    node5 = PathPlannerNode(&node5Name, -2.5, -3);
-    nodeDoor = PathPlannerNode(&nodeDoorName,2.8,5);
-
-    // Specify which nodes have a clear line of sight to each other.
-    node1.addNeighbour(&node2);
-    node1.addNeighbour(&node5);
-
-    node2.addNeighbour(&node1);
-    node2.addNeighbour(&node3);
-    node2.addNeighbour(&node5);
-
-    node3.addNeighbour(&node2);
-    node3.addNeighbour(&node4);
-    node3.addNeighbour(&nodeDoor);
-
-    node4.addNeighbour(&node3);
-    node4.addNeighbour(&nodeDoor);
-
-    node5.addNeighbour(&node2);
-    node5.addNeighbour(&node1);
     
-    nodeDoor.addNeighbour(&node3);
-    nodeDoor.addNeighbour(&node4);
-
-    // Add the nodes to the path planner's graph of nodes and connections.
-    PathPlanner::addNode(&node1);
-    PathPlanner::addNode(&node2);
-    PathPlanner::addNode(&node3);
-    PathPlanner::addNode(&node4);
-    PathPlanner::addNode(&node5);
-    PathPlanner::addNode(&nodeDoor);
-
-    this->activeNode = &node1;
-
-    this->movingToResident = false;
 }
 
 Actor::~Actor()
@@ -469,56 +415,57 @@ double Actor::faceDirection(double x,double y){
 }
 
 // Moves the Actor in a straight line towards the given x and y coordinates.
-bool Actor::gotoPosition(double x,double y){
+// Returns true while moving/rotating, and false when it has arrived at its location and stopped.
+bool Actor::gotoPosition(double x,double y) {
     // Face the node
-    if (faceDirection(x,y) < 0.1){
+    if (faceDirection(x,y) < 0.1) {
         double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
 
-        //ROS_DEBUG("Distance is %f",distance);
+        ROS_DEBUG("Distance is %f",distance);
 
-        if (distance > 0.01){
+        if (distance > 0.01) {
             faceDirection(x,y);
             this->velLinear = distance*1;
             return true;
-        }else{
+        } else {
             this->velLinear = 0;
             return false;
         }
-    }else{
-        //ROS_DEBUG("Target: %f",faceDirection(x,y));
+    } else {
+        ROS_DEBUG("Target: %f",faceDirection(x,y));
         this->velLinear = 0;
         return true;
     }
 }
 
-bool Actor::goToNode(string* nodeName) {
-    activeNode = getActiveNode();
+// Returns false when it has arrived at the target node, and true when in transit.
+bool Actor::goToNode(string nodeName) {
+	//Update the graph before doing anything else
 
-    targetNode = PathPlanner::getNode(nodeName);
-                //TODO: REWIRITE THIS TO USE NEW SYSTEM ################################################################################################
-    // goingToNode = pathPlanner.getClosestNode(goingToX, goingToY);
 
-    // vector <PathPlannerNodepath = pathPlanner.pathToNode(this->activeNode, goingToNode);
+    vector <PathPlannerNode*> path = pathPlanner.pathToNode(rosName, nodeName);
 
-    // //Get the node
-    // if (targetNode >= path.size()){
-    //     //We have arrived at the last node
-    //     this->velLinear = 0;
-        
-    //     return true;
-    // }
-    // if (!this->gotoPosition(path[targetNode]->px,path[targetNode]->py)){
-    //     this->activeNode = path[targetNode];
-    //     targetNode++;
-    // }else{
-    //     ROS_DEBUG("current position %f %f",px,py);
-    // }
-    // return false;
-}
 
-// Find the closest waypoint node to this Actor's current position.
-PathPlannerNode* Actor::getActiveNode() {
-    return PathPlanner::getClosestNode(this->px, this->py);
+    if (currentNodeIndex < path.size()-1) {
+
+				PathPlannerNode* nextNode = pathPlanner.getNode(currentNode);
+
+				if (!this->gotoPosition(nextNode->px, nextNode->py)) {
+            // We have arrived at the next node.
+            ROS_INFO_STREAM("We have arrived at a node on the path");
+            currentNode = path[currentNodeIndex+1]->getName();
+						currentNodeIndex++;
+            return true;
+        } else {
+						ROS_INFO("We are travelling to %s",currentNode.c_str());
+            return true;
+				}
+    } else {
+        ROS_INFO_STREAM("We have arrived at our final destination!");
+				currentNode = nodeName;
+        currentNodeIndex = 0;
+        return false;
+    }
 }
 
 ros::NodeHandle &Actor::getNodeHandle() const
