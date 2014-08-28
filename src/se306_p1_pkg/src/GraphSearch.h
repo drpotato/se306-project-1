@@ -2,6 +2,9 @@
 #include <string>
 #include <map>
 
+#ifndef SE306P1_GRAPHSEARCH_H_DEFINED
+#define SE306P1_GRAPHSEARCH_H_DEFINED
+
 using namespace std;
 
 class GraphSearch
@@ -50,3 +53,5 @@ private:
   static vector<edge>* getAdjacentEdges(point *t);
   static point* getAdjacentVertex(point *t, edge *e);
 };
+
+#endif

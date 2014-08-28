@@ -62,6 +62,10 @@ void Resident::doInitialSetup()
   has_woken_ = hasWoken();
   has_gone_to_bed_ = !hasWoken();
 
+  getOutOfBed = false;
+  goToEatingPlace = false;
+  getIntoBed = false;
+
   // Set levels to maximum initially.
   morale_level_ = LEVEL_MAX;
   socialness_level_ = LEVEL_MAX;
@@ -96,6 +100,27 @@ void Resident::doExecuteLoop()
   if (residentInstance->RCmode == "resident")
   {
     residentInstance->controlRobot();
+  }
+  else if (getOutOfBed)
+  {
+    if (!goToNode("nodeBedroomCentre"))
+    {
+      getOutOfBed = false;
+    }
+  }
+  else if (getIntoBed)
+  {
+    if (!goToNode("nodeMasterBed"))
+    {
+      getIntoBed = false;
+    }
+  }
+  else if (goToEatingPlace)
+  {
+    if (!goToNode("nodeLivingRoomEatingPlace"))
+    {
+      goToEatingPlace = false;
+    }
   }
   
   /* Call a friend if socialness gets too low but only call once per day */
@@ -456,11 +481,13 @@ void Resident::wakeUp()
 {
   // Reset sleep value for the day
   has_gone_to_bed_ = false;
-
   has_woken_ = true;
+  // Get out of bed
+  getOutOfBed = true;
 }
 void Resident::eat(int hour)
 {
+  goToEatingPlace = true;
   if (hour == BREAKFAST_TIME)
   {
     has_eaten_breakfast_ = true;
@@ -476,6 +503,7 @@ void Resident::eat(int hour)
 }
 void Resident::goToSleep()
 {
+  getIntoBed = true;
   // Reset values for next day
   has_eaten_breakfast_ = false;
   has_eaten_breakfast_ = false;
