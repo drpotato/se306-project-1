@@ -19,3 +19,4 @@ Team Google Ultron Dev Team - SE306 Project 1 Repo
 3. Run the project  
 `./run.sh`
 
+See [Controls](https://github.com/drpotato/se306-project-1/wiki/Controls) for instructions for use
