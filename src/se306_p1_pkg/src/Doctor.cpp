@@ -16,6 +16,7 @@ void Doctor::doInitialSetup()
     velRotational = 0.0;
     srand(time(NULL));
     subscriberTelephone = nodeHandle->subscribe("telephone", 1000, Doctor::telephoneCallback);
+    subscriberHealth = nodeHandle->subscribe("health", 1000, Doctor::healthCallback);
     homeVisit = false;
     travellingToResident = false;
     
@@ -23,6 +24,7 @@ void Doctor::doInitialSetup()
  	publisherNurse1 = nodeHandle->advertise<msg_pkg::Nurse>("nurse1", 1000);
  	publisherNurse2 = nodeHandle->advertise<msg_pkg::Nurse>("nurse2", 1000);
  	first = true;
+ 	healthLevel = 100;
     
 }
 
@@ -42,6 +44,11 @@ void Doctor::doExecuteLoop()
 		attendPatient();
 	}
 
+	if (goHome)
+	{
+		//TODO: go home
+	}
+
 }
 
 void Doctor::telephoneCallback(msg_pkg::Telephone msg)
@@ -55,6 +62,15 @@ void Doctor::telephoneCallback(msg_pkg::Telephone msg)
 		temp->travellingToResident = true;
 		temp->callNurses();
 	}
+
+}
+
+void Doctor::healthCallback(msg_pkg::Health msg)
+{
+
+	//TODO: Make something happen in the if statement
+	Doctor* temp = dynamic_cast<Doctor*>( ActorSpawner::getInstance().getActor());
+	temp->healthLevel = msg.level;
 
 }
 
@@ -93,6 +109,15 @@ void Doctor::attendPatient()
 		if (haveLock)
 		{
 			//Treat resident
+			if (!(healthLevel >= 99))
+			{
+				doResponse("mend");
+			} else 
+			{
+				goHome = true;
+				treating = false;
+				homeVisit = false;
+			}
 		} else if (deniedLock)
 		{
 			if (otherUnlocked)
