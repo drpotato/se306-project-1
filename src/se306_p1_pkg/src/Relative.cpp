@@ -12,7 +12,7 @@ void Relative::doInitialSetup()
     velRotational = 0.0;
     socialnessLevel = 5;
     socialising = false;
-    residentName = "Relative1";
+    residentName = "RobotNode2";
     subscriberSocialness = nodeHandle->subscribe("socialness", 1000, Relative::socialnessCallback);
     y = 0;
     x = 0;
@@ -24,10 +24,6 @@ void Relative::doInitialSetup()
 
 void Relative::doExecuteLoop()
 {
-    if (RCmode == "relative1")
-    {
-        Relative::controlRobot();
-    }
     if (returningHome){
         //ROS_INFO("MOVING TO HOME");
 
@@ -104,5 +100,8 @@ void Relative::socialnessCallback(msg_pkg::Socialness msg)
 
 bool Relative::checkSocialnessLevel()
 {
-  return socialnessLevel >= 2;
+	if (socialnessLevel>=2 ) {
+		return true;
+	}
+	return false;
 }

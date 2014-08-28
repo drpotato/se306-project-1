@@ -34,7 +34,6 @@ void KeyboardListener::keyInputCallback(msg_pkg::KeyInput msg)
 	KeyboardListener &keyboardListener = getInstance();
 	
 	// Clear the old active keys
-	keyboardListener.activeKeysPrevious = keyboardListener.activeKeys;
 	keyboardListener.activeKeys.clear();
 	
 	// Add the keys from the message
@@ -47,11 +46,4 @@ void KeyboardListener::keyInputCallback(msg_pkg::KeyInput msg)
 bool KeyboardListener::isKeyPressed(ups::KeyCode keyCode) const
 {
 	return activeKeys.find(keyCode) != activeKeys.end();
-}
-
-bool KeyboardListener::isKeyTapped(ups::KeyCode keyCode) const
-{
-	bool isTapped = activeKeys.find(keyCode) != activeKeys.end();
-	isTapped &= activeKeysPrevious.find(keyCode) == activeKeysPrevious.end();
-	return isTapped;
 }

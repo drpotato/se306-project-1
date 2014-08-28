@@ -1,8 +1,8 @@
-#ifndef SE306P1_ACTOR_MEDICATIONROBOT_H_DEFINED
-#define SE306P1_ACTOR_MEDICATIONROBOT_H_DEFINED
+#ifndef SE306P1_ACTOR_ENTERTAINMENTROBOT_H_DEFINED
+#define SE306P1_ACTOR_ENTERTAINMENTROBOT_H_DEFINED
 
 #include "Robot.h"
-#include <msg_pkg/Health.h>
+#include <msg_pkg/Morale.h>
 
 class MedicationRobot : public Robot
 {
@@ -10,21 +10,20 @@ protected:
 	virtual void doInitialSetup();
 	virtual void doExecuteLoop();
 
-	bool checkHealthLevel();
+	bool checkMedicationLevel();
 
-	static void healthCallback(msg_pkg::Health msg);
+	static void moraleCallback(msg_pkg::Morale msg);
 
-	int8_t healthLevel;
-	bool health;
+	int8_t moraleLevel;
+	bool entertaining;
 
-	ros::Subscriber subscriberHealth;
+	ros::Subscriber subscriberMorale;
 
 	string residentName;
 	int y;
 	int x;
 	bool first;
 	bool first_call;
-    bool healing;
 	bool returningHome;
 	bool returningHome_first;
 };

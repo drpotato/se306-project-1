@@ -1,5 +1,5 @@
-#ifndef SE306P1_ACTOR_COMPANIONROBOT_H_DEFINED
-#define SE306P1_ACTOR_COMPANIONROBOT_H_DEFINED
+#ifndef SE306P1_ACTOR_ENTERTAINMENTROBOT_H_DEFINED
+#define SE306P1_ACTOR_ENTERTAINMENTROBOT_H_DEFINED
 
 #include "Robot.h"
 #include <msg_pkg/Morale.h>
@@ -10,12 +10,12 @@ protected:
 	virtual void doInitialSetup();
 	virtual void doExecuteLoop();
 
-	bool checkMoraleLevel();
+	bool checkCompanionLevel();
 
 	static void moraleCallback(msg_pkg::Morale msg);
 
 	int8_t moraleLevel;
-	bool giving_morale;
+	bool entertaining;
 
 	ros::Subscriber subscriberMorale;
 
