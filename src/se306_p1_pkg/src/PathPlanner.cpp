@@ -137,7 +137,7 @@ void PathPlanner::removeNode(string* name) {
 // Adds a PathPlannerNode to the graph.
 void PathPlanner::addNode(PathPlannerNode p) {
     nodes.push_back(p);
-    int num = nodes.size();
+    ROS_INFO("Added node %s at location (%f, %f)", p.getName().c_str(), p.px, p.py);
 }
 
 // Returns the PathPlannerNode with the given name (if any).
