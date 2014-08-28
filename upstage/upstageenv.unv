@@ -12,6 +12,16 @@
 		<image
 			file="src/se306_p1_pkg/world/worldmaps/worldwalls.bmp"
 			l_rel="0.5" />
+		<image
+			file="img/ultronlogo.tga"
+			l_rel="0.5"
+			l_abs="-64.0"
+			r_rel="0.5"
+			r_abs="64.0"
+			d_rel="1.0"
+			d_abs="-128.0"
+			u_rel="1.0"
+			u_abs="0.0" />
 		<text
 			font="fonts/tiny.fnt"
 			text="This is example text. Blah blah blah." 

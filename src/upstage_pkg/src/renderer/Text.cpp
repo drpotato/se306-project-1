@@ -117,7 +117,8 @@ void ups::Text::finalise()
 				else
 				{
 					// We rewind to the last word boundary, insert a newline, and let the main loop take care of it.
-					pos = lastWordPos;
+					pos = lastWordPos++; // Increment last word pos to avoid getting stuck.
+					lastWordX = 0;
 					cursorX = 0;
 					cursorY -= _font.getLineHeight();
 					continue;

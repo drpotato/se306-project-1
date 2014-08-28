@@ -196,10 +196,18 @@ namespace ups
 	{
 		char c;
 		float returnValue = 0.f;
+		bool negative = false;
 		
 		// Skip over whitespace
 		while (isWhitespace(c = *str))
 		{
+			++str;
+		}
+		
+		// Check sign
+		if ((c = *str) == '-')
+		{
+			negative = true;
 			++str;
 		}
 		
@@ -226,7 +234,7 @@ namespace ups
 			*strPtr = str;
 		}
 		
-		return returnValue;
+		return negative ? -returnValue : returnValue;
 	}
 	
 	template<>
@@ -234,10 +242,18 @@ namespace ups
 	{
 		char c;
 		double returnValue = 0.0;
+		bool negative = false;
 		
 		// Skip over whitespace
 		while (isWhitespace(c = *str))
 		{
+			++str;
+		}
+		
+		// Check sign
+		if ((c = *str) == '-')
+		{
+			negative = true;
 			++str;
 		}
 		
@@ -264,7 +280,7 @@ namespace ups
 			*strPtr = str;
 		}
 		
-		return returnValue;
+		return negative ? -returnValue : returnValue;
 	}
 	
 	template<>
@@ -272,10 +288,18 @@ namespace ups
 	{
 		char c;
 		long returnValue = 0l;
+		bool negative = false;
 		
 		// Skip over whitespace
 		while (isWhitespace(c = *str))
 		{
+			++str;
+		}
+		
+		// Check sign
+		if ((c = *str) == '-')
+		{
+			negative = true;
 			++str;
 		}
 		
@@ -291,7 +315,7 @@ namespace ups
 		{
 			*strPtr = str;
 		}
-		return returnValue;
+		return negative ? -returnValue : returnValue;
 	}
 	
 	template<typename t>

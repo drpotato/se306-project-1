@@ -88,9 +88,9 @@ namespace ups
 				{
 					uint8 *outputImageOffset = outputImage + 4 * (yRaw * outputHeight + xRaw);
 					*(  outputImageOffset) = 0;
-					*(++outputImageOffset) = 1;
-					*(++outputImageOffset) = 2;
-					*(++outputImageOffset) = 3;
+					*(++outputImageOffset) = 0;
+					*(++outputImageOffset) = 0;
+					*(++outputImageOffset) = 0;
 					continue;
 				}
 				
@@ -102,15 +102,15 @@ namespace ups
 					switch(tgaPixelDepth)
 					{
 					case 24:
-						*(  outputImageOffset) = pixelBuffer[0];
+						*(  outputImageOffset) = pixelBuffer[2];
 						*(++outputImageOffset) = pixelBuffer[1];
-						*(++outputImageOffset) = pixelBuffer[2];
+						*(++outputImageOffset) = pixelBuffer[0];
 						*(++outputImageOffset) = 255;
 						break;
 					case 32:
-						*(  outputImageOffset) = pixelBuffer[0];
+						*(  outputImageOffset) = pixelBuffer[2];
 						*(++outputImageOffset) = pixelBuffer[1];
-						*(++outputImageOffset) = pixelBuffer[2];
+						*(++outputImageOffset) = pixelBuffer[0];
 						*(++outputImageOffset) = pixelBuffer[3];
 						break;
 					}
