@@ -18,9 +18,9 @@ void EntertainmentRobot::doInitialSetup()
 	velRotational = 0.0;
 	moraleLevel = 5;
 	entertaining = false;
-	residentName = "RobotNode2";
+	residentName = "Resident0";
 	subscriberMorale = nodeHandle->subscribe("morale", 1000, EntertainmentRobot::moraleCallback);
-	//subscriberLockStatus = nodeHandle->subscribe("lockStatus", 1000, EntertainmentRobot::lockStatusCallback);
+	
 	y = 0;
 	x = 0;
 	first = true;
@@ -32,7 +32,7 @@ void EntertainmentRobot::doInitialSetup()
 
 void EntertainmentRobot::doExecuteLoop()
 {
-	goToNode("Resident0");
+	goToNode("Doctor4");
 
 	// if (RCmode == "entertainmentRobot")
  //  	{

@@ -442,8 +442,9 @@ bool Actor::gotoPosition(double x,double y) {
 // Returns false when it has arrived at the target node, and true when in transit.
 bool Actor::goToNode(string nodeName) {
 	//Update the graph before doing anything else
+    ROS_INFO_STREAM("1");
     pathPlanner.update(rosName);
-    
+    ROS_INFO_STREAM("2");
     vector <PathPlannerNode*> path = pathPlanner.pathToNode(rosName, nodeName);
     if (path.size() == 0){
 	return true;

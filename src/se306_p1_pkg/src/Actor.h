@@ -15,7 +15,11 @@
 #include "PathPlannerNode.h"
 
 /* Macros */
-#define CRITICAL_LEVEL 90
+#define CRITICAL_LEVEL 20
+#define REASONABLE_LEVEL 80
+#define LEVEL_MAX 100 // Final release should be 100
+#define LEVEL_MIN 0 // Final release should be 0
+#define FREQUENCY 10
 
 class Actor
 {

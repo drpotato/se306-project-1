@@ -6,7 +6,6 @@
 // This class maintains a graph of navigation waypoint nodes, and calculates the shortest (fewest nodes) path between any two of them.
 
 PathPlanner::PathPlanner() {
-
     nodeBedroomCentreName = "nodeBedroomCentre";
     nodeHallwayByBedroomName = "nodeHallwayByBedroom";
     nodeHalllwayByLivingRoomName = "nodeHalllwayByLivingRoom";
@@ -18,7 +17,6 @@ PathPlanner::PathPlanner() {
     nodeHalllwayByLivingRoom = new PathPlannerNode(nodeHalllwayByLivingRoomName, 3, 0,false);
     nodeGuestBedroomCentre = new PathPlannerNode(nodeGuestBedroomCentreName, -2.5, -3,false);
     nodeHouseDoor = new PathPlannerNode(nodeHouseDoorName, 2.8, 5,false);
-
 
     // Specify which nodes have a clear line of sight to each other.
     nodeBedroomCentre->addNeighbour(nodeHallwayByBedroom->getName());
@@ -42,9 +40,6 @@ PathPlanner::PathPlanner() {
     addNode(*nodeHalllwayByLivingRoom);
     addNode(*nodeGuestBedroomCentre);
     addNode(*nodeHouseDoor);
-
-    //subscriberLocation = nodeHandle->subscribe("location", 1000, PathPlanner::locationCallback);
-
 }
 
 void PathPlanner::update(string name){
@@ -77,12 +72,15 @@ void PathPlanner::processMessage(msg_pkg::Location msg){
 // Returns the shortest path between the two given nodes.
 vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
 {
+    ROS_INFO_STREAM("2.1");
     PathPlannerNode *top;
     queue<PathPlannerNode*> s;
     s.push(this->getNode(startNode));
+    ROS_INFO_STREAM("2.2");
 
     for (int i = 0; i < nodes.size(); i++){
         nodes[i].setVisited(false);
+        ROS_INFO_STREAM("2.3x");
     }
 
     if(!hasNode(target)){
@@ -92,11 +90,14 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
 
     this->getNode(startNode)->setVisited(true);
 
+    ROS_INFO_STREAM("2.5");
 
     while (s.empty() == false){
+    ROS_INFO_STREAM("2.6");
         top = s.front();
         s.pop();
         if (top->getName().compare(target) == 0) {
+    ROS_INFO_STREAM("2.7 - Target node found");
             //found it!
             break;
         }
@@ -126,8 +127,6 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
     }
     return path;
 }
-
-
 
 // Removes a node from the graph, and removes it from all its' neighbours' lists of neighbours.
 void PathPlanner::removeNode(string* name) {
