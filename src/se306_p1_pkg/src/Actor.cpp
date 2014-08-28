@@ -63,6 +63,10 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 
 	publisherInteraction = nodeHandle->advertise<msg_pkg::Interaction>("interaction", 1000);
 
+
+	//PathPlanner
+	this->currentNode = pathPlanner.getClosestNode(this->px, this->py)->getName();
+	this->currentNodeIndex = 0;
 	// Put custom init stuff here (or make a method and call it from here)
 	KeyboardListener::init();
 	initialSetupStage();
@@ -214,24 +218,25 @@ bool Actor::goToNode(string nodeName) {
 
     vector <PathPlannerNode*> path = pathPlanner.pathToNode(rosName, nodeName);
 
-    if (firstNode) {
-        nextNode = path[0];
-        firstNode = false;
-    }
 
-    if (path.size() > 0) {
-        if (!this->gotoPosition(nextNode->px, nextNode->py)) {
+    if (currentNodeIndex < path.size()-1) {
+
+				PathPlannerNode* nextNode = pathPlanner.getNode(currentNode);
+
+				if (!this->gotoPosition(nextNode->px, nextNode->py)) {
             // We have arrived at the next node.
             ROS_INFO_STREAM("We have arrived at a node on the path");
-            nextNode = path[1];
+            currentNode = path[currentNodeIndex+1]->getName();
+						currentNodeIndex++;
             return true;
         } else {
-			ROS_INFO_STREAM("We are travelling between nodes");
+						ROS_INFO_STREAM("We are travelling between nodes");
             return true;
-		}
+				}
     } else {
         ROS_INFO_STREAM("We have arrived at our final destination!");
-        firstNode = true;
+				currentNode = nodeName;
+        currentNodeIndex = 0;
         return false;
     }
 }

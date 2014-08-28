@@ -34,14 +34,14 @@ void EntertainmentRobot::doExecuteLoop() {
 		}
         return;
 	}
-
 	if (!entertaining) {
 		if (!checkMoraleLevel()) {
-			
-	    	if (!(this->goToNode(residentName))) {
+				if (!(this->goToNode(residentName))) {
 	    		ROS_INFO("CHANGED TO ENTERTAINING");
 	    		entertaining=true;
-	    	}
+	    	}else{
+					ROS_INFO("travelling");
+				}
 		}
 	} else {
 		if (moraleLevel == 5) {
@@ -55,7 +55,7 @@ void EntertainmentRobot::doExecuteLoop() {
 				y = 0;
 			} else {
 				y++;
-			}	
+			}
 		}
 	}
 }

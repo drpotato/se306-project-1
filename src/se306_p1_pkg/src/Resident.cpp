@@ -9,7 +9,7 @@
 #include <time.h>
 #include <msg_pkg/Time.h>
 
-// The person living in our house. 
+// The person living in our house.
 // Has various attributes representing his needs/wants, which degrade over time.
 // When they reach a certain level, messages are published to his assistant Robots and the VisitorController, requesting various services.
 void Resident::doInitialSetup()
@@ -49,7 +49,7 @@ void Resident::doInitialSetup()
 }
 
 void Resident::doExecuteLoop()
-{    
+{
 
   //TODO: REMOVE THIS WHEN RANDOMNESS AND DAY LOGIC IS IMPLEMENTED##################################################################################
   if (morale_count_ >= WAIT_TIME && !m_dropped_)
@@ -60,7 +60,7 @@ void Resident::doExecuteLoop()
       // don't drop the value any more, it's being tended to or has been already
       m_dropped_ = true;
     }
-    else 
+    else
     {
       // Reduce the level every 1000 counts
       residentInstance->morale_level_--;
@@ -157,7 +157,7 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
 
   //Publish the message
   residentInstance->publisherSocialness.publish(socialnessMessage);
-  } 
+  }
   else if (attribute == "entertaining")
   {
   // Get new level
