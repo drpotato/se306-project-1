@@ -8,36 +8,36 @@
 PathPlanner::PathPlanner() {
     nodeBedroomCentreName = "nodeBedroomCentre";
     nodeHallwayByBedroomName = "nodeHallwayByBedroom";
-    nodeHalllwayByLivingRoomName = "nodeHalllwayByLivingRoom";
+    nodeHallwayByLivingRoomName = "nodeHallwayByLivingRoom";
     nodeGuestBedroomCentreName = "nodeGuestBedroomCentre";
     nodeHouseDoorName = "nodeHouseDoor";
 
-    nodeBedroomCentre = new PathPlannerNode(nodeBedroomCentreName, -2.5, 3,false);
-    nodeHallwayByBedroom = new PathPlannerNode(nodeHallwayByBedroomName, -2.5, -0,false);
-    nodeHalllwayByLivingRoom = new PathPlannerNode(nodeHalllwayByLivingRoomName, 3, 0,false);
-    nodeGuestBedroomCentre = new PathPlannerNode(nodeGuestBedroomCentreName, -2.5, -3,false);
-    nodeHouseDoor = new PathPlannerNode(nodeHouseDoorName, 2.8, 5,false);
+    nodeBedroomCentre = new PathPlannerNode(nodeBedroomCentreName, -2.5, 3, false);
+    nodeHallwayByBedroom = new PathPlannerNode(nodeHallwayByBedroomName, -2.5, -0, false);
+    nodeHallwayByLivingRoom = new PathPlannerNode(nodeHallwayByLivingRoomName, 3, 0, false);
+    nodeGuestBedroomCentre = new PathPlannerNode(nodeGuestBedroomCentreName, -2.5, -3, false);
+    nodeHouseDoor = new PathPlannerNode(nodeHouseDoorName, 2.8, 5, false);
 
     // Specify which nodes have a clear line of sight to each other.
     nodeBedroomCentre->addNeighbour(nodeHallwayByBedroom->getName());
     nodeBedroomCentre->addNeighbour(nodeGuestBedroomCentre->getName());
 
     nodeHallwayByBedroom->addNeighbour(nodeBedroomCentre->getName());
-    nodeHallwayByBedroom->addNeighbour(nodeHalllwayByLivingRoom->getName());
+    nodeHallwayByBedroom->addNeighbour(nodeHallwayByLivingRoom->getName());
     nodeHallwayByBedroom->addNeighbour(nodeGuestBedroomCentre->getName());
 
-    nodeHalllwayByLivingRoom->addNeighbour(nodeHallwayByBedroom->getName());
-    nodeHalllwayByLivingRoom->addNeighbour(nodeHouseDoor->getName());
+    nodeHallwayByLivingRoom->addNeighbour(nodeHallwayByBedroom->getName());
+    nodeHallwayByLivingRoom->addNeighbour(nodeHouseDoor->getName());
 
     nodeGuestBedroomCentre->addNeighbour(nodeHallwayByBedroom->getName());
     nodeGuestBedroomCentre->addNeighbour(nodeBedroomCentre->getName());
 
-    nodeHouseDoor->addNeighbour(nodeHalllwayByLivingRoom->getName());
+    nodeHouseDoor->addNeighbour(nodeHallwayByLivingRoom->getName());
 
     // Add the nodes to the path planner's graph of nodes and connections.
     addNode(*nodeBedroomCentre);
     addNode(*nodeHallwayByBedroom);
-    addNode(*nodeHalllwayByLivingRoom);
+    addNode(*nodeHallwayByLivingRoom);
     addNode(*nodeGuestBedroomCentre);
     addNode(*nodeHouseDoor);
 }
@@ -67,10 +67,10 @@ void PathPlanner::processMessage(msg_pkg::Location msg){
   double y = msg.ypos;
   if (hasNode(name)) {
       updateNode(name, x, y);
-      ROS_INFO("Updating node %s to (%f, %f)", name.c_str(), x, y);
+      //ROS_INFO("Updating node %s to (%f, %f)", name.c_str(), x, y);
   } else {
       ROS_INFO("adding new node (%s)", name.c_str());
-      PathPlannerNode* newNode = new PathPlannerNode(name, x, y,true);
+      PathPlannerNode* newNode = new PathPlannerNode(name, x, y, true);
       PathPlannerNode* closestNode = getClosestNode(x, y);
       addNode(*newNode);
       getNode(name)->addNeighbour(closestNode);
@@ -92,7 +92,7 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
         ROS_INFO_STREAM("2.3x");
     }
 
-    if(!hasNode(target)){
+    if(!hasNode(target)) {
 	vector<PathPlannerNode*> retVal;
         return retVal;
     }
@@ -120,6 +120,7 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
 
     vector<PathPlannerNode*> path;
     PathPlannerNode* iter = top;
+
     while (iter->getName().compare(startNode) != 0) {
         path.insert(path.begin(),iter);
         iter = iter->previous;
@@ -129,8 +130,9 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
     for (int i=0;i<path.size();i++) {
         path[i]->visited = false;
     }
+
     ROS_INFO_STREAM("Path found!");
-    for (int i=0;i<path.size();i++) {
+    for (int i=0;i < path.size(); i++) {
         ROS_INFO_STREAM(path[i]->getName());
     }
     return path;
