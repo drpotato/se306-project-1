@@ -6,7 +6,6 @@
 // This class maintains a graph of navigation waypoint nodes, and calculates the shortest (fewest nodes) path between any two of them.
 
 PathPlanner::PathPlanner() {
-    //nodeHandle = new ros::NodeHandle();
 
     nodeBedroomCentreName = "nodeBedroomCentre";
     nodeHallwayByBedroomName = "nodeHallwayByBedroom";
@@ -56,7 +55,6 @@ void PathPlanner::update(string name){
     messages->pop();
     this->processMessage(msg);
   }
-
 }
 
 void PathPlanner::processMessage(msg_pkg::Location msg){
