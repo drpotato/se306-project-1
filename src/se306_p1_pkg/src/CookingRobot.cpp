@@ -28,7 +28,7 @@ void CookingRobot::doExecuteLoop()
 {
 	if (RCmode == "cookingRobot")
   	{
-    	CookingRobot::controlRobot();
+    	CookingRobot::controlRobot();	
   	}
 	if (returningHome){
 		//ROS_INFO("MOVEING TO HOME");
@@ -57,7 +57,7 @@ void CookingRobot::doExecuteLoop()
 			//PathPlannerNode *target = this->pathPlanner.getNode(&node2Name);
 	    	//vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
 
-
+			
 
 	    	//The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
 	    	if (!(this->movingToResident) )
