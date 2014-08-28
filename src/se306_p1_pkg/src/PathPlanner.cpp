@@ -67,6 +67,7 @@ void PathPlanner::processMessage(msg_pkg::Location msg){
   double y = msg.ypos;
   if (hasNode(name)) {
       updateNode(name, x, y);
+      ROS_INFO("Updating node %s to (%f, %f)", name.c_str(), x, y);
   } else {
       ROS_INFO("adding new node (%s)", name.c_str());
       PathPlannerNode* newNode = new PathPlannerNode(name, x, y,true);

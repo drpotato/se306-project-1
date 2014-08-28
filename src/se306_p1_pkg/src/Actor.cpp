@@ -137,14 +137,12 @@ void Actor::lockStatusCallback(msg_pkg::LockStatus msg)
             actorPtr->deniedLock = false;
             actorPtr->haveLock=true;
             ROS_INFO("I HAVE THE LOCK %s",actorPtr->rosName.c_str() );
-        } else
-        {
+        } else {
             actorPtr->haveLock = false;
             actorPtr->deniedLock = true;
             ROS_INFO("I WAS DENIED THE LOCK %s",actorPtr->rosName.c_str() );
         }
     }
-
 }
 
 void Actor::unlockCallback(msg_pkg::Unlock msg)
@@ -353,7 +351,7 @@ void Actor::doResponse(const char *attribute)
 {
 	msg_pkg::Interaction interaction;
 	interaction.attribute = attribute;
-	interaction.amount = 1;
+	interaction.amount = INC_AMOUNT;
 	publisherInteraction.publish(interaction);
 
 	ROS_INFO("%s (%s) is performing \"%s\"", rosName.c_str(), stageName.c_str(), attribute);
@@ -418,10 +416,15 @@ bool Actor::goToNode(string nodeName) {
     pathPlanner.update(rosName);
     ROS_INFO_STREAM("2");
     vector <PathPlannerNode*> path = pathPlanner.pathToNode(rosName, nodeName);
-    if (path.size() == 0){
-	return true;
+
+    if (path.size() == 0) {
+	   ROS_INFO_STREAM("Path size is 0");
+       return true;
+    } else {
+        ROS_INFO_STREAM("Path size is not 0");
     }
-    if (currentNodeIndex < path.size()-1) {
+    
+    if (currentNodeIndex < path.size() - 1) {
         PathPlannerNode* nextNode = pathPlanner.getNode(currentNode);
         if (!this->gotoPosition(nextNode->px, nextNode->py)) {
             // We have arrived at the next node.
