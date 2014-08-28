@@ -22,14 +22,12 @@ protected:
   static void socialnessCallback(msg_pkg::Socialness msg);
   static void moraleCallback(msg_pkg::Morale msg);
   static void timeCallback(msg_pkg::Time msg);
-  static void lockStatusCallback(msg_pkg::LockStatus msg);
   static void telephoneCallback(msg_pkg::Telephone msg);
   
   /* Subscribers */
   ros::Subscriber subscriberSocialness;
   ros::Subscriber subscriberMorale;
   ros::Subscriber subscriberTime;
-  ros::Subscriber subscriberLockStatus;
   ros::Subscriber subscribeTelephone;
 
   string getActorName();
