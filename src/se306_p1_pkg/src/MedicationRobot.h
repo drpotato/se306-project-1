@@ -14,8 +14,10 @@ protected:
 
 	static void moraleCallback(msg_pkg::Morale msg);
 
-	int8_t moraleLevel;
-	bool entertaining;
+	string getActorName();
+
+	int8_t healthLevel;
+	bool health;
 
 	ros::Subscriber subscriberMorale;
 

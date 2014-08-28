@@ -19,16 +19,16 @@ public:
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg);
   static void timeCallback(msg_pkg::Time msg);
+  static void requestLockCallback(msg_pkg::RequestLock msg);
+  static void unlockCallback(msg_pkg::Unlock msg);
+
+  string getActorName();
   
   bool lock_;
 
-  // Demo paramters to gradually reduce levels
-  int morale_count_;
-  int socialness_count_;
-  bool m_dropped_;
-  bool s_dropped_;
-  const static int WAIT_TIME = 50;
-  bool m_replenished_;
+	#define LEVEL_MAX 100 // Final release should be 100
+	#define LEVEL_MIN 0 // Final release should be 0
+	#define FREQUENCY 10
 
   // Event hours - c++ inverts 24hr time for some reason? - maybe just my machine does this
   const static int WAKE_TIME = 7;

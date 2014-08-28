@@ -58,6 +58,8 @@ add_message_files(
   Location.msg
   Morale.msg
   Socialness.msg
+  KeyInput.msg
+  Nurse.msg
   Telephone.msg
   Time.msg
 )
