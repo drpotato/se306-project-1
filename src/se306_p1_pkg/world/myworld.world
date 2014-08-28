@@ -40,7 +40,7 @@ model
   size [15.399 10.000 0.500]
   pose [ 0.000 0.000 0.000 0.000 ]
   
-  obstacle_return 1
+  obstacle_return 0
 )
 
 # Carpet
