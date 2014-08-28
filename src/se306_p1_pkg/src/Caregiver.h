@@ -11,6 +11,7 @@
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/Time.h>
 #include <msg_pkg/Telephone.h>
+#include <msg_pkg/LockStatus.h>
 
 class Caregiver : public Visitor
 {
@@ -55,6 +56,8 @@ protected:
     bool checkHygieneLevel();
     bool checkMoraleLevel();
     bool checkSocialnessLevel();
+    
+    bool has_lock;
 };
 
 
