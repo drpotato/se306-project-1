@@ -7,7 +7,7 @@
 #include "renderer/Font.hpp"
 #include "renderer/Renderer.hpp"
 #include "renderer/Text.hpp"
-#include "renderer/Texture.hpp"
+#include "renderer/Image.hpp"
 
 int main(int argc, char **argv)
 {
@@ -18,6 +18,11 @@ int main(int argc, char **argv)
 	resMan.addPriorityPath("upstage");
 	
 	ups::UpstageEnvironment *env = resMan.fetch<ups::UpstageEnvironment>("upstageenv.unv");
+	ups::Image image("test.bmp");
+	image.setOffsetsL(0.f, 0.f);
+	image.setOffsetsR(0.f, 1.f);
+	image.setOffsetsU(0.f, 1.f);
+	image.setOffsetsD(0.f, 0.f);
 	ups::Font *font = resMan.fetch<ups::Font>("fonts/tiny.fnt");
 	ups::Font *font2 = resMan.fetch<ups::Font>("fonts/ubuntu_mono.fnt");
 
@@ -35,6 +40,7 @@ int main(int argc, char **argv)
 		// Update positions etc. here
 		env->step();
 		env->draw(renderer);
+		image.draw(renderer);
 		textTest.draw(renderer);
 		textTest2.draw(renderer);
 		// ups::Colour c0 = ups::Colour::rgb(1.f, 0.f, 0.f, 1.f);

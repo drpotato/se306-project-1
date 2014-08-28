@@ -26,9 +26,11 @@ add_library(UpstageLibrary
   src/geom/Model.cpp
   src/maths/Quaternion.cpp
   src/renderer/Font.cpp
+  src/renderer/Image.cpp
   src/renderer/Renderer.cpp
   src/renderer/Texture.cpp
   src/renderer/Text.cpp
+  src/renderer/UltronScale.cpp
   src/renderer/opengl/glloader.cpp
   src/resourceloaders/ResourceLoaderBMP.cpp
   src/resourceloaders/ResourceLoaderFNT.cpp
