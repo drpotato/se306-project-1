@@ -6,7 +6,6 @@
 // This class maintains a graph of navigation waypoint nodes, and calculates the shortest (fewest nodes) path between any two of them.
 
 PathPlanner::PathPlanner() {
-
     nodeBedroomCentreName = "nodeBedroomCentre";
     nodeHallwayByBedroomName = "nodeHallwayByBedroom";
     nodeHalllwayByLivingRoomName = "nodeHalllwayByLivingRoom";
@@ -18,7 +17,6 @@ PathPlanner::PathPlanner() {
     nodeHalllwayByLivingRoom = new PathPlannerNode(nodeHalllwayByLivingRoomName, 3, 0,false);
     nodeGuestBedroomCentre = new PathPlannerNode(nodeGuestBedroomCentreName, -2.5, -3,false);
     nodeHouseDoor = new PathPlannerNode(nodeHouseDoorName, 2.8, 5,false);
-
 
     // Specify which nodes have a clear line of sight to each other.
     nodeBedroomCentre->addNeighbour(nodeHallwayByBedroom->getName());
@@ -43,8 +41,7 @@ PathPlanner::PathPlanner() {
     addNode(*nodeGuestBedroomCentre);
     addNode(*nodeHouseDoor);
 
-    //subscriberLocation = nodeHandle->subscribe("location", 1000, PathPlanner::locationCallback);
-
+    PathPlanner::manualNodesExist = true;
 }
 
 void PathPlanner::update(string name){
@@ -129,8 +126,6 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
     }
     return path;
 }
-
-
 
 // Removes a node from the graph, and removes it from all its' neighbours' lists of neighbours.
 void PathPlanner::removeNode(string* name) {

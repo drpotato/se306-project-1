@@ -8,14 +8,10 @@ ros::Subscriber PathPlannerListener::subscriberLocation;
 ros::NodeHandle* PathPlannerListener::nodeHandle;
 boost::unordered_map<std::string, queue<msg_pkg::Location> > PathPlannerListener::messageQueues;
 
-
 PathPlannerListener::PathPlannerListener() {
     nodeHandle = new ros::NodeHandle();
     subscriberLocation = nodeHandle->subscribe("location", 1000, PathPlannerListener::locationCallback);
 }
-
-
-
 
 void PathPlannerListener::locationCallback(msg_pkg::Location msg){
   // Find Actor of this name in graph and remove it.
@@ -30,7 +26,6 @@ void PathPlannerListener::locationCallback(msg_pkg::Location msg){
 
   messageQueues[name].push(msg);
 }
-
 
 queue<msg_pkg::Location>* PathPlannerListener::getMessages(string name){
   return &(messageQueues[name]);
