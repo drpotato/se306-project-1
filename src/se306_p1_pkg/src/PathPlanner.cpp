@@ -52,21 +52,18 @@ PathPlanner::PathPlanner() {
 // When a location message is received, updates the graph with that Actor's new location.
 void PathPlanner::locationCallback(msg_pkg::Location msg)
 {
-    ROS_INFO_STREAM("LocationCallback called!");
     // Find Actor of this name in graph and remove it.
     string name = msg.id;
     double x = msg.xpos;
     double y = msg.ypos;
     if (hasNode(name)) {
-        ROS_INFO_STREAM("update node");
         updateNode(name, x, y);
     } else {
-        ROS_INFO_STREAM("Node does not exist; create it");
         PathPlannerNode newNode = PathPlannerNode(name, x, y);
         PathPlannerNode* closestNode = getClosestNode(x, y);
         addNode(newNode);
         getNode(name)->addNeighbour(closestNode);
-        closestNode->addNeighbour(getNode(name));
+        closestNode->addNeighbour(name);
 
     }
 }
@@ -93,9 +90,9 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
             break;
         }
         for (int i =0;i<top->neighbours.size();i++){
-            if (top->neighbours[i]->isVisited() == false){
-                s.push(top->neighbours[i]);
-                top->neighbours[i]->previous = top;
+            if (getNode(top->neighbours[i])->isVisited() == false){
+                s.push(getNode(top->neighbours[i]));
+                getNode(top->neighbours[i])->previous = top;
             }
         }
         top->setVisited(true);
@@ -123,8 +120,8 @@ void PathPlanner::removeNode(string* name) {
         if (currentNode->getName().compare(*name) == 0) {
             // For each of its neighbours
             for (int j = 0; j < currentNode->neighbours.size(); j++) {
-                PathPlannerNode* neighbour = currentNode->neighbours[j];
-                neighbour->removeNeighbour(currentNode);
+                PathPlannerNode* neighbour = getNode(currentNode->neighbours[j]);
+                neighbour->removeNeighbour(*name);
             }
           nodes.erase(nodes.begin()+i);
           return;
@@ -136,7 +133,6 @@ void PathPlanner::removeNode(string* name) {
 void PathPlanner::addNode(PathPlannerNode p) {
     nodes.push_back(p);
     int num = nodes.size();
-    ROS_INFO("New size of nodes list: %i", num);
 }
 
 // Returns the PathPlannerNode with the given name (if any).
@@ -163,11 +159,11 @@ bool PathPlanner::hasNode(string name){
 // Updates the PathPlannerNode's location with the given x and y, and refinds its closest neighbour.
 void PathPlanner::updateNode(string name, double x, double y) {
     PathPlannerNode* node = getNode(name);
+    ROS_INFO("Got node called %s",node->getName().c_str());
     node->removeAllNeighbours();
-    ROS_INFO_STREAM("all neighbours removed");
     PathPlannerNode* closestNode = getClosestNode(x, y);
-    node->addNeighbour(closestNode);
-    closestNode->addNeighbour(node);
+    node->addNeighbour(closestNode->getName());
+    closestNode->addNeighbour(name);
     /*
     for (int i = 0; i < nodes.size(); i++) {
         PathPlannerNode* node = &nodes[i];

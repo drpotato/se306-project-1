@@ -10,7 +10,7 @@ class PathPlannerNode{
     private:
         string name;
         PathPlannerNode* previous;
-        vector<PathPlannerNode*> neighbours;
+        vector<string> neighbours;
 
     public:
         bool visited;
@@ -18,9 +18,10 @@ class PathPlannerNode{
         double py;
         PathPlannerNode(string, double, double);
         PathPlannerNode();
-        PathPlannerNode(const PathPlannerNode &other);
+        //PathPlannerNode(const PathPlannerNode &other);
+        void addNeighbour(string);
         void addNeighbour(PathPlannerNode*);
-        void removeNeighbour(PathPlannerNode*);
+        void removeNeighbour(string);
         void removeAllNeighbours();
         string getName();
         bool isVisited();
