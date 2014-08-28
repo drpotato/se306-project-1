@@ -52,8 +52,7 @@ public:
   static void requestLockCallback(msg_pkg::RequestLock msg);
   static void unlockCallback(msg_pkg::Unlock msg);
 
-	
-  
+  string getActorName();
   bool lock_;
   ActorType lock_type_;
   string lock_id_;
@@ -80,6 +79,10 @@ public:
   bool m_replenished_;	
   bool m_dropped_;
   bool s_dropped_;
+
+	#define LEVEL_MAX 100 // Final release should be 100
+	#define LEVEL_MIN 0 // Final release should be 0
+	#define FREQUENCY 10
 
   // Event hours
   const static int WAKE_TIME = 7;

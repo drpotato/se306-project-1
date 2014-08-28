@@ -32,6 +32,8 @@ protected:
   ros::Subscriber subscriberLockStatus;
   ros::Subscriber subscribeTelephone;
 
+  string getActorName();
+
   int8_t socialnessLevel;
   bool socialising;
 
@@ -42,6 +44,7 @@ protected:
   bool returningHome;
   bool returningHome_first;
   bool waiting_to_socialise;
+  bool called_by_resident_;
   
   bool has_lock;
 };

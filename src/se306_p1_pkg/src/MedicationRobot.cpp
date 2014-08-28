@@ -6,6 +6,11 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 
+string MedicationRobot::getActorName()
+{
+  return "MedicationRobot";
+}
+
 // A Robot which gives the Resident his medication.
 void MedicationRobot::doInitialSetup()
 {

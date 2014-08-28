@@ -60,6 +60,8 @@ add_message_files(
   Morale.msg
   RequestLock.msg
   Socialness.msg
+  KeyInput.msg
+  Nurse.msg
   Telephone.msg
   Time.msg
   Unlock.msg
