@@ -20,27 +20,16 @@ rosrun se306_p1_pkg ActorSpawner 0 Resident -5 3 0 & # >> log/actor_Resident_000
 ROBOT0_PID=$!
 echo ROBOT0_PID = $ROBOT0_PID >> log/debugscript.txt
 
-echo "############################## DEBUG LOG ##############################" > log/actor_R1_000.txt
-echo ActorClass     = R1 >> log/actor_R1_000.txt
-echo InitialX       = -6 >> log/actor_R1_000.txt
-echo InitialY       = -3 >> log/actor_R1_000.txt
-echo InitialAngle   = 0 >> log/actor_R1_000.txt
-echo Colour         = yellow >> log/actor_R1_000.txt
-echo "#######################################################################" >> log/actor_R1_000.txt
-rosrun se306_p1_pkg ActorSpawner 1 R1 -6 -3 0 & # >> log/actor_R1_000.txt &
-ROBOT1_PID=$!
-echo ROBOT1_PID = $ROBOT1_PID >> log/debugscript.txt
-
 echo "############################## DEBUG LOG ##############################" > log/actor_EntertainmentRobot_000.txt
 echo ActorClass     = EntertainmentRobot >> log/actor_EntertainmentRobot_000.txt
 echo InitialX       = -2.5 >> log/actor_EntertainmentRobot_000.txt
 echo InitialY       = -3 >> log/actor_EntertainmentRobot_000.txt
 echo InitialAngle   = 0 >> log/actor_EntertainmentRobot_000.txt
-echo Colour         = blue >> log/actor_EntertainmentRobot_000.txt
+echo Colour         = wheat3 >> log/actor_EntertainmentRobot_000.txt
 echo "#######################################################################" >> log/actor_EntertainmentRobot_000.txt
-rosrun se306_p1_pkg ActorSpawner 2 EntertainmentRobot -2.5 -3 0 & # >> log/actor_EntertainmentRobot_000.txt &
-ROBOT2_PID=$!
-echo ROBOT2_PID = $ROBOT2_PID >> log/debugscript.txt
+rosrun se306_p1_pkg ActorSpawner 1 EntertainmentRobot -2.5 -3 0 & # >> log/actor_EntertainmentRobot_000.txt &
+ROBOT1_PID=$!
+echo ROBOT1_PID = $ROBOT1_PID >> log/debugscript.txt
 
 echo "############################## DEBUG LOG ##############################" > log/actor_Relative_000.txt
 echo ActorClass     = Relative >> log/actor_Relative_000.txt
@@ -49,18 +38,29 @@ echo InitialY       = 5 >> log/actor_Relative_000.txt
 echo InitialAngle   = 0 >> log/actor_Relative_000.txt
 echo Colour         = pink >> log/actor_Relative_000.txt
 echo "#######################################################################" >> log/actor_Relative_000.txt
-rosrun se306_p1_pkg ActorSpawner 3 Relative 2.75 5 0 & # >> log/actor_Relative_000.txt &
+rosrun se306_p1_pkg ActorSpawner 2 Relative 2.75 5 0 & # >> log/actor_Relative_000.txt &
+ROBOT2_PID=$!
+echo ROBOT2_PID = $ROBOT2_PID >> log/debugscript.txt
+
+echo "############################## DEBUG LOG ##############################" > log/actor_Friend_000.txt
+echo ActorClass     = Friend >> log/actor_Friend_000.txt
+echo InitialX       = 2.75 >> log/actor_Friend_000.txt
+echo InitialY       = 6 >> log/actor_Friend_000.txt
+echo InitialAngle   = 0 >> log/actor_Friend_000.txt
+echo Colour         = purple >> log/actor_Friend_000.txt
+echo "#######################################################################" >> log/actor_Friend_000.txt
+rosrun se306_p1_pkg ActorSpawner 3 Friend 2.75 6 0 & # >> log/actor_Friend_000.txt &
 ROBOT3_PID=$!
 echo ROBOT3_PID = $ROBOT3_PID >> log/debugscript.txt
 
-echo "############################## DEBUG LOG ##############################" > log/actor_RCActor_000.txt
-echo ActorClass     = RCActor >> log/actor_RCActor_000.txt
-echo InitialX       = 2.75 >> log/actor_RCActor_000.txt
-echo InitialY       = 3 >> log/actor_RCActor_000.txt
-echo InitialAngle   = 0 >> log/actor_RCActor_000.txt
-echo Colour         = grey >> log/actor_RCActor_000.txt
-echo "#######################################################################" >> log/actor_RCActor_000.txt
-rosrun se306_p1_pkg ActorSpawner 4 RCActor 2.75 3 0 & # >> log/actor_RCActor_000.txt &
+echo "############################## DEBUG LOG ##############################" > log/actor_Doctor_000.txt
+echo ActorClass     = Doctor >> log/actor_Doctor_000.txt
+echo InitialX       = 2.75 >> log/actor_Doctor_000.txt
+echo InitialY       = 7 >> log/actor_Doctor_000.txt
+echo InitialAngle   = 0 >> log/actor_Doctor_000.txt
+echo Colour         = black >> log/actor_Doctor_000.txt
+echo "#######################################################################" >> log/actor_Doctor_000.txt
+rosrun se306_p1_pkg ActorSpawner 4 Doctor 2.75 7 0 & # >> log/actor_Doctor_000.txt &
 ROBOT4_PID=$!
 echo ROBOT4_PID = $ROBOT4_PID >> log/debugscript.txt
 
@@ -74,6 +74,72 @@ echo "#######################################################################" >
 rosrun se306_p1_pkg ActorSpawner 5 Clock 6 -4.6 0 & # >> log/actor_Clock_000.txt &
 ROBOT5_PID=$!
 echo ROBOT5_PID = $ROBOT5_PID >> log/debugscript.txt
+
+echo "############################## DEBUG LOG ##############################" > log/actor_Nurse_000.txt
+echo ActorClass     = Nurse >> log/actor_Nurse_000.txt
+echo InitialX       = 3.75 >> log/actor_Nurse_000.txt
+echo InitialY       = 8 >> log/actor_Nurse_000.txt
+echo InitialAngle   = 0 >> log/actor_Nurse_000.txt
+echo Colour         = white >> log/actor_Nurse_000.txt
+echo "#######################################################################" >> log/actor_Nurse_000.txt
+rosrun se306_p1_pkg ActorSpawner 6 Nurse 3.75 8 0 & # >> log/actor_Nurse_000.txt &
+ROBOT6_PID=$!
+echo ROBOT6_PID = $ROBOT6_PID >> log/debugscript.txt
+
+echo "############################## DEBUG LOG ##############################" > log/actor_Nurse_001.txt
+echo ActorClass     = Nurse >> log/actor_Nurse_001.txt
+echo InitialX       = 1.75 >> log/actor_Nurse_001.txt
+echo InitialY       = 8 >> log/actor_Nurse_001.txt
+echo InitialAngle   = 0 >> log/actor_Nurse_001.txt
+echo Colour         = white >> log/actor_Nurse_001.txt
+echo "#######################################################################" >> log/actor_Nurse_001.txt
+rosrun se306_p1_pkg ActorSpawner 7 Nurse 1.75 8 0 & # >> log/actor_Nurse_001.txt &
+ROBOT7_PID=$!
+echo ROBOT7_PID = $ROBOT7_PID >> log/debugscript.txt
+
+echo "############################## DEBUG LOG ##############################" > log/actor_EntertainmentRobot_001.txt
+echo ActorClass     = EntertainmentRobot >> log/actor_EntertainmentRobot_001.txt
+echo InitialX       = -1 >> log/actor_EntertainmentRobot_001.txt
+echo InitialY       = -4.5 >> log/actor_EntertainmentRobot_001.txt
+echo InitialAngle   = 0 >> log/actor_EntertainmentRobot_001.txt
+echo Colour         = wheat3 >> log/actor_EntertainmentRobot_001.txt
+echo "#######################################################################" >> log/actor_EntertainmentRobot_001.txt
+rosrun se306_p1_pkg ActorSpawner 8 EntertainmentRobot -1 -4.5 0 & # >> log/actor_EntertainmentRobot_001.txt &
+ROBOT8_PID=$!
+echo ROBOT8_PID = $ROBOT8_PID >> log/debugscript.txt
+
+echo "############################## DEBUG LOG ##############################" > log/actor_MedicationRobot_000.txt
+echo ActorClass     = MedicationRobot >> log/actor_MedicationRobot_000.txt
+echo InitialX       = -1 >> log/actor_MedicationRobot_000.txt
+echo InitialY       = 3 >> log/actor_MedicationRobot_000.txt
+echo InitialAngle   = 0 >> log/actor_MedicationRobot_000.txt
+echo Colour         = grey30 >> log/actor_MedicationRobot_000.txt
+echo "#######################################################################" >> log/actor_MedicationRobot_000.txt
+rosrun se306_p1_pkg ActorSpawner 9 MedicationRobot -1 3 0 & # >> log/actor_MedicationRobot_000.txt &
+ROBOT9_PID=$!
+echo ROBOT9_PID = $ROBOT9_PID >> log/debugscript.txt
+
+echo "############################## DEBUG LOG ##############################" > log/actor_CompanionRobot_000.txt
+echo ActorClass     = CompanionRobot >> log/actor_CompanionRobot_000.txt
+echo InitialX       = -2.5 >> log/actor_CompanionRobot_000.txt
+echo InitialY       = 4.5 >> log/actor_CompanionRobot_000.txt
+echo InitialAngle   = 0 >> log/actor_CompanionRobot_000.txt
+echo Colour         = grey30 >> log/actor_CompanionRobot_000.txt
+echo "#######################################################################" >> log/actor_CompanionRobot_000.txt
+rosrun se306_p1_pkg ActorSpawner 10 CompanionRobot -2.5 4.5 0 & # >> log/actor_CompanionRobot_000.txt &
+ROBOT10_PID=$!
+echo ROBOT10_PID = $ROBOT10_PID >> log/debugscript.txt
+
+echo "############################## DEBUG LOG ##############################" > log/actor_CookingRobot_000.txt
+echo ActorClass     = CookingRobot >> log/actor_CookingRobot_000.txt
+echo InitialX       = 4.5 >> log/actor_CookingRobot_000.txt
+echo InitialY       = 2 >> log/actor_CookingRobot_000.txt
+echo InitialAngle   = 0 >> log/actor_CookingRobot_000.txt
+echo Colour         = grey30 >> log/actor_CookingRobot_000.txt
+echo "#######################################################################" >> log/actor_CookingRobot_000.txt
+rosrun se306_p1_pkg ActorSpawner 11 CookingRobot 4.5 2 0 & # >> log/actor_CookingRobot_000.txt &
+ROBOT11_PID=$!
+echo ROBOT11_PID = $ROBOT11_PID >> log/debugscript.txt
 
 echo "############################## DEBUG LOG ##############################" > log/upstage.txt
 echo "#######################################################################" >> log/upstage.txt
@@ -91,4 +157,10 @@ kill $ROBOT2_PID
 kill $ROBOT3_PID
 kill $ROBOT4_PID
 kill $ROBOT5_PID
+kill $ROBOT6_PID
+kill $ROBOT7_PID
+kill $ROBOT8_PID
+kill $ROBOT9_PID
+kill $ROBOT10_PID
+kill $ROBOT11_PID
 kill $ROSCORE_PID
