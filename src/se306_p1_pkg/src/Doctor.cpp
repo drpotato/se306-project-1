@@ -24,6 +24,11 @@ void Doctor::doInitialSetup()
 
 void Doctor::doExecuteLoop()
 {
+	if (RCmode == "doctor")
+	{
+		controlRobot();
+		return;
+	}
 	if (homeVisit)
 	{
 		attendPatient();

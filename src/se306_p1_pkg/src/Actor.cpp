@@ -249,7 +249,7 @@ void Actor::checkKeyboardPress()
         toggleMode("doctor");
         ROS_INFO("hello doctor");
     }
-    else if (keyboardListener.isKeyTapped(ups::KEY_N_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_N_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
     {
         //nurse1
         toggleMode("nurse1");

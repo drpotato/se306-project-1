@@ -15,6 +15,7 @@ protected:
   static void nurseCallback(msg_pkg::Nurse msg);
 
   bool assist;
+  int nurseId;
 
 };
 
