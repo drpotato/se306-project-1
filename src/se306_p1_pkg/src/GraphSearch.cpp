@@ -1,6 +1,7 @@
 #include "GraphSearch.h"
 #include <stdlib.h>
 #include <queue>
+#include <cmath>
 
 
 //ActorController should act as a Singleton.
@@ -160,4 +161,29 @@ GraphSearch::point* GraphSearch::getPoint(string name)
     		return &(*theGraph)[i][0];
     	}		
 	}
+}
+
+GraphSearch::point* GraphSearch::findClosestPoint(double x, double y)
+{
+	int i;
+	point *best = (point*)malloc(sizeof(point));
+	double bestDist = 100.0;
+	for (i = 0; i < theGraph->size(); i++)
+	{
+    	double tempx = (*theGraph)[i][0].x;
+    	double tempy = (*theGraph)[i][0].y;
+
+    	double tempDiff = abs(x - tempx) + abs(y - tempy);
+
+    	if (tempDiff < bestDist)
+    	{
+    		bestDist = tempDiff;
+    		best = &(*theGraph)[i][0];
+    	}
+
+    		
+	}
+
+	return best;
+
 }
