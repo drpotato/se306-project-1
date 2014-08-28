@@ -45,7 +45,7 @@ public:
 
 	//The rate at which ros will loop - used to calculate time of day
     const static int LOOP_RATE = 10;
-
+    bool gotoPosition(double x,double y);
     enum ActorType {Doctor=3, Nurse=2, Caregiver=2, Visitor=1, Robot=0};
 
     bool haveLock;
@@ -107,7 +107,7 @@ protected:
 private:
     
     double faceDirection(double,double);
-    bool gotoPosition(double x,double y);
+    
 	PathPlanner pathPlanner;
 	string currentNode;
 	int currentNodeIndex;

@@ -434,7 +434,7 @@ bool Actor::goToNode(string nodeName) {
         ROS_INFO_STREAM("If returned true");
         PathPlannerNode* nextNode = pathPlanner.getNode(currentNode);
         ROS_INFO_STREAM("Did pathplanner.getNode()");
-        if (!this->gotoPosition(nextNode->px, nextNode->py)) {
+        if (!(gotoPosition(nextNode->px, nextNode->py))) {
             // We have arrived at the next node.
             ROS_INFO_STREAM("We have arrived at a node on the path");
             currentNode = path[currentNodeIndex+1]->getName();
