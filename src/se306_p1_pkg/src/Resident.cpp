@@ -18,7 +18,8 @@
 	#include <ctime>
 #endif
 
-// Debug lines for changeLevel()
+// Debug lines for randomness component of code
+//#define DEBUG_RANDNUM_GENERATION
 #define DEBUG_CHANGE_LEVEL
 //#define NON_RANDOM // For testing (produces same sequence of 'random' numbers)
 
@@ -176,6 +177,8 @@ void Resident::doExecuteLoop()
     call("friend");
     called_friend_today_ = true;
   }
+
+	randomEventLoop();
   //###################################################################################################################################################
 }
 
@@ -353,30 +356,15 @@ void Resident::randomEventLoop()
 	// In this case, an event will occur whenever the random number is between 139
 	// and 140 (14 * FREQUENCY {10} - 1), so 1/140 of the time. 140 loops = 14 seconds.
 
-	// TODO: Reduce code repetition by moving the first two lines of each section below
-	// to the random method
-
 	// Socialness drops fastest and is most affected by randomness.
 	// On average, it should drop by 1 every second
 	// Every cycle, ANY and ALL levels may change
-	randNum = getRandom(float(0), float(1 * FREQUENCY));
-	if (randNum > ((1 * FREQUENCY) - 1)) {
-		changeLevel(-1, SOCIALNESS);
-		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("EVENT: socialness drop -1 (rand = %.3f)\n", randNum);
-		#endif
-	}
+	randomLevelChange(1, -1, SOCIALNESS);
 	
 	// Morale also drops quickly but is less affected by randomness than
 	// entertainedness.
 	// On average, it should drop by 1 every 1.4 seconds
-	randNum = getRandom(float(0), float(1.4 * FREQUENCY));
-	if (randNum > ((1.4 * FREQUENCY) - 1)) {
-		changeLevel(-1, MORALE);
-		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("EVENT: morale drop -1 (rand = %.3f)\n", randNum);
-		#endif
-	}
+	randomLevelChange(1.4, -1, MORALE);
 
 	// Health drops in two ways, either almost slowly and almost 
 	// completely linearly or in a random, drastic fashion.
@@ -384,66 +372,57 @@ void Resident::randomEventLoop()
 	// As well as this, to simulate an 'emergency', the resident 
 	// can face a sudden drop in health, which is rare (every 6 minutes
 	// on average)
-	randNum = getRandom(float(0), float(2.5 * FREQUENCY));
-	if (randNum > ((2.5 * FREQUENCY) - 1)) {
-		changeLevel(-1, HEALTH);
-		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("EVENT: health drop -1 (rand = %.3f)\n", randNum);
-		#endif
-	}
-	randNum = getRandom(float(0), float(360 * FREQUENCY));
-	if (randNum > ((360 * FREQUENCY) - 1)) {
-		changeLevel(-95, HEALTH);
-		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("EVENT: EMERGENCY= health drop -95 (rand = %.3f)\n", randNum);
-		#endif
-	}	
+	randomLevelChange(2.5, -1, HEALTH);
+	randomLevelChange(360, -95, HEALTH);
 
 	// Hygiene
 	// On average, it should drop by 1 every 1.5 seconds
-	randNum = getRandom(float(0), float(1.5 * FREQUENCY));
-	if (randNum > ((1.5 * FREQUENCY) - 1)) {
-		changeLevel(-1, HYGIENE);
-		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("EVENT: hygiene drop -1 (rand = %.3f)\n", randNum);
-		#endif
-	}
+	randomLevelChange(1.5, -1, HYGIENE);
 
 	// Hunger drops almost completely linearly...
 	// On average, it should drop by 1 every 3 seconds
-	randNum = getRandom(float(0), float(3 * FREQUENCY));
-	if (randNum > ((3 * FREQUENCY) - 1)) {
-		changeLevel(-1, HUNGER);
-		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("EVENT: hunger drop -1 (rand = %.3f)\n", randNum);
-		#endif
-	}	
+	randomLevelChange(3, -1, HUNGER);
 
 	// == THIRST NOT CURRENTLY IMPLEMENTED ==
 	/*
 	// ...as does thirst
 	// On average, it should drop by 1 every 3 seconds, with
-	randNum = getRandom(float(0), float(1 * FREQUENCY));
-	if (randNum > ((3 * FREQUENCY) - 1)) {
-		changeLevel(-1, THIRST);
-		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("EVENT: thirst drop -1 (rand = %.3f)\n", randNum);
-		#endif
+	randomLevelChange(3, -1, THIRST);
 	} */
 
 	// Fitness drops fairly slowly...
 	// On average, it should drop by 1 every 4 seconds
-	randNum = getRandom(float(0), float(4 * FREQUENCY));
-	if (randNum > ((4 * FREQUENCY) - 1)) {
-		changeLevel(-1, FITNESS);
+	randomLevelChange(4, -1, FITNESS);
+}
+
+// Method used to randomly change resident levels
+// Receives frequency and change as arguments
+// Input how many seconds (on average) you want a level to change by as the 
+// frequency argument, how much you want the level to change (can be positive or negative)
+// as the magnitude argument and the level you want to change as the level argument.
+// NOTE: To increase/decrease the variance of the change, simply adjust magnitude and
+// frequency. For example: for attributes that should conform closely to a mean (i.e. be
+// predictable) use a low magnitude and a high frequency. The reverse is true for attributes
+// that need to change unpredictably. Each time you halve frequency and double magnitude,
+// the mean change over time of the attribute in question remains the same, but the
+// variance or 'unpredictability' will increase. This is important to note for some 
+// attributes that need to conform tightly to a mean (such as hunger).
+void Resident::randomLevelChange(float frequency, float magnitude, Level level) 
+{
+	randNum = getRandom(float(0), float(frequency * FREQUENCY));
+	if (randNum > ((frequency * FREQUENCY) - 1)) {
+		changeLevel(magnitude, level);
+		std:string LevelNames[7] =  { "Morale", "Socialnesss", "Hygiene", "Health", "Hunger", "Thirst", "Fitness" };
 		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("EVENT: fitness drop -1 (rand = %.3f)\n", randNum);
+		#ifdef DEBUG_RANDNUM_GENERATION
+		ROS_INFO("EVENT: %s drop %.0f (rand = %.2f)\n", LevelNames[level].c_str(), magnitude, randNum);
+		#else
+		ROS_INFO("EVENT: %s drop %.0f\n", LevelNames[level].c_str(), magnitude);
+		#endif
 		#endif
 	}
-
-
-
 }
+
 
 
 // Method used to change resident levels 

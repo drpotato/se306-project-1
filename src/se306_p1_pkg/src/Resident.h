@@ -42,6 +42,7 @@ public:
   static void interactionCallback(msg_pkg::Interaction msg); //alpha
   static float getRandom(float, float);
   int changeLevel(float, Level); 
+	void randomLevelChange(float, float, Level);
   void randomEventLoop();
 
 	unsigned int seed;
@@ -50,6 +51,8 @@ public:
   static void timeCallback(msg_pkg::Time msg);
   static void requestLockCallback(msg_pkg::RequestLock msg);
   static void unlockCallback(msg_pkg::Unlock msg);
+
+	
   
   bool lock_;
   ActorType lock_type_;
@@ -71,7 +74,7 @@ public:
   const static int WAIT_TIME;  
 	const static float LEVEL_MAX; // Final release should be 100
 	const static float LEVEL_MIN; // Final release should be 0
-	const static float FREQUENCY;
+	const static float FREQUENCY;;
 
 	// Deprecated (alpha) - will be replaced by 'm_changed_' for example
   bool m_replenished_;	
