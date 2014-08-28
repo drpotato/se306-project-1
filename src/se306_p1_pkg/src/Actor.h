@@ -11,7 +11,7 @@
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 
-class Actor : public PathPlannerNode
+class Actor
 {
 public:
 	Actor();

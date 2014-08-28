@@ -18,59 +18,64 @@ PathPlanner::PathPlanner() {
     nodeGuestBedroomCentreName = "nodeGuestBedroomCentre";
     nodeHouseDoorName = "nodeHouseDoor";
 
-    nodeBedroomCentre = PathPlannerNode(nodeBedroomCentreName, -2.5, 3);
-    nodeHallwayByBedroom = PathPlannerNode(nodeHallwayByBedroomName, -2.5, -0);
-    nodeHalllwayByLivingRoom = PathPlannerNode(nodeHalllwayByLivingRoomName, 3, 0);
-    nodeGuestBedroomCentre = PathPlannerNode(nodeGuestBedroomCentreName, -2.5, -3);
-    nodeHouseDoor = PathPlannerNode(nodeHouseDoorName, 2.8, 5);
+    nodeBedroomCentre = new PathPlannerNode(nodeBedroomCentreName, -2.5, 3);
+    nodeHallwayByBedroom = new PathPlannerNode(nodeHallwayByBedroomName, -2.5, -0);
+    nodeHalllwayByLivingRoom = new PathPlannerNode(nodeHalllwayByLivingRoomName, 3, 0);
+    nodeGuestBedroomCentre = new PathPlannerNode(nodeGuestBedroomCentreName, -2.5, -3);
+    nodeHouseDoor = new PathPlannerNode(nodeHouseDoorName, 2.8, 5);
 
 
     // Specify which nodes have a clear line of sight to each other.
-    nodeBedroomCentre.addNeighbour(&nodeHallwayByBedroom);
-    nodeBedroomCentre.addNeighbour(&nodeGuestBedroomCentre);
+    nodeBedroomCentre->addNeighbour(nodeHallwayByBedroom->getName());
+    nodeBedroomCentre->addNeighbour(nodeGuestBedroomCentre->getName());
 
-    nodeHallwayByBedroom.addNeighbour(&nodeBedroomCentre);
-    nodeHallwayByBedroom.addNeighbour(&nodeHalllwayByLivingRoom);
-    nodeHallwayByBedroom.addNeighbour(&nodeGuestBedroomCentre);
+    nodeHallwayByBedroom->addNeighbour(nodeBedroomCentre->getName());
+    nodeHallwayByBedroom->addNeighbour(nodeHalllwayByLivingRoom->getName());
+    nodeHallwayByBedroom->addNeighbour(nodeGuestBedroomCentre->getName());
 
-    nodeHalllwayByLivingRoom.addNeighbour(&nodeHallwayByBedroom);
-    nodeHalllwayByLivingRoom.addNeighbour(&nodeHouseDoor);
+    nodeHalllwayByLivingRoom->addNeighbour(nodeHallwayByBedroom->getName());
+    nodeHalllwayByLivingRoom->addNeighbour(nodeHouseDoor->getName());
 
-    nodeGuestBedroomCentre.addNeighbour(&nodeHallwayByBedroom);
-    nodeGuestBedroomCentre.addNeighbour(&nodeBedroomCentre);
+    nodeGuestBedroomCentre->addNeighbour(nodeHallwayByBedroom->getName());
+    nodeGuestBedroomCentre->addNeighbour(nodeBedroomCentre->getName());
 
-    nodeHouseDoor.addNeighbour(&nodeHalllwayByLivingRoom);
+    nodeHouseDoor->addNeighbour(nodeHalllwayByLivingRoom->getName());
 
     // Add the nodes to the path planner's graph of nodes and connections.
-    addNode(nodeBedroomCentre);
-    addNode(nodeHallwayByBedroom);
-    addNode(nodeHalllwayByLivingRoom);
-    addNode(nodeGuestBedroomCentre);
-    addNode(nodeHouseDoor);
+    addNode(*nodeBedroomCentre);
+    addNode(*nodeHallwayByBedroom);
+    addNode(*nodeHalllwayByLivingRoom);
+    addNode(*nodeGuestBedroomCentre);
+    addNode(*nodeHouseDoor);
 }
 
 // When a location message is received, updates the graph with that Actor's new location.
 void PathPlanner::locationCallback(msg_pkg::Location msg)
 {
     // Find Actor of this name in graph and remove it.
+    ROS_INFO_STREAM("Callback start");
     string name = msg.id;
     double x = msg.xpos;
     double y = msg.ypos;
     if (hasNode(name)) {
         updateNode(name, x, y);
     } else {
+        ROS_INFO_STREAM("Addnode start");
         PathPlannerNode newNode = PathPlannerNode(name, x, y);
         PathPlannerNode* closestNode = getClosestNode(x, y);
         addNode(newNode);
+        ROS_INFO_STREAM("Neighbours add start");
         getNode(name)->addNeighbour(closestNode);
+        ROS_INFO_STREAM("One edge added");
         closestNode->addNeighbour(name);
-
     }
+    ROS_INFO_STREAM("Callback end");
 }
 
 // Returns the shortest path between the two given nodes.
 vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,PathPlannerNode *target)
 {
+    ROS_INFO_STREAM("PathPlanner Started!");
     PathPlannerNode *top;
     queue<PathPlannerNode*> s;
     s.push(startNode);
@@ -164,6 +169,7 @@ void PathPlanner::updateNode(string name, double x, double y) {
     PathPlannerNode* closestNode = getClosestNode(x, y);
     node->addNeighbour(closestNode->getName());
     closestNode->addNeighbour(name);
+    ROS_INFO_STREAM("done updating");
     /*
     for (int i = 0; i < nodes.size(); i++) {
         PathPlannerNode* node = &nodes[i];

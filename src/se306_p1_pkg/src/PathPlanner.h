@@ -25,11 +25,12 @@ private:
     string nodeGuestBedroomCentreName;
     string nodeHouseDoorName;
 
-    PathPlannerNode nodeBedroomCentre;
-    PathPlannerNode nodeHallwayByBedroom;
-    PathPlannerNode nodeHalllwayByLivingRoom;
-    PathPlannerNode nodeGuestBedroomCentre;
-    PathPlannerNode nodeHouseDoor;
+
+    PathPlannerNode* nodeBedroomCentre;
+    PathPlannerNode* nodeHallwayByBedroom;
+    PathPlannerNode* nodeHalllwayByLivingRoom;
+    PathPlannerNode* nodeGuestBedroomCentre;
+    PathPlannerNode* nodeHouseDoor;
 
 public:
     PathPlanner();
