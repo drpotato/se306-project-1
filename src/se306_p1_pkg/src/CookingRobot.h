@@ -1,8 +1,8 @@
-#ifndef SE306P1_ACTOR_COOKINGROBOT_H_DEFINED
-#define SE306P1_ACTOR_COOKINGROBOT_H_DEFINED
+#ifndef SE306P1_ACTOR_ENTERTAINMENTROBOT_H_DEFINED
+#define SE306P1_ACTOR_ENTERTAINMENTROBOT_H_DEFINED
 
 #include "Robot.h"
-#include <msg_pkg/Hunger.h>
+#include <msg_pkg/Morale.h>
 
 class CookingRobot : public Robot
 {
@@ -10,15 +10,14 @@ protected:
 	virtual void doInitialSetup();
 	virtual void doExecuteLoop();
 
-	bool checkHungerLevel();
+	bool checkCookingLevel();
 
-	static void hungerCallback(msg_pkg::Hunger msg);
-	string getActorName();
+	static void moraleCallback(msg_pkg::Morale msg);
 
-	int8_t hungerLevel;
-	bool cooking;
+	int8_t moraleLevel;
+	bool entertaining;
 
-	ros::Subscriber subscriberHunger;
+	ros::Subscriber subscriberMorale;
 
 	string residentName;
 	int y;

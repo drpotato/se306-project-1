@@ -15,8 +15,6 @@ protected:
 
   static void socialnessCallback(msg_pkg::Socialness msg);
 
-  string getActorName();
-
   int8_t socialnessLevel;
   bool socialising;
 

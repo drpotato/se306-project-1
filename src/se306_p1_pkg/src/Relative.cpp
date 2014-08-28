@@ -5,12 +5,6 @@
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 
-
-string Relative::getActorName()
-{
-  return "Relative";
-}
-
 // A Visitor who provides Socialness.
 void Relative::doInitialSetup()
 {
@@ -18,7 +12,7 @@ void Relative::doInitialSetup()
     velRotational = 0.0;
     socialnessLevel = 5;
     socialising = false;
-    residentName = "Relative1";
+    residentName = "RobotNode2";
     subscriberSocialness = nodeHandle->subscribe("socialness", 1000, Relative::socialnessCallback);
     y = 0;
     x = 0;
@@ -30,10 +24,6 @@ void Relative::doInitialSetup()
 
 void Relative::doExecuteLoop()
 {
-    if (RCmode == "relative1")
-    {
-        Relative::controlRobot();
-    }
     if (returningHome){
         //ROS_INFO("MOVING TO HOME");
 
@@ -60,11 +50,10 @@ void Relative::doExecuteLoop()
         {
             if (first_call)
             {
-                this->startMovingToResident();
                 first_call = false;
             }
 
-            if (!(this->movingToResident) )
+            if (!(true) )
             {
                 //Relative::doResponse("socialising");
                 ROS_INFO("CHANGED TO SOCIALISING");
@@ -82,7 +71,7 @@ void Relative::doExecuteLoop()
             socialising = false;
             returningHome = true;
 
-        } 
+        }
         else
         {
 
@@ -90,11 +79,11 @@ void Relative::doExecuteLoop()
             {
                 Relative::doResponse("socialising");
                 y=0;
-            } 
-            else 
+            }
+            else
             {
                 y++;
-            }   
+            }
         }
     }
 }
@@ -103,13 +92,16 @@ void Relative::doExecuteLoop()
  * Upon receiving a message published to the 'socialness' topic, respond appropriately.
  */
 void Relative::socialnessCallback(msg_pkg::Socialness msg)
-{ 	
+{
 	Relative* temp = dynamic_cast<Relative*>( ActorSpawner::getInstance().getActor());
 
- 	temp->socialnessLevel = msg.level;	
+ 	temp->socialnessLevel = msg.level;
 }
 
 bool Relative::checkSocialnessLevel()
 {
-  return socialnessLevel >= 2;
+	if (socialnessLevel>=2 ) {
+		return true;
+	}
+	return false;
 }

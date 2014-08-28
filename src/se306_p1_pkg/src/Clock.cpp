@@ -7,12 +7,6 @@
 
 // The clock object keeps track of the time of day and publishes it to the time topic
 
-
-string Clock::getActorName()
-{
-  return "Clock";
-}
-
 void Clock::doInitialSetup()
 {
   // Initialise time of day to current time
@@ -46,7 +40,6 @@ void Clock::doExecuteLoop()
   msg_pkg::Time timeMessage;
 
   // Assign current time values to the message
-  timeMessage.day = ptm->tm_mday;
   timeMessage.hour = ptm->tm_hour;
   timeMessage.minutes = ptm->tm_min;
   timeMessage.seconds = ptm->tm_sec;

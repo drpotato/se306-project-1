@@ -14,9 +14,6 @@
 /* Macros */
 #define CRITICAL_LEVEL 90
 
-/* Macros */
-#define CRITICAL_LEVEL 90
-
 class Actor
 {
 public:
@@ -45,8 +42,6 @@ protected:
 
 	virtual void doInitialSetup() = 0;
 	virtual void doExecuteLoop() = 0;
-        
-        virtual string getActorName() = 0;
 
 	void doResponse(const char *attribute);
     void stopResponse(const char *attribute);

@@ -12,14 +12,14 @@
 // Declare a test
 TEST(TestSuite, test_resident_contructor)
 {
-/*Resident *resident = new Resident();
+Resident *resident = new Resident();
 ASSERT_EQ(resident->morale_count_, 0);
-ASSERT_EQ(resident->socialness_count_, 0);*/
+ASSERT_EQ(resident->socialness_count_, 0);
 }
 
 TEST(TestSuite, test_resident_get_new_level)
 {
-/*Resident *resident = new Resident();
+Resident *resident = new Resident();
 int result = resident->getNewLevel(0, 0);
 ASSERT_EQ(result, 1);
 result = resident->getNewLevel(0, 1);
@@ -35,7 +35,7 @@ ASSERT_EQ(result, 5);
 result = resident->getNewLevel(0, 6);
 ASSERT_EQ(result, 5);
 result = resident->getNewLevel(-99, 6);
-ASSERT_EQ(result, 1);*/
+ASSERT_EQ(result, 1);
 }
 
 

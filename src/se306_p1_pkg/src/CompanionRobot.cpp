@@ -6,19 +6,14 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 
-string CompanionRobot::getActorName()
-{
-  return "CompanionRobot";
-}
-
 // A robot who provides the Resident with companionship (could be a robotic dog, a video call system, sex bot)
 void CompanionRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
 	moraleLevel = 5;
-	giving_morale = false;
-	residentName = "RobotNode2";
+	entertaining = false;
+	residentName = "Resident";
 	subscriberMorale = nodeHandle->subscribe("morale", 1000, CompanionRobot::moraleCallback);
 	y = 0;
 	x = 0;
@@ -30,10 +25,6 @@ void CompanionRobot::doInitialSetup()
 
 void CompanionRobot::doExecuteLoop()
 {
-	if (RCmode == "companionRobot")
-  	{
-    	CompanionRobot::controlRobot();
-  	}
 	if (returningHome){
 		//ROS_INFO("MOVEING TO HOME");
 
@@ -46,25 +37,25 @@ void CompanionRobot::doExecuteLoop()
         return;
 	}
 
-	if (!giving_morale)
+	if (!entertaining)
 	{
-		if (!checkMoraleLevel())
+		if (!checkCompanionLevel())
 		{
 			if (first_call)
 			{
 				//this->activeNode = &node5;
-				this->startMovingToResident();
+				//TODO: Change to movetoNode(resident)
 				first_call = false;
 			}
-	    	if (!(this->movingToResident) )
+	    	if (!(true) )
 	    	{
-	    		//CompanionRobot::doResponse("socialising");
-	    		ROS_INFO("CHANGED TO socialising");
-	    		giving_morale=true;
+	    		//CompanionRobot::doResponse("entertaining");
+	    		ROS_INFO("CHANGED TO ENTERTAINING");
+	    		entertaining=true;
 	    		first = false;
 	    	}
 
-			//After finished socialising set socialising to flase
+			//After finished entertaining set entertaining to flase
 
 		}
 	}
@@ -73,8 +64,8 @@ void CompanionRobot::doExecuteLoop()
 		if (moraleLevel == 5)
 		{
 			//Add do last desponse call that kurt implimented
-			CompanionRobot::stopResponse("giving morale");
-			giving_morale = false;
+			CompanionRobot::stopResponse("entertaining");
+			entertaining = false;
 			returningHome = true;
 
 		}
@@ -83,7 +74,7 @@ void CompanionRobot::doExecuteLoop()
 
 			if (y == 40)
 			{
-				CompanionRobot::doResponse("socialising");
+				CompanionRobot::doResponse("entertaining");
 				y=0;
 			}
 			else
@@ -103,7 +94,7 @@ void CompanionRobot::moraleCallback(msg_pkg::Morale msg)
  	//ROS_INFO("Changed value");
 }
 
-bool CompanionRobot::checkMoraleLevel()
+bool CompanionRobot::checkCompanionLevel()
 {
 	if (moraleLevel>=2 )
 	{
