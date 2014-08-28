@@ -16,7 +16,6 @@ define Doctor position
 		pose [0.0 0.13 0.0 0.0]
 		color "grey45"
 	)
-
 	
 	# Torso
 	model

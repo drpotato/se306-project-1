@@ -41,7 +41,6 @@ protected:
 
     bool homeVisit;
     bool movingToResident;
-    bool odd;
     string nodename;
     int caregiverId;
     int hour;
@@ -49,13 +48,14 @@ protected:
 
     bool fitnessLevel, hungerLevel, hygieneLevel, moraleLevel, socialnessLevel;
     bool exercising, eating, showering, entertaining, socialising;
-    bool locked;
 
     bool checkFitnessLevel();
     bool checkHungerLevel();
     bool checkHygieneLevel();
     bool checkMoraleLevel();
     bool checkSocialnessLevel();
+    
+    bool first;
     
 //    bool has_lock;
 };
