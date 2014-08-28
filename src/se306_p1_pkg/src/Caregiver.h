@@ -16,48 +16,42 @@
 class Caregiver : public Visitor
 {
 protected:
-    virtual void doInitialSetup();
-    virtual void doExecuteLoop();
-    string getActorName();
-    void caring();
+  virtual void doInitialSetup();
+  virtual void doExecuteLoop();
+  string getActorName();
+  void caring();
 
-    ros::Subscriber subscriberFitness;
-    ros::Subscriber subscriberHunger;
-    ros::Subscriber subscriberHygiene;
-    ros::Subscriber subscriberMorale;
-    ros::Subscriber subscriberSocialness;
-    ros::Subscriber subscriberTime;
-    ros::Subscriber subscriberTelephone;
-//    ros::Subscriber subscriberLockStatus;
+  ros::Subscriber subscriberFitness;
+  ros::Subscriber subscriberHunger;
+  ros::Subscriber subscriberHygiene;
+  ros::Subscriber subscriberMorale;
+  ros::Subscriber subscriberSocialness;
+  ros::Subscriber subscriberTime;
 
-    static void fitnessCallback(msg_pkg::Fitness msg);
-    static void hungerCallback(msg_pkg::Hunger msg);
-    static void hygieneCallback(msg_pkg::Hygiene msg);
-    static void moraleCallback(msg_pkg::Morale msg);
-    static void socialnessCallback(msg_pkg::Socialness msg);
-    static void timeCallback(msg_pkg::Time msg);
-    static void telephoneCallback(msg_pkg::Telephone msg);
-//    static void lockStatusCallback(msg_pkg::LockStatus msg);
+  static void fitnessCallback(msg_pkg::Fitness msg);
+  static void hungerCallback(msg_pkg::Hunger msg);
+  static void hygieneCallback(msg_pkg::Hygiene msg);
+  static void moraleCallback(msg_pkg::Morale msg);
+  static void socialnessCallback(msg_pkg::Socialness msg);
+  static void timeCallback(msg_pkg::Time msg);
 
-    bool homeVisit;
-    bool movingToResident;
-    string nodename;
-    int caregiverId;
-    int hour;
-    int y;
+  bool homeVisit;
+  bool movingToResident;
+  string nodename;
+  int caregiverId;
+  int hour;
+  int y;
 
-    bool fitnessLevel, hungerLevel, hygieneLevel, moraleLevel, socialnessLevel;
-    bool exercising, eating, showering, entertaining, socialising;
+  bool fitnessLevel, hungerLevel, hygieneLevel, moraleLevel, socialnessLevel;
+  bool exercising, eating, showering, entertaining, socialising;
 
-    bool checkFitnessLevel();
-    bool checkHungerLevel();
-    bool checkHygieneLevel();
-    bool checkMoraleLevel();
-    bool checkSocialnessLevel();
-    
-    bool first;
-    
-//    bool has_lock;
+  bool checkFitnessLevel();
+  bool checkHungerLevel();
+  bool checkHygieneLevel();
+  bool checkMoraleLevel();
+  bool checkSocialnessLevel();
+
+  bool first;
 };
 
 
