@@ -7,15 +7,17 @@
 #include <msg_pkg/LockStatus.h>
 
 #include "ros/ros.h"
-#include "PathPlanner.h"
 #include <vector>
 #include <string>
 #include "std_msgs/String.h"
+#include "ActorLocation.h"
+#include "PathPlanner.h"
+#include "PathPlannerNode.h"
 
 /* Macros */
 #define CRITICAL_LEVEL 90
 
-class Actor
+class Actor : public PathPlannerNode
 {
 public:
 	Actor();
@@ -58,7 +60,7 @@ protected:
         virtual string getActorName() = 0;
 
 	void doResponse(const char *attribute);
-        void stopResponse(const char *attribute);
+    void stopResponse(const char *attribute);
 
 	//velocity of the robot
 	double velLinear;
@@ -95,7 +97,7 @@ protected:
 	std::string stageName;
 
     //Path Planner
-    bool goToNode(vector<PathPlannerNode*> &path);
+    bool goToNode(string*);
     PathPlannerNode* getActiveNode();
 
     bool movingToResident;
@@ -104,18 +106,19 @@ protected:
     void controlRobot();
 
 private:
-    
-    PathPlanner pathPlanner;
-    PathPlannerNode *activeNode;
+    PathPlannerNode* activeNode;
+    PathPlannerNode* targetNode;
+
     double faceDirection(double,double);
     bool gotoPosition(double x,double y);
-    int targetNode;
+
     PathPlannerNode node1;
     PathPlannerNode node2;
     PathPlannerNode node3;
     PathPlannerNode node4;
     PathPlannerNode node5;
     PathPlannerNode nodeDoor;
+
     string node1Name;
     string node2Name;
     string node3Name;

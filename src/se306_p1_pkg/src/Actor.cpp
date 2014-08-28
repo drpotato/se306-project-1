@@ -7,6 +7,7 @@
 
 #include <math.h>
 #include <string>
+#include <vector>
 #include <msg_pkg/Location.h>
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/RequestLock.h>
@@ -16,6 +17,8 @@
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
+#include "ActorLocation.h"
+
 #include "keyinput/KeyboardListener.hpp"
 
 namespace
@@ -38,8 +41,7 @@ Actor::Actor():
 	loopRate(0)
 
 {
-    //Create path planner and setup navigation waypoint nodes.
-    this->pathPlanner = PathPlanner();
+    // Setup navigation waypoint nodes.
     this->targetNode = 0;
 
     // Next to the Resident.
@@ -84,12 +86,12 @@ Actor::Actor():
     nodeDoor.addNeighbour(&node4);
 
     // Add the nodes to the path planner's graph of nodes and connections.
-    this->pathPlanner.addNode(&node1);
-    this->pathPlanner.addNode(&node2);
-    this->pathPlanner.addNode(&node3);
-    this->pathPlanner.addNode(&node4);
-    this->pathPlanner.addNode(&node5);
-    this->pathPlanner.addNode(&nodeDoor);
+    PathPlanner::addNode(&node1);
+    PathPlanner::addNode(&node2);
+    PathPlanner::addNode(&node3);
+    PathPlanner::addNode(&node4);
+    PathPlanner::addNode(&node5);
+    PathPlanner::addNode(&nodeDoor);
 
     this->activeNode = &node1;
 
@@ -166,7 +168,6 @@ bool Actor::executeLoop()
 void Actor::initialSetupStage()
 {
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
-	subscriberLocation = nodeHandle->subscribe("location", 1000, Actor::locationCallback);
 	subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000,
 Actor::StageOdom_callback);
 
@@ -440,17 +441,16 @@ void Actor::startMovingToResident() {
 }
 
 bool Actor::moveToResident() {
-
-    if (this->movingToResident) {
-    	//ROS_INFO("MOVING TO RESIDENT");
-        PathPlannerNode *target = this->pathPlanner.getNode(&node1Name);
-        vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-        if ( this->goToNode(path))
-        {
-        	ROS_INFO("CHANGED MOVING TO RESIDENT");
-        	this->movingToResident = false;
-        }
-    }
+    // if (this->movingToResident) {
+    // 	//ROS_INFO("MOVING TO RESIDENT");
+    //     PathPlannerNode *target = this->pathPlanner.getNode(&node1Name);
+    //     vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
+    //     if ( this->goToNode(path))
+    //     {
+    //     	ROS_INFO("CHANGED MOVING TO RESIDENT");
+    //     	this->movingToResident = false;
+    //     }
+    // }
 }
 
 double Actor::faceDirection(double x,double y){
@@ -489,24 +489,36 @@ bool Actor::gotoPosition(double x,double y){
         this->velLinear = 0;
         return true;
     }
-
 }
 
-bool Actor::goToNode(vector<PathPlannerNode*> &path){
-    //Get the node
-    if (targetNode >= path.size()){
-        //We have arrived at the last node
-        this->velLinear = 0;
+bool Actor::goToNode(string* nodeName) {
+    activeNode = getActiveNode();
+
+    targetNode = PathPlanner::getNode(nodeName);
+                //TODO: REWIRITE THIS TO USE NEW SYSTEM ################################################################################################
+    // goingToNode = pathPlanner.getClosestNode(goingToX, goingToY);
+
+    // vector <PathPlannerNodepath = pathPlanner.pathToNode(this->activeNode, goingToNode);
+
+    // //Get the node
+    // if (targetNode >= path.size()){
+    //     //We have arrived at the last node
+    //     this->velLinear = 0;
         
-        return true;
-    }
-    if (!this->gotoPosition(path[targetNode]->px,path[targetNode]->py)){
-        this->activeNode = path[targetNode];
-        targetNode++;
-    }else{
-        //ROS_DEBUG("current position %f %f",px,py);
-    }
-    return false;
+    //     return true;
+    // }
+    // if (!this->gotoPosition(path[targetNode]->px,path[targetNode]->py)){
+    //     this->activeNode = path[targetNode];
+    //     targetNode++;
+    // }else{
+    //     ROS_DEBUG("current position %f %f",px,py);
+    // }
+    // return false;
+}
+
+// Find the closest waypoint node to this Actor's current position.
+PathPlannerNode* Actor::getActiveNode() {
+    return PathPlanner::getClosestNode(this->px, this->py);
 }
 
 ros::NodeHandle &Actor::getNodeHandle() const
