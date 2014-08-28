@@ -3,6 +3,7 @@
 #include <queue>
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
 
 //ActorController should act as a Singleton.
@@ -19,7 +20,7 @@ GraphSearch &GraphSearch::getInstance()
 }
 
 GraphSearch::GraphSearch()
-{
+{  
 	theGraph = new vector< vector<point> > ();
 	defineNode(-2.5, 3, "nodeBedroomCentre");
     defineNode(-2.5, -0, "nodeHallwayByBedroom");
@@ -63,7 +64,7 @@ GraphSearch::GraphSearch()
     defineEdge("nodeGuestBedroomCentre", "nodeHallwayBedroom");
 
     defineEdge("nodeHallwayByLivingRoom", "nodeHouseDoor");
-    defineEdge("nodeHouseDoor", "nodeHallwayByLivingRoom");
+    defineEdge("nodeHouseDoor", "nodeHallwayByLivingRoom");   
 }
 
 GraphSearch::~GraphSearch()
@@ -73,7 +74,7 @@ GraphSearch::~GraphSearch()
 
 void GraphSearch::defineNode(double x, double y)
 {
-	point *p = (point*)malloc(sizeof(point));
+	point *p = new point; //(point*)malloc(sizeof(point));
 	p->x = x;
 	p->y = y;
 	p->name = "";
@@ -83,7 +84,7 @@ void GraphSearch::defineNode(double x, double y)
 }
 void GraphSearch::defineNode(double x, double y, string name)
 {
-	point *p = (point*)malloc(sizeof(point));
+	point *p = new point; //(point*)malloc(sizeof(point));
 	p->x = x;
 	p->y = y;
 	p->name = name;
@@ -93,7 +94,7 @@ void GraphSearch::defineNode(double x, double y, string name)
 }
 void GraphSearch::defineEdge(double x1, double y1, double x2, double y2)
 {
-	point *p = (point*)malloc(sizeof(point));
+	point *p = new point; //(point*)malloc(sizeof(point));
 	int i;
 	for (i = 0; i < theGraph->size(); i++)
 	{
@@ -112,7 +113,7 @@ void GraphSearch::defineEdge(double x1, double y1, double x2, double y2)
 }
 void GraphSearch::defineEdge(string name1, string name2)
 {
-	point *p = (point*)malloc(sizeof(point));
+	point *p = new point; //(point*)malloc(sizeof(point));
 	p = getPoint(name2);
 	int i;
 	for (i = 0; i < theGraph->size(); i++)
@@ -125,7 +126,7 @@ void GraphSearch::defineEdge(string name1, string name2)
 }
 void GraphSearch::defineEdge(string name1, double x, double y)
 {
-	point *p = (point*)malloc(sizeof(point));
+	point *p = new point; //(point*)malloc(sizeof(point));
 	p = getPoint(name1);
 	int i;
 	for (i = 0; i < theGraph->size(); i++)
@@ -138,15 +139,15 @@ void GraphSearch::defineEdge(string name1, double x, double y)
 }
 vector<GraphSearch::point>* GraphSearch::getPath(string name1, string name2)
 {
-	point *p1 = (point*)malloc(sizeof(point));
+	point *p1 = new point; //(point*)malloc(sizeof(point));
 	p1 = getPoint(name1);
-	point *p2 = (point*)malloc(sizeof(point));
+	point *p2 = new point; //(point*)malloc(sizeof(point));
 	p2 = getPoint(name2);	
 	return getPath(p1->x,p1->y,p2->x,p2->y);	
 }
 vector<GraphSearch::point>* GraphSearch::getPath(string name1, double x, double y)
 {
-	point *p1 = (point*)malloc(sizeof(point));
+	point *p1 = new point; //(point*)malloc(sizeof(point));
 	p1 = getPoint(name1);
 	return getPath(p1->x,p1->y,x,y);	
 }
@@ -227,12 +228,12 @@ vector<GraphSearch::point>* GraphSearch::getPath(double x1, double y1, double x2
 	vector<point> *V = new vector<point>();
         
         // Starting point
-        point *v = (point*) malloc(sizeof(point));
+        point *v = new point; //(point*) malloc(sizeof(point));
         v->x = x1;
         v->y = y1;
         
         // Finish point
-        point *f = (point*) malloc(sizeof(point));
+        point *f = new point; //(point*) malloc(sizeof(point));
         f->x = x2;
         f->y = y2;
         
@@ -266,7 +267,7 @@ vector<GraphSearch::point>* GraphSearch::getPath(double x1, double y1, double x2
                 prev_bp = bp;
               }
               
-              bp = (backPointer*) malloc(sizeof(backPointer));
+              bp = new backPointer; //(backPointer*) malloc(sizeof(backPointer));
               bp->p = u;
               bp->previous = prev_bp;
             }          
@@ -287,7 +288,7 @@ vector<GraphSearch::point>* GraphSearch::getPath(double x1, double y1, double x2
 
 vector<GraphSearch::point>* GraphSearch::getPath(double x, double y, string name1)
 {
-	point *p1 = (point*)malloc(sizeof(point));
+	point *p1 = new point; //(point*)malloc(sizeof(point));
 	p1 = getPoint(name1);
 	return getPath(x,y,p1->x,p1->y);
 }
@@ -306,7 +307,7 @@ GraphSearch::point* GraphSearch::getPoint(string name)
 
 GraphSearch::point* GraphSearch::getNewPoint(string name, double x, double y)
 {
-	point *p1 = (point*)malloc(sizeof(point));
+	point *p1 = new point; //(point*)malloc(sizeof(point));
 	p1->x = x;
 	p1->y = y;
 	p1->name = name;
@@ -316,7 +317,7 @@ GraphSearch::point* GraphSearch::getNewPoint(string name, double x, double y)
 GraphSearch::point* GraphSearch::findClosestPoint(double x, double y)
 {
 	int i;
-	point *best = (point*)malloc(sizeof(point));
+	point *best = new point; //(point*)malloc(sizeof(point));
 	double bestDist = 100.0;
 	for (i = 0; i < theGraph->size(); i++)
 	{
