@@ -3,6 +3,8 @@
 
 #include <nav_msgs/Odometry.h>
 #include <msg_pkg/Location.h>
+#include <msg_pkg/Unlock.h>
+#include <msg_pkg/LockStatus.h>
 
 #include "ros/ros.h"
 #include <vector>
@@ -31,11 +33,20 @@ public:
 
 	static void StageOdom_callback(nav_msgs::Odometry msg);
 	static void locationCallback(msg_pkg::Location msg);
+	static void lockStatusCallback(msg_pkg::LockStatus msg);
+	static void unlockCallback(msg_pkg::Unlock msg);
+
 
 	ros::NodeHandle &getNodeHandle() const;
 
 	//The rate at which ros will loop - used to calculate time of day
     const static int LOOP_RATE = 10;
+
+    enum ActorType {Doctor=3, Nurse=2, Caregiver=2, Visitor=1, Robot=0};
+
+    bool haveLock;
+    bool deniedLock;
+    bool otherUnlocked;
 
 
 protected:
@@ -69,6 +80,15 @@ protected:
 	ros::Publisher  publisherInteraction;
 	ros::Subscriber subscriberStageOdometry;
 	ros::Subscriber subscriberStageLaserScan;
+	ros::Subscriber subscriberLocation;
+	ros::Subscriber subscriberlockStatus;
+	ros::Subscriber subscriberUnlock;
+
+	ros::Publisher publisherRequestLock;
+	ros::Subscriber subscriberLockStatus;
+	void requestLock (std::string actor_name);
+	ros::Publisher publisherUnlock;
+	void unlock();
 
 	std::string rosName;
 	std::string stageName;
@@ -76,9 +96,17 @@ protected:
     //Path Planner
     bool goToNode(string);
 
+    string RCmode;
+    void controlRobot();
+
 private:
     double faceDirection(double,double);
     bool gotoPosition(double x,double y);
+
+    void checkKeyboardPress();
+    bool modeSet();
+    bool inMode(string mode);
+    void toggleMode(string mode);
 };
 
 

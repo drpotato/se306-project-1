@@ -10,6 +10,8 @@
 #include <vector>
 #include <msg_pkg/Location.h>
 #include <msg_pkg/Interaction.h>
+#include <msg_pkg/RequestLock.h>
+#include <msg_pkg/Unlock.h>
 
 #include "Actor.h"
 #include "PathPlanner.h"

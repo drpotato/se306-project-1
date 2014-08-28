@@ -47,21 +47,24 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   Action.msg
-  Arrive.msg
-  Fitness.msg
-  Health.msg
-  Hunger.msg
-  Hygiene.msg
-  Interaction.msg
-  KeyInput.msg
-  Leave.msg
-  Location.msg
-  Morale.msg
-  Socialness.msg
-  KeyInput.msg
-  Nurse.msg
-  Telephone.msg
-  Time.msg
+ Arrive.msg
+ Fitness.msg
+ Health.msg
+ Hunger.msg
+ Hygiene.msg
+ Interaction.msg
+ KeyInput.msg
+ Leave.msg
+ Location.msg
+ LockStatus.msg
+ Morale.msg
+ RequestLock.msg
+ Socialness.msg
+ KeyInput.msg
+ Nurse.msg
+ Telephone.msg
+ Time.msg
+ Unlock.msg
 )
 
 ## Generate services in the 'srv' folder
