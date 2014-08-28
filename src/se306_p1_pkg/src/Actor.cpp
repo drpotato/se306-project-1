@@ -18,6 +18,7 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 #include "ActorLocation.h"
+#include "GraphSearch.h"
 
 #include "keyinput/KeyboardListener.hpp"
 
@@ -55,6 +56,7 @@ Actor::~Actor()
 
 void Actor::initialSetup(unsigned int robotID, double px, double py, double theta)
 {
+        GraphSearch graphSearch = GraphSearch::getInstance();
 	rosName = generateNodeName(robotID, getActorName());
 	stageName = generateStageName(robotID, getActorName());
 	pxInitial = px;
