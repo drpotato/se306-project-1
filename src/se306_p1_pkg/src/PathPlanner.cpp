@@ -40,8 +40,6 @@ PathPlanner::PathPlanner() {
     addNode(*nodeHalllwayByLivingRoom);
     addNode(*nodeGuestBedroomCentre);
     addNode(*nodeHouseDoor);
-
-    PathPlanner::manualNodesExist = true;
 }
 
 void PathPlanner::update(string name){
