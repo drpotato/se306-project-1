@@ -18,6 +18,7 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 #include "ActorLocation.h"
+#include "GraphSearch.h"
 
 #include "keyinput/KeyboardListener.hpp"
 
@@ -55,6 +56,7 @@ Actor::~Actor()
 
 void Actor::initialSetup(unsigned int robotID, double px, double py, double theta)
 {
+        GraphSearch graphSearch = GraphSearch::getInstance();
 	rosName = generateNodeName(robotID, getActorName());
 	stageName = generateStageName(robotID, getActorName());
 	pxInitial = px;
@@ -80,6 +82,8 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 
     subscriberLockStatus = nodeHandle->subscribe("lockStatus", 1000, Actor::lockStatusCallback);
     subscriberUnlock = nodeHandle->subscribe("unlock", 1000, Actor::unlockCallback);
+
+    subscriberLocation = nodeHandle->subscribe("location", 1000, Actor::locationCallback);
 
 	// Put custom init stuff here (or make a method and call it from here)
 	KeyboardListener::init();
@@ -160,6 +164,16 @@ void Actor::unlockCallback(msg_pkg::Unlock msg)
         actorPtr->otherUnlocked = true;
     }
 
+}
+
+void Actor::locationCallback(msg_pkg::Location msg) {
+
+    Actor *actorPtr = ActorSpawner::getInstance().getActor();
+
+    NodeLocation newLocation = {msg.xpos, msg.ypos};
+
+    actorPtr->nodeLocations[msg.id] = newLocation;
+    
 }
 
 // Publish a message containing own x and y coordinates to the 'location' topic.
@@ -414,40 +428,11 @@ bool Actor::gotoPosition(double x,double y)
 
 // Returns false when it has arrived at the target node, and true when in transit.
 bool Actor::goToNode(string nodeName) {
-	//Update the graph before doing anything else
-    ROS_INFO_STREAM("1");
-    pathPlanner.update(rosName);
-    ROS_INFO_STREAM("2");
-    vector <PathPlannerNode*> path = pathPlanner.pathToNode(rosName, nodeName);
+	NodeLocation nodelocation = nodeLocations[nodeName];
 
-    if (path.size() == 0) {
-	   ROS_INFO_STREAM("Path size is 0");
-       return true;
-    } else {
-        ROS_INFO_STREAM("Path size is not 0");
-    }
-    
-    if (currentNodeIndex < path.size() - 1) {
-        ROS_INFO_STREAM("If returned true");
-        PathPlannerNode* nextNode = pathPlanner.getNode(currentNode);
-        ROS_INFO_STREAM("Did pathplanner.getNode()");
-        if (!(gotoPosition(nextNode->px, nextNode->py))) {
-            // We have arrived at the next node.
-            ROS_INFO_STREAM("We have arrived at a node on the path");
-            currentNode = path[currentNodeIndex+1]->getName();
-			currentNodeIndex++;
-            return true;
-        } else {
-		    ROS_INFO("We are travelling to %s",currentNode.c_str());
-            return true;
-		}
-    } else {
-         ROS_INFO_STREAM("If returned false");
-        ROS_INFO_STREAM("We have arrived at our final destination!");
-		currentNode = nodeName;
-        currentNodeIndex = 0;
-        return false;
-    }
+    //point *pDestination = EGraphSearch::findClosestPoint(nodelocation.x, nodelocation.y);
+    //point *pStart = GraphSearch::findClosestPoint(px, py);
+    //vector<point> *path = GraphSearch::getPath(pStart->x,pStart->y,pDestination->x,pDestination->y);
 }
 
 ros::NodeHandle &Actor::getNodeHandle() const

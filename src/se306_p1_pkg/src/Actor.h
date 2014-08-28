@@ -9,6 +9,7 @@
 #include "ros/ros.h"
 #include <vector>
 #include <string>
+#include <map>
 #include "std_msgs/String.h"
 #include "ActorLocation.h"
 #include "PathPlanner.h"
@@ -40,6 +41,7 @@ public:
 	static void StageOdom_callback(nav_msgs::Odometry msg);
 	static void lockStatusCallback(msg_pkg::LockStatus msg);
 	static void unlockCallback(msg_pkg::Unlock msg);
+	static void locationCallback(msg_pkg::Location msg);
 	
 	ros::NodeHandle &getNodeHandle() const;
 
@@ -51,6 +53,13 @@ public:
     bool haveLock;
     bool deniedLock;
     bool otherUnlocked;
+
+    struct NodeLocation {
+    	int x;
+    	int y;
+	};
+
+    std::map<string, NodeLocation> nodeLocations;
 
 protected:
 
@@ -85,6 +94,7 @@ protected:
 	ros::Subscriber subscriberStageLaserScan;
 	ros::Subscriber subscriberlockStatus;
 	ros::Subscriber subscriberUnlock;
+	ros::Subscriber subscriberLocation;
 
 	ros::Publisher publisherRequestLock;
 	ros::Subscriber subscriberLockStatus;
