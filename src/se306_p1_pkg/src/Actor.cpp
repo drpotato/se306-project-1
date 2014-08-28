@@ -389,30 +389,7 @@ double Actor::faceDirection(double x,double y){
 // Returns true while moving/rotating, and false when it has arrived at its location and stopped.
 bool Actor::gotoPosition(double x,double y) {
     // Face the node
-    ROS_INFO("entered gotoposition");
-    if (faceDirection(x,y) < 0.1) {
-        ROS_INFO("entered gotoposition if loop");
-        double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
-
-        ROS_DEBUG("Distance is %f",distance);
-
-        if (distance > 0.01) {
-            faceDirection(x,y);
-            this->velLinear = distance*1;
-            ROS_INFO("gotoPosition return True");
-            return true;
-        } else {
-            this->velLinear = 0;
-            ROS_INFO("gotoPosition return false");
-            return false;
-        }
-    } else {
-        ROS_INFO("entered gotoposition if else loop");
-        ROS_DEBUG("Target: %f",faceDirection(x,y));
-        this->velLinear = 0;
-        ROS_INFO("gotoPosition return True");
-        return true;
-    }
+    
 }
 
 // Returns false when it has arrived at the target node, and true when in transit.
