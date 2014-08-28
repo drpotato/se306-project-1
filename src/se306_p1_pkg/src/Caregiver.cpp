@@ -22,7 +22,7 @@ void Caregiver::caring()
             // Move to resident
             
         }
-        if (movingToResident)
+        if (!goToNode("Resident0"))
         {
             if (eating)
             {
@@ -189,11 +189,11 @@ void Caregiver::doInitialSetup()
     hour = 0;
     y = 0;
 
-    fitnessLevel = 5;
-    hungerLevel = 5;
-    hygieneLevel = 5;
-    moraleLevel = 5;
-    socialnessLevel = 5;
+    fitnessLevel = LEVEL_MAX;
+    hungerLevel = LEVEL_MAX;
+    hygieneLevel = LEVEL_MAX;
+    moraleLevel = LEVEL_MAX;
+    socialnessLevel = LEVEL_MAX;
 
     exercising = false;
     eating = false;
@@ -294,7 +294,7 @@ void Caregiver::telephoneCallback(msg_pkg::Telephone msg)
 
 bool Caregiver::checkFitnessLevel()
 {
-    if (fitnessLevel >= 2)
+    if (fitnessLevel >= CRITICAL_LEVEL)
     {
         return true;
     }
@@ -302,7 +302,7 @@ bool Caregiver::checkFitnessLevel()
 }
 bool Caregiver::checkHungerLevel()
 {
-    if (hungerLevel >= 2)
+    if (hungerLevel >= CRITICAL_LEVEL)
     {
         return true;
     }
@@ -310,7 +310,7 @@ bool Caregiver::checkHungerLevel()
 }
 bool Caregiver::checkHygieneLevel()
 {
-    if (hygieneLevel >= 2)
+    if (hygieneLevel >= CRITICAL_LEVEL)
     {
         return true;
     }
@@ -318,7 +318,7 @@ bool Caregiver::checkHygieneLevel()
 }
 bool Caregiver::checkMoraleLevel()
 {
-    if (moraleLevel >= 2)
+    if (moraleLevel >= CRITICAL_LEVEL)
     {
         return true;
     }
@@ -326,7 +326,7 @@ bool Caregiver::checkMoraleLevel()
 }
 bool Caregiver::checkSocialnessLevel()
 {
-    if (socialnessLevel >= 2)
+    if (socialnessLevel >= CRITICAL_LEVEL)
     {
         return true;
     }
