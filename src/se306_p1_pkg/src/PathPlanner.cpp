@@ -47,6 +47,7 @@ PathPlanner::PathPlanner() {
 
 }
 
+<<<<<<< HEAD
 
 
 
@@ -66,6 +67,28 @@ void PathPlanner::processMessage(msg_pkg::Location msg){
       closestNode->addNeighbour(name);
   }
   ROS_INFO_STREAM("Callback end");
+=======
+// When a location message is received, updates the graph with that Actor's new location.
+void PathPlanner::locationCallback(msg_pkg::Location msg) {
+    // Find Actor of this name in graph and remove it.
+    ROS_INFO_STREAM("Callback start");
+    string name = msg.id;
+    double x = msg.xpos;
+    double y = msg.ypos;
+    if (hasNode(name)) {
+        updateNode(name, x, y);
+    } else {
+        ROS_INFO_STREAM("Addnode start");
+        PathPlannerNode newNode = PathPlannerNode(name, x, y);
+        PathPlannerNode* closestNode = getClosestNode(x, y);
+        addNode(newNode);
+        ROS_INFO_STREAM("Neighbours add start");
+        getNode(name)->addNeighbour(closestNode);
+        ROS_INFO_STREAM("One edge added");
+        closestNode->addNeighbour(name);
+    }
+    ROS_INFO_STREAM("Callback end");
+>>>>>>> d11c0abfee6414ef56442005190013a361ffcded
 }
 
 // Returns the shortest path between the two given nodes.
@@ -166,24 +189,9 @@ void PathPlanner::updateNode(string name, double x, double y) {
     PathPlannerNode* closestNode = getClosestNode(x, y);
     node->addNeighbour(closestNode->getName());
     closestNode->addNeighbour(name);
-    ROS_INFO_STREAM("done updating");
-    /*
-    for (int i = 0; i < nodes.size(); i++) {
-        PathPlannerNode* node = &nodes[i];
-        if (node->getName().compare(name) == 0) {
-            ROS_INFO("Updating Node %s at index %d", name.c_str(),i);
-            PathPlannerNode* neighbour;
-            // This node represents an Actor, and so will only have one neighbour.
-
-            if (node->neighbours.size() > 0){
-              ROS_INFO_STREAM("Node has neighbours to remove");
-              node->removeAllNeighbours();
-            }
-
-
-            ROS_INFO_STREAM("Neighbourship updated");
-        }
-    }*/
+    node->px = x;
+    node->py = y;
+    ROS_INFO("Location of node %s updated to: (%f, %f)", node->getName().c_str(), node->px, node->py);
 }
 
 // Returns a pointer to the waypoint closest to the given set of coordinates.

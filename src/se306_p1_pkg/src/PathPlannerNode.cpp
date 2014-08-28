@@ -10,7 +10,6 @@ PathPlannerNode::PathPlannerNode(string inputName, double x, double y,bool robot
     this->isRobot = robot;
 }
 
-
 string PathPlannerNode::getName() {
     return this->name;
 }
@@ -24,8 +23,7 @@ void PathPlannerNode::setVisited(bool newVisited){
 }
 
 void PathPlannerNode::addNeighbour(string newNode) {
-    this->neighbours.push_back(newNode);
-
+  this->neighbours.push_back(newNode);
 }
 
 void PathPlannerNode::addNeighbour(PathPlannerNode* newNode){
@@ -40,7 +38,6 @@ void PathPlannerNode::removeNeighbour(string deleteNode) {
             break;
         }
     }
-
 }
 
 void PathPlannerNode::removeAllNeighbours(){
