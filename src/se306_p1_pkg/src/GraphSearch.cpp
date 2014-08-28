@@ -91,10 +91,43 @@ vector<GraphSearch::point> GraphSearch::getPath(string name1, double x, double y
 	p1 = getPoint(name1);
 	return getPath(p1->x,p1->y,x,y);	
 }
+
+bool GraphSearch::checkIfInList(point *p, vector<point> *list)
+{
+  int i;
+  for(i = 0; i < list->size(); i++)
+  {
+    if ((*list)[i].x == p->x && (*list)[i].y == p->y)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+void GraphSearch::addPointToSeen(point *p, vector<point> *list)
+{
+  if (!checkIfInList(p, list)) {
+    list->push_back(*p);
+  }
+}
+
 vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2, double y2)
 {
-	queue<point> Q = new queue<point>();
-	set<point> V = new set<point>();
+	queue<point> *Q = new queue<point>();
+	vector<point> *V = new vector<point>();
+        
+        // Starting point
+        point *v = (point*) malloc(sizeof(point));
+        v->x = x1;
+        v->y = y1;
+        
+        // Finish point
+        point *f = (point*) malloc(sizeof(point));
+        f->x = x2;
+        f->y = y2;
+        
+        return *(new vector<point>());
 }
 vector<GraphSearch::point> GraphSearch::getPath(double x, double y, string name1)
 {

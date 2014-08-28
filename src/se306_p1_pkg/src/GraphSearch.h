@@ -31,5 +31,9 @@ public:
 	point* getPoint(string name);
 
 	vector< vector<point> > *theGraph;
+        
+private:
+  void addPointToSeen(point *p, vector<point> *list);
+  bool checkIfInList(point *p, vector<point> *list);
 
 };
