@@ -25,6 +25,29 @@ GraphSearch::GraphSearch()
     defineNode(3, 0, "nodeHallwayByLivingRoom");
     defineNode(-2.5, -3, "nodeGuestBedroomCentre");
     defineNode(2.8, 5, "nodeHouseDoor");
+    defineNode(-1.5, 2, "nodeShowerUnderHead");
+    defineNode(-1.5, 1.1, "nodeInShowerNextToDoor");
+    defineNode(-0.5, 1.1, "nodeOutShowerNextToDoor");
+    defineNode(1, 0, "nodeBathroomDoorHallway");
+    defineNode(1, 1, "nodeBathroomDoorInBathroom");
+
+    defineEdge("nodeShowerUnderHead", "nodeInShowerNextToDoor");
+    defineEdge("nodeInShowerNextToDoor", "nodeShowerUnderHead");
+
+    defineEdge("nodeInShowerNextToDoor", "nodeOutShowerNextToDoor");
+    defineEdge("nodeOutShowerNextToDoor", "nodeInShowerNextToDoor");
+
+    defineEdge("nodeBathroomDoorInBathroom", "nodeOutShowerNextToDoor");
+    defineEdge("nodeOutShowerNextToDoor","nodeBathroomDoorInBathroom");
+
+    defineEdge("nodeBathroomDoorInBathroom", "nodeBathroomDoorHallway");
+    defineEdge("nodeBathroomDoorHallway", "nodeBathroomDoorInBathroom");
+
+    defineEdge("nodeBathroomDoorHallway", "nodeHallwayBedroom");
+    defineEdge("nodeHallwayBedroom", "nodeBathroomDoorHallway");
+
+    defineEdge("nodeBathroomDoorHallway", "nodeHallwayByLivingRoom");
+    defineEdge("nodeHallwayByLivingRoom", "nodeBathroomDoorHallway");
 
     defineEdge("nodeBedroomCentre", "nodeHallwayBedroom");
     defineEdge("nodeHallwayBedroom", "nodeBedroomCentre");
