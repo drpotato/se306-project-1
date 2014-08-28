@@ -10,14 +10,11 @@ protected:
 	virtual void doInitialSetup();
 	virtual void doExecuteLoop();
 
-	bool checkHungerLevel();
-
 	static void hungerCallback(msg_pkg::Hunger msg);
 	string getActorName();
 
-	int8_t hungerLevel;
 	bool cooking;
-
+	bool moving_to_stove;
 	ros::Subscriber subscriberHunger;
 
 	string residentName;
