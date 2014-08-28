@@ -96,7 +96,7 @@ bool Actor::executeLoop()
 		// Put custom loop stuff here (or make a method and call it from here)
 
 		publishLocation();
-
+		pathPlanner.update(rosName);
         checkKeyboardPress();
 
         moveToResident();
