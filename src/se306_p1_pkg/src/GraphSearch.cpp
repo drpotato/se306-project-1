@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <queue>
 #include <cmath>
+#include <algorithm>
 
 
 //ActorController should act as a Singleton.
@@ -256,6 +257,8 @@ vector<GraphSearch::point>* GraphSearch::getPath(double x1, double y1, double x2
           path->push_back(*bp->p);
           bp = bp->previous;
         }
+        reverse(path->begin(), path->end());
+        
         return path;
 }
 
