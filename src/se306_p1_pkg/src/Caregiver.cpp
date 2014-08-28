@@ -10,144 +10,7 @@ string Caregiver::getActorName()
 {
     return "Caregiver";
 }
-
-void Caregiver::caring()
-{
-    if ((hour > 6 && hour < 21) || (locked))
-    {
-        if (!homeVisit)
-        {
-            homeVisit = true;
-            movingToResident = true;
-            // Move to resident
-            
-        }
-        if (movingToResident)
-        {
-            if (eating)
-            {
-                if (hungerLevel == REASONABLE_LEVEL)
-                {
-                    stopResponse("eating");
-                    eating = false;
-                    locked = false;
-                }
-                else
-                {
-                    locked = true;
-                    if (y == 40)
-                    {
-                        doResponse("eating");
-                        y = 0;
-                    }
-                    else
-                    {
-                        y ++;
-                    }
-                }
-            }
-            else if (showering)
-            {
-                // First, moving to bathroom
-                if (hygieneLevel == REASONABLE_LEVEL)
-                {
-                    stopResponse("showering");
-                    showering = false;
-                    locked = false;
-                    // Finally, moving back to resident
-                }
-                else
-                {
-                    locked = true;
-                    if (y == 40)
-                    {
-                        doResponse("showering");
-                        y = 0;
-                        // Showering
-                    }
-                    else
-                    {
-                        y ++;
-                    }
-                }
-            }
-            else if (exercising)
-            {
-                if (fitnessLevel == REASONABLE_LEVEL)
-                {
-                    stopResponse("exercising");
-                    exercising = false;
-                    locked = false;
-                }
-                else
-                {
-                    locked = true;
-                    if (y == 40)
-                    {
-                        doResponse("exercising");
-                        y = 0;
-                    }
-                    else
-                    {
-                        y ++;
-                    }
-                }
-            }
-            else if (entertaining)
-            {
-                if (moraleLevel == REASONABLE_LEVEL)
-                {
-                    stopResponse("entertaining");
-                    entertaining = false;
-                    locked = false;
-                }
-                else
-                {
-                    locked = true;
-                    if (y == 40)
-                    {
-                        doResponse("entertaining");
-                        y = 0;
-                    }
-                    else
-                    {
-                        y ++;
-                    }
-                }
-            }
-            else if (socialising)
-            {
-                if (socialnessLevel == REASONABLE_LEVEL)
-                {
-                    stopResponse("socialising");
-                    socialising = false;
-                    locked = false;
-                }
-                else
-                {
-                    locked = true;
-                    if (y == 40)
-                    {
-                        doResponse("socialising");
-                        y = 0;
-                    }
-                    else
-                    {
-                        y ++;
-                    }
-                }
-            }
-        }
-    }
-    else
-    {
-        if (homeVisit)
-        {
-            homeVisit = false;
-            // Back to initial location
-        }
-    }
-}
+// haveLock, otherUnlock, deniedLock
 
 void Caregiver::doInitialSetup()
 {
@@ -185,41 +48,178 @@ void Caregiver::doInitialSetup()
 
     homeVisit = false;
     movingToResident = false;
-    odd = true;
+
     hour = 0;
     y = 0;
 
-    fitnessLevel = 5;
-    hungerLevel = 5;
-    hygieneLevel = 5;
-    moraleLevel = 5;
-    socialnessLevel = 5;
+    fitnessLevel = LEVEL_MAX;
+    hungerLevel = LEVEL_MAX;
+    hygieneLevel = LEVEL_MAX;
+    moraleLevel = LEVEL_MAX;
+    socialnessLevel = LEVEL_MAX;
 
     exercising = false;
     eating = false;
     showering = false;
     entertaining = false;
     socialising = false;
-
-    locked = false;
+    
+    first = true;
 }
 
 void Caregiver::doExecuteLoop()
 {
-    if (caregiverId == 1)
-    {
-        if (odd)
+  if (RCmode == "Caregiver")
+  {
+    Caregiver::controlRobot();
+    return;
+  }
+  
+  
+  if ((hour > 6 && hour < 21) || (0))
+  {
+        if (!homeVisit)
         {
-            caring();
+            homeVisit = true;
+            movingToResident = true;
+            // Move to resident
+            
+        }
+        if (!goToNode("Resident0"))
+        {
+          if (first)
+          {
+            requestLock("Caregiver");
+            first = false;
+          }
+          if (haveLock)
+          {
+            if (eating)
+            {
+                if (hungerLevel >= REASONABLE_LEVEL)
+                {
+                    stopResponse("eating");
+                    eating = false;
+                }
+                else
+                {
+                    if (y == 40)
+                    {
+                        doResponse("eating");
+                        y = 0;
+                    }
+                    else
+                    {
+                        y ++;
+                    }
+                }
+            }
+            else if (showering)
+            {
+                // First, moving to bathroom
+                if (hygieneLevel >= REASONABLE_LEVEL)
+                {
+                    stopResponse("showering");
+                    showering = false;
+                    // Finally, moving back to resident
+                }
+                else
+                {
+                    if (y == 40)
+                    {
+                        doResponse("showering");
+                        y = 0;
+                        // Showering
+                    }
+                    else
+                    {
+                        y ++;
+                    }
+                }
+            }
+            else if (exercising)
+            {
+                if (fitnessLevel >= REASONABLE_LEVEL)
+                {
+                    stopResponse("exercising");
+                    exercising = false;
+                }
+                else
+                {
+                    if (y == 40)
+                    {
+                        doResponse("exercising");
+                        y = 0;
+                    }
+                    else
+                    {
+                        y ++;
+                    }
+                }
+            }
+            else if (entertaining)
+            {
+                if (moraleLevel >= REASONABLE_LEVEL)
+                {
+                    stopResponse("entertaining");
+                    entertaining = false;
+                }
+                else
+                {
+                    if (y == 40)
+                    {
+                        doResponse("entertaining");
+                        y = 0;
+                    }
+                    else
+                    {
+                        y ++;
+                    }
+                }
+            }
+            else if (socialising)
+            {
+                if (socialnessLevel >= REASONABLE_LEVEL)
+                {
+                    stopResponse("socialising");
+                    socialising = false;
+                }
+                else
+                {
+                    if (y == 40)
+                    {
+                        doResponse("socialising");
+                        y = 0;
+                    }
+                    else
+                    {
+                        y ++;
+                    }
+                }
+            }
         }
     }
+  }
+  else if (deniedLock)
+  {
+    if (otherUnlocked)
+    {
+      requestLock("Caregiver");
+      deniedLock = false;
+      otherUnlocked = false;
+    }
+  }
     else
     {
-        if (!odd)
+        if (homeVisit)
         {
-            caring();
+            homeVisit = false;
+            // Back to initial location
         }
     }
+    
+  
+// 
 }
 
 void Caregiver::fitnessCallback(msg_pkg::Fitness msg)
@@ -277,15 +277,6 @@ void Caregiver::timeCallback(msg_pkg::Time msg)
     Caregiver* temp = dynamic_cast<Caregiver*> (ActorSpawner::getInstance().getActor());
 
     temp-> hour = msg.hour;
-
-    if (msg.day % 2 != 0)
-    {
-        temp->odd = true;
-    }
-    else
-    {
-        temp->odd = false;
-    }
 }
 
 void Caregiver::telephoneCallback(msg_pkg::Telephone msg)
@@ -294,7 +285,7 @@ void Caregiver::telephoneCallback(msg_pkg::Telephone msg)
 
 bool Caregiver::checkFitnessLevel()
 {
-    if (fitnessLevel >= 2)
+    if (fitnessLevel >= CRITICAL_LEVEL)
     {
         return true;
     }
@@ -302,7 +293,7 @@ bool Caregiver::checkFitnessLevel()
 }
 bool Caregiver::checkHungerLevel()
 {
-    if (hungerLevel >= 2)
+    if (hungerLevel >= CRITICAL_LEVEL)
     {
         return true;
     }
@@ -310,7 +301,7 @@ bool Caregiver::checkHungerLevel()
 }
 bool Caregiver::checkHygieneLevel()
 {
-    if (hygieneLevel >= 2)
+    if (hygieneLevel >= CRITICAL_LEVEL)
     {
         return true;
     }
@@ -318,7 +309,7 @@ bool Caregiver::checkHygieneLevel()
 }
 bool Caregiver::checkMoraleLevel()
 {
-    if (moraleLevel >= 2)
+    if (moraleLevel >= CRITICAL_LEVEL)
     {
         return true;
     }
@@ -326,7 +317,7 @@ bool Caregiver::checkMoraleLevel()
 }
 bool Caregiver::checkSocialnessLevel()
 {
-    if (socialnessLevel >= 2)
+    if (socialnessLevel >= CRITICAL_LEVEL)
     {
         return true;
     }

@@ -32,73 +32,72 @@ void EntertainmentRobot::doInitialSetup()
 
 void EntertainmentRobot::doExecuteLoop()
 {
-	goToNode("Doctor4");
+	if (RCmode == "entertainmentRobot")
+  	{
+    	EntertainmentRobot::controlRobot();
+        return;
+  	}
 
-	// if (RCmode == "entertainmentRobot")
- //  	{
- //    	EntertainmentRobot::controlRobot();
- //  	}
+	if (returningHome){
+		//ROS_INFO("MOVING TO HOME");
 
-	// if (returningHome){
-	// 	//ROS_INFO("MOVING TO HOME");
-
-	// 	if (returningHome_first){
-	// 		returningHome_first = false;
-	// 		//TODO: Matt fix this shit (Target node reset upon reach destination)
-	// 		//targetNode = 0;
-	// 	}
+		if (returningHome_first){
+			returningHome_first = false;
+			//TODO: Matt fix this shit (Target node reset upon reach destination)
+			//targetNode = 0;
+		}
         
- //        return;
+        return;
 
-	// }
+	}
 
-	// // If we have finished moving to the resident and we need to entertain:
-	// if ((!(this->movingToResident)) && (waiting_to_entertain) && first)
-	// {
-	// 	// Request the lock
-	// 	ROS_INFO("Requesting lock...");
-	// 	first = false;
-	//     EntertainmentRobot::requestLock("Robot");
-	// }
-	// // If it has the lock:
-	// else if (haveLock)
-	// {
-	// 	waiting_to_entertain = false;
-	// 	entertaining=true;
-	// 	// If it has reached the maximum level
-	// 	if (moraleLevel == 5)
-	// 	{
-	// 		// TODO: Add do last desponse call that kurt implimented
-	// 		// Stop entertaining and unlock the resident
-	// 		EntertainmentRobot::stopResponse("entertaining");
-	// 		EntertainmentRobot::unlock();
-	// 		entertaining = false;
-	// 		first = false;
-	// 		returningHome = true;
-	// 	} 
-	// 	else
-	// 	{
-	// 		if (y == 40)
-	// 		{
-	// 			EntertainmentRobot::doResponse("entertaining");
-	// 			y=0;
-	// 		} 
-	// 		else 
-	// 		{
-	// 			y++;
-	// 		}	
-	// 	}
-	// }
-	// else if (deniedLock)
-	// {
-	// 	if (otherUnlocked)
-	// 	{
-	// 		EntertainmentRobot::requestLock("Robot");
-	// 		//Set back to false so only requests again once
-	// 		deniedLock = false;
-	// 		otherUnlocked = false;
-	// 	}
-	// }
+	// If we have finished moving to the resident and we need to entertain:
+	if ((!(this->movingToResident)) && (waiting_to_entertain) && first)
+	{
+		// Request the lock
+		ROS_INFO("Requesting lock...");
+		first = false;
+	    EntertainmentRobot::requestLock("Robot");
+	}
+	// If it has the lock:
+	else if (haveLock)
+	{
+		waiting_to_entertain = false;
+		entertaining=true;
+		// If it has reached the maximum level
+		if (moraleLevel == 5)
+		{
+			// TODO: Add do last desponse call that kurt implimented
+			// Stop entertaining and unlock the resident
+			EntertainmentRobot::stopResponse("entertaining");
+			EntertainmentRobot::unlock();
+			entertaining = false;
+			first = false;
+			returningHome = true;
+		} 
+		else
+		{
+			if (y == 40)
+			{
+				EntertainmentRobot::doResponse("entertaining");
+				y=0;
+			} 
+			else 
+			{
+				y++;
+			}	
+		}
+	}
+	else if (deniedLock)
+	{
+		if (otherUnlocked)
+		{
+			EntertainmentRobot::requestLock("Robot");
+			//Set back to false so only requests again once
+			deniedLock = false;
+			otherUnlocked = false;
+		}
+	}
 }
 
 // Upon receiving a message published to the 'entertainedness' topic, respond appropriately.

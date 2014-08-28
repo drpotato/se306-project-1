@@ -17,7 +17,6 @@ void Friend::doInitialSetup()
   subscriberSocialness = nodeHandle->subscribe("socialness", 1000, Friend::socialnessCallback);
   subscriberMorale = nodeHandle->subscribe("morale", 1000, Friend::moraleCallback);
   subscriberTime = nodeHandle->subscribe("time", 1000, Friend::timeCallback);
-  subscriberLockStatus = nodeHandle->subscribe("lockStatus", 1000, Friend::lockStatusCallback);
   subscribeTelephone = nodeHandle->subscribe("telephone", 1000, Friend::telephoneCallback);
   
   velLinear = 0.0;
@@ -64,7 +63,7 @@ void Friend::doExecuteLoop()
     Friend::requestLock("Friend");
   }
   // If it has the lock:
-  else if (this->has_lock)
+  else if (haveLock)
   {
     // If it has reached the maximum level
     if (socialnessLevel == 5)
@@ -88,6 +87,16 @@ void Friend::doExecuteLoop()
       {
         y++;
       }       
+    }
+  }
+  else if (deniedLock)
+  {
+    if (otherUnlocked)
+    {
+      Friend::requestLock("Visitor");
+      //Set back to false so only requests again once
+      deniedLock = false;
+      otherUnlocked = false;
     }
   }
 }
@@ -120,22 +129,4 @@ void Friend::moraleCallback(msg_pkg::Morale msg)
 void Friend::timeCallback(msg_pkg::Time msg)
 {
   //ROS_DEBUG_STREAM("Friend timeCallback with time " << (int)msg.hour << ":" << (int)msg.minutes << ":" << (int)msg.seconds);
-}
-
-void Friend::lockStatusCallback(msg_pkg::LockStatus msg)
-{
-        Friend* temp = Friend::getFriendInstance();
-        if ((msg.has_lock) && (msg.robot_id == temp->rosName))
-        {
-                ROS_INFO("Friend has the lock");
-                ROS_INFO("CHANGED TO SOCIALISING");
-                //temp->waiting_to_entertain = false;
-                //temp->entertaining=true;
-                temp->has_lock = true;
-        }
-        else if ((!(msg.has_lock)) && (msg.robot_id == temp->rosName))
-        {
-                ROS_INFO("Friend does not have the lock");
-                temp->has_lock = false;
-        }
 }
