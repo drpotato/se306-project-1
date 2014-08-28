@@ -6,6 +6,11 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 
+string EntertainmentRobot::getActorName()
+{
+  return "EntertainmentRobot";
+}
+
 // A Robot that provides the Resident with entertainment (possibly TV)
 void EntertainmentRobot::doInitialSetup()
 {

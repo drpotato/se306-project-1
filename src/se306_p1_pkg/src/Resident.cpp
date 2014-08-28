@@ -37,6 +37,11 @@
 #include <ctime>
 #include <time.h>
 
+string Resident::getActorName()
+{
+  return "Resident";
+}
+
 // The person living in our house. 
 // Has various attributes representing his needs/wants, which degrade over time.
 // When they reach a certain level, messages are published to his assistant Robots and the VisitorController, requesting various services.

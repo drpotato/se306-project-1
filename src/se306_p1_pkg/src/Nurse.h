@@ -10,6 +10,7 @@ class Nurse : public Visitor
 protected:
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
+  string getActorName();
   ros::Subscriber subscriberNurse;
 
   static void nurseCallback(msg_pkg::Nurse msg);

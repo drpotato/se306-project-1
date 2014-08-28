@@ -11,6 +11,8 @@ class Doctor : public Visitor
 protected:
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
+  string getActorName();
+  
   void emergency();
   void callNurses();
   void attendPatient();

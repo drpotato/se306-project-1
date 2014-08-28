@@ -20,8 +20,8 @@
 
 namespace
 {
-	std::string generateNodeName(unsigned int ID);
-	std::string generateStageName(unsigned int ID);
+	std::string generateNodeName(unsigned int ID, string nodeName);
+	std::string generateStageName(unsigned int ID, string nodeName);
 }
 
 Actor::Actor():
@@ -104,8 +104,8 @@ Actor::~Actor()
 
 void Actor::initialSetup(unsigned int robotID, double px, double py, double theta)
 {
-	rosName = generateNodeName(robotID);
-	stageName = generateStageName(robotID);
+	rosName = generateNodeName(robotID, getActorName());
+	stageName = generateStageName(robotID, getActorName());
 	pxInitial = px;
 	pyInitial = py;
 	thetaInitial = theta;
@@ -516,25 +516,35 @@ ros::NodeHandle &Actor::getNodeHandle() const
 
 namespace
 {
-	std::string generateNodeName(unsigned int ID)
+	std::string generateNodeName(unsigned int ID, string nodeName)
 	{
+          ostringstream os;
+          os << nodeName << ID;
+          string s = os.str();
+          return s;
+          /*
+          
 		char *buffer = new char[128];
-		sprintf(buffer, "RobotNode%u", ID);
+		sprintf(buffer, "%s%u", nodeName, ID);
 
 		std::string nodeName(buffer);
 		delete[] buffer;
 
-		return nodeName;
+		return nodeName;*/
 	}
 
-	std::string generateStageName(unsigned int ID)
+	std::string generateStageName(unsigned int ID, string nodeName)
 	{
-		char *buffer = new char[128];
-		sprintf(buffer, "robot_%u", ID);
+          ostringstream os;
+          os << nodeName << ID;
+          string s = os.str();
+          return s;
+		/*char *buffer = new char[128];
+		sprintf(buffer, "%s%u", nodeName, ID);
 
 		std::string nodeName(buffer);
 		delete[] buffer;
 
-		return nodeName;
+		return nodeName;*/
 	}
 }

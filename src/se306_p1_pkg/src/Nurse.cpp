@@ -7,6 +7,11 @@
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 
+string Nurse::getActorName()
+{
+  return "Nurse";
+}
+
 void Nurse::doInitialSetup()
 {
 	velLinear = 0.0;
