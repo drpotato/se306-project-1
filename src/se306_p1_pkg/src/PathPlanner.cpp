@@ -3,7 +3,6 @@
 #include "ros/ros.h"
 #include <msg_pkg/Location.h>
 
-bool PathPlanner::manualNodesExist;
 // This class maintains a graph of navigation waypoint nodes, and calculates the shortest (fewest nodes) path between any two of them.
 
 PathPlanner::PathPlanner() {
