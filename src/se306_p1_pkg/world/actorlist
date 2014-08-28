@@ -15,3 +15,5 @@ EntertainmentRobot -1 -4.5 0 wheat3
 MedicationRobot -1 3 0 grey30
 CompanionRobot -2.5 4.5 0 grey30
 CookingRobot 4.5 2 0 grey30
+Caregiver 2.75 9 0 cyan
+Caregiver 2.75 10 0 cyan
