@@ -205,15 +205,9 @@ PathPlannerNode* PathPlanner::getClosestNode(double x, double y) {
         PathPlannerNode* nodeToCompare = &nodes[i];
         double distanceToOld = sqrtf(pow(x - closestNode->px, 2) + pow(y - closestNode->py, 2));
         double distanceToNew = sqrtf(pow(x - nodeToCompare->px, 2) + pow(y - nodeToCompare->py, 2));
-        ROS_INFO_STREAM(" ");
-        ROS_INFO("Distance to old is %f", distanceToOld);
-        ROS_INFO("Distance to new is %f", distanceToNew);
-        if(nodeToCompare->isRobot) {ROS_INFO_STREAM("This is an Actor");}
         if (distanceToNew < distanceToOld && !nodeToCompare->isRobot) {
-            ROS_INFO_STREAM("THIS IS LESS");
             closestNode = nodeToCompare;
         }
     }
-    ROS_INFO_STREAM("Closest node found, returning");
     return closestNode;
 }
