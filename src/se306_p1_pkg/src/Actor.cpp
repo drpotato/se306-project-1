@@ -83,6 +83,8 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
     subscriberLockStatus = nodeHandle->subscribe("lockStatus", 1000, Actor::lockStatusCallback);
     subscriberUnlock = nodeHandle->subscribe("unlock", 1000, Actor::unlockCallback);
 
+    subscriberLocation = nodeHandle->subscribe("location", 1000, Actor::locationCallback);
+
 	// Put custom init stuff here (or make a method and call it from here)
 	KeyboardListener::init();
 	initialSetupStage();
@@ -162,6 +164,16 @@ void Actor::unlockCallback(msg_pkg::Unlock msg)
         actorPtr->otherUnlocked = true;
     }
 
+}
+
+void Actor::locationCallback(msg_pkg::Location msg) {
+
+    Actor *actorPtr = ActorSpawner::getInstance().getActor();
+
+    NodeLocation newLocation = {msg.xpos, msg.ypos};
+
+    actorPtr->nodeLocations[msg.id] = newLocation;
+    
 }
 
 // Publish a message containing own x and y coordinates to the 'location' topic.
