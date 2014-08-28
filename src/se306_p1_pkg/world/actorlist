@@ -11,7 +11,6 @@ Doctor 2.75 7 0 black
 Clock 6 -4.6 0 grey30
 Nurse 3.75 8 0 white
 Nurse 1.75 8 0 white
-EntertainmentRobot -1 -4.5 0 wheat3
 MedicationRobot -1 3 0 grey30
 CompanionRobot -2.5 4.5 0 grey30
 CookingRobot 4.5 2 0 grey30
