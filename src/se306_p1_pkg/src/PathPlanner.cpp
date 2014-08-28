@@ -78,8 +78,6 @@ void PathPlanner::processMessage(msg_pkg::Location msg){
 // Returns the shortest path between the two given nodes.
 vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
 {
-    ROS_INFO("Pathing from %s to %s",startNode.c_str(),target.c_str());
-    
     PathPlannerNode *top;
     queue<PathPlannerNode*> s;
     s.push(this->getNode(startNode));
@@ -117,11 +115,11 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
 
     for (int i=0;i<path.size();i++) {
         path[i]->visited = false;
-    }/*
+    }
     ROS_INFO_STREAM("Path found!");
     for (int i=0;i<path.size();i++) {
         ROS_INFO_STREAM(path[i]->getName());
-    }*/
+    }
     return path;
 }
 
