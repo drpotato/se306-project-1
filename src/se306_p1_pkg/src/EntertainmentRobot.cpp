@@ -32,8 +32,11 @@ void EntertainmentRobot::doInitialSetup()
 
 void EntertainmentRobot::doExecuteLoop()
 {
-
-	gotoPosition(12.0,12.0);
+	if (y++ >= 100)
+	{
+		gotoPosition(6.0,6.0);
+	}
+	
 	// if (RCmode == "entertainmentRobot")
  //  	{
  //    	EntertainmentRobot::controlRobot();

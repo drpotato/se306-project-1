@@ -389,20 +389,21 @@ double Actor::faceDirection(double x,double y){
 
 // Moves the Actor in a straight line towards the given x and y coordinates.
 // Returns true while moving/rotating, and false when it has arrived at its location and stopped.
-bool Actor::gotoPosition(double x,double y) {
-    // Face the node
+bool Actor::gotoPosition(double x,double y) 
+{
     faceDirection(x,y);
 
     if (faceDirection(x,y) <= DELTA)
     {
+        double distance = sqrt(pow((px - x), 2) + (pow((py - y), 2)));
         // If we are at the destination
-        if ((sqrt (pow((px - x), 2) + (pow((py - y), 2)))) <= DELTA)
+        if (distance <= DELTA)
         {
             velLinear = 0;
             return true;
         }
         //Move forward
-        velLinear = 1.0;
+        velLinear = distance;
     }
     else
     {
