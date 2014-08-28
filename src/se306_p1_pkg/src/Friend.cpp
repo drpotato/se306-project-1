@@ -50,13 +50,15 @@ void Friend::doExecuteLoop()
   // If socialness is CRITICAL_LEVEL and has been called by resident should probably socialise with resident
   if (socialnessLevel <= CRITICAL_LEVEL && called_by_resident_)
   {
-    startMovingToResident();
+    //TODO: KURT FIX THIS SHIT
+    //startMovingToResident();
     waiting_to_socialise = true;
     called_by_resident_ = false;
   }
   
   // If we have finished moving to the resident and we need to socialise:
-  if ((!(this->movingToResident)) && (waiting_to_socialise) && first)
+  //TODO: KURT MADE THATTHING FALSE INSTEAD OF THE OTHER THING
+  if ((!(false)) && (waiting_to_socialise) && first)
   {
     // Request the lock
     ROS_INFO("Requesting lock...");

@@ -3,6 +3,9 @@
 
 #include "Human.h"
 #include <msg_pkg/Interaction.h>
+#include <msg_pkg/RequestLock.h>
+#include <msg_pkg/LockStatus.h>
+#include <msg_pkg/Unlock.h>
 #include "ros/ros.h"
 #include <ctime>
 #include <time.h>
@@ -11,13 +14,34 @@
 class Resident : public Human
 {
 public:
+
+   // Enum for different levels of resident
+ enum Level
+ {
+    MORALE,
+    SOCIALNESS,
+    HYGIENE,
+    HUNGER,
+    THIRST,
+    HEALTH,
+    FITNESS
+  };
+
   virtual bool isLocked();
-  virtual void lock();
-  virtual void unlock();
+  virtual void lock(ActorType type, string id);
+  virtual void unlock(std::string robot_id);
   
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
   static void interactionCallback(msg_pkg::Interaction msg);
+
+  static float getRandom(float, float);
+  int changeLevel(float, Level); 
+  void randomEventLoop();
+
+  unsigned int seed;
+  FILE *urandom;
+
   static void timeCallback(msg_pkg::Time msg);
 
   static void requestLockCallback(msg_pkg::RequestLock msg);
@@ -27,6 +51,18 @@ public:
 
   
   bool lock_;
+  ActorType lock_type_;
+  string lock_id_;
+
+  // Level variables
+int morale_level_;
+int socialness_level_;
+int health_level_;
+int hygiene_level_;
+int hunger_level_;
+int thirst_level_;
+int fitness_level_;
+
 
 
 	#define LEVEL_MAX 100 // Final release should be 100
@@ -48,25 +84,41 @@ public:
   bool has_woken_;
   bool has_gone_to_bed_;
 
-  // Level of social fulfillment: 
-  // 1 - bad (lonely)
-  // 5 - good (not lonely)
-  int socialness_level_;
 
-  // Level of morale:
-  // 1 - bad (bored)
-  // 5 - good (entertained)	
-  int morale_level_;
+   // Delay measurement variables
+long long msAtPreviousLoop;
+float randNum;
 
-  // Publisher for socialness
-  ros::Publisher publisherSocialness;
-  // Publisher for morale
-  ros::Publisher publisherMorale;
 
-  // Subscriber for interactions
-  ros::Subscriber subscriberInteraction;
-  // Subscriber for time
-  ros::Subscriber subscriberTime;
+#ifdef USE_DEV_RANDOM
+// Randomness variables 
+int randomData;
+int myRandomInteger;
+size_t randomDataLen;
+#endif    
+
+// Publishers for all attributes/levels  
+ ros::Publisher publisherMorale;
+ros::Publisher publisherSocialness;
+ros::Publisher publisherHealth;
+ros::Publisher publisherHygiene;
+ros::Publisher publisherHunger;
+ros::Publisher publisherThirst;
+ros::Publisher publisherFitness;
+
+ // Publisher for lock status
+ ros::Publisher publisherLockStatus;
+ // Publisher for telephone
+ ros::Publisher publisherTelephone;
+
+ // Subscriber for interactions
+ ros::Subscriber subscriberInteraction;
+ // Subscriber for time
+ ros::Subscriber subscriberTime;
+ // Subscriber for requesting a lock
+ ros::Subscriber subscriberRequestLock;
+ // Subscriber for unlocking
+ ros::Subscriber subscriberUnlock;
 
   // Gets a new level with a maximum of 5 and minimum of 1
   static int getNewLevel(int amount, int oldValue);
@@ -79,6 +131,14 @@ public:
   void eat(int hour);
   void goToSleep();
   bool hasWoken();
+
+    // Phone call
+ void call(string personType);
+ bool called_friend_today_;
+
+ // Enum conversions
+ ActorType getActorTypeFromString(string actorType);
+ string getStringFromActorType(ActorType actorType);
 };
 
 

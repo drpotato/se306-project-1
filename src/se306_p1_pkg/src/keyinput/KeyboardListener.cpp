@@ -31,17 +31,17 @@ KeyboardListener::~KeyboardListener()
 
 void KeyboardListener::keyInputCallback(msg_pkg::KeyInput msg)
 {
-	KeyboardListener &keyboardListener = getInstance();
-	
-	// Clear the old active keys
-	KeyboardListener.activeKeysPrevious = KeyboardListener.activeKeys;
-	keyboardListener.activeKeys.clear();
-	
-	// Add the keys from the message
-	for (int i = 0; i < msg.pressedkeys.size(); ++i)
-	{
-		keyboardListener.activeKeys.insert(msg.pressedkeys[i]);
-	}
+KeyboardListener &keyboardListener = getInstance();
+
+// Clear the old active keys
+keyboardListener.activeKeysPrevious = keyboardListener.activeKeys;
+keyboardListener.activeKeys.clear();
+
+// Add the keys from the message
+for (int i = 0; i < msg.pressedkeys.size(); ++i)
+{
+keyboardListener.activeKeys.insert(msg.pressedkeys[i]);
+}
 }
 
 bool KeyboardListener::isKeyPressed(ups::KeyCode keyCode) const
