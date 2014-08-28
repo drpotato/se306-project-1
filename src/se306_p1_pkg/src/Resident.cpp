@@ -99,20 +99,20 @@ void Resident::doInitialSetup()
 void Resident::doExecuteLoop()
 
 {  
-  Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
-  if (residentInstance->RCmode == "resident")
+  
+  if (RCmode == "resident")
   {
-    residentInstance->controlRobot();
+    controlRobot();
   }
   
   /* Call a friend if socialness gets too low but only call once per day */
-  if (residentInstance->socialness_level_ <= 1 && !called_friend_today_)
+  if (socialness_level_ <= 1 && !called_friend_today_)
   {
     call("friend");
     called_friend_today_ = true;
   }
 
-  residentInstance->randomEventLoop();
+  randomEventLoop();
 
 }
 
