@@ -1,6 +1,7 @@
 #include "GraphSearch.h"
 #include <stdlib.h>
 #include <queue>
+#include <cmath>
 
 
 //ActorController should act as a Singleton.
@@ -19,6 +20,26 @@ GraphSearch &GraphSearch::getInstance()
 GraphSearch::GraphSearch()
 {
 	theGraph = new vector< vector<point> > ();
+	defineNode(-2.5, 3, "nodeBedroomCentre");
+    defineNode(-2.5, -0, "nodeHallwayByBedroom");
+    defineNode(3, 0, "nodeHallwayByLivingRoom");
+    defineNode(-2.5, -3, "nodeGuestBedroomCentre");
+    defineNode(2.8, 5, "nodeHouseDoor");
+
+    defineEdge("nodeBedroomCentre", "nodeHallwayBedroom");
+    defineEdge("nodeHallwayBedroom", "nodeBedroomCentre");
+
+    defineEdge("nodeBedroomCentre", "nodeGuestBedroomCentre");
+    defineEdge("nodeGuestBedroomCentre", "nodeBedroomCentre");
+
+    defineEdge("nodeHallwayBedroom", "nodeHallwayByLivingRoom");
+    defineEdge("nodeHallwayByLivingRoom", "nodeHallwayBedroom");
+
+    defineEdge("nodeHallwayBedroom", "nodeGuestBedroomCentre");
+    defineEdge("nodeGuestBedroomCentre", "nodeHallwayBedroom");
+
+    defineEdge("nodeHallwayByLivingRoom", "nodeHouseDoor");
+    defineEdge("nodeHouseDoor", "nodeHallwayByLivingRoom");
 }
 
 GraphSearch::~GraphSearch()
@@ -237,4 +258,37 @@ GraphSearch::point* GraphSearch::getPoint(string name)
     		return &(*theGraph)[i][0];
     	}		
 	}
+}
+
+GraphSearch::point* GraphSearch::getNewPoint(string name, double x, double y)
+{
+	point *p1 = (point*)malloc(sizeof(point));
+	p1->x = x;
+	p1->y = y;
+	p1->name = name;
+	return p1;
+}
+
+GraphSearch::point* GraphSearch::findClosestPoint(double x, double y)
+{
+	int i;
+	point *best = (point*)malloc(sizeof(point));
+	double bestDist = 100.0;
+	for (i = 0; i < theGraph->size(); i++)
+	{
+    	double tempx = (*theGraph)[i][0].x;
+    	double tempy = (*theGraph)[i][0].y;
+
+    	double tempDiff = abs(x - tempx) + abs(y - tempy);
+
+    	if (tempDiff < bestDist)
+    	{
+    		bestDist = tempDiff;
+    		best = &(*theGraph)[i][0];
+    	}
+
+    		
+	}
+
+	return best;
 }

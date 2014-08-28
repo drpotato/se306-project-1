@@ -24,6 +24,12 @@ public:
           point *p2;
         };
 
+	point* nodeBedroomCentre;
+    point* nodeHallwayByBedroom;
+    point* nodeHallwayByLivingRoom;
+    point* nodeGuestBedroomCentre;
+    point* nodeHouseDoor;
+
 
 	void defineNode(double x, double y);
 	void defineNode(double x, double y, string name);
@@ -34,7 +40,9 @@ public:
 	vector<point> getPath(string name1, double x, double y);
 	vector<point> getPath(double x1, double y1, double x2, double y2);
 	vector<point> getPath(double x, double y, string name1);
+	point* findClosestPoint(double x, double y);
 
+	point* getNewPoint(string name, double x, double y);
 	point* getPoint(string name);
 
 	vector< vector<point> > *theGraph;
