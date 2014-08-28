@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <cstring>
-
+#include "PathPlannerListener.h"
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 #include <geometry_msgs/Twist.h>
@@ -66,7 +66,6 @@ int main(int argc, char **argv)
 
   ActorSpawner &spawner = ActorSpawner::getInstance();
   Actor *actor = spawner.getActor(argv[2]);
-
   unsigned int robotID;
   double px, py, theta;
   std::sscanf(argv[1], "%u", &robotID);
@@ -75,7 +74,7 @@ int main(int argc, char **argv)
   std::sscanf(argv[5], "%lf", &theta);
 
   actor->initialSetup(robotID, px, py, theta);
-  
+  PathPlannerListener();
   while (actor->executeLoop());
 
   return 0;

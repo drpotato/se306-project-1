@@ -47,7 +47,6 @@ PathPlanner::PathPlanner() {
 
 }
 
-<<<<<<< HEAD
 
 
 
@@ -67,28 +66,6 @@ void PathPlanner::processMessage(msg_pkg::Location msg){
       closestNode->addNeighbour(name);
   }
   ROS_INFO_STREAM("Callback end");
-=======
-// When a location message is received, updates the graph with that Actor's new location.
-void PathPlanner::locationCallback(msg_pkg::Location msg) {
-    // Find Actor of this name in graph and remove it.
-    ROS_INFO_STREAM("Callback start");
-    string name = msg.id;
-    double x = msg.xpos;
-    double y = msg.ypos;
-    if (hasNode(name)) {
-        updateNode(name, x, y);
-    } else {
-        ROS_INFO_STREAM("Addnode start");
-        PathPlannerNode newNode = PathPlannerNode(name, x, y);
-        PathPlannerNode* closestNode = getClosestNode(x, y);
-        addNode(newNode);
-        ROS_INFO_STREAM("Neighbours add start");
-        getNode(name)->addNeighbour(closestNode);
-        ROS_INFO_STREAM("One edge added");
-        closestNode->addNeighbour(name);
-    }
-    ROS_INFO_STREAM("Callback end");
->>>>>>> d11c0abfee6414ef56442005190013a361ffcded
 }
 
 // Returns the shortest path between the two given nodes.
@@ -135,6 +112,8 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
     }
         return path;
 }
+
+
 
 // Removes a node from the graph, and removes it from all its' neighbours' lists of neighbours.
 void PathPlanner::removeNode(string* name) {
