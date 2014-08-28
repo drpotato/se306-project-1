@@ -1,6 +1,7 @@
 #include "GraphSearch.h"
 #include <stdlib.h>
 #include <queue>
+#include <cmath>
 
 
 //ActorController should act as a Singleton.
@@ -125,9 +126,43 @@ vector<GraphSearch::point> GraphSearch::getPath(string name1, double x, double y
 	p1 = getPoint(name1);
 	return getPath(p1->x,p1->y,x,y);	
 }
+
+bool GraphSearch::checkIfInList(point *p, vector<point> *list)
+{
+  int i;
+  for(i = 0; i < list->size(); i++)
+  {
+    if ((*list)[i].x == p->x && (*list)[i].y == p->y)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+void GraphSearch::addPointToSeen(point *p, vector<point> *list)
+{
+  if (!checkIfInList(p, list)) {
+    list->push_back(*p);
+  }
+}
+
 vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2, double y2)
 {
-
+	queue<point> *Q = new queue<point>();
+	vector<point> *V = new vector<point>();
+        
+        // Starting point
+        point *v = (point*) malloc(sizeof(point));
+        v->x = x1;
+        v->y = y1;
+        
+        // Finish point
+        point *f = (point*) malloc(sizeof(point));
+        f->x = x2;
+        f->y = y2;
+        
+        return *(new vector<point>());
 }
 vector<GraphSearch::point> GraphSearch::getPath(double x, double y, string name1)
 {
@@ -148,6 +183,7 @@ GraphSearch::point* GraphSearch::getPoint(string name)
 	}
 }
 
+<<<<<<< HEAD
 GraphSearch::point* GraphSearch::getNewPoint(string name, double x, double y)
 {
 	point *p1 = (point*)malloc(sizeof(point));
@@ -155,4 +191,29 @@ GraphSearch::point* GraphSearch::getNewPoint(string name, double x, double y)
 	p1->y = y;
 	p1->name = name;
 	return p1;
+=======
+GraphSearch::point* GraphSearch::findClosestPoint(double x, double y)
+{
+	int i;
+	point *best = (point*)malloc(sizeof(point));
+	double bestDist = 100.0;
+	for (i = 0; i < theGraph->size(); i++)
+	{
+    	double tempx = (*theGraph)[i][0].x;
+    	double tempy = (*theGraph)[i][0].y;
+
+    	double tempDiff = abs(x - tempx) + abs(y - tempy);
+
+    	if (tempDiff < bestDist)
+    	{
+    		bestDist = tempDiff;
+    		best = &(*theGraph)[i][0];
+    	}
+
+    		
+	}
+
+	return best;
+
+>>>>>>> 0b823dba2c10bd5828e72c37bf32c045ad84ed8c
 }

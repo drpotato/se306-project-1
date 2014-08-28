@@ -35,11 +35,15 @@ public:
 	vector<point> getPath(string name1, double x, double y);
 	vector<point> getPath(double x1, double y1, double x2, double y2);
 	vector<point> getPath(double x, double y, string name1);
+	point* findClosestPoint(double x, double y);
 
 	point* getNewPoint(string name, double x, double y);
 	point* getPoint(string name);
 
 	vector< vector<point> > *theGraph;
+
 private:
-	GraphSearch();
+  void addPointToSeen(point *p, vector<point> *list);
+  bool checkIfInList(point *p, vector<point> *list);
+  GraphSearch();
 };
