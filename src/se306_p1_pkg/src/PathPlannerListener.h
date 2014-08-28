@@ -20,7 +20,7 @@ private:
 public:
     PathPlannerListener();
     static void locationCallback(msg_pkg::Location);
-    queue<msg_pkg::Location>* getMessages(string);
+    static queue<msg_pkg::Location>* getMessages(string);
 };
 
 

@@ -1,4 +1,5 @@
 #include "PathPlanner.h"
+#include "PathPlannerListener.h"
 #include "ros/ros.h"
 #include <msg_pkg/Location.h>
 
@@ -47,6 +48,16 @@ PathPlanner::PathPlanner() {
 
 }
 
+void PathPlanner::update(string name){
+  //Get messages from listener
+  queue<msg_pkg::Location>* messages = PathPlannerListener::getMessages(name);
+  while(messages->size() >0){
+    msg_pkg::Location msg = messages->front();
+    messages->pop();
+    this->processMessage(msg);
+  }
+
+}
 
 
 
@@ -61,32 +72,29 @@ void PathPlanner::processMessage(msg_pkg::Location msg){
       PathPlannerNode newNode = PathPlannerNode(name, x, y,true);
       PathPlannerNode* closestNode = getClosestNode(x, y);
       addNode(newNode);
-      ROS_INFO_STREAM("Neighbours add start");
       getNode(name)->addNeighbour(closestNode);
       closestNode->addNeighbour(name);
   }
-  ROS_INFO_STREAM("Callback end");
 }
 
 // Returns the shortest path between the two given nodes.
-vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,PathPlannerNode *target)
+vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
 {
-    ROS_INFO_STREAM("PathPlanner Started!");
     PathPlannerNode *top;
     queue<PathPlannerNode*> s;
-    s.push(startNode);
+    s.push(this->getNode(startNode));
 
     for (int i = 0; i < nodes.size(); i++){
-        nodes[i].visited = false;
+        nodes[i].setVisited(false);
     }
 
-    startNode->setVisited(true);
+    this->getNode(startNode)->setVisited(true);
 
 
     while (s.empty() == false){
         top = s.front();
         s.pop();
-        if (top->getName().compare(target->getName()) == 0) {
+        if (top->getName().compare(target) == 0) {
             //found it!
             break;
         }
@@ -101,16 +109,20 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(PathPlannerNode *startNode,Path
 
     vector<PathPlannerNode*> path;
     PathPlannerNode* iter = top;
-    while (iter->getName().compare(startNode->getName()) != 0) {
+    while (iter->getName().compare(startNode) != 0) {
         path.insert(path.begin(),iter);
         iter = iter->previous;
     }
-    path.insert(path.begin(),startNode);
+    path.insert(path.begin(),getNode(startNode));
 
     for (int i=0;i<path.size();i++) {
         path[i]->visited = false;
     }
-        return path;
+    ROS_INFO_STREAM("Path found!");
+    for (int i=0;i<path.size();i++) {
+        ROS_INFO_STREAM(path[i]->getName());
+    }
+    return path;
 }
 
 
@@ -162,7 +174,6 @@ bool PathPlanner::hasNode(string name){
 // Updates the PathPlannerNode's location with the given x and y, and refinds its closest neighbour.
 void PathPlanner::updateNode(string name, double x, double y) {
     PathPlannerNode* node = getNode(name);
-    ROS_INFO("Got node called %s",node->getName().c_str());
     //TODO: Remove links to this node
     node->removeAllNeighbours();
     PathPlannerNode* closestNode = getClosestNode(x, y);
@@ -170,7 +181,6 @@ void PathPlanner::updateNode(string name, double x, double y) {
     closestNode->addNeighbour(name);
     node->px = x;
     node->py = y;
-    ROS_INFO("Location of node %s updated to: (%f, %f)", node->getName().c_str(), node->px, node->py);
 }
 
 // Returns a pointer to the waypoint closest to the given set of coordinates.

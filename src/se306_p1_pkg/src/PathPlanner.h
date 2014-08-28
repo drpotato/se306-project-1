@@ -33,11 +33,12 @@ private:
     PathPlannerNode* nodeHalllwayByLivingRoom;
     PathPlannerNode* nodeGuestBedroomCentre;
     PathPlannerNode* nodeHouseDoor;
+    void processMessage(msg_pkg::Location);
 
 public:
     PathPlanner();
-    void processMessage(msg_pkg::Location);
-    vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
+    void update(string);
+    vector<PathPlannerNode*> pathToNode(string,string);
     void addNode(PathPlannerNode);
     bool hasNode(string);
     void removeNode(string*);

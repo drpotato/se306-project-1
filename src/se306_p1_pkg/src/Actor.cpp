@@ -205,7 +205,7 @@ bool Actor::gotoPosition(double x,double y) {
 // Returns false when it has arrived at the target node, and true when in transit.
 bool Actor::goToNode(string nodeName) {
 		//Update the graph before doing anything else
-		
+		pathPlanner.update(rosName);
 
 
     ROS_INFO("current position %f %f", px, py);
@@ -213,10 +213,8 @@ bool Actor::goToNode(string nodeName) {
 
     ROS_INFO("Name of closest node is %s", closest.c_str());
 
-    PathPlannerNode* goingToNode = pathPlanner.getNode(nodeName);
 
-
-    vector <PathPlannerNode*> path = pathPlanner.pathToNode(pathPlanner.getNode(rosName), goingToNode);
+    vector <PathPlannerNode*> path = pathPlanner.pathToNode(rosName, nodeName);
 
     int nextNode = 0;
 
@@ -224,7 +222,9 @@ bool Actor::goToNode(string nodeName) {
         if (!this->gotoPosition(path[nextNode]->px, path[nextNode]->py)) {
             // We have arrived at the next node.
             nextNode++;
-        }
+        }else{
+					ROS_INFO_STREAM("travelling");
+				}
     }
     this->velLinear = 0;
     return false;
