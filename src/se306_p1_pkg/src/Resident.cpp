@@ -20,7 +20,7 @@
 
 // Debug lines for randomness component of code
 //#define DEBUG_RANDNUM_GENERATION
-#define DEBUG_CHANGE_LEVEL
+//#define DEBUG_CHANGE_LEVEL
 //#define NON_RANDOM // For testing (produces same sequence of 'random' numbers)
 
 #include <msg_pkg/Interaction.h>
