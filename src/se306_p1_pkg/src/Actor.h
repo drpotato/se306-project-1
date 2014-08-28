@@ -51,7 +51,6 @@ public:
     bool deniedLock;
     bool otherUnlocked;
 
-
 protected:
 
 	virtual void doInitialSetup() = 0;
