@@ -84,6 +84,11 @@ public:
   bool has_woken_;
   bool has_gone_to_bed_;
 
+  // Navigation helpers
+  bool getOutOfBed;
+  bool goToEatingPlace;
+  bool getIntoBed;
+
 	// Delay measurement variables
 	long long msAtPreviousLoop;
 	float randNum;
