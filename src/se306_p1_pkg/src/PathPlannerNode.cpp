@@ -9,7 +9,6 @@ PathPlannerNode::PathPlannerNode(string inputName, double x, double y){
     this->py = y;
 }
 
-
 string PathPlannerNode::getName() {
     return this->name;
 }
@@ -23,9 +22,9 @@ void PathPlannerNode::setVisited(bool newVisited){
 }
 
 void PathPlannerNode::addNeighbour(string newNode) {
-    ROS_INFO("we have %d neighbours %s",this->neighbours.size(),this->getName().c_str());
-    this->neighbours.push_back(newNode);
-
+  this->neighbours.push_back(newNode);
+  int num = this->neighbours.size();
+  ROS_INFO("Node %s has %d neighbours", this->getName().c_str(), num);
 }
 
 void PathPlannerNode::addNeighbour(PathPlannerNode* newNode){
@@ -39,7 +38,6 @@ void PathPlannerNode::removeNeighbour(string deleteNode) {
             break;
         }
     }
-
 }
 
 void PathPlannerNode::removeAllNeighbours(){
@@ -49,7 +47,3 @@ void PathPlannerNode::removeAllNeighbours(){
 
   this->neighbours.clear();
 }
-
-
-//Copy Constructor
-//PathPlannerNode::PathPlannerNode(const PathPlannerNode &other) : name(other.name),px(other.px),py(other.py),neighbours(other.neighbours){}
