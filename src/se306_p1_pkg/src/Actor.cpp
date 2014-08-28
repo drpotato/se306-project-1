@@ -445,7 +445,9 @@ bool Actor::goToNode(string nodeName) {
     pathPlanner.update(rosName);
     
     vector <PathPlannerNode*> path = pathPlanner.pathToNode(rosName, nodeName);
-
+    if (path.size() == 0){
+	return true;
+    }
     if (currentNodeIndex < path.size()-1) {
         PathPlannerNode* nextNode = pathPlanner.getNode(currentNode);
         if (!this->gotoPosition(nextNode->px, nextNode->py)) {

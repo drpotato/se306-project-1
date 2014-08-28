@@ -65,9 +65,10 @@ void PathPlanner::processMessage(msg_pkg::Location msg){
   if (hasNode(name)) {
       updateNode(name, x, y);
   } else {
-      PathPlannerNode newNode = PathPlannerNode(name, x, y,true);
+      ROS_INFO_STREAM("adding new node");
+      PathPlannerNode* newNode = new PathPlannerNode(name, x, y,true);
       PathPlannerNode* closestNode = getClosestNode(x, y);
-      addNode(newNode);
+      addNode(*newNode);
       getNode(name)->addNeighbour(closestNode);
       closestNode->addNeighbour(name);
   }
@@ -82,6 +83,11 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
 
     for (int i = 0; i < nodes.size(); i++){
         nodes[i].setVisited(false);
+    }
+
+    if(!hasNode(target)){
+	vector<PathPlannerNode*> retVal;
+        return retVal;
     }
 
     this->getNode(startNode)->setVisited(true);
@@ -125,7 +131,7 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
 
 // Removes a node from the graph, and removes it from all its' neighbours' lists of neighbours.
 void PathPlanner::removeNode(string* name) {
-
+    ROS_INFO("removenode called");
     for(int i=0;i<nodes.size();i++) {
         PathPlannerNode* currentNode = &nodes[i];
         if (currentNode->getName().compare(*name) == 0) {
@@ -142,8 +148,9 @@ void PathPlanner::removeNode(string* name) {
 
 // Adds a PathPlannerNode to the graph.
 void PathPlanner::addNode(PathPlannerNode p) {
-    nodes.push_back(p);
+    this->nodes.push_back(p);
     int num = nodes.size();
+    
 }
 
 // Returns the PathPlannerNode with the given name (if any).
