@@ -139,7 +139,7 @@ void GraphSearch::defineEdge(string name1, string name2)
 	int i;
 	for (i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
-    	if (((*GraphSearch::theGraph)[i][0].name == name1))
+    	if (((*GraphSearch::theGraph)[i][0].name.compare(name1) == 0))
     	{
     		(*GraphSearch::theGraph)[i].push_back(*p);
     	}		
@@ -319,7 +319,7 @@ GraphSearch::point* GraphSearch::getPoint(string name)
 	int i;
 	for (i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
-    	if (((*GraphSearch::theGraph)[i][0].name == name))
+    	if (((*GraphSearch::theGraph)[i][0].name.compare(name) == 0))
     	{
     		return &(*GraphSearch::theGraph)[i][0];
     	}		
