@@ -7,13 +7,19 @@
 #include <msg_pkg/LockStatus.h>
 
 #include "ros/ros.h"
-#include "PathPlanner.h"
 #include <vector>
 #include <string>
 #include "std_msgs/String.h"
+#include "ActorLocation.h"
+#include "PathPlanner.h"
+#include "PathPlannerNode.h"
 
 /* Macros */
-#define CRITICAL_LEVEL 90
+#define CRITICAL_LEVEL 20
+#define REASONABLE_LEVEL 80
+#define LEVEL_MAX 100 // Final release should be 100
+#define LEVEL_MIN 0 // Final release should be 0
+#define FREQUENCY 10
 
 class Actor
 {
@@ -58,7 +64,7 @@ protected:
         virtual string getActorName() = 0;
 
 	void doResponse(const char *attribute);
-        void stopResponse(const char *attribute);
+    void stopResponse(const char *attribute);
 
 	//velocity of the robot
 	double velLinear;
@@ -95,8 +101,8 @@ protected:
 	std::string stageName;
 
     //Path Planner
-    bool goToNode(vector<PathPlannerNode*> &path);
-    PathPlannerNode* getActiveNode();
+	//Path Planner
+    bool goToNode(string);
 
     bool movingToResident;
 
@@ -105,23 +111,11 @@ protected:
 
 private:
     
-    PathPlanner pathPlanner;
-    PathPlannerNode *activeNode;
     double faceDirection(double,double);
     bool gotoPosition(double x,double y);
-    int targetNode;
-    PathPlannerNode node1;
-    PathPlannerNode node2;
-    PathPlannerNode node3;
-    PathPlannerNode node4;
-    PathPlannerNode node5;
-    PathPlannerNode nodeDoor;
-    string node1Name;
-    string node2Name;
-    string node3Name;
-    string node4Name;
-    string node5Name;
-    string nodeDoorName;
+	PathPlanner pathPlanner;
+	string currentNode;
+	int currentNodeIndex;
 
     void checkKeyboardPress();
     bool modeSet();
