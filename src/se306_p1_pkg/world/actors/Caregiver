@@ -1,4 +1,4 @@
-define Caregiver position
+define Caregiver actor
 (
   # Left Leg
   model
