@@ -134,6 +134,8 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	KeyboardListener::init();
 	initialSetupStage();
 	doInitialSetup();
+
+    RCmode = "";
     
 }
 
@@ -146,11 +148,12 @@ bool Actor::executeLoop()
 
 		publishLocation();
 
+        checkKeyboardPress();
+
         moveToResident();
 
 		doExecuteLoop();
 		executeLoopStagePublication();
-        ROS_DEBUG("loop");
 
 		ros::spinOnce();
 		loopRate->sleep();
@@ -234,6 +237,147 @@ void Actor::publishLocation()
 	locationMessage.id = rosName;
 	// Publish the message.
 	publisherLocation.publish(locationMessage);
+}
+
+// Check to see if any keys are pressed and set the mode appropriately
+void Actor::checkKeyboardPress()
+{
+    KeyboardListener &keyboardListener = KeyboardListener::getInstance();
+    if (keyboardListener.isKeyTapped(ups::KEY_D_CODE))
+    {
+        //doctor
+        toggleMode("doctor");
+        ROS_INFO("hello doctor");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_N_CODE))
+    {
+        //nurse1
+        toggleMode("nurse1");
+    }
+    else if ((keyboardListener.isKeyTapped(ups::KEY_N_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
+    {
+        //nurse2
+        toggleMode("nurse2");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_F_CODE))
+    {
+        //friend1
+        toggleMode("friend1");
+    }
+    else if ((keyboardListener.isKeyTapped(ups::KEY_F_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
+    {
+        //friend2
+        toggleMode("friend2");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_R_CODE))
+    {
+        //relative1
+        toggleMode("relative1");
+    }
+    else if ((keyboardListener.isKeyTapped(ups::KEY_R_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
+    {
+        //relative2
+        toggleMode("relative2");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_C_CODE))
+    {
+        //caregiver1
+        toggleMode("caregiver1");
+    }
+    else if ((keyboardListener.isKeyTapped(ups::KEY_C_CODE)) && (keyboardListener.isKeyTapped(ups::KEY_SPACE_CODE)))
+    {
+        //caregiver2
+        toggleMode("caregiver2");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_M_CODE))
+    {
+        //medicationRobot
+        toggleMode("medicationRobot");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_E_CODE))
+    {
+        //entertainmentRobot
+        toggleMode("entertainmentRobot");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_T_CODE))
+    {
+        //companionRobot
+        toggleMode("companionRobot");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_B_CODE))
+    {
+        //cookingRobot
+        toggleMode("cookingRobot");
+    }
+    else if (keyboardListener.isKeyTapped(ups::KEY_ENTER_CODE))
+    {
+        //resident
+        toggleMode("resident");
+    }
+}
+
+// Checks if there is any mode currently set
+bool Actor::modeSet()
+{
+    if (RCmode == "")
+    {
+        return false;
+    }
+    return true;
+}
+
+// Checks whether we are in a certain mode or not
+bool Actor::inMode(string mode)
+{
+    if (RCmode == mode)
+    {
+        return true;
+    }
+    return false;
+}
+
+// Turns a mode on or off
+void Actor::toggleMode(string mode)
+{
+    // If we are in this mode, turn the mode off
+    if (inMode(mode)) 
+    {
+        RCmode = "";
+    }
+    // If there is no current mode, we are free to put it in this mode
+    else if (!modeSet())
+    {
+        RCmode = mode;
+    }
+    // Cannot set the mode on or off if it is currently in another mode
+}
+
+// Only call this method from the subclass IF it is in your corresponding mode (RCmode)
+void Actor::controlRobot()
+{
+    KeyboardListener &keyboardListener = KeyboardListener::getInstance();
+    velRotational = 0.0;
+    velLinear = 0.0;
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_UP_CODE))
+    {
+        velLinear += 1.0;
+    }
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_DOWN_CODE))
+    {
+        velLinear -= 1.0;
+    }
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_LEFT_CODE))
+    {
+        velRotational += 1.0;
+    }
+    
+    if (keyboardListener.isKeyPressed(ups::KEY_RIGHT_CODE))
+    {
+        velRotational -= 1.0;
+    }
 }
 
 // Request the lock for the resident
@@ -330,7 +474,7 @@ bool Actor::gotoPosition(double x,double y){
     if (faceDirection(x,y) < 0.1){
         double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
 
-        ROS_DEBUG("Distance is %f",distance);
+        //ROS_DEBUG("Distance is %f",distance);
 
         if (distance > 0.01){
             faceDirection(x,y);
@@ -341,7 +485,7 @@ bool Actor::gotoPosition(double x,double y){
             return false;
         }
     }else{
-        ROS_DEBUG("Target: %f",faceDirection(x,y));
+        //ROS_DEBUG("Target: %f",faceDirection(x,y));
         this->velLinear = 0;
         return true;
     }
@@ -360,7 +504,7 @@ bool Actor::goToNode(vector<PathPlannerNode*> &path){
         this->activeNode = path[targetNode];
         targetNode++;
     }else{
-        ROS_DEBUG("current position %f %f",px,py);
+        //ROS_DEBUG("current position %f %f",px,py);
     }
     return false;
 }
