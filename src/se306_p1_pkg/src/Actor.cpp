@@ -20,8 +20,8 @@
 
 namespace
 {
-	std::string generateNodeName(unsigned int ID);
-	std::string generateStageName(unsigned int ID);
+	std::string generateNodeName(unsigned int ID, string nodeName);
+	std::string generateStageName(unsigned int ID, string nodeName);
 }
 
 Actor::Actor():
@@ -104,8 +104,8 @@ Actor::~Actor()
 
 void Actor::initialSetup(unsigned int robotID, double px, double py, double theta)
 {
-	rosName = generateNodeName(robotID);
-	stageName = generateStageName(robotID);
+	rosName = generateNodeName(robotID, getActorName());
+	stageName = generateStageName(robotID, getActorName());
 	pxInitial = px;
 	pyInitial = py;
 	thetaInitial = theta;
@@ -154,7 +154,6 @@ bool Actor::executeLoop()
 
 		doExecuteLoop();
 		executeLoopStagePublication();
-        ROS_DEBUG("loop");
 
 		ros::spinOnce();
 		loopRate->sleep();
@@ -250,7 +249,7 @@ void Actor::checkKeyboardPress()
         toggleMode("doctor");
         ROS_INFO("hello doctor");
     }
-    else if (keyboardListener.isKeyTapped(ups::KEY_N_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_N_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
     {
         //nurse1
         toggleMode("nurse1");
@@ -260,7 +259,7 @@ void Actor::checkKeyboardPress()
         //nurse2
         toggleMode("nurse2");
     }
-    else if (keyboardListener.isKeyTapped(ups::KEY_F_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_F_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
     {
         //friend1
         toggleMode("friend1");
@@ -270,7 +269,7 @@ void Actor::checkKeyboardPress()
         //friend2
         toggleMode("friend2");
     }
-    else if (keyboardListener.isKeyTapped(ups::KEY_R_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_R_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
     {
         //relative1
         toggleMode("relative1");
@@ -280,7 +279,7 @@ void Actor::checkKeyboardPress()
         //relative2
         toggleMode("relative2");
     }
-    else if (keyboardListener.isKeyTapped(ups::KEY_C_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_C_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
     {
         //caregiver1
         toggleMode("caregiver1");
@@ -475,7 +474,7 @@ bool Actor::gotoPosition(double x,double y){
     if (faceDirection(x,y) < 0.1){
         double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
 
-        ROS_DEBUG("Distance is %f",distance);
+        //ROS_DEBUG("Distance is %f",distance);
 
         if (distance > 0.01){
             faceDirection(x,y);
@@ -486,7 +485,7 @@ bool Actor::gotoPosition(double x,double y){
             return false;
         }
     }else{
-        ROS_DEBUG("Target: %f",faceDirection(x,y));
+        //ROS_DEBUG("Target: %f",faceDirection(x,y));
         this->velLinear = 0;
         return true;
     }
@@ -505,7 +504,7 @@ bool Actor::goToNode(vector<PathPlannerNode*> &path){
         this->activeNode = path[targetNode];
         targetNode++;
     }else{
-        ROS_DEBUG("current position %f %f",px,py);
+        //ROS_DEBUG("current position %f %f",px,py);
     }
     return false;
 }
@@ -517,25 +516,20 @@ ros::NodeHandle &Actor::getNodeHandle() const
 
 namespace
 {
-	std::string generateNodeName(unsigned int ID)
+	std::string generateNodeName(unsigned int ID, string nodeName)
 	{
-		char *buffer = new char[128];
-		sprintf(buffer, "RobotNode%u", ID);
-
-		std::string nodeName(buffer);
-		delete[] buffer;
-
-		return nodeName;
+          ostringstream os;
+          os << nodeName << ID;
+          string s = os.str();
+          return s;
 	}
 
-	std::string generateStageName(unsigned int ID)
+	std::string generateStageName(unsigned int ID, string nodeName)
 	{
-		char *buffer = new char[128];
-		sprintf(buffer, "robot_%u", ID);
-
-		std::string nodeName(buffer);
-		delete[] buffer;
-
-		return nodeName;
+          // TODO Jamie, why the fuck does this have to mess with the behaviour of robots?
+          ostringstream os;
+          os << "robot_" << ID;
+          string s = os.str();
+          return s;
 	}
 }

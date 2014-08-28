@@ -6,6 +6,11 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 
+string EntertainmentRobot::getActorName()
+{
+  return "EntertainmentRobot";
+}
+
 // A Robot that provides the Resident with entertainment (possibly TV)
 void EntertainmentRobot::doInitialSetup()
 {
@@ -113,7 +118,7 @@ void EntertainmentRobot::moraleCallback(msg_pkg::Morale msg)
 
 bool EntertainmentRobot::checkMoraleLevel()
 {
-	if (moraleLevel>=2 )
+	if (moraleLevel>= CRITICAL_LEVEL )
 	{
 		return true;
 	}

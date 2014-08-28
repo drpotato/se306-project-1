@@ -6,6 +6,11 @@
 #include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 
+string CompanionRobot::getActorName()
+{
+  return "CompanionRobot";
+}
+
 // A robot who provides the Resident with companionship (could be a robotic dog, a video call system, sex bot)
 void CompanionRobot::doInitialSetup()
 {

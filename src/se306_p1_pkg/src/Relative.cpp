@@ -5,6 +5,12 @@
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 
+
+string Relative::getActorName()
+{
+  return "Relative";
+}
+
 // A Visitor who provides Socialness.
 void Relative::doInitialSetup()
 {
@@ -12,7 +18,7 @@ void Relative::doInitialSetup()
     velRotational = 0.0;
     socialnessLevel = 5;
     socialising = false;
-    residentName = "RobotNode2";
+    residentName = "Relative1";
     subscriberSocialness = nodeHandle->subscribe("socialness", 1000, Relative::socialnessCallback);
     y = 0;
     x = 0;
@@ -105,8 +111,5 @@ void Relative::socialnessCallback(msg_pkg::Socialness msg)
 
 bool Relative::checkSocialnessLevel()
 {
-	if (socialnessLevel>=2 ) {
-		return true;
-	}
-	return false;
+  return socialnessLevel >= 2;
 }
