@@ -100,8 +100,6 @@ protected:
 	//Path Planner
     bool goToNode(string);
 
-    bool movingToResident;
-
     string RCmode;
     void controlRobot();
 

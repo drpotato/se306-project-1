@@ -41,6 +41,7 @@ Actor::Actor():
 	loopRate(0)
 
 {
+
     
 }
 
