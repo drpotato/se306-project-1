@@ -17,7 +17,6 @@ class PathPlannerNode{
         double px;
         double py;
         PathPlannerNode(string, double, double);
-        PathPlannerNode();
         //PathPlannerNode(const PathPlannerNode &other);
         void addNeighbour(string);
         void addNeighbour(PathPlannerNode*);

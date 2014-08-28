@@ -9,7 +9,6 @@ PathPlannerNode::PathPlannerNode(string inputName, double x, double y){
     this->py = y;
 }
 
-PathPlannerNode::PathPlannerNode() {}
 
 string PathPlannerNode::getName() {
     return this->name;
@@ -24,11 +23,13 @@ void PathPlannerNode::setVisited(bool newVisited){
 }
 
 void PathPlannerNode::addNeighbour(string newNode) {
+    ROS_INFO("we have %d neighbours %s",this->neighbours.size(),this->getName().c_str());
     this->neighbours.push_back(newNode);
+
 }
 
 void PathPlannerNode::addNeighbour(PathPlannerNode* newNode){
-  this->neighbours.push_back(newNode->getName());
+  this->addNeighbour(newNode->getName());
 }
 
 void PathPlannerNode::removeNeighbour(string deleteNode) {
