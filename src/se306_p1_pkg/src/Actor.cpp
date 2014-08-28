@@ -389,7 +389,9 @@ double Actor::faceDirection(double x,double y){
 // Returns true while moving/rotating, and false when it has arrived at its location and stopped.
 bool Actor::gotoPosition(double x,double y) {
     // Face the node
+    ROS_INFO("entered gotoposition");
     if (faceDirection(x,y) < 0.1) {
+        ROS_INFO("entered gotoposition if loop");
         double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
 
         ROS_DEBUG("Distance is %f",distance);
@@ -397,14 +399,18 @@ bool Actor::gotoPosition(double x,double y) {
         if (distance > 0.01) {
             faceDirection(x,y);
             this->velLinear = distance*1;
+            ROS_INFO("gotoPosition return True");
             return true;
         } else {
             this->velLinear = 0;
+            ROS_INFO("gotoPosition return false");
             return false;
         }
     } else {
+        ROS_INFO("entered gotoposition if else loop");
         ROS_DEBUG("Target: %f",faceDirection(x,y));
         this->velLinear = 0;
+        ROS_INFO("gotoPosition return True");
         return true;
     }
 }
@@ -425,7 +431,9 @@ bool Actor::goToNode(string nodeName) {
     }
     
     if (currentNodeIndex < path.size() - 1) {
+        ROS_INFO_STREAM("If returned true");
         PathPlannerNode* nextNode = pathPlanner.getNode(currentNode);
+        ROS_INFO_STREAM("Did pathplanner.getNode()");
         if (!this->gotoPosition(nextNode->px, nextNode->py)) {
             // We have arrived at the next node.
             ROS_INFO_STREAM("We have arrived at a node on the path");
@@ -437,6 +445,7 @@ bool Actor::goToNode(string nodeName) {
             return true;
 		}
     } else {
+         ROS_INFO_STREAM("If returned false");
         ROS_INFO_STREAM("We have arrived at our final destination!");
 		currentNode = nodeName;
         currentNodeIndex = 0;
