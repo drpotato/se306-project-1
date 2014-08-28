@@ -28,7 +28,6 @@
 #include <msg_pkg/Health.h>
 #include <msg_pkg/Hygiene.h>
 #include <msg_pkg/Hunger.h>
-#include <msg_pkg/Thirst.h>
 #include <msg_pkg/Fitness.h>
 #include <msg_pkg/Time.h>
 #include <msg_pkg/RequestLock.h>
@@ -37,12 +36,6 @@
 #include "ActorSpawner.h"
 #include <ctime>
 #include <time.h>
-
-
-const float Resident::FREQUENCY = 10;
-const int Resident::WAIT_TIME = 50;
-const float Resident::LEVEL_MAX = 100;
-const float Resident::LEVEL_MIN = 0;
 
 // The person living in our house. 
 // Has various attributes representing his needs/wants, which degrade over time.
@@ -79,23 +72,13 @@ void Resident::doInitialSetup()
   health_level_ = LEVEL_MAX;
   hygiene_level_ = LEVEL_MAX;
   hunger_level_ = LEVEL_MAX;
-  thirst_level_ = LEVEL_MAX;
   fitness_level_ = LEVEL_MAX;
-
-  //
-  morale_count_ = 0;
-  socialness_count_ = 0;
-
-
-  m_dropped_ = false;
-  m_replenished_ = false;
 
   // Set up publishers.
   publisherSocialness = nodeHandle->advertise<msg_pkg::Socialness>("socialness", 1000);
   publisherMorale = nodeHandle->advertise<msg_pkg::Morale>("morale", 1000);
   publisherHygiene = nodeHandle->advertise<msg_pkg::Hygiene>("hygiene", 1000);
   publisherHunger = nodeHandle->advertise<msg_pkg::Hunger>("hunger", 1000);
-  publisherThirst = nodeHandle->advertise<msg_pkg::Thirst>("thirst", 1000);
   publisherHealth = nodeHandle->advertise<msg_pkg::Health>("health", 1000);
   publisherFitness = nodeHandle->advertise<msg_pkg::Fitness>("fitness", 1000);
 
@@ -118,57 +101,6 @@ void Resident::doExecuteLoop()
   {
     residentInstance->controlRobot();
   }
-
-  //TODO: REMOVE THIS WHEN RANDOMNESS AND DAY LOGIC IS IMPLEMENTED##################################################################################
-  if (morale_count_ >= WAIT_TIME && !m_dropped_)
-  {
-    
-    if(residentInstance->morale_level_ <= 1)
-    {
-      // don't drop the value any more, it's being tended to or has been already
-      m_dropped_ = true;
-    }
-    else 
-    {
-      // Reduce the level every 1000 counts
-      residentInstance->morale_level_--;
-      // Create a socialness message to publish
-      msg_pkg::Morale moraleMessage;
-      // Assign current socialness level to the message
-      moraleMessage.level = residentInstance->morale_level_;
-      // Publish the message
-      residentInstance->publisherMorale.publish(moraleMessage);
-    }
-    morale_count_ = 0;
-  }
-  else if (morale_count_ < WAIT_TIME && !m_dropped_) {
-    morale_count_++;
-  }
-
-  else if (m_replenished_ && (socialness_count_ >= WAIT_TIME) && !s_dropped_) {
-    Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
-
-    if(residentInstance->socialness_level_ <= 1) {
-      // don't drop the value any more, it's being tended to or has been already
-      s_dropped_ = true;
-    }
-
-    else {
-      // reduce the level every 1000 counts
-      residentInstance->socialness_level_--;
-      //Create a socialness message to publish
-      msg_pkg::Socialness socialnessMessage;
-      //Assign current socialness level to the message
-      socialnessMessage.level = residentInstance->socialness_level_;
-      //Publish the message
-      residentInstance->publisherSocialness.publish(socialnessMessage);
-    }
-    socialness_count_ = 0;
-  }
-  else if (m_replenished_ && (socialness_count_ < WAIT_TIME) && !s_dropped_)
-  {
-    socialness_count_++;
-  }
   
   /* Call a friend if socialness gets too low but only call once per day */
   if (residentInstance->socialness_level_ <= 1 && !called_friend_today_)
@@ -176,7 +108,8 @@ void Resident::doExecuteLoop()
     call("friend");
     called_friend_today_ = true;
   }
-  //###################################################################################################################################################
+
+  residentInstance->randomEventLoop();
 }
 
 // PHONE CALLING -------------------------------------------------------------------------------------------------//
@@ -198,7 +131,7 @@ void Resident::call(string personType)
 
 void Resident::interactionCallback(msg_pkg::Interaction msg)
 {
-	/* == COMMENTED OUT ALPHA CODE BELOW ==
+	
   std::string attribute = msg.attribute;
   int amount = msg.amount;
 
@@ -239,14 +172,11 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
     if (newLevel == 5)
     {
       residentInstance->stopRobotSpinning();
-      residentInstance->m_replenished_ = true;
     }
 
     //Publish the message
     residentInstance->publisherMorale.publish(moraleMessage);
   }
-  // TODO: put others in when implemented
-	*/// == COMMENTED OUT ALPHA CODE ABOVE ==
 }
 
 
@@ -279,22 +209,11 @@ void Resident::timeCallback(msg_pkg::Time msg)
   }
 }
 
-
-// Alpha (deprecated)
-int Resident::getNewLevel(int amount, int oldLevel)
-{
-  int newLevel = std::min(amount + oldLevel, 5); // Can only have a maximum level of 5
-  return newLevel < 1 ? 1 : newLevel; // Should not be below 1
-}
-
-
-
 void Resident::stopRobotSpinning()
 {
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
   residentInstance->velRotational = 0.0; // Stop rotation to show interaction finished
 }
-
 
 
 // Function called for each iteration of 'doExecuteLoop()'; emulates random
@@ -329,7 +248,7 @@ void Resident::randomEventLoop()
 	int drop;
 	
 	// Description:
-	// Entertainedness, morale, health, fitness, hunger and thirst all
+	// Entertainedness, morale, health, fitness, and hunger all
 	// drop over time, but not linearly.
 	
 	// == IMPORTANT: Read if you are another person building/running this feature
@@ -342,7 +261,7 @@ void Resident::randomEventLoop()
 	// an average of 140 loop iterations should pass before the Morale level drops
 	// by 1).
 	// As we have (unofficially) set a day length at 12 minutes, hunger drop will
-	// be based on this, as will thirst.
+	// be based on this.
 
 	// getRandom(float(0), float(14 * FREQUENCY))); explained:
 	// The second argument to get random is the maximum value that the randomly
@@ -419,18 +338,6 @@ void Resident::randomEventLoop()
 		#endif
 	}	
 
-	// == THIRST NOT CURRENTLY IMPLEMENTED ==
-	/*
-	// ...as does thirst
-	// On average, it should drop by 1 every 3 seconds, with
-	randNum = getRandom(float(0), float(1 * FREQUENCY));
-	if (randNum > ((3 * FREQUENCY) - 1)) {
-		changeLevel(-1, THIRST);
-		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("EVENT: thirst drop -1 (rand = %.3f)\n", randNum);
-		#endif
-	} */
-
 	// Fitness drops fairly slowly...
 	// On average, it should drop by 1 every 4 seconds
 	randNum = getRandom(float(0), float(4 * FREQUENCY));
@@ -440,9 +347,6 @@ void Resident::randomEventLoop()
 		ROS_INFO("EVENT: fitness drop -1 (rand = %.3f)\n", randNum);
 		#endif
 	}
-
-
-
 }
 
 
@@ -459,14 +363,10 @@ int Resident::changeLevel(float change, Level level) {
 	Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
 
 	// Change level, publish new level showing new level value
-	if (level == MORALE) {
-		if (residentInstance->morale_level_ + change >= LEVEL_MAX) {
-			residentInstance->morale_level_ = LEVEL_MAX;
-		} else if (residentInstance->morale_level_ + change <= LEVEL_MIN) {
-			residentInstance->morale_level_ = LEVEL_MIN;
-		} else {
-			residentInstance->morale_level_ = residentInstance->morale_level_ + change;
-		}
+	if (level == MORALE) 
+  {
+    residentInstance->morale_level_ = residentInstance->getNewLevel(change, residentInstance->morale_level_);
+
 		msg_pkg::Morale moraleMessage;
 		moraleMessage.level = residentInstance->morale_level_;
 		residentInstance->publisherMorale.publish(moraleMessage);	
@@ -476,14 +376,11 @@ int Resident::changeLevel(float change, Level level) {
 		return residentInstance->morale_level_;
 		#endif
 
-	} else if (level == SOCIALNESS) {
-		if (residentInstance->socialness_level_ + change >= LEVEL_MAX) {
-			residentInstance->socialness_level_ = LEVEL_MAX;
-		} else if (residentInstance->socialness_level_ + change <= LEVEL_MIN) {
-			residentInstance->socialness_level_ = LEVEL_MIN;
-		} else {
-			residentInstance->socialness_level_ = residentInstance->socialness_level_ + change;
-		}
+	} 
+  else if (level == SOCIALNESS) 
+  {
+		residentInstance->socialness_level_ = residentInstance->getNewLevel(change, residentInstance->socialness_level_);
+
 		msg_pkg::Socialness socialnessMessage;
 		socialnessMessage.level = residentInstance->socialness_level_;
 		residentInstance->publisherSocialness.publish(socialnessMessage);
@@ -493,14 +390,11 @@ int Resident::changeLevel(float change, Level level) {
 		return residentInstance->socialness_level_;
 		#endif
 
-	} else if (level == HYGIENE) {
-		if (residentInstance->hygiene_level_ + change >= LEVEL_MAX) {
-			residentInstance->hygiene_level_ = LEVEL_MAX;
-		} else if (residentInstance->hygiene_level_ + change <= LEVEL_MIN) {
-			residentInstance->hygiene_level_ = LEVEL_MIN;
-		} else {
-			residentInstance->hygiene_level_ = residentInstance->hygiene_level_ + change;
-		}
+	} 
+  else if (level == HYGIENE) 
+  {
+		residentInstance->hygiene_level_ = residentInstance->getNewLevel(change, residentInstance->hygiene_level_);
+
 		msg_pkg::Hygiene hygieneMessage;
 		hygieneMessage.level = residentInstance->hygiene_level_;
 		residentInstance->publisherHygiene.publish(hygieneMessage);
@@ -510,14 +404,11 @@ int Resident::changeLevel(float change, Level level) {
 		return residentInstance->hygiene_level_;
 		#endif
 
-	} else if (level == HUNGER) {
-		if (residentInstance->hunger_level_ + change >= LEVEL_MAX) {
-			residentInstance->hunger_level_ = LEVEL_MAX;
-		} else if (residentInstance->hunger_level_ + change <= LEVEL_MIN) {
-			residentInstance->hunger_level_ = LEVEL_MIN;
-		} else {
-			residentInstance->hunger_level_ = residentInstance->hunger_level_ + change;
-		}
+	} 
+  else if (level == HUNGER) 
+  {
+		residentInstance->hunger_level_ = residentInstance->getNewLevel(change, residentInstance->hunger_level_);
+
 		msg_pkg::Hunger hungerMessage;
 		hungerMessage.level = residentInstance->hunger_level_;
 		residentInstance->publisherHunger.publish(hungerMessage);
@@ -527,31 +418,11 @@ int Resident::changeLevel(float change, Level level) {
 		return residentInstance->hunger_level_;
 		#endif
 
-	} else if (level == THIRST) {
-		if (residentInstance->thirst_level_ + change >= LEVEL_MAX) {
-			residentInstance->thirst_level_ = LEVEL_MAX;
-		} else if (residentInstance->thirst_level_ + change <= LEVEL_MIN) {
-			residentInstance->thirst_level_ = LEVEL_MIN;
-		} else {
-			residentInstance->thirst_level_ = residentInstance->thirst_level_ + change;
-		}
-		msg_pkg::Thirst thirstMessage;
-		thirstMessage.level = residentInstance->thirst_level_;
-		residentInstance->publisherThirst.publish(thirstMessage);
+	}  
+  else if (level == FITNESS) 
+  {
+		residentInstance->fitness_level_ = residentInstance->getNewLevel(change, residentInstance->fitness_level_);
 
-		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("Thirst: %d", residentInstance->thirst_level_);
-		return residentInstance->thirst_level_;
-		#endif
-
-	}  else if (level == FITNESS) {
-		if (residentInstance->fitness_level_ + change >= LEVEL_MAX) {
-			residentInstance->fitness_level_ = LEVEL_MAX;
-		} else if (residentInstance->fitness_level_ + change <= LEVEL_MIN) {
-			residentInstance->fitness_level_ = LEVEL_MIN;
-		} else {
-			residentInstance->fitness_level_ = residentInstance->fitness_level_ + change;
-		}
 		msg_pkg::Fitness fitnessMessage;
 		fitnessMessage.level = residentInstance->fitness_level_;
 		residentInstance->publisherFitness.publish(fitnessMessage);
@@ -561,14 +432,11 @@ int Resident::changeLevel(float change, Level level) {
 		return residentInstance->fitness_level_;
 		#endif
 
-	} else if (level == HEALTH) {
-		if (residentInstance->health_level_ + change >= LEVEL_MAX) {
-			residentInstance->health_level_ = LEVEL_MAX;
-		} else if (residentInstance->health_level_ + change <= LEVEL_MIN) {
-			residentInstance->health_level_ = LEVEL_MIN;
-		} else { 
-			residentInstance->health_level_ = residentInstance->health_level_ + change;
-		}
+	} 
+  else if (level == HEALTH) 
+  {
+		residentInstance->health_level_ = residentInstance->getNewLevel(change, residentInstance->health_level_);
+
 		msg_pkg::Health healthMessage;
 		healthMessage.level = residentInstance->health_level_;
 		residentInstance->publisherHealth.publish(healthMessage);
@@ -581,78 +449,19 @@ int Resident::changeLevel(float change, Level level) {
 }
 
 
+// Alpha (deprecated)
+int Resident::getNewLevel(int amount, int oldLevel)
+{
+  int newLevel = std::min(amount + oldLevel, LEVEL_MAX);
+  return newLevel < LEVEL_MIN ? LEVEL_MIN : newLevel;
+}
+
 // Basic random number generator with min/range input,
 // uses C's 'rand()'
 float Resident::getRandom(float minimum, float range) {
 	float rn = (float)rand() / (float)RAND_MAX;
     rn = minimum += (rn * range);
 	return rn;
-}
-
-
-void oldRNG()
-{
-	// True random number generator (uses an entropy pool as opposed to
-	// time.h seed, too CPU intensive for the moment)
-
-	// Access/dev/random in read-only for true, random 
-	// number generation
-	//DELAY TEST
-	//clock_t begin = clock();
-
-	/*
-	
-	#ifdef USE_DEV_RANDOM
-	randomData = open("/dev/random", O_RDONLY);
-	randomData = open("/dev/random", O_RDONLY);
-	// Note: /dev/random blocks when it's empty, and it seems to become empty pretty quickly :(
-	// It's probably higher quality than we need, but /dev/urandom sounds like it might be an okay compromise
-	// It takes the numbers from /dev/random, but also generates new lower-quality pseudo-random numbers instead of blocking
-	// I reckon we can get away with using C's rand(), which is just a simple linear congruential generator, but we're not storing passwords or anything.
-
-	myRandomInteger;
-	randomDataLen = 0;
-	
-	while (randomDataLen < sizeof myRandomInteger)
-	{
-		ssize_t randomResult = read(randomData, ((char*)&myRandomInteger) + randomDataLen, (sizeof myRandomInteger) - randomDataLen);
-
-		// ssize_t type will return negative if an error occurs while
-		// the random number is being generated and assigned to result
-		if (randomResult < 0)
-		{
-			ROS_INFO("Unable to read /dev/random, resorting to alternative RNG");
-		}
-
-		randomDataLen += randomResult;
-	}
-
-	close(randomData);
-	ROS_INFO("Random number generated: %zu", randomDataLen);
-	//ROS_INFO("Random number generated: %d", randomDataLen);
-	
-#else // Use C's rand()
-
-	long myRandomInteger = 0;
-	
-	// RAND_MAX is guaranteed to be >= 32767, but that's 15 bytes, so to cover 32 bytes completely, we'll need to do it in 3 stages
-	for (int shiftVal = 0; shiftVal < 32; shiftVal += 15)
-	{
-		// Fill out myRandomInteger, 15 bits at a time
-		myRandomInteger |= (std::rand() & 0x7fff) << shiftVal;
-	}
-	
-	//ROS_INFO("Random number generated: %d", myRandomInteger);
-#endif
-
-
-	// DELAY TEST
-	clock_t end = clock();
-	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-	cout.precision(dbl::digits10);
-	cout << "Delay: " << fixed << elapsed_secs << endl;
-
-	*/
 }
 
 
