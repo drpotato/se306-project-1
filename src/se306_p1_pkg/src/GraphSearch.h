@@ -7,8 +7,10 @@ using namespace std;
 class GraphSearch
 {
 public:
-	GraphSearch();
+	
 	~GraphSearch();
+
+	static GraphSearch &getInstance();
 
 
 	struct point {
@@ -31,9 +33,9 @@ public:
 	point* getPoint(string name);
 
 	vector< vector<point> > *theGraph;
-        
+
 private:
   void addPointToSeen(point *p, vector<point> *list);
   bool checkIfInList(point *p, vector<point> *list);
-
+  GraphSearch();
 };
