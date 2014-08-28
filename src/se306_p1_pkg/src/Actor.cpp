@@ -108,7 +108,6 @@ bool Actor::executeLoop()
 		loopRate->sleep();
 		return true;
 	}
-
 	return false;
 }
 
@@ -117,7 +116,6 @@ void Actor::initialSetupStage()
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
 	subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000,
 Actor::StageOdom_callback);
-
 }
 
 void Actor::StageOdom_callback(nav_msgs::Odometry msg)
@@ -129,13 +127,6 @@ void Actor::StageOdom_callback(nav_msgs::Odometry msg)
   actorPtr->px = actorPtr->pxInitial + msg.pose.pose.position.x;
   actorPtr->py = actorPtr->pyInitial + msg.pose.pose.position.y;
   actorPtr->theta = actorPtr->thetaInitial + tf::getYaw(msg.pose.pose.orientation);
-}
-
-// Process messages publish to the 'location' topic.
-// These messages each contain the current location of a single Actor.
-void Actor::locationCallback(msg_pkg::Location msg)
-{
-
 }
 
 void Actor::lockStatusCallback(msg_pkg::LockStatus msg)
