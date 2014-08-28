@@ -39,7 +39,7 @@ string Resident::getActorName()
 // When they reach a certain level, messages are published to his assistant Robots and the VisitorController, requesting various services.
 void Resident::doInitialSetup()
 {
-  PathPlanner* pathPlanner = new PathPlanner();
+
 
 
 
