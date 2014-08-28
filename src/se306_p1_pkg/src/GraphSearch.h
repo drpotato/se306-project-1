@@ -28,6 +28,7 @@ public:
 	vector<point> getPath(double x1, double y1, double x2, double y2);
 	vector<point> getPath(double x, double y, string name1);
 
+	point* getPoint(string name);
 
 	vector< vector<point> > *theGraph;
 
