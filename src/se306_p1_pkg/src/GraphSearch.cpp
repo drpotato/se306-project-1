@@ -183,7 +183,6 @@ GraphSearch::point* GraphSearch::getPoint(string name)
 	}
 }
 
-<<<<<<< HEAD
 GraphSearch::point* GraphSearch::getNewPoint(string name, double x, double y)
 {
 	point *p1 = (point*)malloc(sizeof(point));
@@ -191,7 +190,8 @@ GraphSearch::point* GraphSearch::getNewPoint(string name, double x, double y)
 	p1->y = y;
 	p1->name = name;
 	return p1;
-=======
+}
+
 GraphSearch::point* GraphSearch::findClosestPoint(double x, double y)
 {
 	int i;
@@ -214,6 +214,4 @@ GraphSearch::point* GraphSearch::findClosestPoint(double x, double y)
 	}
 
 	return best;
-
->>>>>>> 0b823dba2c10bd5828e72c37bf32c045ad84ed8c
 }
