@@ -407,7 +407,6 @@ bool Actor::gotoPosition(double x,double y)
     }
     else
     {
-
         return false;
     }
     
