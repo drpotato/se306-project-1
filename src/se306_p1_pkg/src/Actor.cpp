@@ -99,8 +99,6 @@ bool Actor::executeLoop()
 		pathPlanner.updateAll();
         checkKeyboardPress();
 
-        moveToResident();
-
 		doExecuteLoop();
 		executeLoopStagePublication();
 
