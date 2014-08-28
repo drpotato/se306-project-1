@@ -29,6 +29,7 @@ protected:
     bool healing;
 	bool returningHome;
 	bool returningHome_first;
+	bool travellingToResident;
 };
 
 #endif
