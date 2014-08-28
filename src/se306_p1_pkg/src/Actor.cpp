@@ -259,7 +259,7 @@ void Actor::checkKeyboardPress()
         //nurse2
         toggleMode("nurse2");
     }
-    else if (keyboardListener.isKeyTapped(ups::KEY_F_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_F_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
     {
         //friend1
         toggleMode("friend1");
@@ -269,7 +269,7 @@ void Actor::checkKeyboardPress()
         //friend2
         toggleMode("friend2");
     }
-    else if (keyboardListener.isKeyTapped(ups::KEY_R_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_R_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
     {
         //relative1
         toggleMode("relative1");
@@ -279,7 +279,7 @@ void Actor::checkKeyboardPress()
         //relative2
         toggleMode("relative2");
     }
-    else if (keyboardListener.isKeyTapped(ups::KEY_C_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_C_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
     {
         //caregiver1
         toggleMode("caregiver1");
