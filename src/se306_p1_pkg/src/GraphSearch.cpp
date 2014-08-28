@@ -27,6 +27,7 @@ void GraphSearch::setupNodes()
     defineNode(-0.5, 1.1, "nodeOutShowerNextToDoor");
     defineNode(1, 0, "nodeBathroomDoorHallway");
     defineNode(1, 1, "nodeBathroomDoorInBathroom");
+    defineNode(-1, 3, "nodeMedicationRobotHome");
 
     //KITCHEN NODES
     defineNode(5.8, 3, "nodeKitchenStove");
@@ -76,7 +77,6 @@ cout << "e\n";
     defineEdge("nodeHallwayByLivingRoom", "nodeLivingRoomByHallwayDoor");
     cout << "o\n";
 
-
     defineEdge("nodeShowerUnderHead", "nodeInShowerNextToDoor");
     cout << "p\n";
     defineEdge("nodeInShowerNextToDoor", "nodeShowerUnderHead");
@@ -93,6 +93,13 @@ cout << "u\n";
     defineEdge("nodeBathroomDoorInBathroom", "nodeBathroomDoorHallway");
     cout << "v\n";
     defineEdge("nodeBathroomDoorHallway", "nodeBathroomDoorInBathroom");
+
+    defineEdge("nodeBathroomDoorInBathroom", "nodeMedicationRobotHome");
+    defineEdge("nodeMedicationRobotHome", "nodeBathroomDoorInBathroom");
+
+    defineEdge("nodeBathroomDoorHallway", "nodeHallwayBedroom");
+    defineEdge("nodeHallwayBedroom", "nodeBathroomDoorHallway");
+
 cout << "w\n";
     defineEdge("nodeBathroomDoorHallway", "nodeHallwayByBedroom");
     cout << "x\n";
