@@ -261,6 +261,33 @@ namespace ups
 		return returnValue;
 	}
 	
+	template<>
+	inline long s2num<long>(const char *str, const char **strPtr)
+	{
+		char c;
+		long returnValue = 0l;
+		
+		// Skip over whitespace
+		while (isWhitespace(c = *str))
+		{
+			++str;
+		}
+		
+		// Read in as many digits as possible
+		while (isDigit(c = *str))
+		{
+			returnValue = returnValue * 10l + (c - '0');
+			++str;
+		}
+		
+		// Update the position, and return.
+		if (strPtr)
+		{
+			*strPtr = str;
+		}
+		return returnValue;
+	}
+	
 	template<typename t>
 	inline bool s2num(t &output, const char *str, const char **strPtr)
 	{

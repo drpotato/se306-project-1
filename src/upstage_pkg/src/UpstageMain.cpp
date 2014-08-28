@@ -4,6 +4,7 @@
 #include "ResourceManager.hpp"
 #include "StackAllocator.hpp"
 #include "UpstageEnvironment.hpp"
+#include "renderer/Font.hpp"
 #include "renderer/Renderer.hpp"
 #include "renderer/Texture.hpp"
 
@@ -15,6 +16,7 @@ int main(int argc, char **argv)
 	ups::ResourceManager &resMan = ups::ResourceManager::getInstance();
 	resMan.addPriorityPath("upstage");
 	
+	ups::Font *font = resMan.fetch<ups::Font>("fonts/ubuntu_mono.fnt");
 	ups::UpstageEnvironment *env = resMan.fetch<ups::UpstageEnvironment>("upstageenv.unv");
 
 	

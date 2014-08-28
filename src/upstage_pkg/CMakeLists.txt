@@ -25,10 +25,13 @@ add_library(UpstageLibrary
   src/geom/Mesh.cpp
   src/geom/Model.cpp
   src/maths/Quaternion.cpp
+  src/renderer/Font.cpp
   src/renderer/Renderer.cpp
   src/renderer/Texture.cpp
+  src/renderer/Text.cpp
   src/renderer/opengl/glloader.cpp
   src/resourceloaders/ResourceLoaderBMP.cpp
+  src/resourceloaders/ResourceLoaderFNT.cpp
   src/resourceloaders/ResourceLoaderGenericXML.cpp
   src/resourceloaders/ResourceLoaderStageWorld.cpp
   src/resourceloaders/ResourceLoaderUpstageEnv.cpp

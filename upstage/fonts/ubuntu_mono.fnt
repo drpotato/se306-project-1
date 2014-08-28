@@ -2,7 +2,7 @@
 	<info face="ubuntu mono" size="80" />
 	<common lineHeight="80" scaleW="512" scaleH="256" pages="1" />
 	<pages>
-		<page id="0" file="C:\Users\Jamie\SkyDrive\Documents\ubuntu_mono.bmp" />
+		<page id="0" file="fonts/ubuntu_mono.bmp" />
 	</pages>
 	<chars count="96">
 		<char id="33" x="445" y="54" width="8" height="30" xoffset="8" yoffset="50" xadvance="9" /><!-- ! -->

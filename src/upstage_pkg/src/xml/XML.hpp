@@ -134,6 +134,13 @@ namespace ups
 		double output;
 		return s2num<double>(output, getAttr<const char *>(attrName, "")) ? output : attrDefault;
 	}
+	
+	template<>
+	inline const long XML::getAttr<long>(const std::string &attrName, const long &attrDefault) const
+	{
+		long output;
+		return s2num<long>(output, getAttr<const char *>(attrName, "")) ? output : attrDefault;
+	}
 }
 
 #endif // #ifndef SE306P1_UPSTAGE_XML_HPP_DEFINED
