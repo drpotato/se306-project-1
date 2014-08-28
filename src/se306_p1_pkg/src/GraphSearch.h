@@ -7,51 +7,46 @@ using namespace std;
 class GraphSearch
 {
 public:
-	
-	~GraphSearch();
+  static void setupNodes();
+  
+  struct point {
+          double x;
+          double y;
+          string name;
+  };
+      
+  struct edge {
+    point *p1;
+    point *p2;
+  };
 
-	static GraphSearch &getInstance();
-
-
-	struct point {
-		double x;
-		double y;
-		string name;
-	};
-        
-        struct edge {
-          point *p1;
-          point *p2;
-        };
-
-	point* nodeBedroomCentre;
-    point* nodeHallwayByBedroom;
-    point* nodeHallwayByLivingRoom;
-    point* nodeGuestBedroomCentre;
-    point* nodeHouseDoor;
+  point* nodeBedroomCentre;
+  point* nodeHallwayByBedroom;
+  point* nodeHallwayByLivingRoom;
+  point* nodeGuestBedroomCentre;
+  point* nodeHouseDoor;
 
 
-	void defineNode(double x, double y);
-	void defineNode(double x, double y, string name);
-	void defineEdge(double x1, double y1, double x2, double y2);
-	void defineEdge(string name1, string name2);
-	void defineEdge(string name1, double x, double y);
-	vector<point>* getPath(string name1, string name2);
-	vector<point>* getPath(string name1, double x, double y);
-	vector<point>* getPath(double x1, double y1, double x2, double y2);
-	vector<point>* getPath(double x, double y, string name1);
-	point* findClosestPoint(double x, double y);
+  static void defineNode(double x, double y);
+  static void defineNode(double x, double y, string name);
+  static void defineEdge(double x1, double y1, double x2, double y2);
+  static void defineEdge(string name1, string name2);
+  static void defineEdge(string name1, double x, double y);
+  static vector<point>* getPath(string name1, string name2);
+  static vector<point>* getPath(string name1, double x, double y);
+  static vector<point>* getPath(double x1, double y1, double x2, double y2);
+  static vector<point>* getPath(double x, double y, string name1);
+  static point* findClosestPoint(double x, double y);
 
-	point* getNewPoint(string name, double x, double y);
-	point* getPoint(string name);
+  static point* getNewPoint(string name, double x, double y);
+  static point* getPoint(string name);
 
-	vector< vector<point> > *theGraph;
+  static vector< vector<point> > *theGraph;
 
 private:
-  void addPointToSeen(point *p, vector<point> *list);
-  bool checkIfInList(point *p, vector<point> *list);
-  bool comparePointer(point *a, point *b);
-  vector<edge>* getAdjacentEdges(point *t);
-  point* getAdjacentVertex(point *t, edge *e);
-  GraphSearch();
+  static void addPointToSeen(point *p, vector<point> *list);
+  static bool checkIfInList(point *p, vector<point> *list);
+  static bool comparePointer(point *a, point *b);
+  static vector<edge>* getAdjacentEdges(point *t);
+  static point* getAdjacentVertex(point *t, edge *e);
 };

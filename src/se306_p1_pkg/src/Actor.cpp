@@ -56,7 +56,6 @@ Actor::~Actor()
 
 void Actor::initialSetup(unsigned int robotID, double px, double py, double theta)
 {
-        GraphSearch graphSearch = GraphSearch::getInstance();
 	rosName = generateNodeName(robotID, getActorName());
 	stageName = generateStageName(robotID, getActorName());
 	pxInitial = px;
