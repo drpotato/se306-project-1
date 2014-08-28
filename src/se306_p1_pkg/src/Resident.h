@@ -17,18 +17,39 @@ public:
   
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
-  static void interactionCallback(msg_pkg::Interaction msg);
+  static void interactionCallback(msg_pkg::Interaction msg); //alpha
+  static float getRandom(float, float);
+  int changeLevel(float, Level); 
+	void randomLevelChange(float, float, Level);
+  void randomEventLoop();
+
+	unsigned int seed;
+	FILE *urandom;
+
   static void timeCallback(msg_pkg::Time msg);
   static void requestLockCallback(msg_pkg::RequestLock msg);
   static void unlockCallback(msg_pkg::Unlock msg);
 
   string getActorName();
-  
   bool lock_;
 
 	#define LEVEL_MAX 100 // Final release should be 100
 	#define LEVEL_MIN 0 // Final release should be 0
 	#define FREQUENCY 10
+
+  // Demo paramters to gradually reduce levels (deprecated)
+  int morale_count_;
+  int socialness_count_;
+
+  const static int WAIT_TIME;  
+	const static float LEVEL_MAX; // Final release should be 100
+	const static float LEVEL_MIN; // Final release should be 0
+	const static float FREQUENCY;;
+
+	// Deprecated (alpha) - will be replaced by 'm_changed_' for example
+  bool m_replenished_;	
+  bool m_dropped_;
+  bool s_dropped_;
 
 	#define LEVEL_MAX 100 // Final release should be 100
 	#define LEVEL_MIN 0 // Final release should be 0

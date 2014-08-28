@@ -46,6 +46,7 @@ void Clock::doExecuteLoop()
   msg_pkg::Time timeMessage;
 
   // Assign current time values to the message
+  timeMessage.day = ptm->tm_mday;
   timeMessage.hour = ptm->tm_hour;
   timeMessage.minutes = ptm->tm_min;
   timeMessage.seconds = ptm->tm_sec;
