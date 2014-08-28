@@ -52,8 +52,8 @@ Actor::Actor():
     node4Name = "testnode4";
 
     // Next to the Entertainment Robot.
-
     node5Name = "testnode5";
+    
     // At the door to the house
     nodeDoorName = "nodeDoorName";
 
