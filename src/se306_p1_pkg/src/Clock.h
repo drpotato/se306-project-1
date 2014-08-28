@@ -13,6 +13,8 @@ public:
 	virtual void doInitialSetup();
   virtual void doExecuteLoop();
 
+  string getActorName();
+
   // Publisher for time
   ros::Publisher publisherTime;
 

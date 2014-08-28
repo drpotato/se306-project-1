@@ -20,8 +20,8 @@
 
 namespace
 {
-	std::string generateNodeName(unsigned int ID);
-	std::string generateStageName(unsigned int ID);
+	std::string generateNodeName(unsigned int ID, string nodeName);
+	std::string generateStageName(unsigned int ID, string nodeName);
 }
 
 Actor::Actor():
@@ -104,8 +104,8 @@ Actor::~Actor()
 
 void Actor::initialSetup(unsigned int robotID, double px, double py, double theta)
 {
-	rosName = generateNodeName(robotID);
-	stageName = generateStageName(robotID);
+	rosName = generateNodeName(robotID, getActorName());
+	stageName = generateStageName(robotID, getActorName());
 	pxInitial = px;
 	pyInitial = py;
 	thetaInitial = theta;
@@ -249,7 +249,7 @@ void Actor::checkKeyboardPress()
         toggleMode("doctor");
         ROS_INFO("hello doctor");
     }
-    else if (keyboardListener.isKeyTapped(ups::KEY_N_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_N_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
     {
         //nurse1
         toggleMode("nurse1");
@@ -259,7 +259,7 @@ void Actor::checkKeyboardPress()
         //nurse2
         toggleMode("nurse2");
     }
-    else if (keyboardListener.isKeyTapped(ups::KEY_F_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_F_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
     {
         //friend1
         toggleMode("friend1");
@@ -269,7 +269,7 @@ void Actor::checkKeyboardPress()
         //friend2
         toggleMode("friend2");
     }
-    else if (keyboardListener.isKeyTapped(ups::KEY_R_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_R_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
     {
         //relative1
         toggleMode("relative1");
@@ -279,7 +279,7 @@ void Actor::checkKeyboardPress()
         //relative2
         toggleMode("relative2");
     }
-    else if (keyboardListener.isKeyTapped(ups::KEY_C_CODE))
+    else if (keyboardListener.isKeyTapped(ups::KEY_C_CODE) && !(keyboardListener.isKeyPressed(ups::KEY_SPACE_CODE)))
     {
         //caregiver1
         toggleMode("caregiver1");
@@ -516,25 +516,35 @@ ros::NodeHandle &Actor::getNodeHandle() const
 
 namespace
 {
-	std::string generateNodeName(unsigned int ID)
+	std::string generateNodeName(unsigned int ID, string nodeName)
 	{
+          ostringstream os;
+          os << nodeName << ID;
+          string s = os.str();
+          return s;
+          /*
+          
 		char *buffer = new char[128];
-		sprintf(buffer, "RobotNode%u", ID);
+		sprintf(buffer, "%s%u", nodeName, ID);
 
 		std::string nodeName(buffer);
 		delete[] buffer;
 
-		return nodeName;
+		return nodeName;*/
 	}
 
-	std::string generateStageName(unsigned int ID)
+	std::string generateStageName(unsigned int ID, string nodeName)
 	{
-		char *buffer = new char[128];
-		sprintf(buffer, "robot_%u", ID);
+          ostringstream os;
+          os << nodeName << ID;
+          string s = os.str();
+          return s;
+		/*char *buffer = new char[128];
+		sprintf(buffer, "%s%u", nodeName, ID);
 
 		std::string nodeName(buffer);
 		delete[] buffer;
 
-		return nodeName;
+		return nodeName;*/
 	}
 }

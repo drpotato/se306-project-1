@@ -13,6 +13,7 @@ protected:
 	bool checkHungerLevel();
 
 	static void hungerCallback(msg_pkg::Hunger msg);
+	string getActorName();
 
 	int8_t hungerLevel;
 	bool cooking;

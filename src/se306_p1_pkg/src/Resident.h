@@ -12,31 +12,63 @@
 #include <time.h>
 #include "Actor.h"
 
+// Typedef for dbl-precision printing in randomEventLoop()
+typedef std::numeric_limits< double > dbl;
+// Uncomment this to use Conor's very high-quality (but sometimes blocking) PRNG stream.
+//#define USE_DEV_RANDOM
+
 class Resident : public Human
 {
 public:
+
+	// Enum for different levels of resident
+  enum Level
+  {
+		MORALE,
+		SOCIALNESS,
+		HYGIENE,
+		HUNGER,
+		THIRST,
+		HEALTH,
+		FITNESS
+	};
+
   virtual bool isLocked();
   virtual void lock(ActorType type, string id);
   virtual void unlock(std::string robot_id);
   
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
-  static void interactionCallback(msg_pkg::Interaction msg);
+  static void interactionCallback(msg_pkg::Interaction msg); //alpha
+  static float getRandom(float, float);
+  int changeLevel(float, Level); 
+  void randomEventLoop();
+
+	unsigned int seed;
+	FILE *urandom;
+
   static void timeCallback(msg_pkg::Time msg);
   static void requestLockCallback(msg_pkg::RequestLock msg);
   static void unlockCallback(msg_pkg::Unlock msg);
+
+  string getActorName();
   
   bool lock_;
   ActorType lock_type_;
   string lock_id_;
 
-  // Demo paramters to gradually reduce levels
-  int morale_count_;
-  int socialness_count_;
-  bool m_dropped_;
-  bool s_dropped_;
-  const static int WAIT_TIME = 50;
-  bool m_replenished_;
+	// Level variables
+	int morale_level_;
+	int socialness_level_;
+	int health_level_;
+	int hygiene_level_;
+	int hunger_level_;
+	int thirst_level_;
+	int fitness_level_;
+
+	#define LEVEL_MAX 100 // Final release should be 100
+	#define LEVEL_MIN 0 // Final release should be 0
+	#define FREQUENCY 10
 
   // Event hours
   const static int WAKE_TIME = 7;
@@ -52,20 +84,27 @@ public:
   bool has_woken_;
   bool has_gone_to_bed_;
 
-  // Level of social fulfillment: 
-  // 1 - bad (lonely)
-  // 5 - good (not lonely)
-  int socialness_level_;
+	// Delay measurement variables
+	long long msAtPreviousLoop;
+	float randNum;
 
-  // Level of morale:
-  // 1 - bad (bored)
-  // 5 - good (entertained)	
-  int morale_level_;
 
-  // Publisher for socialness
-  ros::Publisher publisherSocialness;
-  // Publisher for morale
+#ifdef USE_DEV_RANDOM
+	// Randomness variables	
+	int randomData;
+	int myRandomInteger;
+	size_t randomDataLen;
+#endif    
+
+	// Publishers for all attributes/levels  
   ros::Publisher publisherMorale;
+	ros::Publisher publisherSocialness;
+	ros::Publisher publisherHealth;
+	ros::Publisher publisherHygiene;
+	ros::Publisher publisherHunger;
+	ros::Publisher publisherThirst;
+	ros::Publisher publisherFitness;
+
   // Publisher for lock status
   ros::Publisher publisherLockStatus;
   // Publisher for telephone
@@ -81,7 +120,7 @@ public:
   ros::Subscriber subscriberUnlock;
 
 
-  // Gets a new level with a maximum of 5 and minimum of 1
+  // Gets a new level with a maximum of MAX_LEVEL and minimum of 0
   static int getNewLevel(int amount, int oldValue);
 
   // Stop the robots angular velocity
