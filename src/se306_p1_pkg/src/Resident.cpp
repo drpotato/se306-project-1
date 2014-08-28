@@ -147,40 +147,57 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   if (attribute == "socialising")
   {
     // Get new level
-    int newLevel = getNewLevel(amount, residentInstance->socialness_level_);
-    // Update the residents socialness level
-    residentInstance->socialness_level_ = newLevel;
-    //Create a socialness message to publish
-    msg_pkg::Socialness socialnessMessage;
-    //Assign current socialness level to the message
-    socialnessMessage.level = newLevel;
+    residentInstance->changeLevel(amount,  SOCIALNESS);
 
-    if (newLevel == 5)
+    if (residentInstance->socialness_level_ == LEVEL_MAX)
     {
       residentInstance->stopRobotSpinning();
     }
-
-    //Publish the message
-    residentInstance->publisherSocialness.publish(socialnessMessage);
   } 
   else if (attribute == "entertaining")
   {
-    // Get new level
-    int newLevel = getNewLevel(amount, residentInstance->morale_level_);
-    // Update the residents socialness level
-    residentInstance->morale_level_ = newLevel;
-    //Create a socialness message to publish
-    msg_pkg::Morale moraleMessage;
-    //Assign current socialness level to the message
-    moraleMessage.level = newLevel;
+    residentInstance->changeLevel(amount, MORALE);
 
-    if (newLevel == 5)
+    if (residentInstance->morale_level_ == LEVEL_MAX)
     {
       residentInstance->stopRobotSpinning();
     }
+  }
+  else if (attribute == "showering")
+  {
+    residentInstance->changeLevel(amount, HYGIENE);
 
-    //Publish the message
-    residentInstance->publisherMorale.publish(moraleMessage);
+    if (residentInstance->hygiene_level_ == LEVEL_MAX)
+    {
+      residentInstance->stopRobotSpinning();
+    }
+  }
+  else if (attribute == "medicating")
+  {
+    residentInstance->changeLevel(amount, HEALTH);
+
+    if (residentInstance->health_level_ == LEVEL_MAX)
+    {
+      residentInstance->stopRobotSpinning();
+    }
+  }
+  else if (attribute == "exercising")
+  {
+    residentInstance->changeLevel(amount, FITNESS);
+
+    if (residentInstance->fitness_level_ == LEVEL_MAX)
+    {
+      residentInstance->stopRobotSpinning();
+    }
+  }
+  else if (attribute == "eating")
+  {
+    residentInstance->changeLevel(amount, HUNGER);
+
+    if (residentInstance->hunger_level_ == LEVEL_MAX)
+    {
+      residentInstance->stopRobotSpinning();
+    }
   }
 }
 
