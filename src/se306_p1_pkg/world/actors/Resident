@@ -1,4 +1,4 @@
-define Resident position
+define Resident actor
 (
 
 	# Left Leg

@@ -1,4 +1,4 @@
-define CompanionRobot position
+define CompanionRobot actor
 (
 
 	# Left Leg

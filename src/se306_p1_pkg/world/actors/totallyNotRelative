@@ -1,6 +1,6 @@
 
 
-define Relative model
+define Relative actor
 (
 
 	# Left Leg

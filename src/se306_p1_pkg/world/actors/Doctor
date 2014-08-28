@@ -1,4 +1,4 @@
-define Doctor position
+define Doctor actor
 (
 
 	# Left Leg

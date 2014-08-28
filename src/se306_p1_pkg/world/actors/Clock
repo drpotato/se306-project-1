@@ -1,4 +1,4 @@
-define Clock position
+define Clock actor
 (
 	# Base additions ######################################
 	model

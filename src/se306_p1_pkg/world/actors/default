@@ -1,4 +1,4 @@
-define default position
+define default actor
 (
   size [0.35 0.35 0.25]
   drive "diff"

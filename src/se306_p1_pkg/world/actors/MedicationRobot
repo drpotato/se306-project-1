@@ -1,4 +1,4 @@
-define MedicationRobot position
+define MedicationRobot actor
 (
 
 	# Left Leg
