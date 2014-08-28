@@ -39,9 +39,6 @@ public:
 	static void StageOdom_callback(nav_msgs::Odometry msg);
 	static void lockStatusCallback(msg_pkg::LockStatus msg);
 	static void unlockCallback(msg_pkg::Unlock msg);
-
-    bool moveToResident();
-    void startMovingToResident();
 	
 	ros::NodeHandle &getNodeHandle() const;
 
