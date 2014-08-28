@@ -1,7 +1,11 @@
 #include "../Debug.hpp"
 #include "../ResourceLoader.hpp"
+#include "../ResourceManager.hpp"
 #include "../Resource.hpp"
 #include "../UpstageEnvironment.hpp"
+#include "../renderer/Image.hpp"
+#include "../renderer/Text.hpp"
+#include "../renderer/UltronScale.hpp"
 #include "../xml/XML.hpp"
 
 #include <cstdio>
@@ -31,8 +35,48 @@ namespace ups
 		bgCol.a = xmlEnvBGCol.getAttr<float>("a", 1.f);
 		env->setBGColour(bgCol);
 		
-		xml->print();
+		// Oh boy, the piece de resistance!
+		const XML &xmlLayout = xml->getChild("layout");
+		const XML::ChildList &layoutChildren = xmlLayout.getAllChildren();
 		
+		for (XML::ChildList::const_iterator it = layoutChildren.begin(); it != layoutChildren.end(); ++it)
+		{
+			XML &child = **it;
+			const std::string &name = child.getName();
+			
+			UltronScale *newUS = 0;
+			
+			// Subclass-specific stuff
+			if (name == "image")
+			{
+				newUS = new Image(child.getAttr<const char *>("file", ""));
+			}
+			else if (name == "text")
+			{
+				// Made slightly trickier because we have to get the font first. If the font's missing, no text child.
+				Font *font = ResourceManager::getInstance().fetch<Font>(child.getAttr<const char *>("font", ""));
+				
+				// No font? NO ENTRY!
+				if (!font) break;
+				
+				// Create the text
+				newUS = new Text(child.getAttr<const char *>("text", ""), *font);
+			}
+
+			if (newUS)
+			{
+				// Common UltronScale stuff
+				newUS->setOffsetsL(child.getAttr<float>("l_abs", 0.f), child.getAttr<float>("l_rel", 0.f));
+				newUS->setOffsetsR(child.getAttr<float>("r_abs", 0.f), child.getAttr<float>("r_rel", 1.f));
+				newUS->setOffsetsD(child.getAttr<float>("d_abs", 0.f), child.getAttr<float>("d_rel", 0.f));
+				newUS->setOffsetsU(child.getAttr<float>("u_abs", 0.f), child.getAttr<float>("u_rel", 1.f));
+				
+				env->addUltronScale(newUS);
+			}
+		}
+		
+		// This is for debugging - it's not mission-critical.
+		xml->print();
 		
 		return env;
 	}

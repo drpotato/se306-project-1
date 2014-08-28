@@ -20,7 +20,7 @@ namespace ups
 	};
 	
 	
-	Image::Image(const std::string &texName) :
+	inline Image::Image(const std::string &texName) :
 		_texName(texName),
 		_colour(ups::Colour::rgb(1.f,1.f,1.f))
 	{

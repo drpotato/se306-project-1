@@ -11,6 +11,7 @@ namespace ups
 	public:
 		virtual void draw(Renderer &renderer)=0;
 		void resize(const Renderer &renderer);
+		virtual ~UltronScale();
 		
 		float getL();
 		float getR();
@@ -80,6 +81,10 @@ namespace ups
 		UltronWeightedDimension _up;
 		UltronWeightedDimension _down;
 	};
+	
+	inline UltronScale::~UltronScale()
+	{
+	}
 	
 	inline float UltronScale::getL()
 	{

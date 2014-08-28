@@ -3,13 +3,10 @@
 #include "../Debug.hpp"
 #include "../Util.hpp"
 
-ups::Text::Text(const std::string text, const Font &font, float x, float y, float width) :
+ups::Text::Text(const std::string &text, const Font &font) :
 	_text(text),
 	_font(font),
-	_finalised(false),
-	_width(width),
-	_x(x),
-	_y(y)
+	_finalised(false)
 {
 }
 
@@ -20,12 +17,15 @@ ups::Text::~Text()
 
 void ups::Text::draw(Renderer &renderer)
 {
+	resize(renderer);
+	_finalised = false;
 	finalise();
+	
 	ups::Colour colour = ups::Colour::rgb(1.f,1.f,1.f);
 	for (std::vector<GlyphStamp *>::const_iterator it = _stamps.begin(); it != _stamps.end(); ++it)
 	{
 		GlyphStamp &glyphStamp = **it;
-		renderer.drawTextGlyph(colour, _font.getTexName(), _x + glyphStamp.x, _y + glyphStamp.y, glyphStamp.w, glyphStamp.h, glyphStamp.u, glyphStamp.v);
+		renderer.drawTextGlyph(colour, _font.getTexName(), getL() + glyphStamp.x, getU() + glyphStamp.y, glyphStamp.w, glyphStamp.h, glyphStamp.u, glyphStamp.v);
 		/*UPS_LOGF("Stamp: x=%lf, y=%lf | w=%lf, h=%lf | u=%lf, v=%lf",
 			(**it).x,
 			(**it).y,
@@ -55,6 +55,7 @@ void ups::Text::finalise()
 	
 	long cursorX = 0;
 	long cursorY = 0;
+	long width = getR() - getL();
 	
 	long borderSize = 1;
 	
@@ -103,7 +104,7 @@ void ups::Text::finalise()
 		{
 			// If the width is exceeded, roll back to the last word boundary and insert a newline.
 			// Orrrrr.... if it's too wide, just split the word
-			if (cursorX >= _width)
+			if (cursorX >= width)
 			{
 				// If we're already as wide as we can be ...
 				if (lastWordX == 0)

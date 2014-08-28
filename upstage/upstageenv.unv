@@ -5,8 +5,17 @@
 	<stage>
 		<actorlist file="src/se306_p1_pkg/world/actorlist" />
 	</stage>
-	<layout scale="40">
-		<!-- <image file="src/se306_p1_pkg/world/worldmaps/worldwalls.bmp" x="-7.69925" y="-5.0" w="15.3985" h="10.0" /> -->
+	<layout>
+		<image
+			file="src/se306_p1_pkg/world/worldmaps/worldwalls.bmp"
+			r_rel="0.5" />
+		<image
+			file="src/se306_p1_pkg/world/worldmaps/worldwalls.bmp"
+			l_rel="0.5" />
+		<text
+			font="fonts/tiny.fnt"
+			text="This is example text. Blah blah blah." 
+			u_rel="0.5" />
 		
 	</layout>
 </upstage>

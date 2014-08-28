@@ -48,6 +48,7 @@ namespace ups
 		const XML &getChild(const std::string &childName) const;
 		template<typename t>
 		const t getAttr(const std::string &attrName, const t &attrDefault) const;
+		const std::string &getName() const;
 		
 		void print(int indentDepth = 0) const;
 		
@@ -146,6 +147,11 @@ namespace ups
 	{
 		long output;
 		return s2num<long>(output, getAttr<const char *>(attrName, "")) ? output : attrDefault;
+	}
+	
+	inline const std::string &XML::getName() const
+	{
+		return _name;
 	}
 }
 
