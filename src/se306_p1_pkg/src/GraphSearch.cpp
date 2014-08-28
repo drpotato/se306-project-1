@@ -22,14 +22,52 @@ GraphSearch::GraphSearch()
 	theGraph = new vector< vector<point> > ();
 	defineNode(-2.5, 3, "nodeBedroomCentre");
     defineNode(-2.5, -0, "nodeHallwayByBedroom");
-    defineNode(3, 0, "nodeHallwayByLivingRoom");
+    defineNode(3.1, 0, "nodeHallwayByLivingRoom");
     defineNode(-2.5, -3, "nodeGuestBedroomCentre");
     defineNode(2.8, 5, "nodeHouseDoor");
+
+    //BATHROOM NODES
     defineNode(-1.5, 2, "nodeShowerUnderHead");
     defineNode(-1.5, 1.1, "nodeInShowerNextToDoor");
     defineNode(-0.5, 1.1, "nodeOutShowerNextToDoor");
     defineNode(1, 0, "nodeBathroomDoorHallway");
     defineNode(1, 1, "nodeBathroomDoorInBathroom");
+
+    //KITCHEN NODES
+    defineNode(5.8, 3, "nodeKitchenStove");
+    defineNode(5.8, -2, "nodeLivingRoomMidwayPoint");
+    defineNode(4, -2, "nodeLivingRoomFeedingPlace");
+    defineNode(3.1, -2, "nodeLivingRoomByHallwayDoor");
+
+    //SOCIAL TALKING SPACE IN LIVING ROOM
+    defineNode(0, -2, "nodeLivingRoomByCouchHallway");
+    defineNode(0, -3.5, "nodeLivingRoomByCouch");
+
+    //BED
+    defineNode(-6.33, 3.01, "nodeMasterBed");
+
+    defineEdge("nodeMasterBed", "nodeGuestBedroomCentre");
+    defineEdge("nodeGuestBedroomCentre", "nodeMasterBed");
+
+
+    defineEdge("nodeLivingRoomByCouch", "nodeLivingRoomByCouchHallway");
+    defineEdge("nodeLivingRoomByCouchHallway", "nodeLivingRoomByCouch");
+
+    defineEdge("nodeLivingRoomByCouchHallway", "nodeLivingRoomByHallwayDoor");
+    defineEdge("nodeLivingRoomByHallwayDoor", "nodeLivingRoomByCouchHallway");
+
+    defineEdge("nodeKitchenStove", "nodeLivingRoomMidwayPoint");
+    defineEdge("nodeLivingRoomMidwayPoint", "nodeKitchenStove");
+
+    defineEdge("nodeLivingRoomMidwayPoint", "nodeLivingRoomFeedingPlace");
+    defineEdge("nodeLivingRoomFeedingPlace", "nodeLivingRoomMidwayPoint");
+
+    defineEdge("nodeLivingRoomFeedingPlace", "nodeLivingRoomByHallwayDoor");
+    defineEdge("nodeLivingRoomByHallwayDoor", "nodeLivingRoomFeedingPlace");
+
+    defineEdge("nodeLivingRoomByHallwayDoor", "nodeHallwayByLivingRoom");
+    defineEdge("nodeHallwayByLivingRoom", "nodeLivingRoomByHallwayDoor");
+
 
     defineEdge("nodeShowerUnderHead", "nodeInShowerNextToDoor");
     defineEdge("nodeInShowerNextToDoor", "nodeShowerUnderHead");
