@@ -90,12 +90,11 @@ vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
     ROS_INFO_STREAM("2.5");
 
     while (s.empty() == false){
-    ROS_INFO_STREAM("2.6");
+    ROS_INFO_STREAM("2.6x");
         top = s.front();
         s.pop();
         if (top->getName().compare(target) == 0) {
     ROS_INFO_STREAM("2.7 - Target node found");
-            //found it!
             break;
         }
         for (int i =0;i<top->neighbours.size();i++){
@@ -146,6 +145,8 @@ void PathPlanner::removeNode(string* name) {
 void PathPlanner::addNode(PathPlannerNode p) {
     nodes.push_back(p);
     ROS_INFO("Node added: %s", p.getName().c_str());
+    int num = nodes.size();
+    ROS_INFO("Current size of nodes is %d", num);
 }
 
 // Returns the PathPlannerNode with the given name (if any).

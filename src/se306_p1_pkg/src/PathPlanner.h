@@ -14,11 +14,7 @@ using namespace std;
 class PathPlanner {
 private:
     vector<PathPlannerNode> nodes;
-    /*
-    //TODO: Refactor
-    static ros::Subscriber subscriberLocation;
-    static ros::NodeHandle *nodeHandle;
-    */
+
     typedef boost::unordered_map<string,string> map;
 
     string nodeBedroomCentreName;
