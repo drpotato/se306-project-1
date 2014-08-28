@@ -135,7 +135,7 @@ private:
 	PathPlanner pathPlanner;
 	string currentNode;
 	int currentNodeIndex;
-
+	int pathIndex;
     void checkKeyboardPress();
     bool modeSet();
     bool inMode(string mode);

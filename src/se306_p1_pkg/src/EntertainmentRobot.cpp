@@ -32,7 +32,7 @@ void EntertainmentRobot::doInitialSetup()
 
 void EntertainmentRobot::doExecuteLoop()
 {
-	if (y++ >= 100)
+	if (y++ >= 50)
 	{
 		goToNode("Resident0");
 	}

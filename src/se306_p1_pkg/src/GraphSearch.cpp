@@ -5,12 +5,17 @@
 #include <algorithm>
 #include <iostream>
 
+
 vector< vector<GraphSearch::point> >* GraphSearch::theGraph = NULL;
 
 void GraphSearch::setupNodes()
 {  
+
 	GraphSearch::theGraph = new vector< vector<point> > ();
+
+
 	defineNode(-2.5, 3, "nodeBedroomCentre");
+
     defineNode(-2.5, -0, "nodeHallwayByBedroom");
     defineNode(3.1, 0, "nodeHallwayByLivingRoom");
     defineNode(-2.5, -3, "nodeGuestBedroomCentre");
@@ -342,6 +347,7 @@ GraphSearch::point* GraphSearch::findClosestPoint(double x, double y)
 	double bestDist = 100.0;
 	for (i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
+		cout << "findClosestPointLoop ---------------------------------------";
     	double tempx = (*GraphSearch::theGraph)[i][0].x;
     	double tempy = (*GraphSearch::theGraph)[i][0].y;
 
