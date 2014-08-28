@@ -15,6 +15,7 @@ protected:
 	static void timeCallback(msg_pkg::Time msg);
 	string getActorName();
 
+	bool givingFood;
 	bool cooking;
 	bool moving_to_stove;
 	ros::Subscriber subscriberHunger;

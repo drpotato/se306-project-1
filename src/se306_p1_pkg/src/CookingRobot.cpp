@@ -23,6 +23,7 @@ void CookingRobot::doInitialSetup()
 	first = true;
 	first_call = true;
 	x = 0;
+	givingFood = false;
 	returningHome = false;
 	returningHome_first = true;
 	moving_to_stove = false;
@@ -33,6 +34,14 @@ void CookingRobot::doExecuteLoop()
 	if (RCmode == "cookingRobot")
   	{
     	CookingRobot::controlRobot();	
+  	}
+  	else if (givingFood)
+  	{
+  		if(!(CookingRobot::goToNode("Caregiver")))
+		{
+			givingFood = false;
+			returningHome = true;
+		}
   	}
 	else if (returningHome){
 		if(!(CookingRobot::goToNode("nodeLivingRoomByCouch")))
@@ -57,7 +66,7 @@ void CookingRobot::doExecuteLoop()
 			//Add do last response call that kurt implimented
 			CookingRobot::stopResponse("cooking");
 			cooking = false;
-			returningHome = true;
+			givingFood = true;
 		}
 		else
 		{
