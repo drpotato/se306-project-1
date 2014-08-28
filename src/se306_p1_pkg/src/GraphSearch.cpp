@@ -1,5 +1,6 @@
 #include "GraphSearch.h"
 #include <stdlib.h>
+#include <queue>
 
 GraphSearch::GraphSearch()
 {
@@ -92,7 +93,8 @@ vector<GraphSearch::point> GraphSearch::getPath(string name1, double x, double y
 }
 vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2, double y2)
 {
-	
+	queue<point> Q = new queue<point>();
+	set<point> V = new set<point>();
 }
 vector<GraphSearch::point> GraphSearch::getPath(double x, double y, string name1)
 {
