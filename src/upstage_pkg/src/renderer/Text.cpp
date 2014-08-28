@@ -58,23 +58,46 @@ void ups::Text::finalise()
 	
 	long borderSize = 1;
 	
-	for (long pos = 0; pos < _text.length(); ++pos)
+	for (long pos = 0; pos <= _text.length(); ++pos)
 	{
-		const FontChar &fontChar = _font.getChar(_text[pos]);
 		
 		// Each word boundary, if the line doesn't exceed the width, populate the list until the boundary - it's locked-in.
-		if (isWhitespace(_text[pos]) || pos == _text.length() - 1)
+		if (isWhitespace(_text[pos]) || pos == _text.length())
 		{
 			cursorX = lastWordX;
 			for (; lastWordPos < pos; ++lastWordPos)
 			{
-				const FontChar &previousFontChar = _font.getChar(_text[pos]);
+				const FontChar &previousFontChar = _font.getChar(_text[lastWordPos]);
+				
+				// Add the glyph stamp
+				GlyphStamp *glyphStamp = new GlyphStamp();
+				glyphStamp->x = cursorX + previousFontChar.xOff;
+				glyphStamp->y = cursorY + _font.getLineHeight() - previousFontChar.h - previousFontChar.yOff;
+				glyphStamp->w = previousFontChar.w;
+				glyphStamp->h = previousFontChar.h;
+				glyphStamp->u = previousFontChar.x;
+				glyphStamp->v = previousFontChar.y;
+				
+				// Expand the border
+				glyphStamp->x -= borderSize;
+				glyphStamp->y -= borderSize;
+				glyphStamp->w += borderSize * 2;
+				glyphStamp->h += borderSize * 2;
+				glyphStamp->u -= borderSize;
+				glyphStamp->v -= borderSize;
+				
+				// Add to the stamp list
+				_stamps.push_back(glyphStamp);
+				
 				cursorX += previousFontChar.xAdv;
 			}
 			
-			cursorX += fontChar.xAdv;
-			lastWordPos = pos;
-			lastWordX = cursorX;
+			if (pos < _text.length())
+			{
+				cursorX += _font.getChar(_text[pos]).xAdv;
+				lastWordPos = pos;
+				lastWordX = cursorX;
+			}
 		}
 		else
 		{
@@ -90,37 +113,18 @@ void ups::Text::finalise()
 					lastWordX = 0;
 					cursorY -= _font.getLineHeight();
 				}
-				else // We rewind to the last word boundary, insert a newline, and let the main loop take care of it.
+				else
 				{
+					// We rewind to the last word boundary, insert a newline, and let the main loop take care of it.
 					pos = lastWordPos;
 					cursorX = 0;
 					cursorY -= _font.getLineHeight();
-					break;
+					continue;
 				}
 			}
 			
-			// Add the glyph stamp
-			GlyphStamp *glyphStamp = new GlyphStamp();
-			glyphStamp->x = cursorX + fontChar.xOff;
-			glyphStamp->y = cursorY + fontChar.h - fontChar.yOff;// + fontChar.yOff;
-			glyphStamp->w = fontChar.w;
-			glyphStamp->h = fontChar.h;
-			glyphStamp->u = fontChar.x;
-			glyphStamp->v = fontChar.y;
-			
-			// Expand the border
-			glyphStamp->x -= borderSize;
-			glyphStamp->y -= borderSize;
-			glyphStamp->w += borderSize * 2;
-			glyphStamp->h += borderSize * 2;
-			glyphStamp->u -= borderSize;
-			glyphStamp->v -= borderSize;
-			
-			// Add to the stamp list
-			_stamps.push_back(glyphStamp);
-			
 			// Shift along
-			cursorX += fontChar.xAdv;
+			cursorX += _font.getChar(_text[pos]).xAdv;
 		}
 	}
 	_finalised = true;

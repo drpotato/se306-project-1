@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 	ups::Font *font = resMan.fetch<ups::Font>("fonts/ubuntu_mono.fnt");
 	ups::UpstageEnvironment *env = resMan.fetch<ups::UpstageEnvironment>("upstageenv.unv");
 
-	ups::Text textTest("Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Ll Mm Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz", *font, 80.f, 256.f, 480.f);
+	ups::Text textTest("Testing testing testing", *font, 80.f, 256.f, 480.f);
 	
 	bool isContinuing = true;
 	while (isContinuing)
