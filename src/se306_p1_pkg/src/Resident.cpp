@@ -141,11 +141,6 @@ void Resident::call(string personType)
 
 
 
-
-
-
-
-
 /*
  * Upon receiving a message published to the 'interaction' topic, respond appropriately.
  */

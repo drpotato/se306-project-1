@@ -32,7 +32,7 @@ void Nurse::doInitialSetup()
     	ROS_INFO("THIS IS BROKEN! NURSES SHOULD BE KEPT TO ROSNODE6 AND ROSNODE7");
     	ROS_INFO("MY NAME IS %s",name.c_str());
         nurseId = 0;
-        exit(EXIT_FAILURE);
+        //exit(EXIT_FAILURE);
     }
   
 }
