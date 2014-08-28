@@ -30,10 +30,57 @@ void MedicationRobot::doInitialSetup()
 
 void MedicationRobot::doExecuteLoop()
 {
+
 	if (RCmode == "medicationRobot")
   	{
     	MedicationRobot::controlRobot();
   	}
+
+	if (travellingToResident)
+	{
+		//This is here so that it will compile. Get rid of when uncommenting goToNode()
+		bool temp;
+		//bool temp = goToNode("RosNode0");
+		if (!temp)
+		{
+			travellingToResident = false;
+			healing = true;
+			first = true;
+		}
+		return;
+	}
+
+	if (healing)
+	{
+		//Send message to patient to rise health stats
+		if (first)
+		{
+			requestLock("MedicationRobot");
+			first = false;
+		}
+
+		if (haveLock)
+		{
+			//Treat resident
+			if (!(healing >= 99))
+			{
+				doResponse("mend");
+			} else 
+			{
+				returningHome = true;
+				healing = false;
+			}
+		} else if (deniedLock)
+		{
+			if (otherUnlocked)
+			{
+				requestLock("MedicationRobot");
+				deniedLock = false;
+				otherUnlocked = false;
+			}
+		}
+	}
+
 	if (returningHome){
 
 		if (returningHome_first){
@@ -44,54 +91,6 @@ void MedicationRobot::doExecuteLoop()
 
         return;
 
-	}
-
-	if (!healing)
-	{
-		if (checkHealthLevel())
-		{
-			//ROS_INFO("Nothing to do here");
-		}
-		else
-		{
-			if (first_call)
-			{
-				//TODO: go to resident
-				first_call = false;
-			}
-
-	    	if (!(true) ) //TODO: go to resident
-	    	{
-	    		ROS_INFO("CHANGED TO ENTERTAINING");
-	    		healing=true;
-	    		first = false;
-	    	}
-
-		}
-	}
-	else
-	{
-		if (healthLevel == 5)
-		{
-			//Add do last desponse call that kurt implimented
-			MedicationRobot::stopResponse("entertaining");
-			healing = false;
-			returningHome = true;
-
-		}
-		else
-		{
-
-			if (y == 40)
-			{
-				MedicationRobot::doResponse("entertaining");
-				y=0;
-			}
-			else
-			{
-				y++;
-			}
-		}
 	}
 }
 

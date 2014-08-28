@@ -5,23 +5,11 @@
 #include <algorithm>
 #include <iostream>
 
+vector< vector<GraphSearch::point> >* GraphSearch::theGraph = NULL;
 
-//ActorController should act as a Singleton.
-GraphSearch &GraphSearch::getInstance()
-{
-  static GraphSearch *graphSearchInstance;
-
-  if (!graphSearchInstance)
-  {
-    graphSearchInstance = new GraphSearch();
-  }
-
-  return *graphSearchInstance;
-}
-
-GraphSearch::GraphSearch()
+void GraphSearch::setupNodes()
 {  
-	theGraph = new vector< vector<point> > ();
+	GraphSearch::theGraph = new vector< vector<point> > ();
 	defineNode(-2.5, 3, "nodeBedroomCentre");
     defineNode(-2.5, -0, "nodeHallwayByBedroom");
     defineNode(3.1, 0, "nodeHallwayByLivingRoom");
@@ -105,11 +93,6 @@ GraphSearch::GraphSearch()
     defineEdge("nodeHouseDoor", "nodeHallwayByLivingRoom");   
 }
 
-GraphSearch::~GraphSearch()
-{
-	delete theGraph;
-}
-
 void GraphSearch::defineNode(double x, double y)
 {
 	point *p = new point; //(point*)malloc(sizeof(point));
@@ -118,7 +101,7 @@ void GraphSearch::defineNode(double x, double y)
 	p->name = "";
 	vector<point> *temp = new vector<point>();
 	temp->push_back(*p);
-	theGraph->push_back(*temp);
+	GraphSearch::theGraph->push_back(*temp);
 }
 void GraphSearch::defineNode(double x, double y, string name)
 {
@@ -128,24 +111,24 @@ void GraphSearch::defineNode(double x, double y, string name)
 	p->name = name;
 	vector<point> *temp = new vector<point>();
 	temp->push_back(*p);
-	theGraph->push_back(*temp);
+	GraphSearch::theGraph->push_back(*temp);
 }
 void GraphSearch::defineEdge(double x1, double y1, double x2, double y2)
 {
 	point *p = new point; //(point*)malloc(sizeof(point));
 	int i;
-	for (i = 0; i < theGraph->size(); i++)
+	for (i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
-    	if (((*theGraph)[i][0].x == x2) && ((*theGraph)[i][0].y == y2))
+    	if (((*GraphSearch::theGraph)[i][0].x == x2) && ((*GraphSearch::theGraph)[i][0].y == y2))
     	{
-    		p = &(*theGraph)[i][0];
+    		p = &(*GraphSearch::theGraph)[i][0];
     	}		
 	}
-	for (i = 0; i < theGraph->size(); i++)
+	for (i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
-    	if (((*theGraph)[i][0].x == x1) && ((*theGraph)[i][0].y == y1))
+    	if (((*GraphSearch::theGraph)[i][0].x == x1) && ((*GraphSearch::theGraph)[i][0].y == y1))
     	{
-    		(*theGraph)[i].push_back(*p);
+    		(*GraphSearch::theGraph)[i].push_back(*p);
     	}		
 	}
 }
@@ -154,11 +137,11 @@ void GraphSearch::defineEdge(string name1, string name2)
 	point *p = new point; //(point*)malloc(sizeof(point));
 	p = getPoint(name2);
 	int i;
-	for (i = 0; i < theGraph->size(); i++)
+	for (i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
-    	if (((*theGraph)[i][0].name == name1))
+    	if (((*GraphSearch::theGraph)[i][0].name == name1))
     	{
-    		(*theGraph)[i].push_back(*p);
+    		(*GraphSearch::theGraph)[i].push_back(*p);
     	}		
 	}
 }
@@ -167,11 +150,11 @@ void GraphSearch::defineEdge(string name1, double x, double y)
 	point *p = new point; //(point*)malloc(sizeof(point));
 	p = getPoint(name1);
 	int i;
-	for (i = 0; i < theGraph->size(); i++)
+	for (i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
-    	if (((*theGraph)[i][0].x == x) && ((*theGraph)[i][0].y == y))
+    	if (((*GraphSearch::theGraph)[i][0].x == x) && ((*GraphSearch::theGraph)[i][0].y == y))
     	{
-    		(*theGraph)[i].push_back(*p);
+    		(*GraphSearch::theGraph)[i].push_back(*p);
     	}		
 	}
 }
@@ -220,12 +203,12 @@ vector<GraphSearch::edge>* GraphSearch::getAdjacentEdges(point *t)
   vector<edge>* listEdges = new vector<edge>();
   int i;
   int j;
-  for (i = 0; i < theGraph->size(); i++)
+  for (i = 0; i < GraphSearch::theGraph->size(); i++)
   {
-    for(j = 1; j < (*theGraph)[i].size(); j++)
+    for(j = 1; j < (*GraphSearch::theGraph)[i].size(); j++)
     {
-      point *p1 = &(*theGraph)[i][0];
-      point *p2 = &(*theGraph)[i][j];
+      point *p1 = &(*GraphSearch::theGraph)[i][0];
+      point *p2 = &(*GraphSearch::theGraph)[i][j];
       
       if (comparePointer(p1, t) || comparePointer(p2, t))
       {
@@ -334,11 +317,11 @@ vector<GraphSearch::point>* GraphSearch::getPath(double x, double y, string name
 GraphSearch::point* GraphSearch::getPoint(string name)
 {
 	int i;
-	for (i = 0; i < theGraph->size(); i++)
+	for (i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
-    	if (((*theGraph)[i][0].name == name))
+    	if (((*GraphSearch::theGraph)[i][0].name == name))
     	{
-    		return &(*theGraph)[i][0];
+    		return &(*GraphSearch::theGraph)[i][0];
     	}		
 	}
 }
@@ -357,17 +340,17 @@ GraphSearch::point* GraphSearch::findClosestPoint(double x, double y)
 	int i;
 	point *best = new point; //(point*)malloc(sizeof(point));
 	double bestDist = 100.0;
-	for (i = 0; i < theGraph->size(); i++)
+	for (i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
-    	double tempx = (*theGraph)[i][0].x;
-    	double tempy = (*theGraph)[i][0].y;
+    	double tempx = (*GraphSearch::theGraph)[i][0].x;
+    	double tempy = (*GraphSearch::theGraph)[i][0].y;
 
     	double tempDiff = abs(x - tempx) + abs(y - tempy);
 
     	if (tempDiff < bestDist)
     	{
     		bestDist = tempDiff;
-    		best = &(*theGraph)[i][0];
+    		best = &(*GraphSearch::theGraph)[i][0];
     	}
 
     		
