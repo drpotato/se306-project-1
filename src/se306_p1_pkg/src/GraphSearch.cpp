@@ -78,11 +78,17 @@ void GraphSearch::defineEdge(string name1, double x, double y)
 }
 vector<GraphSearch::point> GraphSearch::getPath(string name1, string name2)
 {
-
+	point *p1 = (point*)malloc(sizeof(point));
+	p1 = getPoint(name1);
+	point *p2 = (point*)malloc(sizeof(point));
+	p2 = getPoint(name2);	
+	return getPath(p1->x,p1->y,p2->x,p2->y);	
 }
 vector<GraphSearch::point> GraphSearch::getPath(string name1, double x, double y)
 {
-	
+	point *p1 = (point*)malloc(sizeof(point));
+	p1 = getPoint(name1);
+	return getPath(p1->x,p1->y,x,y);	
 }
 vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2, double y2)
 {
@@ -90,7 +96,9 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
 }
 vector<GraphSearch::point> GraphSearch::getPath(double x, double y, string name1)
 {
-	
+	point *p1 = (point*)malloc(sizeof(point));
+	p1 = getPoint(name1);
+	return getPath(x,y,p1->x,p1->y);
 }
 
 GraphSearch::point* GraphSearch::getPoint(string name)
