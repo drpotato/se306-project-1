@@ -160,6 +160,7 @@ target_link_libraries(
 ## Add gtest based cpp test target and link libraries
 catkin_add_gtest(${PROJECT_NAME}-test
   test/utest.cpp
+  test/graph_search_test.cpp
   test/resident_test.cpp
   ##test/path_planner_test.cpp
   test/path_planner_node_test.cpp
