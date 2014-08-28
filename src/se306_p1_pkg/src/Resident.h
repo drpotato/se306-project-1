@@ -77,10 +77,6 @@ public:
   bool m_dropped_;
   bool s_dropped_;
 
-  #define LEVEL_MAX 100 // Final release should be 100
-  #define LEVEL_MIN 0 // Final release should be 0
-  #define FREQUENCY 10
-
   // Event hours
   const static int WAKE_TIME = 7;
   const static int BREAKFAST_TIME = 8;
