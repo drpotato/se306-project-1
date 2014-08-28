@@ -38,6 +38,8 @@ ups::Resource *ups::ResourceLoader::loadFrom(const std::string &filePath) const
 		return ups::ResourceLoader::loadFrom<RL_LT_BMP>(filePath);
 	case RL_LT_FNT:
 		return ups::ResourceLoader::loadFrom<RL_LT_FNT>(filePath);
+	case RL_LT_TGA:
+		return ups::ResourceLoader::loadFrom<RL_LT_TGA>(filePath);
 	case RL_LT_GenericXML:
 		return ups::ResourceLoader::loadFrom<RL_LT_GenericXML>(filePath);
 	case RL_LT_UpstageEnv:
@@ -61,6 +63,7 @@ namespace
 
 		typeMap["bmp"] = ups::ResourceLoader::RL_LT_BMP;
 		typeMap["fnt"] = ups::ResourceLoader::RL_LT_FNT;
+		typeMap["tga"] = ups::ResourceLoader::RL_LT_TGA;
 		typeMap["xml"] = ups::ResourceLoader::RL_LT_GenericXML;
 		typeMap["unv"] = ups::ResourceLoader::RL_LT_UpstageEnv;
 		typeMap["world"] = ups::ResourceLoader::RL_LT_StageWorld;

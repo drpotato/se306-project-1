@@ -19,7 +19,7 @@ namespace ups
 	class Text
 	{
 	public:
-		Text(const std::string text, const Font &font, long width);
+		Text(const std::string text, const Font &font, float x, float y, float width);
 		~Text();
 		
 		void draw(Renderer &renderer);
@@ -31,7 +31,9 @@ namespace ups
 		std::string _text;
 		const Font &_font;
 		bool _finalised;
-		long _width;
+		float _width;
+		float _x;
+		float _y;
 	};
 }
 #endif // #ifndef SE306P1_UPSTAGE_TEXT_HPP_DEFINED

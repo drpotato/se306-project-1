@@ -40,7 +40,6 @@ ups::Renderer::Renderer(ups::Context &context) :
 	
 	// Set up the GL context, including loading function pointers
 	loadOpenGL();
-	
 	glEnable(GL_TEXTURE_2D);
 }
 ups::Renderer::~Renderer()
@@ -166,6 +165,31 @@ void ups::Renderer::doTask(RenderTask *task)
 		glDisable(GL_TEXTURE_2D);
 		break;
 		
+	case RenderTask::RT_TextGlyph:
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBindTexture(GL_TEXTURE_2D, task->textGlyph.texHandle);
+		glEnable(GL_TEXTURE_2D);
+		glColor4f(task->textGlyph.col.r, task->textGlyph.col.g, task->textGlyph.col.b, task->textGlyph.col.a);
+		glBegin(GL_QUADS);
+		
+		glTexCoord2f(task->textGlyph.ul, task->textGlyph.vh);
+		glVertex2f(task->textGlyph.x, task->textGlyph.y);
+		
+		glTexCoord2f(task->textGlyph.ul, task->textGlyph.vl);
+		glVertex2f(task->textGlyph.x, task->textGlyph.y + task->textGlyph.h);
+		
+		glTexCoord2f(task->textGlyph.uh, task->textGlyph.vl);
+		glVertex2f(task->textGlyph.x + task->textGlyph.w, task->textGlyph.y + task->textGlyph.h);
+		
+		glTexCoord2f(task->textGlyph.uh, task->textGlyph.vh);
+		glVertex2f(task->textGlyph.x + task->textGlyph.w, task->textGlyph.y);
+		
+		glEnd();
+		glColor4f(1.f,1.f,1.f,1.f);
+		glDisable(GL_TEXTURE_2D);
+		break;
+		
 	default:
 		break;
 	}
@@ -220,6 +244,29 @@ void ups::Renderer::drawTexQuad(const ups::Colour &colour, const std::string &te
 	addToTaskList(rt, TLS_2D);
 }
 
+void ups::Renderer::drawTextGlyph(const ups::Colour &colour, const std::string &texName, float x, float y, float w, float h, float u, float v)
+{
+	RenderTask *rt = _frameAlloc.allocate<RenderTask>();
+	ups::Texture *quadTex = ResourceManager::getInstance().fetch<ups::Texture>(texName);
+	if (!quadTex) return;
+	
+	rt->type = RenderTask::RT_TextGlyph;
+	rt->textGlyph.col = colour;
+
+	rt->textGlyph.texHandle = quadTex->getRendererHandle(*this);
+	rt->textGlyph.ul = u / quadTex->getInnerWidth();
+	rt->textGlyph.vl = v / quadTex->getInnerHeight();
+	rt->textGlyph.uh = (u + w) / quadTex->getInnerWidth();
+	rt->textGlyph.vh = (v + h) / quadTex->getInnerHeight();
+
+	rt->textGlyph.x = x;
+	rt->textGlyph.y = y;
+	rt->textGlyph.w = w;
+	rt->textGlyph.h = h;
+	
+	addToTaskList(rt, TLS_2D);
+}
+
 void ups::Renderer::drawTexQuad(const std::string &texName, float x, float y, float w, float h)
 {
 	drawTexQuad(ups::Colour::rgb(1.f,1.f,1.f), texName, x, y, w, h);
@@ -237,7 +284,7 @@ ups::TexHandle ups::Renderer::makeTexHandle(ups::Texture &tex)
 	switch (tex.getTextureType())
 	{
 	case ups::Texture::TT_RGBA8:
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.getWidth(), tex.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.getData());
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tex.getWidth(), tex.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.getData());
 		break;
 	}	
 	

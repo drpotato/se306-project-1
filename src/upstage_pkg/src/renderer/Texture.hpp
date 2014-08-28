@@ -25,6 +25,8 @@ namespace ups
 		const TextureType &getTextureType() const;
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;
+		unsigned int getInnerWidth() const;
+		unsigned int getInnerHeight() const;
 		float getMaxTexX() const;
 		float getMaxTexY() const;
 		const unsigned char *getData() const;
@@ -54,6 +56,16 @@ namespace ups
 	inline unsigned int Texture::getHeight() const
 	{
 		return _height;
+	}
+	
+	inline unsigned int Texture::getInnerWidth() const
+	{
+		return _innerWidth;
+	}
+	
+	inline unsigned int Texture::getInnerHeight() const
+	{
+		return _innerHeight;
 	}
 	
 	inline float Texture::getMaxTexX() const

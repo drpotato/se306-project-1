@@ -28,6 +28,7 @@ namespace ups
 	std::string getFileExtension(const std::string &fileName);
 	
 	bool isWhitespace(char testChar);
+	bool isWhitespace(long testChar);
 	bool isDigit(char testChar);
 	
 	template<typename t>
@@ -176,6 +177,11 @@ namespace ups
 	}
 	
 	inline bool isWhitespace(char testChar)
+	{
+		return (testChar == ' ' || testChar == '\t' || testChar == '\n' || testChar == '\r');
+	}
+	
+	inline bool isWhitespace(long testChar)
 	{
 		return (testChar == ' ' || testChar == '\t' || testChar == '\n' || testChar == '\r');
 	}

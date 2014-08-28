@@ -67,10 +67,6 @@ namespace ups
 				charXOff,
 				charYOff,
 				charXAdv);
-			
-			UPS_LOGF("Font %s has char %ld", 
-			font->getFaceName().c_str(),
-			charID);
 		}
 		
 		// Env|BG Colour
@@ -84,7 +80,7 @@ namespace ups
 		env->setBGColour(bgCol);
 		*/
 		
-		xml->print();
+		//xml->print();
 		
 		
 		return font;

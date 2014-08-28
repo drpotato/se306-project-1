@@ -14,6 +14,7 @@ namespace ups
 		{
 			RL_LT_BMP,
 			RL_LT_FNT,
+			RL_LT_TGA,
 			RL_LT_GenericXML,
 			RL_LT_UpstageEnv,
 			RL_LT_StageWorld

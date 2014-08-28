@@ -24,6 +24,7 @@ namespace ups
 		void drawTestQuad(const Colour &colour, float x, float y, float w, float h);
 		void drawTexQuad(const Colour &colour, const std::string &texName, float x, float y, float w, float h);
 		void drawTexQuad(const std::string &texName, float x, float y, float w, float h);
+		void drawTextGlyph(const Colour &colour, const std::string &texName, float x, float y, float w, float h, float u, float v);
 		TexHandle makeTexHandle(Texture &tex);
 		
 		int getWidth() const;

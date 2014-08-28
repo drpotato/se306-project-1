@@ -34,6 +34,7 @@ add_library(UpstageLibrary
   src/resourceloaders/ResourceLoaderFNT.cpp
   src/resourceloaders/ResourceLoaderGenericXML.cpp
   src/resourceloaders/ResourceLoaderStageWorld.cpp
+  src/resourceloaders/ResourceLoaderTGA.cpp
   src/resourceloaders/ResourceLoaderUpstageEnv.cpp
   src/rosworld/Actor.cpp
   src/rosworld/ROSComm.cpp
