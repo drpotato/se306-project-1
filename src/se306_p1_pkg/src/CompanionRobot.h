@@ -9,6 +9,8 @@ class CompanionRobot : public Robot
 protected:
 	virtual void doInitialSetup();
 	virtual void doExecuteLoop();
+        
+        virtual string getActorName();
 
 	bool checkMoraleLevel();
 
