@@ -26,7 +26,7 @@ void Caregiver::caring()
         {
             if (eating)
             {
-                if (hungerLevel == 5)
+                if (hungerLevel == REASONABLE_LEVEL)
                 {
                     stopResponse("eating");
                     eating = false;
@@ -49,7 +49,7 @@ void Caregiver::caring()
             else if (showering)
             {
                 // First, moving to bathroom
-                if (hygieneLevel == 5)
+                if (hygieneLevel == REASONABLE_LEVEL)
                 {
                     stopResponse("showering");
                     showering = false;
@@ -73,7 +73,7 @@ void Caregiver::caring()
             }
             else if (exercising)
             {
-                if (fitnessLevel == 5)
+                if (fitnessLevel == REASONABLE_LEVEL)
                 {
                     stopResponse("exercising");
                     exercising = false;
@@ -95,7 +95,7 @@ void Caregiver::caring()
             }
             else if (entertaining)
             {
-                if (moraleLevel == 5)
+                if (moraleLevel == REASONABLE_LEVEL)
                 {
                     stopResponse("entertaining");
                     entertaining = false;
@@ -117,7 +117,7 @@ void Caregiver::caring()
             }
             else if (socialising)
             {
-                if (socialnessLevel == 5)
+                if (socialnessLevel == REASONABLE_LEVEL)
                 {
                     stopResponse("socialising");
                     socialising = false;
