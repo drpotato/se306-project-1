@@ -47,8 +47,8 @@ void Friend::doExecuteLoop()
     return;
   }
   
-  // If socialness is 1 and has been called by resident should probably socialise with resident
-  if (socialnessLevel <= 1 && called_by_resident_)
+  // If socialness is CRITICAL_LEVEL and has been called by resident should probably socialise with resident
+  if (socialnessLevel <= CRITICAL_LEVEL && called_by_resident_)
   {
     startMovingToResident();
     waiting_to_socialise = true;

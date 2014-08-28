@@ -12,6 +12,9 @@
 #include <string>
 #include "std_msgs/String.h"
 
+/* Macros */
+#define CRITICAL_LEVEL 90
+
 class Actor
 {
 public:

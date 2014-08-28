@@ -522,29 +522,14 @@ namespace
           os << nodeName << ID;
           string s = os.str();
           return s;
-          /*
-          
-		char *buffer = new char[128];
-		sprintf(buffer, "%s%u", nodeName, ID);
-
-		std::string nodeName(buffer);
-		delete[] buffer;
-
-		return nodeName;*/
 	}
 
 	std::string generateStageName(unsigned int ID, string nodeName)
 	{
+          // TODO Jamie, why the fuck does this have to mess with the behaviour of robots?
           ostringstream os;
-          os << nodeName << ID;
+          os << "robot_" << ID;
           string s = os.str();
           return s;
-		/*char *buffer = new char[128];
-		sprintf(buffer, "%s%u", nodeName, ID);
-
-		std::string nodeName(buffer);
-		delete[] buffer;
-
-		return nodeName;*/
 	}
 }
