@@ -59,7 +59,7 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	rosName = generateNodeName(robotID, getActorName());
 	stageName = generateStageName(robotID, getActorName());
     GraphSearch::setupNodes();
-
+    
 	pxInitial = px;
 	pyInitial = py;
 	thetaInitial = theta;
