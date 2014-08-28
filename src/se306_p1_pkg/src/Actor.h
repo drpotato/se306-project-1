@@ -40,9 +40,6 @@ public:
 	static void locationCallback(msg_pkg::Location msg);
 	static void lockStatusCallback(msg_pkg::LockStatus msg);
 	static void unlockCallback(msg_pkg::Unlock msg);
-
-    bool moveToResident();
-    void startMovingToResident();
 	
 	ros::NodeHandle &getNodeHandle() const;
 

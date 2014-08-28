@@ -383,23 +383,6 @@ void Actor::stopResponse(const char *attribute)
   velLinear = 0.0;
 }
 
-void Actor::startMovingToResident() {
-    this->movingToResident = true;
-}
-
-bool Actor::moveToResident() {
-    // if (this->movingToResident) {
-    // 	//ROS_INFO("MOVING TO RESIDENT");
-    //     PathPlannerNode *target = this->pathPlanner.getNode(&node1Name);
-    //     vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-    //     if ( this->goToNode(path))
-    //     {
-    //     	ROS_INFO("CHANGED MOVING TO RESIDENT");
-    //     	this->movingToResident = false;
-    //     }
-    // }
-}
-
 double Actor::faceDirection(double x,double y){
     // Calculate target angle.
     double vx = x-this->px;
