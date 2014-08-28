@@ -59,8 +59,6 @@ void PathPlanner::update(string name){
 
 }
 
-
-
 void PathPlanner::processMessage(msg_pkg::Location msg){
   // Find Actor of this name in graph and remove it.
   string name = msg.id;

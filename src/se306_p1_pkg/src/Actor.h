@@ -74,7 +74,9 @@ protected:
 private:
     double faceDirection(double,double);
     bool gotoPosition(double x,double y);
-		PathPlanner pathPlanner;
+	PathPlanner pathPlanner;
+	PathPlannerNode* nextNode;
+	bool firstNode;
 };
 
 
