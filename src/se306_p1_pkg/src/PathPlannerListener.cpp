@@ -6,7 +6,7 @@
 
 ros::Subscriber PathPlannerListener::subscriberLocation;
 ros::NodeHandle* PathPlannerListener::nodeHandle;
-boost::unordered_map<std::string, queue<msg_pkg::Location> > PathPlannerListener::messageQueues;
+map<std::string, queue<msg_pkg::Location> > PathPlannerListener::messageQueues;
 
 PathPlannerListener::PathPlannerListener() {
     nodeHandle = new ros::NodeHandle();
@@ -29,4 +29,13 @@ void PathPlannerListener::locationCallback(msg_pkg::Location msg){
 
 queue<msg_pkg::Location>* PathPlannerListener::getMessages(string name){
   return &(messageQueues[name]);
+}
+
+set<string> PathPlannerListener::getQueueTitles(){
+  set<string> queueTitles;
+  for (map<std::string, queue<msg_pkg::Location> >::iterator it = messageQueues.begin(); it != messageQueues.end(); ++it)
+  {
+    queueTitles.insert(it->first);
+  }
+  return queueTitles;
 }
