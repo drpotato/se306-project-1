@@ -1,22 +1,12 @@
 #include "Resident.h"
 #include <string.h>
 
-/* Old RNG includes
-#include <fcntl.h> // File access for RNG
-#include <ctime> // as above
-#include <limits> // Get information about max double/float prec.
-*/
-
 #include <time.h> // seed for rand()
 #include <stdlib.h> // rand()
 #include <limits> // Get information about max double/float prec.
 
-#ifdef USE_DEV_RANDOM
-#include <fcntl.h> // File access for RNG
-#else
 #include <cstdlib>
 #include <ctime>
-#endif
 
 // Debug lines for changeLevel()
 #define DEBUG_CHANGE_LEVEL
