@@ -1,12 +1,5 @@
 #include "Resident.h"
 #include <string.h>
-
-/* Old RNG includes
-#include <fcntl.h> // File access for RNG
-#include <ctime> // as above
-#include <limits> // Get information about max double/float prec.
-*/
-
 #include <time.h> // seed for rand()
 #include <stdlib.h> // rand()
 #include <limits> // Get information about max double/float prec.
@@ -19,9 +12,6 @@
 #endif
 
 // Debug lines for randomness component of code
-//#define DEBUG_RANDNUM_GENERATION
-//#define DEBUG_CHANGE_LEVEL
-//#define NON_RANDOM // For testing (produces same sequence of 'random' numbers)
 
 #include <msg_pkg/Interaction.h>
 #include <msg_pkg/Socialness.h>
@@ -243,16 +233,6 @@ void Resident::stopRobotSpinning()
 // human behaviours and needs
 void Resident::randomEventLoop()
 {
-
-	//ROS_INFO("Calculating random event(s)...\n");
-	//ROS_INFO("System time: %d\n", msExpiredPrevious);
-	
-	// - Delay test 
-	// Return time in milliseconds to check delay between
-	// *full* ROS loops
-	// KEEP THIS HERE - This time will change as more load is added
-	// to roscore; randomEventLoop() will have to change in response to this
-
 
 	// DELAY TEST
 
