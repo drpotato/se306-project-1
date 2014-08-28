@@ -28,7 +28,7 @@ protected:
     ros::Subscriber subscriberSocialness;
     ros::Subscriber subscriberTime;
     ros::Subscriber subscriberTelephone;
-    ros::Subscriber subscriberLockStatus;
+//    ros::Subscriber subscriberLockStatus;
 
     static void fitnessCallback(msg_pkg::Fitness msg);
     static void hungerCallback(msg_pkg::Hunger msg);
@@ -37,7 +37,7 @@ protected:
     static void socialnessCallback(msg_pkg::Socialness msg);
     static void timeCallback(msg_pkg::Time msg);
     static void telephoneCallback(msg_pkg::Telephone msg);
-    static void lockStatusCallback(msg_pkg::LockStatus msg);
+//    static void lockStatusCallback(msg_pkg::LockStatus msg);
 
     bool homeVisit;
     bool movingToResident;
@@ -57,7 +57,7 @@ protected:
     bool checkMoraleLevel();
     bool checkSocialnessLevel();
     
-    bool has_lock;
+//    bool has_lock;
 };
 
 
