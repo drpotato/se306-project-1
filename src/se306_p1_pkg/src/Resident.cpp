@@ -42,15 +42,14 @@ void Resident::doInitialSetup()
 
 
 
-
- // /dev/urandom
-urandom = fopen("/dev/urandom", "r");
-fread(&seed, sizeof (seed), 1, urandom);
-#ifdef NON_RANDOM
-srand(0);
-#else
-srand(seed);
-#endif
+	 // /dev/urandom
+	urandom = fopen("/dev/urandom", "r");
+	fread(&seed, sizeof (seed), 1, urandom);
+	#ifdef NON_RANDOM
+		srand(0);
+	#else
+		srand(seed);
+	#endif
 
 
   velLinear = 0;
@@ -90,10 +89,10 @@ srand(seed);
   // Set up subscriptions.
   subscriberInteraction = nodeHandle->subscribe("interaction", 1000, Resident::interactionCallback);
   subscriberTime = nodeHandle->subscribe("time", 1000, Resident::timeCallback);
-   subscriberRequestLock = nodeHandle->subscribe("requestLock", 1000, Resident::requestLockCallback);
- subscriberUnlock = nodeHandle->subscribe("unlock", 1000, Resident::unlockCallback);
+  subscriberRequestLock = nodeHandle->subscribe("requestLock", 1000, Resident::requestLockCallback);
+  subscriberUnlock = nodeHandle->subscribe("unlock", 1000, Resident::unlockCallback);
  
- called_friend_today_ = false;
+  called_friend_today_ = false;
 
 }
 
@@ -123,13 +122,10 @@ void Resident::doExecuteLoop()
 */ 
 void Resident::call(string personType)
 {
- msg_pkg::Telephone phonecall;
- phonecall.contact = personType;
- publisherTelephone.publish(phonecall);
+	msg_pkg::Telephone phonecall;
+	phonecall.contact = personType;
+	publisherTelephone.publish(phonecall);
 }
-
-
-
 
 /*
  * Upon receiving a message published to the 'interaction' topic, respond appropriately.
@@ -471,8 +467,6 @@ int Resident::changeLevel(float change, Level level) {
 	}  
 }
 
-
-// Alpha (deprecated)
 int Resident::getNewLevel(int amount, int oldLevel)
 {
   int newLevel = std::min(amount + oldLevel, LEVEL_MAX);
