@@ -34,7 +34,6 @@ void Nurse::doInitialSetup()
         nurseId = 0;
         exit(EXIT_FAILURE);
     }
-  
 }
 
 
@@ -64,13 +63,11 @@ void Nurse::doExecuteLoop()
 		//Follow the doctor
 		//goToNode("RosNode4");
 	}
-
 }
 
 
 void Nurse::nurseCallback(msg_pkg::Nurse msg)
 {
-
 	//TODO: Make something happen in the if statement
 	Nurse* temp = dynamic_cast<Nurse*>( ActorSpawner::getInstance().getActor());
 	temp->assist = msg.follow;

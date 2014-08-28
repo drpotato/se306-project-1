@@ -20,6 +20,7 @@
 #define LEVEL_MAX 100 // Final release should be 100
 #define LEVEL_MIN 0 // Final release should be 0
 #define FREQUENCY 10
+#define INC_AMOUNT 10
 
 class Actor
 {
@@ -37,12 +38,8 @@ public:
 	void executeLoopStagePublication();
 
 	static void StageOdom_callback(nav_msgs::Odometry msg);
-	static void locationCallback(msg_pkg::Location msg);
 	static void lockStatusCallback(msg_pkg::LockStatus msg);
 	static void unlockCallback(msg_pkg::Unlock msg);
-
-    bool moveToResident();
-    void startMovingToResident();
 	
 	ros::NodeHandle &getNodeHandle() const;
 
@@ -55,13 +52,12 @@ public:
     bool deniedLock;
     bool otherUnlocked;
 
-
 protected:
 
 	virtual void doInitialSetup() = 0;
 	virtual void doExecuteLoop() = 0;
         
-        virtual string getActorName() = 0;
+    virtual string getActorName() = 0;
 
 	void doResponse(const char *attribute);
     void stopResponse(const char *attribute);
@@ -87,7 +83,6 @@ protected:
 	ros::Publisher  publisherInteraction;
 	ros::Subscriber subscriberStageOdometry;
 	ros::Subscriber subscriberStageLaserScan;
-	ros::Subscriber subscriberLocation;
 	ros::Subscriber subscriberlockStatus;
 	ros::Subscriber subscriberUnlock;
 

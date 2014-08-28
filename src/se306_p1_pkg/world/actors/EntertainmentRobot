@@ -1,4 +1,4 @@
-define EntertainmentRobot position
+define EntertainmentRobot actor
 (
 
 	# Left Leg

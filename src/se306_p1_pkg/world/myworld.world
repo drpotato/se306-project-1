@@ -1,3 +1,14 @@
+# Base actor type
+define actor position
+(
+  name "actor"
+  size [0.0 0.0 0.0]
+  drive "diff"
+  stack_children 0
+  gui_nose 0
+  obstacle_return 0
+)
+
 include "__autogen__donteditme__actorlist__"
 
 include "models/couch"
@@ -40,7 +51,7 @@ model
   size [15.399 10.000 0.500]
   pose [ 0.000 0.000 0.000 0.000 ]
   
-  obstacle_return 1
+  obstacle_return 0
 )
 
 # Carpet

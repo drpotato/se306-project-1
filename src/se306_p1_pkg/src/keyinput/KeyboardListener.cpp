@@ -10,7 +10,6 @@ KeyboardListener &KeyboardListener::getInstance()
 	{
 		instance = new KeyboardListener();
 	}
-	
 	return *instance;
 }
 

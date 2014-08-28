@@ -99,8 +99,6 @@ bool Actor::executeLoop()
 		pathPlanner.updateAll();
         checkKeyboardPress();
 
-        moveToResident();
-
 		doExecuteLoop();
 		executeLoopStagePublication();
 
@@ -108,7 +106,6 @@ bool Actor::executeLoop()
 		loopRate->sleep();
 		return true;
 	}
-
 	return false;
 }
 
@@ -117,7 +114,6 @@ void Actor::initialSetupStage()
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
 	subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000,
 Actor::StageOdom_callback);
-
 }
 
 void Actor::StageOdom_callback(nav_msgs::Odometry msg)
@@ -131,13 +127,6 @@ void Actor::StageOdom_callback(nav_msgs::Odometry msg)
   actorPtr->theta = actorPtr->thetaInitial + tf::getYaw(msg.pose.pose.orientation);
 }
 
-// Process messages publish to the 'location' topic.
-// These messages each contain the current location of a single Actor.
-void Actor::locationCallback(msg_pkg::Location msg)
-{
-
-}
-
 void Actor::lockStatusCallback(msg_pkg::LockStatus msg)
 {
     Actor *actorPtr = ActorSpawner::getInstance().getActor();
@@ -148,14 +137,12 @@ void Actor::lockStatusCallback(msg_pkg::LockStatus msg)
             actorPtr->deniedLock = false;
             actorPtr->haveLock=true;
             ROS_INFO("I HAVE THE LOCK %s",actorPtr->rosName.c_str() );
-        } else
-        {
+        } else {
             actorPtr->haveLock = false;
             actorPtr->deniedLock = true;
             ROS_INFO("I WAS DENIED THE LOCK %s",actorPtr->rosName.c_str() );
         }
     }
-
 }
 
 void Actor::unlockCallback(msg_pkg::Unlock msg)
@@ -364,7 +351,7 @@ void Actor::doResponse(const char *attribute)
 {
 	msg_pkg::Interaction interaction;
 	interaction.attribute = attribute;
-	interaction.amount = 1;
+	interaction.amount = INC_AMOUNT;
 	publisherInteraction.publish(interaction);
 
 	ROS_INFO("%s (%s) is performing \"%s\"", rosName.c_str(), stageName.c_str(), attribute);
@@ -381,23 +368,6 @@ void Actor::stopResponse(const char *attribute)
   // Stop moving TODO Kurt, this could possibly be threaded and be delayed on a new thread
   velRotational = 0.0;
   velLinear = 0.0;
-}
-
-void Actor::startMovingToResident() {
-    this->movingToResident = true;
-}
-
-bool Actor::moveToResident() {
-    // if (this->movingToResident) {
-    // 	//ROS_INFO("MOVING TO RESIDENT");
-    //     PathPlannerNode *target = this->pathPlanner.getNode(&node1Name);
-    //     vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-    //     if ( this->goToNode(path))
-    //     {
-    //     	ROS_INFO("CHANGED MOVING TO RESIDENT");
-    //     	this->movingToResident = false;
-    //     }
-    // }
 }
 
 double Actor::faceDirection(double x,double y){
@@ -446,10 +416,15 @@ bool Actor::goToNode(string nodeName) {
     pathPlanner.update(rosName);
     ROS_INFO_STREAM("2");
     vector <PathPlannerNode*> path = pathPlanner.pathToNode(rosName, nodeName);
-    if (path.size() == 0){
-	return true;
+
+    if (path.size() == 0) {
+	   ROS_INFO_STREAM("Path size is 0");
+       return true;
+    } else {
+        ROS_INFO_STREAM("Path size is not 0");
     }
-    if (currentNodeIndex < path.size()-1) {
+    
+    if (currentNodeIndex < path.size() - 1) {
         PathPlannerNode* nextNode = pathPlanner.getNode(currentNode);
         if (!this->gotoPosition(nextNode->px, nextNode->py)) {
             // We have arrived at the next node.

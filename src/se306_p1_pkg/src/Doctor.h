@@ -33,8 +33,6 @@ protected:
   bool goHome;
   int8_t healthLevel;
 
-
-
 };
 
 

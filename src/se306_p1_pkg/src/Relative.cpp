@@ -60,11 +60,11 @@ void Relative::doExecuteLoop()
         {
             if (first_call)
             {
-                this->startMovingToResident();
+                //TODO: go to resident
                 first_call = false;
             }
 
-            if (!(this->movingToResident) )
+            if (!(true) ) //TODO: go to resident
             {
                 //Relative::doResponse("socialising");
                 ROS_INFO("CHANGED TO SOCIALISING");

@@ -1,4 +1,4 @@
-define CookingRobot position
+define CookingRobot actor
 (
 
 	# Left Leg

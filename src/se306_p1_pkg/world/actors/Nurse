@@ -1,4 +1,4 @@
-define Nurse position
+define Nurse actor
 (
 
 	# Left Leg

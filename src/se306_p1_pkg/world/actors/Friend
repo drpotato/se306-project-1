@@ -1,4 +1,4 @@
-define Friend position
+define Friend actor
 (
 
 	# Left Leg
