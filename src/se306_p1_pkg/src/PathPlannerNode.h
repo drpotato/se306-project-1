@@ -14,10 +14,10 @@ class PathPlannerNode{
 
     public:
         bool visited;
+        bool isRobot;
         double px;
         double py;
-        PathPlannerNode(string, double, double);
-        //PathPlannerNode(const PathPlannerNode &other);
+        PathPlannerNode(string, double, double,bool);
         void addNeighbour(string);
         void addNeighbour(PathPlannerNode*);
         void removeNeighbour(string);

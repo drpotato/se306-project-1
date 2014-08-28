@@ -2,15 +2,10 @@
 #include "ros/ros.h"
 #include <msg_pkg/Location.h>
 
-vector<PathPlannerNode> PathPlanner::nodes;
-ros::Subscriber PathPlanner::subscriberLocation;
-ros::NodeHandle* PathPlanner::nodeHandle;
-
 // This class maintains a graph of navigation waypoint nodes, and calculates the shortest (fewest nodes) path between any two of them.
 
 PathPlanner::PathPlanner() {
-    nodeHandle = new ros::NodeHandle();
-    subscriberLocation = nodeHandle->subscribe("location", 1000, PathPlanner::locationCallback);
+    //nodeHandle = new ros::NodeHandle();
 
     nodeBedroomCentreName = "nodeBedroomCentre";
     nodeHallwayByBedroomName = "nodeHallwayByBedroom";
@@ -18,11 +13,11 @@ PathPlanner::PathPlanner() {
     nodeGuestBedroomCentreName = "nodeGuestBedroomCentre";
     nodeHouseDoorName = "nodeHouseDoor";
 
-    nodeBedroomCentre = new PathPlannerNode(nodeBedroomCentreName, -2.5, 3);
-    nodeHallwayByBedroom = new PathPlannerNode(nodeHallwayByBedroomName, -2.5, -0);
-    nodeHalllwayByLivingRoom = new PathPlannerNode(nodeHalllwayByLivingRoomName, 3, 0);
-    nodeGuestBedroomCentre = new PathPlannerNode(nodeGuestBedroomCentreName, -2.5, -3);
-    nodeHouseDoor = new PathPlannerNode(nodeHouseDoorName, 2.8, 5);
+    nodeBedroomCentre = new PathPlannerNode(nodeBedroomCentreName, -2.5, 3,false);
+    nodeHallwayByBedroom = new PathPlannerNode(nodeHallwayByBedroomName, -2.5, -0,false);
+    nodeHalllwayByLivingRoom = new PathPlannerNode(nodeHalllwayByLivingRoomName, 3, 0,false);
+    nodeGuestBedroomCentre = new PathPlannerNode(nodeGuestBedroomCentreName, -2.5, -3,false);
+    nodeHouseDoor = new PathPlannerNode(nodeHouseDoorName, 2.8, 5,false);
 
 
     // Specify which nodes have a clear line of sight to each other.
@@ -47,29 +42,30 @@ PathPlanner::PathPlanner() {
     addNode(*nodeHalllwayByLivingRoom);
     addNode(*nodeGuestBedroomCentre);
     addNode(*nodeHouseDoor);
+
+    //subscriberLocation = nodeHandle->subscribe("location", 1000, PathPlanner::locationCallback);
+
 }
 
-// When a location message is received, updates the graph with that Actor's new location.
-void PathPlanner::locationCallback(msg_pkg::Location msg)
-{
-    // Find Actor of this name in graph and remove it.
-    ROS_INFO_STREAM("Callback start");
-    string name = msg.id;
-    double x = msg.xpos;
-    double y = msg.ypos;
-    if (hasNode(name)) {
-        updateNode(name, x, y);
-    } else {
-        ROS_INFO_STREAM("Addnode start");
-        PathPlannerNode newNode = PathPlannerNode(name, x, y);
-        PathPlannerNode* closestNode = getClosestNode(x, y);
-        addNode(newNode);
-        ROS_INFO_STREAM("Neighbours add start");
-        getNode(name)->addNeighbour(closestNode);
-        ROS_INFO_STREAM("One edge added");
-        closestNode->addNeighbour(name);
-    }
-    ROS_INFO_STREAM("Callback end");
+
+
+
+void PathPlanner::processMessage(msg_pkg::Location msg){
+  // Find Actor of this name in graph and remove it.
+  string name = msg.id;
+  double x = msg.xpos;
+  double y = msg.ypos;
+  if (hasNode(name)) {
+      updateNode(name, x, y);
+  } else {
+      PathPlannerNode newNode = PathPlannerNode(name, x, y,true);
+      PathPlannerNode* closestNode = getClosestNode(x, y);
+      addNode(newNode);
+      ROS_INFO_STREAM("Neighbours add start");
+      getNode(name)->addNeighbour(closestNode);
+      closestNode->addNeighbour(name);
+  }
+  ROS_INFO_STREAM("Callback end");
 }
 
 // Returns the shortest path between the two given nodes.
@@ -137,7 +133,7 @@ void PathPlanner::removeNode(string* name) {
 // Adds a PathPlannerNode to the graph.
 void PathPlanner::addNode(PathPlannerNode p) {
     nodes.push_back(p);
-    ROS_INFO("Added node %s at location (%f, %f)", p.getName().c_str(), p.px, p.py);
+    int num = nodes.size();
 }
 
 // Returns the PathPlannerNode with the given name (if any).
@@ -165,6 +161,7 @@ bool PathPlanner::hasNode(string name){
 void PathPlanner::updateNode(string name, double x, double y) {
     PathPlannerNode* node = getNode(name);
     ROS_INFO("Got node called %s",node->getName().c_str());
+    //TODO: Remove links to this node
     node->removeAllNeighbours();
     PathPlannerNode* closestNode = getClosestNode(x, y);
     node->addNeighbour(closestNode->getName());
@@ -198,7 +195,7 @@ PathPlannerNode* PathPlanner::getClosestNode(double x, double y) {
         PathPlannerNode* nodeToCompare = &nodes[i];
         double distanceToOld = sqrtf(pow(x - closestNode->px, 2) + pow(y - closestNode->py, 2));
         double distanceToNew = sqrtf(pow(x - nodeToCompare->px, 2) + pow(y - nodeToCompare->py, 2));
-        if (distanceToNew < distanceToOld) {
+        if (distanceToNew < distanceToOld && !nodeToCompare->isRobot) {
             closestNode = nodeToCompare;
         }
     }

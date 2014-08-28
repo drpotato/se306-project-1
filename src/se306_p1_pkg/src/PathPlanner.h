@@ -13,10 +13,12 @@ using namespace std;
 
 class PathPlanner {
 private:
-    static vector<PathPlannerNode> nodes;
+    vector<PathPlannerNode> nodes;
+    /*
+    //TODO: Refactor
     static ros::Subscriber subscriberLocation;
     static ros::NodeHandle *nodeHandle;
-
+    */
     typedef boost::unordered_map<string,string> map;
 
     string nodeBedroomCentreName;
@@ -34,15 +36,14 @@ private:
 
 public:
     PathPlanner();
-
-    static vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
-    static void addNode(PathPlannerNode);
-    static bool hasNode(string);
-    static void removeNode(string*);
-    static PathPlannerNode* getNode(string);
-    static void updateNode(string, double, double);
-    static PathPlannerNode* getClosestNode(double, double);
-    static void locationCallback(msg_pkg::Location msg);
+    void processMessage(msg_pkg::Location);
+    vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
+    void addNode(PathPlannerNode);
+    bool hasNode(string);
+    void removeNode(string*);
+    PathPlannerNode* getNode(string);
+    void updateNode(string, double, double);
+    PathPlannerNode* getClosestNode(double, double);
 };
 
 
