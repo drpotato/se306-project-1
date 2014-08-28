@@ -35,6 +35,7 @@ void EntertainmentRobot::doExecuteLoop()
 	if (RCmode == "entertainmentRobot")
   	{
     	EntertainmentRobot::controlRobot();
+        return;
   	}
 
 	if (returningHome){
