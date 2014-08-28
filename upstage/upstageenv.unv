@@ -3,6 +3,9 @@
 		<bgcol r="0.2" g="0.7" b="1.0" />
 	</env>
 	<stage>
-		<world file="src/se306_p1_pkg/world/myworld.world" />
+		<actorlist file="src/se306_p1_pkg/world/actorlist" />
 	</stage>
+	<layout scale="40">
+		<image file="src/se306_p1_pkg/world/worldmaps/worldwalls.bmp" x="-7.69925" y="-5.0" w="15.3985" h="10.0" />
+	</layout>
 </upstage>
