@@ -378,91 +378,90 @@ void Resident::randomEventLoop()
 // Return the new value  
 int Resident::changeLevel(float change, Level level) {
 
-	// Get the current resident class instance
-	Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+	
 
 	// Change level, publish new level showing new level value
 	if (level == MORALE) 
   {
-    residentInstance->morale_level_ = residentInstance->getNewLevel(change, residentInstance->morale_level_);
+    morale_level_ = getNewLevel(change, morale_level_);
 
 		msg_pkg::Morale moraleMessage;
-		moraleMessage.level = residentInstance->morale_level_;
-		residentInstance->publisherMorale.publish(moraleMessage);	
+		moraleMessage.level = morale_level_;
+		publisherMorale.publish(moraleMessage);	
 
 		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("Morale: %d", residentInstance->morale_level_);
-		return residentInstance->morale_level_;
+		ROS_INFO("Morale: %d", morale_level_);
+		return morale_level_;
 		#endif
 
 	} 
   else if (level == SOCIALNESS) 
   {
-		residentInstance->socialness_level_ = residentInstance->getNewLevel(change, residentInstance->socialness_level_);
+		socialness_level_ = getNewLevel(change, socialness_level_);
 
 		msg_pkg::Socialness socialnessMessage;
-		socialnessMessage.level = residentInstance->socialness_level_;
-		residentInstance->publisherSocialness.publish(socialnessMessage);
+		socialnessMessage.level = socialness_level_;
+		publisherSocialness.publish(socialnessMessage);
 
 		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("Socialness: %d", residentInstance->socialness_level_);
-		return residentInstance->socialness_level_;
+		ROS_INFO("Socialness: %d", socialness_level_);
+		return socialness_level_;
 		#endif
 
 	} 
   else if (level == HYGIENE) 
   {
-		residentInstance->hygiene_level_ = residentInstance->getNewLevel(change, residentInstance->hygiene_level_);
+		hygiene_level_ = getNewLevel(change, hygiene_level_);
 
 		msg_pkg::Hygiene hygieneMessage;
-		hygieneMessage.level = residentInstance->hygiene_level_;
-		residentInstance->publisherHygiene.publish(hygieneMessage);
+		hygieneMessage.level = hygiene_level_;
+		publisherHygiene.publish(hygieneMessage);
 
 		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("Hygiene: %d", residentInstance->hygiene_level_);
-		return residentInstance->hygiene_level_;
+		ROS_INFO("Hygiene: %d", hygiene_level_);
+		return hygiene_level_;
 		#endif
 
 	} 
   else if (level == HUNGER) 
   {
-		residentInstance->hunger_level_ = residentInstance->getNewLevel(change, residentInstance->hunger_level_);
+		hunger_level_ = getNewLevel(change, hunger_level_);
 
 		msg_pkg::Hunger hungerMessage;
-		hungerMessage.level = residentInstance->hunger_level_;
-		residentInstance->publisherHunger.publish(hungerMessage);
+		hungerMessage.level = hunger_level_;
+		publisherHunger.publish(hungerMessage);
 
 		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("Hunger: %d", residentInstance->hunger_level_);
-		return residentInstance->hunger_level_;
+		ROS_INFO("Hunger: %d", hunger_level_);
+		return hunger_level_;
 		#endif
 
 	}  
   else if (level == FITNESS) 
   {
-		residentInstance->fitness_level_ = residentInstance->getNewLevel(change, residentInstance->fitness_level_);
+		fitness_level_ = getNewLevel(change, fitness_level_);
 
 		msg_pkg::Fitness fitnessMessage;
-		fitnessMessage.level = residentInstance->fitness_level_;
-		residentInstance->publisherFitness.publish(fitnessMessage);
+		fitnessMessage.level = fitness_level_;
+		publisherFitness.publish(fitnessMessage);
 
 		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("Fitness: %d", residentInstance->fitness_level_);
-		return residentInstance->fitness_level_;
+		ROS_INFO("Fitness: %d", fitness_level_);
+		return fitness_level_;
 		#endif
 
 	} 
   else if (level == HEALTH) 
   {
-		residentInstance->health_level_ = residentInstance->getNewLevel(change, residentInstance->health_level_);
+		health_level_ = getNewLevel(change, health_level_);
 
 		msg_pkg::Health healthMessage;
-		healthMessage.level = residentInstance->health_level_;
-		residentInstance->publisherHealth.publish(healthMessage);
+		healthMessage.level = health_level_;
+		publisherHealth.publish(healthMessage);
 
 		#ifdef DEBUG_CHANGE_LEVEL
-		ROS_INFO("Health: %d", residentInstance->health_level_);
-		return residentInstance->health_level_;
+		ROS_INFO("Health: %d", health_level_);
+		return health_level_;
 		#endif
 	}  
 }
