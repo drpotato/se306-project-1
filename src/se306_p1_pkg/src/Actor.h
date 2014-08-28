@@ -16,6 +16,9 @@
 
 /* Macros */
 #define CRITICAL_LEVEL 90
+#define LEVEL_MAX 100 // Final release should be 100
+#define LEVEL_MIN 0 // Final release should be 0
+#define FREQUENCY 10
 
 class Actor
 {
