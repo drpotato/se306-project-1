@@ -8,28 +8,43 @@
 #include <boost/unordered_map.hpp>
 #include "PathPlannerNode.h"
 #include <msg_pkg/Location.h>
-#include "ActorLocation.h"
 
 using namespace std;
 
 class PathPlanner {
 private:
-    static vector<ActorLocation> actorLocations;
-    static vector<PathPlannerNode*> nodes;
-    typedef boost::unordered_map<string,string> map;
-
+    vector<PathPlannerNode> nodes;
+    /*
+    //TODO: Refactor
     static ros::Subscriber subscriberLocation;
     static ros::NodeHandle *nodeHandle;
-    PathPlanner();
-    
+    */
+    typedef boost::unordered_map<string,string> map;
+
+    string nodeBedroomCentreName;
+    string nodeHallwayByBedroomName;
+    string nodeHalllwayByLivingRoomName;
+    string nodeGuestBedroomCentreName;
+    string nodeHouseDoorName;
+
+
+    PathPlannerNode* nodeBedroomCentre;
+    PathPlannerNode* nodeHallwayByBedroom;
+    PathPlannerNode* nodeHalllwayByLivingRoom;
+    PathPlannerNode* nodeGuestBedroomCentre;
+    PathPlannerNode* nodeHouseDoor;
+    void processMessage(msg_pkg::Location);
+
 public:
-	static vector<PathPlannerNode*> pathToNode(PathPlannerNode*, PathPlannerNode*);
-    static void addActorNode(PathPlannerNode*);
-    static void addNode(PathPlannerNode*);
-    static PathPlannerNode* removeNode(string*);
-    static PathPlannerNode* getNode(string*);
-    static PathPlannerNode* getClosestNode(int, int);
-    static void locationCallback(msg_pkg::Location msg);
+    PathPlanner();
+    void update(string);
+    vector<PathPlannerNode*> pathToNode(string,string);
+    void addNode(PathPlannerNode);
+    bool hasNode(string);
+    void removeNode(string*);
+    PathPlannerNode* getNode(string);
+    void updateNode(string, double, double);
+    PathPlannerNode* getClosestNode(double, double);
 };
 
 

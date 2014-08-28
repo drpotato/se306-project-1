@@ -8,25 +8,23 @@ using namespace std;
 class PathPlannerNode{
     friend class PathPlanner;
     private:
-        string* name;
-    
+        string name;
         PathPlannerNode* previous;
-        //position
-    
-    vector<PathPlannerNode*> neighbours;
-    
+        vector<string> neighbours;
+
     public:
         bool visited;
+        bool isRobot;
         double px;
         double py;
-        PathPlannerNode(string*,double,double);
-        PathPlannerNode();
+        PathPlannerNode(string, double, double,bool);
+        void addNeighbour(string);
         void addNeighbour(PathPlannerNode*);
-        void removeNeighbour(PathPlannerNode*);
-        string* getName();
+        void removeNeighbour(string);
+        void removeAllNeighbours();
+        string getName();
         bool isVisited();
         void setVisited(bool newVisited);
 };
 
 #endif // #ifndef SE306P1_ACTOR_VISITOR_H_DEFINED
-
