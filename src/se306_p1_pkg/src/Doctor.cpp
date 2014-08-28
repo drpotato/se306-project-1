@@ -22,6 +22,7 @@ void Doctor::doInitialSetup()
     // Set up publishers.
  	publisherNurse1 = nodeHandle->advertise<msg_pkg::Nurse>("nurse1", 1000);
  	publisherNurse2 = nodeHandle->advertise<msg_pkg::Nurse>("nurse2", 1000);
+ 	first = true;
     
 }
 
@@ -34,8 +35,10 @@ void Doctor::doExecuteLoop()
 		controlRobot();
 		return;
 	}
+
 	if (homeVisit)
 	{
+
 		attendPatient();
 	}
 
@@ -73,6 +76,7 @@ void Doctor::attendPatient()
 		{
 			travellingToResident = false;
 			treating = true;
+			first = true;
 		}
 		return;
 	}
@@ -80,6 +84,24 @@ void Doctor::attendPatient()
 	if (treating)
 	{
 		//Send message to patient to rise health stats
+		if (first)
+		{
+			requestLock("Doctor");
+			first = false;
+		}
+
+		if (haveLock)
+		{
+			//Treat resident
+		} else if (deniedLock)
+		{
+			if (otherUnlocked)
+			{
+				requestLock("Doctor");
+				deniedLock = false;
+				otherUnlocked = false;
+			}
+		}
 	}
 
 }

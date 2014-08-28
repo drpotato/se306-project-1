@@ -26,6 +26,7 @@ protected:
   bool homeVisit;
   bool travellingToResident;
   bool treating;
+  bool first;
 
 
 
