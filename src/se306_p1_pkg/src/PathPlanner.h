@@ -34,6 +34,7 @@ private:
 public:
     PathPlanner();
     void update(string);
+    void updateAll();
     vector<PathPlannerNode*> pathToNode(string,string);
     void addNode(PathPlannerNode);
     bool hasNode(string);

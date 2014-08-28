@@ -52,6 +52,14 @@ void PathPlanner::update(string name){
   }
 }
 
+void PathPlanner::updateAll(){
+  set<string> queueTitles = PathPlannerListener::getQueueTitles();
+  for (set<string>::iterator it = queueTitles.begin(); it != queueTitles.end(); ++it)
+  {
+    update(*it);
+  }
+}
+
 void PathPlanner::processMessage(msg_pkg::Location msg){
   // Find Actor of this name in graph and remove it.
   string name = msg.id;
@@ -60,7 +68,7 @@ void PathPlanner::processMessage(msg_pkg::Location msg){
   if (hasNode(name)) {
       updateNode(name, x, y);
   } else {
-      ROS_INFO_STREAM("adding new node");
+      ROS_INFO("adding new node (%s)", name.c_str());
       PathPlannerNode* newNode = new PathPlannerNode(name, x, y,true);
       PathPlannerNode* closestNode = getClosestNode(x, y);
       addNode(*newNode);

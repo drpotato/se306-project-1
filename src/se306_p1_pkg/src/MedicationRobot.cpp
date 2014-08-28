@@ -56,11 +56,11 @@ void MedicationRobot::doExecuteLoop()
 		{
 			if (first_call)
 			{
-				this->startMovingToResident();
+				//TODO: go to resident
 				first_call = false;
 			}
 
-	    	if (!(this->movingToResident) )
+	    	if (!(true) ) //TODO: go to resident
 	    	{
 	    		ROS_INFO("CHANGED TO ENTERTAINING");
 	    		healing=true;

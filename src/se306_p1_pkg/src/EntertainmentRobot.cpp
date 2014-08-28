@@ -109,7 +109,7 @@ void EntertainmentRobot::moraleCallback(msg_pkg::Morale msg)
  	// If it has reached level 1:
  	if (!temp->checkMoraleLevel())
  	{
- 		temp->startMovingToResident();
+ 		//TODO: Go to resident
  		temp->waiting_to_entertain = true;
  	}
 }

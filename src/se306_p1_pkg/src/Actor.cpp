@@ -96,10 +96,8 @@ bool Actor::executeLoop()
 		// Put custom loop stuff here (or make a method and call it from here)
 
 		publishLocation();
-		pathPlanner.update(rosName);
+		pathPlanner.updateAll();
         checkKeyboardPress();
-
-        moveToResident();
 
 		doExecuteLoop();
 		executeLoopStagePublication();
@@ -108,7 +106,6 @@ bool Actor::executeLoop()
 		loopRate->sleep();
 		return true;
 	}
-
 	return false;
 }
 
@@ -117,7 +114,6 @@ void Actor::initialSetupStage()
 	publisherStageVelocity = nodeHandle->advertise<geometry_msgs::Twist>((stageName + "/cmd_vel").c_str(), 1000);
 	subscriberStageOdometry  = nodeHandle->subscribe<nav_msgs::Odometry>((stageName + "/odom").c_str(), 1000,
 Actor::StageOdom_callback);
-
 }
 
 void Actor::StageOdom_callback(nav_msgs::Odometry msg)
@@ -129,13 +125,6 @@ void Actor::StageOdom_callback(nav_msgs::Odometry msg)
   actorPtr->px = actorPtr->pxInitial + msg.pose.pose.position.x;
   actorPtr->py = actorPtr->pyInitial + msg.pose.pose.position.y;
   actorPtr->theta = actorPtr->thetaInitial + tf::getYaw(msg.pose.pose.orientation);
-}
-
-// Process messages publish to the 'location' topic.
-// These messages each contain the current location of a single Actor.
-void Actor::locationCallback(msg_pkg::Location msg)
-{
-
 }
 
 void Actor::lockStatusCallback(msg_pkg::LockStatus msg)
@@ -381,23 +370,6 @@ void Actor::stopResponse(const char *attribute)
   // Stop moving TODO Kurt, this could possibly be threaded and be delayed on a new thread
   velRotational = 0.0;
   velLinear = 0.0;
-}
-
-void Actor::startMovingToResident() {
-    this->movingToResident = true;
-}
-
-bool Actor::moveToResident() {
-    // if (this->movingToResident) {
-    // 	//ROS_INFO("MOVING TO RESIDENT");
-    //     PathPlannerNode *target = this->pathPlanner.getNode(&node1Name);
-    //     vector<PathPlannerNode*> path = this->pathPlanner.pathToNode(this->activeNode,target);
-    //     if ( this->goToNode(path))
-    //     {
-    //     	ROS_INFO("CHANGED MOVING TO RESIDENT");
-    //     	this->movingToResident = false;
-    //     }
-    // }
 }
 
 double Actor::faceDirection(double x,double y){

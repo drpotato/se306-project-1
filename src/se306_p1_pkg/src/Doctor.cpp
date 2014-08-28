@@ -24,10 +24,8 @@ void Doctor::doInitialSetup()
  	publisherNurse1 = nodeHandle->advertise<msg_pkg::Nurse>("nurse1", 1000);
  	publisherNurse2 = nodeHandle->advertise<msg_pkg::Nurse>("nurse2", 1000);
  	first = true;
- 	healthLevel = 100;
-    
+ 	healthLevel = 100;    
 }
-
 
 
 void Doctor::doExecuteLoop()
