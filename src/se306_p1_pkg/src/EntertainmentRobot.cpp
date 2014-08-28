@@ -13,7 +13,7 @@ void EntertainmentRobot::doInitialSetup()
 	velRotational = 0.0;
 	moraleLevel = 5;
 	entertaining = false;
-	residentName = "RobotNode0";
+	residentName = "nodeGuestBedroomCentre";
 	subscriberMorale = nodeHandle->subscribe("morale", 1000, EntertainmentRobot::moraleCallback);
 	y = 0;
 	x = 0;

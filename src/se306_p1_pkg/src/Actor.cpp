@@ -142,6 +142,9 @@ void Actor::executeLoopStagePublication()
 	commandVelocity.linear.x  = velLinear;
 	commandVelocity.angular.z = velRotational;
 	publisherStageVelocity.publish(commandVelocity);
+
+	//Update pathplanning
+	pathPlanner.update(rosName);
 }
 
 void Actor::doResponse(const char *attribute)
@@ -209,12 +212,7 @@ bool Actor::gotoPosition(double x,double y) {
 // Returns false when it has arrived at the target node, and true when in transit.
 bool Actor::goToNode(string nodeName) {
 	//Update the graph before doing anything else
-	pathPlanner.update(rosName);
 
-    ROS_INFO("current position %f %f", px, py);
-
-    string closest = pathPlanner.getClosestNode(this->px, this->py)->getName();
-    ROS_INFO("Name of closest node is %s", closest.c_str());
 
     vector <PathPlannerNode*> path = pathPlanner.pathToNode(rosName, nodeName);
 
@@ -230,7 +228,7 @@ bool Actor::goToNode(string nodeName) {
 						currentNodeIndex++;
             return true;
         } else {
-						ROS_INFO_STREAM("We are travelling between nodes");
+						ROS_INFO("We are travelling to %s",currentNode.c_str());
             return true;
 				}
     } else {
