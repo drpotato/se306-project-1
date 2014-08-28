@@ -96,7 +96,7 @@ void CookingRobot::hungerCallback(msg_pkg::Hunger msg)
 void CookingRobot::timeCallback(msg_pkg::Time msg)
 {
 	CookingRobot* temp = dynamic_cast<CookingRobot*>( ActorSpawner::getInstance().getActor());
-	if ((msg.hour == temp->LUNCH_TIME) || (msg.hour == temp->BREAKFAST_TIME) || (msg.hour == temp->DINNER_TIME))
+	if ((msg.hour == temp->LUNCH_TIME-1) || (msg.hour == temp->BREAKFAST_TIME-1) || (msg.hour == temp->DINNER_TIME-1))
 	{
 		temp->moving_to_stove = true;
 	}
