@@ -19,16 +19,16 @@ private:
 
     string nodeBedroomCentreName;
     string nodeHallwayByBedroomName;
-    string nodeHalllwayByLivingRoomName;
+    string nodeHallwayByLivingRoomName;
     string nodeGuestBedroomCentreName;
     string nodeHouseDoorName;
 
-
     PathPlannerNode* nodeBedroomCentre;
     PathPlannerNode* nodeHallwayByBedroom;
-    PathPlannerNode* nodeHalllwayByLivingRoom;
+    PathPlannerNode* nodeHallwayByLivingRoom;
     PathPlannerNode* nodeGuestBedroomCentre;
     PathPlannerNode* nodeHouseDoor;
+    
     void processMessage(msg_pkg::Location);
 
 public:
