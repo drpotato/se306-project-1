@@ -3,6 +3,7 @@
 
 #include "Robot.h"
 #include <msg_pkg/Hunger.h>
+#include <msg_pkg/Time.h>
 
 class CookingRobot : public Robot
 {
@@ -11,11 +12,13 @@ protected:
 	virtual void doExecuteLoop();
 
 	static void hungerCallback(msg_pkg::Hunger msg);
+	static void timeCallback(msg_pkg::Time msg);
 	string getActorName();
 
 	bool cooking;
 	bool moving_to_stove;
 	ros::Subscriber subscriberHunger;
+	ros::Subscriber subscriberTime;
 
 	string residentName;
 	int y;

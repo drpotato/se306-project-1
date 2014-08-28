@@ -42,6 +42,13 @@ public:
 	static void lockStatusCallback(msg_pkg::LockStatus msg);
 	static void unlockCallback(msg_pkg::Unlock msg);
 	static void locationCallback(msg_pkg::Location msg);
+
+	  // Event hours
+  const static int WAKE_TIME = 7;
+  const static int BREAKFAST_TIME = 8;
+  const static int LUNCH_TIME = 13;
+  const static int DINNER_TIME = 18;
+  const static int SLEEP_TIME = 23;
 	
 	ros::NodeHandle &getNodeHandle() const;
 
