@@ -5,6 +5,11 @@
 #include "PathPlanner.h"
 #include "PathPlannerNode.h"
 
+string Doctor::getActorName()
+{
+  return "Doctor";
+}
+
 void Doctor::doInitialSetup()
 {
 	velLinear = 0.0;
