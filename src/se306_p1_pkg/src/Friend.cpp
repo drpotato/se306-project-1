@@ -5,6 +5,11 @@ Friend* Friend::getFriendInstance()
   return dynamic_cast<Friend*>( ActorSpawner::getInstance().getActor());
 }
 
+string Friend::getActorName()
+{
+  return "Friend";
+}
+
 /* Hooks */
 void Friend::doInitialSetup()
 {

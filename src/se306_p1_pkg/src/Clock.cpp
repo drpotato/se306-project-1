@@ -7,6 +7,12 @@
 
 // The clock object keeps track of the time of day and publishes it to the time topic
 
+
+string Clock::getActorName()
+{
+  return "Clock";
+}
+
 void Clock::doInitialSetup()
 {
   // Initialise time of day to current time

@@ -14,6 +14,8 @@ protected:
 
 	static void healthCallback(msg_pkg::Health msg);
 
+	string getActorName();
+
 	int8_t healthLevel;
 	bool health;
 
