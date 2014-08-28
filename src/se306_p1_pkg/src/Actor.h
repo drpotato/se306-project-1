@@ -14,6 +14,9 @@
 /* Macros */
 #define CRITICAL_LEVEL 90
 
+/* Macros */
+#define CRITICAL_LEVEL 90
+
 class Actor
 {
 public:

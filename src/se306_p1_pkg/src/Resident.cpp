@@ -174,6 +174,31 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
       residentInstance->stopRobotSpinning();
     }
   }
+  else if (attribute == "health")
+  {
+    if (residentInstance->health_level_ == LEVEL_MAX)
+    {
+      residentInstance->stopRobotSpinning();
+    }
+  }
+  else if (attribute == "exercising")
+  {
+    residentInstance->changeLevel(amount, FITNESS);
+
+    if (residentInstance->fitness_level_ == LEVEL_MAX)
+    {
+      residentInstance->stopRobotSpinning();
+    }
+  }
+  else if (attribute == "eating")
+  {
+    residentInstance->changeLevel(amount, HUNGER);
+
+    if (residentInstance->hunger_level_ == LEVEL_MAX)
+    {
+      residentInstance->stopRobotSpinning();
+    }
+  }
 }
 
 void Resident::timeCallback(msg_pkg::Time msg)
