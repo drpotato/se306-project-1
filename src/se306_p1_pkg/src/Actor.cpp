@@ -96,7 +96,7 @@ bool Actor::executeLoop()
 		// Put custom loop stuff here (or make a method and call it from here)
 
 		publishLocation();
-
+		pathPlanner.update(rosName);
         checkKeyboardPress();
 
         moveToResident();
@@ -442,28 +442,27 @@ bool Actor::gotoPosition(double x,double y) {
 // Returns false when it has arrived at the target node, and true when in transit.
 bool Actor::goToNode(string nodeName) {
 	//Update the graph before doing anything else
-
-
+    ROS_INFO_STREAM("1");
+    pathPlanner.update(rosName);
+    ROS_INFO_STREAM("2");
     vector <PathPlannerNode*> path = pathPlanner.pathToNode(rosName, nodeName);
-
+    ROS_INFO_STREAM("3");
 
     if (currentNodeIndex < path.size()-1) {
-
-				PathPlannerNode* nextNode = pathPlanner.getNode(currentNode);
-
-				if (!this->gotoPosition(nextNode->px, nextNode->py)) {
+        PathPlannerNode* nextNode = pathPlanner.getNode(currentNode);
+        if (!this->gotoPosition(nextNode->px, nextNode->py)) {
             // We have arrived at the next node.
             ROS_INFO_STREAM("We have arrived at a node on the path");
             currentNode = path[currentNodeIndex+1]->getName();
-						currentNodeIndex++;
+			currentNodeIndex++;
             return true;
         } else {
-						ROS_INFO("We are travelling to %s",currentNode.c_str());
+		    ROS_INFO("We are travelling to %s",currentNode.c_str());
             return true;
-				}
+		}
     } else {
         ROS_INFO_STREAM("We have arrived at our final destination!");
-				currentNode = nodeName;
+		currentNode = nodeName;
         currentNodeIndex = 0;
         return false;
     }

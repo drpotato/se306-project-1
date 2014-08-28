@@ -6,7 +6,6 @@
 // This class maintains a graph of navigation waypoint nodes, and calculates the shortest (fewest nodes) path between any two of them.
 
 PathPlanner::PathPlanner() {
-    //nodeHandle = new ros::NodeHandle();
 
     nodeBedroomCentreName = "nodeBedroomCentre";
     nodeHallwayByBedroomName = "nodeHallwayByBedroom";
@@ -56,7 +55,6 @@ void PathPlanner::update(string name){
     messages->pop();
     this->processMessage(msg);
   }
-
 }
 
 void PathPlanner::processMessage(msg_pkg::Location msg){
@@ -78,21 +76,30 @@ void PathPlanner::processMessage(msg_pkg::Location msg){
 // Returns the shortest path between the two given nodes.
 vector<PathPlannerNode*> PathPlanner::pathToNode(string startNode,string target)
 {
+    ROS_INFO_STREAM("2.1");
     PathPlannerNode *top;
     queue<PathPlannerNode*> s;
     s.push(this->getNode(startNode));
+    ROS_INFO_STREAM("2.2");
 
     for (int i = 0; i < nodes.size(); i++){
         nodes[i].setVisited(false);
+        ROS_INFO_STREAM("2.3x");
     }
 
+    ROS_INFO_STREAM("2.4");
+    
+    ROS_INFO("StartNode %s is in PathPlanner's node list.", this->getNode(startNode)->getName().c_str());
     this->getNode(startNode)->setVisited(true);
 
+    ROS_INFO_STREAM("2.5");
 
     while (s.empty() == false){
+    ROS_INFO_STREAM("2.6");
         top = s.front();
         s.pop();
         if (top->getName().compare(target) == 0) {
+    ROS_INFO_STREAM("2.7 - Target node found");
             //found it!
             break;
         }
@@ -145,7 +152,7 @@ void PathPlanner::removeNode(string* name) {
 // Adds a PathPlannerNode to the graph.
 void PathPlanner::addNode(PathPlannerNode p) {
     nodes.push_back(p);
-    int num = nodes.size();
+    ROS_INFO("Node added: %s", p.getName().c_str());
 }
 
 // Returns the PathPlannerNode with the given name (if any).
