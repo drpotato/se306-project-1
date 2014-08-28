@@ -19,6 +19,26 @@ GraphSearch &GraphSearch::getInstance()
 GraphSearch::GraphSearch()
 {
 	theGraph = new vector< vector<point> > ();
+	defineNode(-2.5, 3, "nodeBedroomCentre");
+    defineNode(-2.5, -0, "nodeHallwayByBedroom");
+    defineNode(3, 0, "nodeHallwayByLivingRoom");
+    defineNode(-2.5, -3, "nodeGuestBedroomCentre");
+    defineNode(2.8, 5, "nodeHouseDoor");
+
+    defineEdge("nodeBedroomCentre", "nodeHallwayBedroom");
+    defineEdge("nodeHallwayBedroom", "nodeBedroomCentre");
+
+    defineEdge("nodeBedroomCentre", "nodeGuestBedroomCentre");
+    defineEdge("nodeGuestBedroomCentre", "nodeBedroomCentre");
+
+    defineEdge("nodeHallwayBedroom", "nodeHallwayByLivingRoom");
+    defineEdge("nodeHallwayByLivingRoom", "nodeHallwayBedroom");
+
+    defineEdge("nodeHallwayBedroom", "nodeGuestBedroomCentre");
+    defineEdge("nodeGuestBedroomCentre", "nodeHallwayBedroom");
+
+    defineEdge("nodeHallwayByLivingRoom", "nodeHouseDoor");
+    defineEdge("nodeHouseDoor", "nodeHallwayByLivingRoom");
 }
 
 GraphSearch::~GraphSearch()
@@ -107,7 +127,7 @@ vector<GraphSearch::point> GraphSearch::getPath(string name1, double x, double y
 }
 vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2, double y2)
 {
-	
+
 }
 vector<GraphSearch::point> GraphSearch::getPath(double x, double y, string name1)
 {
@@ -126,4 +146,13 @@ GraphSearch::point* GraphSearch::getPoint(string name)
     		return &(*theGraph)[i][0];
     	}		
 	}
+}
+
+GraphSearch::point* GraphSearch::getNewPoint(string name, double x, double y)
+{
+	point *p1 = (point*)malloc(sizeof(point));
+	p1->x = x;
+	p1->y = y;
+	p1->name = name;
+	return p1;
 }
