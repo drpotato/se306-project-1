@@ -21,6 +21,8 @@
 
 #include "keyinput/KeyboardListener.hpp"
 
+#define DELTA 0.001
+
 namespace
 {
 	std::string generateNodeName(unsigned int ID, string nodeName);
@@ -389,6 +391,24 @@ double Actor::faceDirection(double x,double y){
 // Returns true while moving/rotating, and false when it has arrived at its location and stopped.
 bool Actor::gotoPosition(double x,double y) {
     // Face the node
+    faceDirection(x,y);
+
+    if (faceDirection(x,y) <= DELTA)
+    {
+        // If we are at the destination
+        if ((sqrt (pow((px - x), 2) + (pow((py - y), 2)))) <= DELTA)
+        {
+            velLinear = 0;
+            return true;
+        }
+        //Move forward
+        velLinear = 1.0;
+    }
+    else
+    {
+
+        return false;
+    }
     
 }
 
