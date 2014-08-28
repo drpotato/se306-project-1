@@ -5,6 +5,7 @@
 #include <msg_pkg/Location.h>
 #include <msg_pkg/Unlock.h>
 #include <msg_pkg/LockStatus.h>
+#include "GraphSearch.h"
 
 #include "ros/ros.h"
 #include <vector>
@@ -60,6 +61,8 @@ public:
     bool haveLock;
     bool deniedLock;
     bool otherUnlocked;
+
+    bool firstGoToNode;
 
     struct NodeLocation {
     	int x;
@@ -124,6 +127,10 @@ protected:
 private:
     
     double faceDirection(double,double);
+
+    vector<GraphSearch::point> *path;
+    GraphSearch::point *pDestination;
+    GraphSearch::point *pStart;
     
 	PathPlanner pathPlanner;
 	string currentNode;

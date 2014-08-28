@@ -34,7 +34,7 @@ void EntertainmentRobot::doExecuteLoop()
 {
 	if (y++ >= 100)
 	{
-		gotoPosition(6.0,6.0);
+		goToNode("Resident0");
 	}
 	
 	// if (RCmode == "entertainmentRobot")

@@ -88,6 +88,8 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	KeyboardListener::init();
 	initialSetupStage();
 	doInitialSetup();
+    firstGoToNode = true;
+    pathIndex = 0;
 
     RCmode = "";
     
@@ -305,6 +307,7 @@ void Actor::toggleMode(string mode)
 // Only call this method from the subclass IF it is in your corresponding mode (RCmode)
 void Actor::controlRobot()
 {
+
     KeyboardListener &keyboardListener = KeyboardListener::getInstance();
     velRotational = 0.0;
     velLinear = 0.0;
@@ -429,9 +432,23 @@ bool Actor::gotoPosition(double x,double y)
 bool Actor::goToNode(string nodeName) {
 	NodeLocation nodelocation = nodeLocations[nodeName];
 
-    //point *pDestination = EGraphSearch::findClosestPoint(nodelocation.x, nodelocation.y);
-    //point *pStart = GraphSearch::findClosestPoint(px, py);
-    //vector<point> *path = GraphSearch::getPath(pStart->x,pStart->y,pDestination->x,pDestination->y);
+    if (firstGoToNode)
+    {
+        pDestination = GraphSearch::findClosestPoint(nodelocation.x, nodelocation.y);
+        pStart = GraphSearch::findClosestPoint(px, py);
+        path = GraphSearch::getPath(pStart->x,pStart->y,pDestination->x,pDestination->y);
+        firstGoToNode = false;
+    }
+
+    if (gotoPosition((*path)[i].x, (*path)[i].y))
+    {
+        pathIndex++;
+        if (pathIndex == path->size())
+        {
+            firstGoToNode = true;
+            pathIndex = 0;
+        }
+    }
 }
 
 ros::NodeHandle &Actor::getNodeHandle() const
