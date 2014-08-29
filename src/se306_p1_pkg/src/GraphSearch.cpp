@@ -5,14 +5,11 @@
 #include <algorithm>
 #include <iostream>
 
-
 vector< vector<GraphSearch::point> >* GraphSearch::theGraph = NULL;
 
 void GraphSearch::setupNodes()
 {  
-
 	GraphSearch::theGraph = new vector< vector<point> > ();
-
 
 	defineNode(-2.5, 3, "nodeBedroomCentre");
 
@@ -42,51 +39,35 @@ void GraphSearch::setupNodes()
     //BED
     defineNode(-6.33, 3.01, "nodeMasterBed");
    
+   
     defineEdge("nodeMasterBed", "nodeBedroomCentre");
-    
     defineEdge("nodeBedroomCentre", "nodeMasterBed");
 
-
     defineEdge("nodeLivingRoomByCouch", "nodeLivingRoomByCouchHallway");
-    
     defineEdge("nodeLivingRoomByCouchHallway", "nodeLivingRoomByCouch");
 
-
     defineEdge("nodeLivingRoomByCouchHallway", "nodeLivingRoomByHallwayDoor");
-    
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeLivingRoomByCouchHallway");
-   
 
     defineEdge("nodeKitchenStove", "nodeLivingRoomMidwayPoint");
-    
     defineEdge("nodeLivingRoomMidwayPoint", "nodeKitchenStove");
-    
 
     defineEdge("nodeLivingRoomMidwayPoint", "nodeLivingRoomFeedingPlace");
-    
     defineEdge("nodeLivingRoomFeedingPlace", "nodeLivingRoomMidwayPoint");
-    
 
     defineEdge("nodeLivingRoomFeedingPlace", "nodeLivingRoomByHallwayDoor");
-    
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeLivingRoomFeedingPlace");
-    
 
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeHallwayByLivingRoom");
-   
     defineEdge("nodeHallwayByLivingRoom", "nodeLivingRoomByHallwayDoor");
     
-
     defineEdge("nodeShowerUnderHead", "nodeInShowerNextToDoor");
-    
     defineEdge("nodeInShowerNextToDoor", "nodeShowerUnderHead");
     
     defineEdge("nodeInShowerNextToDoor", "nodeOutShowerNextToDoor");
-    
     defineEdge("nodeOutShowerNextToDoor", "nodeInShowerNextToDoor");
 
     defineEdge("nodeBathroomDoorInBathroom", "nodeOutShowerNextToDoor");
-    
     defineEdge("nodeOutShowerNextToDoor","nodeBathroomDoorInBathroom");
 
     defineEdge("nodeBathroomDoorInBathroom", "nodeBathroomDoorHallway");
@@ -95,35 +76,26 @@ void GraphSearch::setupNodes()
     defineEdge("nodeBathroomDoorInBathroom", "nodeMedicationRobotHome");
     defineEdge("nodeMedicationRobotHome", "nodeBathroomDoorInBathroom");
 
-
     defineEdge("nodeBathroomDoorHallway", "nodeHallwayByBedroom");
-    
     defineEdge("nodeHallwayByBedroom", "nodeBathroomDoorHallway");
     
-
     defineEdge("nodeBathroomDoorHallway", "nodeHallwayByLivingRoom");
-    
     defineEdge("nodeHallwayByLivingRoom", "nodeBathroomDoorHallway");
 
     defineEdge("nodeBedroomCentre", "nodeHallwayByBedroom");
     defineEdge("nodeHallwayByBedroom", "nodeBedroomCentre");
 
     defineEdge("nodeBedroomCentre", "nodeGuestBedroomCentre");
-    
     defineEdge("nodeGuestBedroomCentre", "nodeBedroomCentre");
 
     defineEdge("nodeHallwayByBedroom", "nodeHallwayByLivingRoom");
-    
     defineEdge("nodeHallwayByLivingRoom", "nodeHallwayByBedroom");
 
     defineEdge("nodeHallwayByBedroom", "nodeGuestBedroomCentre");
-    
     defineEdge("nodeGuestBedroomCentre", "nodeHallwayByBedroom");
 
     defineEdge("nodeHallwayByLivingRoom", "nodeHouseDoor");
-    
     defineEdge("nodeHouseDoor", "nodeHallwayByLivingRoom");  
-
 }
 
 void GraphSearch::defineNode(double x, double y)
