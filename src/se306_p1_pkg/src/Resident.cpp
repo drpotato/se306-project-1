@@ -130,6 +130,11 @@ void Resident::doExecuteLoop()
     called_friend_today_ = true;
   }
 
+  if (health_level_ <= 50)
+  {
+    call("doctor");
+  }
+
   residentInstance->randomEventLoop();
 }
 

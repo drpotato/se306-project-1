@@ -43,7 +43,7 @@ Actor::Actor():
 
 {
 
-    
+
 }
 
 Actor::~Actor()
@@ -57,7 +57,7 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	rosName = generateNodeName(robotID, getActorName());
 	stageName = generateStageName(robotID, getActorName());
     GraphSearch::setupNodes();
-    
+
 	pxInitial = px;
 	pyInitial = py;
 	thetaInitial = theta;
@@ -92,7 +92,7 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
     pathIndex = 0;
 
     RCmode = "";
-    
+
 }
 
 bool Actor::executeLoop()
@@ -173,7 +173,7 @@ void Actor::locationCallback(msg_pkg::Location msg) {
     NodeLocation newLocation = {msg.xpos, msg.ypos};
 
     actorPtr->nodeLocations[msg.id] = newLocation;
-    
+
 }
 
 // Publish a message containing own x and y coordinates to the 'location' topic.
@@ -291,7 +291,7 @@ bool Actor::inMode(string mode)
 void Actor::toggleMode(string mode)
 {
     // If we are in this mode, turn the mode off
-    if (inMode(mode)) 
+    if (inMode(mode))
     {
         RCmode = "";
     }
@@ -310,22 +310,22 @@ void Actor::controlRobot()
     KeyboardListener &keyboardListener = KeyboardListener::getInstance();
     velRotational = 0.0;
     velLinear = 0.0;
-    
+
     if (keyboardListener.isKeyPressed(ups::KEY_UP_CODE))
     {
         velLinear += 1.0;
     }
-    
+
     if (keyboardListener.isKeyPressed(ups::KEY_DOWN_CODE))
     {
         velLinear -= 1.0;
     }
-    
+
     if (keyboardListener.isKeyPressed(ups::KEY_LEFT_CODE))
     {
         velRotational += 1.0;
     }
-    
+
     if (keyboardListener.isKeyPressed(ups::KEY_RIGHT_CODE))
     {
         velRotational -= 1.0;
@@ -381,7 +381,7 @@ void Actor::doResponse(const char *attribute)
 void Actor::stopResponse(const char *attribute)
 {
   // TODO maybe do something with the attribute
-  
+
   // Stop moving TODO Kurt, this could possibly be threaded and be delayed on a new thread
   velRotational = 0.0;
   velLinear = 0.0;
@@ -404,27 +404,27 @@ double Actor::faceDirection(double x,double y){
 
 // Moves the Actor in a straight line towards the given x and y coordinates.
 // Returns true while moving/rotating, and false when it has arrived at its location and stopped.
-bool Actor::gotoPosition(double x,double y) 
+bool Actor::gotoPosition(double x,double y)
 {
-    faceDirection(x,y);
+        // Face the node
+    if (faceDirection(x,y) < 0.1) {
+        double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
 
-    if (faceDirection(x,y) <= DELTA)
-    {
-        double distance = sqrt(pow((px - x), 2) + (pow((py - y), 2)));
-        // If we are at the destination
-        if (distance <= DELTA)
-        {
-            velLinear = 0;
+        ROS_DEBUG("Distance is %f",distance);
+
+        if (distance > 0.01) {
+            faceDirection(x,y);
+            this->velLinear = distance*1;
+            return false;
+        } else {
+            this->velLinear = 0;
             return true;
         }
-        //Move forward
-        velLinear = distance;
-    }
-    else
-    {
+    } else {
+        ROS_DEBUG("Target: %f",faceDirection(x,y));
+        this->velLinear = 0;
         return false;
     }
-    
 }
 
 // Returns false when it has arrived at the target node, and true when in transit.
@@ -447,6 +447,7 @@ bool Actor::goToNode(string nodeName) {
 
     if (gotoPosition(path[pathIndex].x, path[pathIndex].y))
     {
+        ROS_INFO("COOKING %f %f", path[pathIndex].x, path[pathIndex].y);
         pathIndex++;
         if (pathIndex == path.size())
         {
