@@ -97,9 +97,6 @@ cout << "u\n";
     defineEdge("nodeBathroomDoorInBathroom", "nodeMedicationRobotHome");
     defineEdge("nodeMedicationRobotHome", "nodeBathroomDoorInBathroom");
 
-    defineEdge("nodeBathroomDoorHallway", "nodeHallwayBedroom");
-    defineEdge("nodeHallwayBedroom", "nodeBathroomDoorHallway");
-
 cout << "w\n";
     defineEdge("nodeBathroomDoorHallway", "nodeHallwayByBedroom");
     cout << "x\n";
