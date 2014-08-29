@@ -18,7 +18,7 @@ void Friend::doInitialSetup()
   subscriberMorale = nodeHandle->subscribe("morale", 1000, Friend::moraleCallback);
   subscriberTime = nodeHandle->subscribe("time", 1000, Friend::timeCallback);
   subscribeTelephone = nodeHandle->subscribe("telephone", 1000, Friend::telephoneCallback);
-  
+
   velLinear = 0.0;
   velRotational = 0.0;
   socialnessLevel = 5;
@@ -30,7 +30,7 @@ void Friend::doInitialSetup()
   first_call = true;
   returningHome = false;
   returningHome_first = true;
-  
+
   waiting_to_socialise = false;
   called_by_resident_ = false;
 }
@@ -45,7 +45,7 @@ void Friend::doExecuteLoop()
     }
     return;
   }
-  
+
   // If socialness is CRITICAL_LEVEL and has been called by resident should probably socialise with resident
   if (socialnessLevel <= CRITICAL_LEVEL && called_by_resident_)
   {
@@ -53,7 +53,7 @@ void Friend::doExecuteLoop()
     waiting_to_socialise = true;
     called_by_resident_ = false;
   }
-  
+
   // If we have finished moving to the resident and we need to socialise:
   if ((!(this->movingToResident)) && (waiting_to_socialise) && first)
   {
@@ -74,7 +74,7 @@ void Friend::doExecuteLoop()
       socialising = false;
       first = false;
       returningHome = true;
-    } 
+    }
     else
     {
       if (y == 40)
@@ -82,11 +82,11 @@ void Friend::doExecuteLoop()
         // Called ever 40 cycles
         Friend::doResponse("socialising");
         y=0;
-      } 
-      else 
+      }
+      else
       {
         y++;
-      }       
+      }
     }
   }
   else if (deniedLock)
@@ -101,22 +101,22 @@ void Friend::doExecuteLoop()
   }
 }
 
-/* Callbacks */ 
+/* Callbacks */
 void Friend::socialnessCallback(msg_pkg::Socialness msg)
 {
   Friend *temp = Friend::getFriendInstance();
   temp->socialnessLevel = msg.level;
-  ROS_DEBUG_STREAM("Friend socialnessCallback with level " << (int)msg.level);
+
 }
 
 void Friend::telephoneCallback(msg_pkg::Telephone msg)
 {
-  ROS_DEBUG_STREAM("Friend telephoneCallback with contact " << msg.contact);
+
   Friend *temp = Friend::getFriendInstance();
-  
+
   if (msg.contact.compare("friend") == 0)
   {
-    ROS_DEBUG_STREAM("Friend telephoneCallback contact is friend!!!");
+    
     temp->called_by_resident_ = true;
   }
 }

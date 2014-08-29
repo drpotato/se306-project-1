@@ -19,12 +19,12 @@ void Doctor::doInitialSetup()
     subscriberHealth = nodeHandle->subscribe("health", 1000, Doctor::healthCallback);
     homeVisit = false;
     travellingToResident = false;
-    
+
     // Set up publishers.
  	publisherNurse1 = nodeHandle->advertise<msg_pkg::Nurse>("nurse1", 1000);
  	publisherNurse2 = nodeHandle->advertise<msg_pkg::Nurse>("nurse2", 1000);
  	first = true;
- 	healthLevel = 100;    
+ 	healthLevel = 100;
 }
 
 
@@ -84,8 +84,8 @@ void Doctor::attendPatient()
 	if (travellingToResident)
 	{
 		//This is here so that it will compile. Get rid of when uncommenting goToNode()
-		
-		//bool temp = 
+
+		//bool temp =
 		if (!goToNode("Resident0"))
 		{
 			travellingToResident = false;
@@ -110,7 +110,7 @@ void Doctor::attendPatient()
 			if (!(healthLevel >= 99))
 			{
 				doResponse("health");
-			} else 
+			} else
 			{
 				goHome = true;
 				treating = false;
@@ -138,7 +138,7 @@ void Doctor::callNurses()
 	nurseMessage.follow = true;
 
 	// Publish the message.
-	
+
 	float num = rand() % 3;
     if (num < 1){
     	return;
@@ -151,6 +151,6 @@ void Doctor::callNurses()
     	publisherNurse1.publish(nurseMessage);
     }
 
-	ROS_DEBUG("Called Nurse");
+	
 
 }

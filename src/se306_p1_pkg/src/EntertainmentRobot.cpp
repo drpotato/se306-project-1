@@ -20,7 +20,7 @@ void EntertainmentRobot::doInitialSetup()
 	entertaining = false;
 	residentName = "Resident0";
 	subscriberMorale = nodeHandle->subscribe("morale", 1000, EntertainmentRobot::moraleCallback);
-	
+
 	y = 0;
 	x = 0;
 	first = true;
@@ -36,7 +36,7 @@ void EntertainmentRobot::doExecuteLoop()
 	{
 		goToNode("nodeKitchenStove");
 	}
-	
+
 	// if (RCmode == "entertainmentRobot")
  //  	{
  //    	EntertainmentRobot::controlRobot();
@@ -51,7 +51,7 @@ void EntertainmentRobot::doExecuteLoop()
 	// 		//TODO: Matt fix this shit (Target node reset upon reach destination)
 	// 		//targetNode = 0;
 	// 	}
-        
+
  //        return;
 
 	// }
@@ -79,18 +79,18 @@ void EntertainmentRobot::doExecuteLoop()
 	// 		entertaining = false;
 	// 		first = false;
 	// 		returningHome = true;
-	// 	} 
+	// 	}
 	// 	else
 	// 	{
 	// 		if (y == 40)
 	// 		{
 	// 			EntertainmentRobot::doResponse("entertaining");
 	// 			y=0;
-	// 		} 
-	// 		else 
+	// 		}
+	// 		else
 	// 		{
 	// 			y++;
-	// 		}	
+	// 		}
 	// 	}
 	// }
 	// else if (deniedLock)
