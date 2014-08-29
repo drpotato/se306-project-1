@@ -32,8 +32,11 @@ void EntertainmentRobot::doInitialSetup()
 
 void EntertainmentRobot::doExecuteLoop()
 {
-
-	gotoPosition(12.0,12.0);
+	if (y++ >= 200)
+	{
+		goToNode("nodeKitchenStove");
+	}
+	
 	// if (RCmode == "entertainmentRobot")
  //  	{
  //    	EntertainmentRobot::controlRobot();

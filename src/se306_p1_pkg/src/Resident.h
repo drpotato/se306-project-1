@@ -77,19 +77,17 @@ public:
   bool m_dropped_;
   bool s_dropped_;
 
-  // Event hours
-  const static int WAKE_TIME = 7;
-  const static int BREAKFAST_TIME = 8;
-  const static int LUNCH_TIME = 13;
-  const static int DINNER_TIME = 18;
-  const static int SLEEP_TIME = 23;
-
   // Has done event values
   bool has_eaten_breakfast_;
   bool has_eaten_lunch_;
   bool has_eaten_dinner_;
   bool has_woken_;
   bool has_gone_to_bed_;
+
+  // Navigation helpers
+  bool getOutOfBed;
+  bool goToEatingPlace;
+  bool getIntoBed;
 
 	// Delay measurement variables
 	long long msAtPreviousLoop;

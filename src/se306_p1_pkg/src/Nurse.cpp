@@ -61,7 +61,7 @@ void Nurse::doExecuteLoop()
 	if (assist)
 	{
 		//Follow the doctor
-		//goToNode("RosNode4");
+		goToNode("Doctor4");
 	}
 }
 
