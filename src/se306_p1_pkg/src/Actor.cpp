@@ -418,10 +418,11 @@ bool Actor::gotoPosition(double x,double y)
             return false;
         } else {
             this->velLinear = 0;
+						this->velRotational = 0;
             return true;
         }
     } else {
-        
+
         this->velLinear = 0;
         return false;
     }
