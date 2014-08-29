@@ -429,25 +429,21 @@ bool Actor::gotoPosition(double x,double y)
 
 // Returns false when it has arrived at the target node, and true when in transit.
 bool Actor::goToNode(string nodeName) {
-    ROS_INFO("BEFORE NODE LOCATION IN ROS_NODE");
 	NodeLocation nodelocation = nodeLocations[nodeName];
-    ROS_INFO("GOTONODE CALLED");
 
     if (firstGoToNode)
     {
-        ROS_INFO("GOTONODE CALLED FIRST LOOP");
         pDestination = GraphSearch::findClosestPoint(nodelocation.x, nodelocation.y);
-        ROS_INFO("GOTONODE CALLED FIRST LOOP 1");
+        
         pStart = GraphSearch::findClosestPoint(px, py);
-        ROS_INFO("GOTONODE CALLED FIRST LOOP 2");
+        
         path = GraphSearch::getPath(pStart->x,pStart->y,pDestination->x,pDestination->y);
-        ROS_INFO("GOTONODE CALLED FIRST LOOP 3");
+        
         firstGoToNode = false;
     }
 
     if (gotoPosition(path[pathIndex].x, path[pathIndex].y))
     {
-        ROS_INFO("COOKING %f %f", path[pathIndex].x, path[pathIndex].y);
         pathIndex++;
         if (pathIndex == path.size())
         {
