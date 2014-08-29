@@ -437,6 +437,7 @@ GraphSearch::point* GraphSearch::findClosestPoint(double x, double y)
 
     		
 	}
+	
 
 	return best;
 }
