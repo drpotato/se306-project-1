@@ -97,8 +97,6 @@ void MedicationRobot::healthCallback(msg_pkg::Health msg)
 
  	temp->healthLevel = msg.level;
 
- 	ROS_INFO("Health: %d", msg.level);
-
  	if (!msg.level >= 50)
  	{
  		//COOK
