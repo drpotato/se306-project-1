@@ -6,6 +6,9 @@
 ups::Text::Text(const std::string &text, const Font &font) :
 	_text(text),
 	_font(font),
+	_centredMargin(0.f),
+	_colour(ups::Colour::rgb(1.f,1.f,1.f)),
+	_centred(false),
 	_finalised(false)
 {
 }
@@ -21,18 +24,18 @@ void ups::Text::draw(Renderer &renderer)
 	_finalised = false;
 	finalise();
 	
-	ups::Colour colour = ups::Colour::rgb(1.f,1.f,1.f);
+	float baseX = getL();
+	float baseY = getU();
+	
+	if (_centred)
+	{
+		baseX += _centredMargin;
+	}
+	
 	for (std::vector<GlyphStamp *>::const_iterator it = _stamps.begin(); it != _stamps.end(); ++it)
 	{
 		GlyphStamp &glyphStamp = **it;
-		renderer.drawTextGlyph(colour, _font.getTexName(), getL() + glyphStamp.x, getU() + glyphStamp.y, glyphStamp.w, glyphStamp.h, glyphStamp.u, glyphStamp.v);
-		/*UPS_LOGF("Stamp: x=%lf, y=%lf | w=%lf, h=%lf | u=%lf, v=%lf",
-			(**it).x,
-			(**it).y,
-			(**it).w,
-			(**it).h,
-			(**it).u,
-			(**it).v);*/
+		renderer.drawTextGlyph(_colour, _font.getTexName(), baseX + glyphStamp.x, baseY + glyphStamp.y, glyphStamp.w, glyphStamp.h, glyphStamp.u, glyphStamp.v);
 	}
 }
 
@@ -53,6 +56,7 @@ void ups::Text::finalise()
 	long lastWordPos = 0;
 	long lastWordX = 0;
 	
+	long maxX = 0;
 	long cursorX = 0;
 	long cursorY = 0;
 	long width = getR() - getL();
@@ -91,6 +95,9 @@ void ups::Text::finalise()
 				_stamps.push_back(glyphStamp);
 				
 				cursorX += previousFontChar.xAdv;
+				
+				long maxXCandidate = cursorX + previousFontChar.w;
+				maxX = maxX > maxXCandidate ? maxX : maxXCandidate;
 			}
 			
 			if (pos < _text.length())
@@ -129,5 +136,6 @@ void ups::Text::finalise()
 			cursorX += _font.getChar(_text[pos]).xAdv;
 		}
 	}
+	_centredMargin = 0.5f * (width - maxX);
 	_finalised = true;
 }

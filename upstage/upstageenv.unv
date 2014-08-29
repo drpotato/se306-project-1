@@ -7,25 +7,395 @@
 	</stage>
 	<layout>
 		<image
-			file="src/se306_p1_pkg/world/worldmaps/worldwalls.bmp"
-			r_rel="0.5" />
-		<image
-			file="src/se306_p1_pkg/world/worldmaps/worldwalls.bmp"
-			l_rel="0.5" />
+			file="img/bg.bmp" />
+			
 		<image
 			file="img/ultronlogo.tga"
 			l_rel="0.5"
 			l_abs="-64.0"
 			r_rel="0.5"
 			r_abs="64.0"
-			d_rel="1.0"
-			d_abs="-128.0"
+			d_rel="0.15"
+			d_abs="-32.0"
+			u_rel="0.15"
+			u_abs="96.0" />
+			
+		<text
+			font="fonts/ubuntu_mono.fnt"
+			text="Controller"
+			colour_r="0.0"
+			colour_g="0.0"
+			colour_b="0.0"
+			centred="1"
 			u_rel="1.0"
-			u_abs="0.0" />
+			u_abs="-40.0" />
+			
+		<image
+			file="img/arrowkeys.tga"
+			l_rel="1.0"
+			l_abs="-160.0"
+			r_rel="1.0"
+			r_abs="-32.0"
+			d_rel="1.0"
+			d_abs="-266.0"
+			u_rel="1.0"
+			u_abs="-138.0" />
+			
 		<text
 			font="fonts/tiny.fnt"
-			text="This is example text. Blah blah blah." 
-			u_rel="0.5" />
+			text="Use arrow keys to control the selected actor"
+			centred="1"
+			l_rel="0.0"
+			r_rel="1.0"
+			u_rel="0.0"
+			u_abs="20.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Select an actor by pressing a key combination. Press it again to deselect."
+			centred="1"
+			l_rel="0.0"
+			l_abs="10.0"
+			r_rel="1.0"
+			r_abs="-10.0"
+			u_rel="1.0"
+			u_abs="-20.0" />v
+		
+		<!-- Doctor -->
+		<text
+			font="fonts/tiny.fnt"
+			text="D"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-100.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Doctor"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-100.0" />
+		
+		<!-- Nurse 1 -->
+		<text
+			font="fonts/tiny.fnt"
+			text="N"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-116.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Nurse 1"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-116.0" />
+		
+		<!-- Nurse 2 -->
+		<text
+			font="fonts/tiny.fnt"
+			text="N+[space]"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-132.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Nurse 2"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-132.0" />
+		
+		<!-- Friend 1 -->
+		<text
+			font="fonts/tiny.fnt"
+			text="F"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-148.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Friend 1"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-148.0" />
+		
+		<!-- Friend 2 -->
+		<text
+			font="fonts/tiny.fnt"
+			text="F+[space]"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-164.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Friend 2"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-164.0" />
+		
+		<!-- Relative 1 -->
+		<text
+			font="fonts/tiny.fnt"
+			text="R"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-180.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Relative 1"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-180.0" />
+		
+		<!-- Relative 2 -->
+		<text
+			font="fonts/tiny.fnt"
+			text="R+[space]"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-196.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Relative 2"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-196.0" />
+		
+		<!-- Caregiver 1 -->
+		<text
+			font="fonts/tiny.fnt"
+			text="C"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-212.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Caregiver 1"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-212.0" />
+		
+		<!-- Caregiver 2 -->
+		<text
+			font="fonts/tiny.fnt"
+			text="C+[shift]"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-228.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Caregiver 2"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-228.0" />
+		
+		<!-- Medication Bot -->
+		<text
+			font="fonts/tiny.fnt"
+			text="M"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-244.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Medication Bot"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-244.0" />
+		
+		<!-- Entertainment Bot -->
+		<text
+			font="fonts/tiny.fnt"
+			text="E"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-260.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Entertainment Bot"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-260.0" />
+		
+		<!-- Companion Bot -->
+		<text
+			font="fonts/tiny.fnt"
+			text="T"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-276.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Companion Bot"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-276.0" />
+		
+		<!-- Cooking Bot -->
+		<text
+			font="fonts/tiny.fnt"
+			text="B"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-292.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Coooking Bot"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-292.0" />
+		
+		<!-- Resident -->
+		<text
+			font="fonts/tiny.fnt"
+			text="[enter]"
+			colour_r="1.0"
+			colour_g="0.8"
+			colour_b="0.0"
+			l_rel="0.0"
+			l_abs="0.0"
+			r_rel="0.0"
+			r_abs="100.0"
+			u_rel="1.0"
+			u_abs="-308.0" />
+			
+		<text
+			font="fonts/tiny.fnt"
+			text="Resident"
+			l_rel="0.0"
+			l_abs="100.0"
+			r_rel="1.0"
+			r_abs="0.0"
+			u_rel="1.0"
+			u_abs="-308.0" />
 		
 	</layout>
 </upstage>

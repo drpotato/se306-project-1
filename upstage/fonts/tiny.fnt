@@ -1,6 +1,6 @@
 <font>
 	<info face="tiny" size="80" />
-	<common lineHeight="20" scaleW="256" scaleH="256" pages="1" />
+	<common lineHeight="16" scaleW="256" scaleH="256" pages="1" />
 	<pages>
 		<page id="0" file="fonts/tiny.tga" />
 	</pages>

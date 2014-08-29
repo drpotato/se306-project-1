@@ -1,6 +1,6 @@
 <font>
 	<info face="ubuntu mono" size="80" />
-	<common lineHeight="70" scaleW="256" scaleH="256" pages="1" />
+	<common lineHeight="34" scaleW="256" scaleH="256" pages="1" />
 	<pages>
 		<page id="0" file="fonts/ubuntu_mono.tga" />
 	</pages>

@@ -60,7 +60,21 @@ namespace ups
 				if (!font) break;
 				
 				// Create the text
-				newUS = new Text(child.getAttr<const char *>("text", ""), *font);
+				Text *newText = new Text(child.getAttr<const char *>("text", ""), *font);
+				
+				// Centred?
+				newText->setCentred(child.getAttr<long>("centred", 0));
+				
+				// Colour?
+				float colR = child.getAttr<float>("colour_r", 1.f);
+				float colG = child.getAttr<float>("colour_g", 1.f);
+				float colB = child.getAttr<float>("colour_b", 1.f);
+				float colA = child.getAttr<float>("colour_a", 1.f);
+				ups::Colour colour = ups::Colour::rgb(colR, colG, colB, colA);
+				newText->setColour(colour);
+				
+				// Set the UltronScale pointer to our new object
+				newUS = newText;
 			}
 
 			if (newUS)
