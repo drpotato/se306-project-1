@@ -342,12 +342,10 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
 				// maintain the backPointer
 				if (bp != NULL)
 				{
-					
 					prev_bp = bp;
 				}
 				else
-				{
-					
+				{					
 					prev_bp == NULL;
 				}
 				
@@ -359,6 +357,8 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
 			}
 		}
 	}
+	
+	
 	vector<point> path;
 
 	while (bp->previous != NULL)
@@ -369,7 +369,6 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
 
 	reverse(path.begin(), path.end());
 
-	cout << "-GraphSearch::getPath" << endl;
 	return path;
 }
 
