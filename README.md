@@ -19,3 +19,7 @@ Team Google Ultron Dev Team - SE306 Project 1 Repo
 `./run.sh`
 
 See [Controls](https://github.com/drpotato/se306-project-1/wiki/Controls) for instructions for use
+
+## Run tests
+1. Run the testing make file
+`make tests`
