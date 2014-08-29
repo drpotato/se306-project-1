@@ -13,8 +13,6 @@
 #include <map>
 #include "std_msgs/String.h"
 #include "ActorLocation.h"
-#include "PathPlanner.h"
-#include "PathPlannerNode.h"
 
 /* Macros */
 #define CRITICAL_LEVEL 20
@@ -115,8 +113,6 @@ protected:
 	std::string rosName;
 	std::string stageName;
 
-    //Path Planner
-	//Path Planner
     bool goToNode(string);
 
     bool movingToResident;
@@ -128,11 +124,10 @@ private:
     
     double faceDirection(double,double);
 
-    vector<GraphSearch::point> *path;
+    vector<GraphSearch::point> path;
     GraphSearch::point *pDestination;
     GraphSearch::point *pStart;
     
-	PathPlanner pathPlanner;
 	string currentNode;
 	int currentNodeIndex;
 	int pathIndex;

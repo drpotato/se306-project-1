@@ -14,8 +14,6 @@
 #include <msg_pkg/Unlock.h>
 
 #include "Actor.h"
-#include "PathPlanner.h"
-#include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 #include "ActorLocation.h"
 #include "GraphSearch.h"
@@ -105,7 +103,6 @@ bool Actor::executeLoop()
 		// Put custom loop stuff here (or make a method and call it from here)
 
 		publishLocation();
-		pathPlanner.updateAll();
         checkKeyboardPress();
 
 		doExecuteLoop();
@@ -448,10 +445,10 @@ bool Actor::goToNode(string nodeName) {
         firstGoToNode = false;
     }
 
-    if (gotoPosition((*path)[pathIndex].x, (*path)[pathIndex].y))
+    if (gotoPosition(path[pathIndex].x, path[pathIndex].y))
     {
         pathIndex++;
-        if (pathIndex == path->size())
+        if (pathIndex == path.size())
         {
             firstGoToNode = true;
             pathIndex = 0;
@@ -476,7 +473,6 @@ namespace
 
 	std::string generateStageName(unsigned int ID, string nodeName)
 	{
-          // TODO Jamie, why the fuck does this have to mess with the behaviour of robots?
           ostringstream os;
           os << "robot_" << ID;
           string s = os.str();
