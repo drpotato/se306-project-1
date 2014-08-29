@@ -62,6 +62,10 @@ void Resident::doInitialSetup()
   has_woken_ = hasWoken();
   has_gone_to_bed_ = !hasWoken();
 
+  getOutOfBed = false;
+  goToEatingPlace = false;
+  getIntoBed = false;
+
   // Set levels to maximum initially.
   morale_level_ = LEVEL_MAX;
   socialness_level_ = LEVEL_MAX;
@@ -97,12 +101,38 @@ void Resident::doExecuteLoop()
   {
     residentInstance->controlRobot();
   }
+  else if (getOutOfBed)
+  {
+    if (!goToNode("nodeBedroomCentre"))
+    {
+      getOutOfBed = false;
+    }
+  }
+  else if (getIntoBed)
+  {
+    if (!goToNode("nodeMasterBed"))
+    {
+      getIntoBed = false;
+    }
+  }
+  else if (goToEatingPlace)
+  {
+    if (!goToNode("nodeLivingRoomEatingPlace"))
+    {
+      goToEatingPlace = false;
+    }
+  }
   
   /* Call a friend if socialness gets too low but only call once per day */
   if (residentInstance->socialness_level_ <= 1 && !called_friend_today_)
   {
     call("friend");
     called_friend_today_ = true;
+  }
+
+  if (health_level_ <= 50)
+  {
+    call("doctor");
   }
 
   residentInstance->randomEventLoop();
@@ -138,7 +168,7 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   if (attribute == "socialising")
   {
     // Get new level
-    residentInstance->changeLevel(amount,  SOCIALNESS);
+    residentInstance->changeLevel(amount, SOCIALNESS);
 
     if (residentInstance->socialness_level_ == LEVEL_MAX)
     {
@@ -190,6 +220,10 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
       residentInstance->stopRobotSpinning();
     }
   }
+	else if (attribute =="go_to_bath")
+	{
+		// Make resident walk to bathroom door node
+	}
 }
 
 
@@ -227,6 +261,46 @@ void Resident::stopRobotSpinning()
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
   residentInstance->velRotational = 0.0; // Stop rotation to show interaction finished
 }
+
+
+
+
+void Resident::actOnCriticalNeeds(Level level)
+{
+	Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+
+	// Stop the resident
+	residentInstance->velRotational = 0.0;
+	residentInstance->velLinear = 0.0;
+	// Lock?
+
+	if (level == SOCIALNESS) {
+		if (!called_friend_today_) {
+			// Get a number between 0 and 100.
+			randNum = getRandom(0, 100);
+			// If 0-25, call first relative
+			if (randNum <= 25) {
+				call("relative");
+			} else if (randNum <= 50) {
+				// If 25-50, call second relative
+				call("relative");
+			} else if (randNum <= 75) {
+				// If 50-75, call first friend
+				call("friend");
+			} else {
+				// If 75-100, call second friend
+				call("friend");
+			} 
+
+		} // else relies on companion robot for socialness
+
+	} else if (level == HEALTH) {
+		call("doctor");
+	}
+}
+		
+
+
 
 
 // Function called for each iteration of 'doExecuteLoop()'; emulates random
@@ -456,11 +530,13 @@ void Resident::wakeUp()
 {
   // Reset sleep value for the day
   has_gone_to_bed_ = false;
-
   has_woken_ = true;
+  // Get out of bed
+  getOutOfBed = true;
 }
 void Resident::eat(int hour)
 {
+  goToEatingPlace = true;
   if (hour == BREAKFAST_TIME)
   {
     has_eaten_breakfast_ = true;
@@ -476,6 +552,7 @@ void Resident::eat(int hour)
 }
 void Resident::goToSleep()
 {
+  getIntoBed = true;
   // Reset values for next day
   has_eaten_breakfast_ = false;
   has_eaten_breakfast_ = false;

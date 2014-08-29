@@ -127,4 +127,5 @@ define Relative actor
 	color "ivory2"
 	stack_children 0
 	gui_nose 0
+	obstacle_return 0
 )

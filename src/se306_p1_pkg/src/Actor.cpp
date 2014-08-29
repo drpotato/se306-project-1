@@ -14,12 +14,13 @@
 #include <msg_pkg/Unlock.h>
 
 #include "Actor.h"
-#include "PathPlanner.h"
-#include "PathPlannerNode.h"
 #include "ActorSpawner.h"
 #include "ActorLocation.h"
+#include "GraphSearch.h"
 
 #include "keyinput/KeyboardListener.hpp"
+
+#define DELTA 0.001
 
 namespace
 {
@@ -42,7 +43,7 @@ Actor::Actor():
 
 {
 
-    
+
 }
 
 Actor::~Actor()
@@ -55,6 +56,8 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 {
 	rosName = generateNodeName(robotID, getActorName());
 	stageName = generateStageName(robotID, getActorName());
+    GraphSearch::setupNodes();
+
 	pxInitial = px;
 	pyInitial = py;
 	thetaInitial = theta;
@@ -79,13 +82,17 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
     subscriberLockStatus = nodeHandle->subscribe("lockStatus", 1000, Actor::lockStatusCallback);
     subscriberUnlock = nodeHandle->subscribe("unlock", 1000, Actor::unlockCallback);
 
+    subscriberLocation = nodeHandle->subscribe("location", 1000, Actor::locationCallback);
+
 	// Put custom init stuff here (or make a method and call it from here)
 	KeyboardListener::init();
 	initialSetupStage();
 	doInitialSetup();
+    firstGoToNode = true;
+    pathIndex = 0;
 
     RCmode = "";
-    
+
 }
 
 bool Actor::executeLoop()
@@ -96,7 +103,6 @@ bool Actor::executeLoop()
 		// Put custom loop stuff here (or make a method and call it from here)
 
 		publishLocation();
-		pathPlanner.updateAll();
         checkKeyboardPress();
 
 		doExecuteLoop();
@@ -157,6 +163,16 @@ void Actor::unlockCallback(msg_pkg::Unlock msg)
     {
         actorPtr->otherUnlocked = true;
     }
+
+}
+
+void Actor::locationCallback(msg_pkg::Location msg) {
+
+    Actor *actorPtr = ActorSpawner::getInstance().getActor();
+
+    NodeLocation newLocation = {msg.xpos, msg.ypos};
+
+    actorPtr->nodeLocations[msg.id] = newLocation;
 
 }
 
@@ -275,7 +291,7 @@ bool Actor::inMode(string mode)
 void Actor::toggleMode(string mode)
 {
     // If we are in this mode, turn the mode off
-    if (inMode(mode)) 
+    if (inMode(mode))
     {
         RCmode = "";
     }
@@ -290,25 +306,26 @@ void Actor::toggleMode(string mode)
 // Only call this method from the subclass IF it is in your corresponding mode (RCmode)
 void Actor::controlRobot()
 {
+
     KeyboardListener &keyboardListener = KeyboardListener::getInstance();
     velRotational = 0.0;
     velLinear = 0.0;
-    
+
     if (keyboardListener.isKeyPressed(ups::KEY_UP_CODE))
     {
         velLinear += 1.0;
     }
-    
+
     if (keyboardListener.isKeyPressed(ups::KEY_DOWN_CODE))
     {
         velLinear -= 1.0;
     }
-    
+
     if (keyboardListener.isKeyPressed(ups::KEY_LEFT_CODE))
     {
         velRotational += 1.0;
     }
-    
+
     if (keyboardListener.isKeyPressed(ups::KEY_RIGHT_CODE))
     {
         velRotational -= 1.0;
@@ -364,7 +381,7 @@ void Actor::doResponse(const char *attribute)
 void Actor::stopResponse(const char *attribute)
 {
   // TODO maybe do something with the attribute
-  
+
   // Stop moving TODO Kurt, this could possibly be threaded and be delayed on a new thread
   velRotational = 0.0;
   velLinear = 0.0;
@@ -387,11 +404,10 @@ double Actor::faceDirection(double x,double y){
 
 // Moves the Actor in a straight line towards the given x and y coordinates.
 // Returns true while moving/rotating, and false when it has arrived at its location and stopped.
-bool Actor::gotoPosition(double x,double y) {
-    // Face the node
-    ROS_INFO("entered gotoposition");
+bool Actor::gotoPosition(double x,double y)
+{
+        // Face the node
     if (faceDirection(x,y) < 0.1) {
-        ROS_INFO("entered gotoposition if loop");
         double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
 
         ROS_DEBUG("Distance is %f",distance);
@@ -399,57 +415,41 @@ bool Actor::gotoPosition(double x,double y) {
         if (distance > 0.01) {
             faceDirection(x,y);
             this->velLinear = distance*1;
-            ROS_INFO("gotoPosition return True");
-            return true;
+            return false;
         } else {
             this->velLinear = 0;
-            ROS_INFO("gotoPosition return false");
-            return false;
+            return true;
         }
     } else {
-        ROS_INFO("entered gotoposition if else loop");
         ROS_DEBUG("Target: %f",faceDirection(x,y));
         this->velLinear = 0;
-        ROS_INFO("gotoPosition return True");
-        return true;
+        return false;
     }
 }
 
 // Returns false when it has arrived at the target node, and true when in transit.
 bool Actor::goToNode(string nodeName) {
-	//Update the graph before doing anything else
-    ROS_INFO_STREAM("1");
-    pathPlanner.update(rosName);
-    ROS_INFO_STREAM("2");
-    vector <PathPlannerNode*> path = pathPlanner.pathToNode(rosName, nodeName);
+	NodeLocation nodelocation = nodeLocations[nodeName];
 
-    if (path.size() == 0) {
-	   ROS_INFO_STREAM("Path size is 0");
-       return true;
-    } else {
-        ROS_INFO_STREAM("Path size is not 0");
+    if (firstGoToNode)
+    {
+        pDestination = GraphSearch::findClosestPoint(nodelocation.x, nodelocation.y);
+        
+        pStart = GraphSearch::findClosestPoint(px, py);
+        
+        path = GraphSearch::getPath(pStart->x,pStart->y,pDestination->x,pDestination->y);
+        
+        firstGoToNode = false;
     }
-    
-    if (currentNodeIndex < path.size() - 1) {
-        ROS_INFO_STREAM("If returned true");
-        PathPlannerNode* nextNode = pathPlanner.getNode(currentNode);
-        ROS_INFO_STREAM("Did pathplanner.getNode()");
-        if (!(gotoPosition(nextNode->px, nextNode->py))) {
-            // We have arrived at the next node.
-            ROS_INFO_STREAM("We have arrived at a node on the path");
-            currentNode = path[currentNodeIndex+1]->getName();
-			currentNodeIndex++;
-            return true;
-        } else {
-		    ROS_INFO("We are travelling to %s",currentNode.c_str());
-            return true;
-		}
-    } else {
-         ROS_INFO_STREAM("If returned false");
-        ROS_INFO_STREAM("We have arrived at our final destination!");
-		currentNode = nodeName;
-        currentNodeIndex = 0;
-        return false;
+
+    if (gotoPosition(path[pathIndex].x, path[pathIndex].y))
+    {
+        pathIndex++;
+        if (pathIndex == path.size())
+        {
+            firstGoToNode = true;
+            pathIndex = 0;
+        }
     }
 }
 
@@ -470,7 +470,6 @@ namespace
 
 	std::string generateStageName(unsigned int ID, string nodeName)
 	{
-          // TODO Jamie, why the fuck does this have to mess with the behaviour of robots?
           ostringstream os;
           os << "robot_" << ID;
           string s = os.str();

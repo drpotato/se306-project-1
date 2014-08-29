@@ -84,9 +84,9 @@ void Doctor::attendPatient()
 	if (travellingToResident)
 	{
 		//This is here so that it will compile. Get rid of when uncommenting goToNode()
-		bool temp;
-		//bool temp = goToNode("RosNode0");
-		if (!temp)
+		
+		//bool temp = 
+		if (!goToNode("Resident0"))
 		{
 			travellingToResident = false;
 			treating = true;
@@ -109,7 +109,7 @@ void Doctor::attendPatient()
 			//Treat resident
 			if (!(healthLevel >= 99))
 			{
-				doResponse("mend");
+				doResponse("health");
 			} else 
 			{
 				goHome = true;

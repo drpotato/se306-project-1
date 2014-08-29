@@ -16,70 +16,74 @@ void CookingRobot::doInitialSetup()
 {
 	velLinear = 0.0;
 	velRotational = 0.0;
-	hungerLevel = 5;
 	cooking = false;
 	residentName = "Resident0";
 	subscriberHunger = nodeHandle->subscribe("hunger", 1000, CookingRobot::hungerCallback);
-	y = 0;
-	x = 0;
+	subscriberTime = nodeHandle->subscribe("time", 1000, CookingRobot::timeCallback);
 	first = true;
 	first_call = true;
+	x = 0;
+	givingFood = false;
 	returningHome = false;
 	returningHome_first = true;
+	moving_to_stove = false;
 }
 
 void CookingRobot::doExecuteLoop()
 {
-	// goToNode("nodeGuestBedroomCentre");
 	if (RCmode == "cookingRobot")
   	{
     	CookingRobot::controlRobot();	
   	}
-	if (returningHome){
-		//ROS_INFO("MOVEING TO HOME");
-
-		if (returningHome_first){
-			returningHome_first = false;
-			//TODO: Matt fix this shit (Target node reset upon reach destination)
-			//targetNode = 0;
-		}
-
-        return;
-
-}
-
-	if (!cooking)
-	{
-		if (!checkHungerLevel())
+  	else if (givingFood)
+  	{
+  		if(!(CookingRobot::goToNode("Resident")))
 		{
-	    	//The or in this case is just for the alpha, remove once the robot is capable of reaching the resident
-	    	if (!(goToNode(residentName)) )
-	    	{
-	    		//CookingRobot::doResponse("cooking");
-	    		ROS_INFO("CHANGED TO cooking");
-	    		cooking=true;
-	    		first = false;
-	    	}
-			//After finished cooking set cooking to false
-
+			givingFood = false;
+			returningHome = true;
+			velRotational = 0.0;
+  			velLinear = 0.0;
+		}
+  	}
+	else if (returningHome){
+		if(!(CookingRobot::goToNode("nodeLivingRoomByCouch")))
+		{
+			returningHome = false;
+			velLinear = 0.0;
+			velRotational = 0.0;
 		}
 	}
-	else
+	else if (moving_to_stove)
 	{
-		if (hungerLevel == 5)
+		if(!(CookingRobot::goToNode("nodeKitchenStove")))
+		{
+    		moving_to_stove = false;
+    		cooking=true;
+    		first = false;
+    		velRotational = 0.0;
+  			velLinear = 0.0;
+		}
+	}
+	else if (cooking)
+	{
+		if (x == 5)
 		{
 			//Add do last response call that kurt implimented
-			CookingRobot::stopResponse("cooking");
 			cooking = false;
-			returningHome = true;
-
+			givingFood = true;
+			velRotational = 0.0;
+  			velLinear = 0.0;
 		}
 		else
 		{
 			if (y == 40)
 			{
-				CookingRobot::doResponse("cooking");
 				y=0;
+				x = x + 1;
+				ROS_INFO("Cooking robot is cooking up a feast!");
+				// Spin for visual feedback
+				velRotational = 1.0;
+				velLinear = 0.0;
 			}
 			else
 			{
@@ -92,16 +96,17 @@ void CookingRobot::doExecuteLoop()
 void CookingRobot::hungerCallback(msg_pkg::Hunger msg)
 {
  	CookingRobot* temp = dynamic_cast<CookingRobot*>( ActorSpawner::getInstance().getActor());
-
- 	temp->hungerLevel = msg.level;
- 	//ROS_INFO("Changed value");
+ 	if (!msg.level >= CRITICAL_LEVEL)
+ 	{
+ 		//COOK
+ 		temp->moving_to_stove = true;
+ 	}
 }
-
-bool CookingRobot::checkHungerLevel()
+void CookingRobot::timeCallback(msg_pkg::Time msg)
 {
-	if (hungerLevel>=2 )
+	CookingRobot* temp = dynamic_cast<CookingRobot*>( ActorSpawner::getInstance().getActor());
+	if ((msg.hour == temp->LUNCH_TIME-1) || (msg.hour == temp->BREAKFAST_TIME-1) || (msg.hour == temp->DINNER_TIME-1))
 	{
-		return true;
+		temp->moving_to_stove = true;
 	}
-	return false;
 }

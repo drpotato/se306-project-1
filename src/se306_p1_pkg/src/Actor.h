@@ -5,14 +5,14 @@
 #include <msg_pkg/Location.h>
 #include <msg_pkg/Unlock.h>
 #include <msg_pkg/LockStatus.h>
+#include "GraphSearch.h"
 
 #include "ros/ros.h"
 #include <vector>
 #include <string>
+#include <map>
 #include "std_msgs/String.h"
 #include "ActorLocation.h"
-#include "PathPlanner.h"
-#include "PathPlannerNode.h"
 
 /* Macros */
 #define CRITICAL_LEVEL 20
@@ -40,17 +40,34 @@ public:
 	static void StageOdom_callback(nav_msgs::Odometry msg);
 	static void lockStatusCallback(msg_pkg::LockStatus msg);
 	static void unlockCallback(msg_pkg::Unlock msg);
+	static void locationCallback(msg_pkg::Location msg);
+
+	  // Event hours
+  const static int WAKE_TIME = 7;
+  const static int BREAKFAST_TIME = 8;
+  const static int LUNCH_TIME = 13;
+  const static int DINNER_TIME = 18;
+  const static int SLEEP_TIME = 23;
 	
 	ros::NodeHandle &getNodeHandle() const;
 
 	//The rate at which ros will loop - used to calculate time of day
     const static int LOOP_RATE = 10;
     bool gotoPosition(double x,double y);
-    enum ActorType {Doctor=3, Nurse=2, Caregiver=2, Visitor=1, Robot=0};
+    enum ActorType {Doctor=4, Nurse=3, Caregiver=2, Visitor=1, Robot=0};
 
     bool haveLock;
     bool deniedLock;
     bool otherUnlocked;
+
+    bool firstGoToNode;
+
+    struct NodeLocation {
+    	int x;
+    	int y;
+	};
+
+    std::map<string, NodeLocation> nodeLocations;
 
 protected:
 
@@ -85,6 +102,7 @@ protected:
 	ros::Subscriber subscriberStageLaserScan;
 	ros::Subscriber subscriberlockStatus;
 	ros::Subscriber subscriberUnlock;
+	ros::Subscriber subscriberLocation;
 
 	ros::Publisher publisherRequestLock;
 	ros::Subscriber subscriberLockStatus;
@@ -95,8 +113,6 @@ protected:
 	std::string rosName;
 	std::string stageName;
 
-    //Path Planner
-	//Path Planner
     bool goToNode(string);
 
     bool movingToResident;
@@ -107,11 +123,14 @@ protected:
 private:
     
     double faceDirection(double,double);
+
+    vector<GraphSearch::point> path;
+    GraphSearch::point *pDestination;
+    GraphSearch::point *pStart;
     
-	PathPlanner pathPlanner;
 	string currentNode;
 	int currentNodeIndex;
-
+	int pathIndex;
     void checkKeyboardPress();
     bool modeSet();
     bool inMode(string mode);
