@@ -4,12 +4,13 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
+#include <ros/console.h>
 
 
 vector< vector<GraphSearch::point> >* GraphSearch::theGraph = NULL;
 
 void GraphSearch::setupNodes()
-{  
+{
 
 	GraphSearch::theGraph = new vector< vector<point> > ();
 
@@ -41,52 +42,52 @@ void GraphSearch::setupNodes()
 
     //BED
     defineNode(-6.33, 3.01, "nodeMasterBed");
-   
+
     defineEdge("nodeMasterBed", "nodeBedroomCentre");
-    
+
     defineEdge("nodeBedroomCentre", "nodeMasterBed");
 
 
     defineEdge("nodeLivingRoomByCouch", "nodeLivingRoomByCouchHallway");
-    
+
     defineEdge("nodeLivingRoomByCouchHallway", "nodeLivingRoomByCouch");
 
 
     defineEdge("nodeLivingRoomByCouchHallway", "nodeLivingRoomByHallwayDoor");
-    
+
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeLivingRoomByCouchHallway");
-   
+
 
     defineEdge("nodeKitchenStove", "nodeLivingRoomMidwayPoint");
-    
+
     defineEdge("nodeLivingRoomMidwayPoint", "nodeKitchenStove");
-    
+
 
     defineEdge("nodeLivingRoomMidwayPoint", "nodeLivingRoomFeedingPlace");
-    
+
     defineEdge("nodeLivingRoomFeedingPlace", "nodeLivingRoomMidwayPoint");
-    
+
 
     defineEdge("nodeLivingRoomFeedingPlace", "nodeLivingRoomByHallwayDoor");
-    
+
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeLivingRoomFeedingPlace");
-    
+
 
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeHallwayByLivingRoom");
-   
+
     defineEdge("nodeHallwayByLivingRoom", "nodeLivingRoomByHallwayDoor");
-    
+
 
     defineEdge("nodeShowerUnderHead", "nodeInShowerNextToDoor");
-    
+
     defineEdge("nodeInShowerNextToDoor", "nodeShowerUnderHead");
-    
+
     defineEdge("nodeInShowerNextToDoor", "nodeOutShowerNextToDoor");
-    
+
     defineEdge("nodeOutShowerNextToDoor", "nodeInShowerNextToDoor");
 
     defineEdge("nodeBathroomDoorInBathroom", "nodeOutShowerNextToDoor");
-    
+
     defineEdge("nodeOutShowerNextToDoor","nodeBathroomDoorInBathroom");
 
     defineEdge("nodeBathroomDoorInBathroom", "nodeBathroomDoorHallway");
@@ -97,32 +98,32 @@ void GraphSearch::setupNodes()
 
 
     defineEdge("nodeBathroomDoorHallway", "nodeHallwayByBedroom");
-    
+
     defineEdge("nodeHallwayByBedroom", "nodeBathroomDoorHallway");
-    
+
 
     defineEdge("nodeBathroomDoorHallway", "nodeHallwayByLivingRoom");
-    
+
     defineEdge("nodeHallwayByLivingRoom", "nodeBathroomDoorHallway");
 
     defineEdge("nodeBedroomCentre", "nodeHallwayByBedroom");
     defineEdge("nodeHallwayByBedroom", "nodeBedroomCentre");
 
     defineEdge("nodeBedroomCentre", "nodeGuestBedroomCentre");
-    
+
     defineEdge("nodeGuestBedroomCentre", "nodeBedroomCentre");
 
     defineEdge("nodeHallwayByBedroom", "nodeHallwayByLivingRoom");
-    
+
     defineEdge("nodeHallwayByLivingRoom", "nodeHallwayByBedroom");
 
     defineEdge("nodeHallwayByBedroom", "nodeGuestBedroomCentre");
-    
+
     defineEdge("nodeGuestBedroomCentre", "nodeHallwayByBedroom");
 
     defineEdge("nodeHallwayByLivingRoom", "nodeHouseDoor");
-    
-    defineEdge("nodeHouseDoor", "nodeHallwayByLivingRoom");  
+
+    defineEdge("nodeHouseDoor", "nodeHallwayByLivingRoom");
 
 }
 
@@ -150,71 +151,69 @@ void GraphSearch::defineEdge(double x1, double y1, double x2, double y2)
     	if (((*GraphSearch::theGraph)[i][0].x == x2) && ((*GraphSearch::theGraph)[i][0].y == y2))
     	{
     		p = &(*GraphSearch::theGraph)[i][0];
-    	}		
+    	}
 	}
-	
+
 	if (!p) return;
-	
+
 	for (int i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
     	if (((*GraphSearch::theGraph)[i][0].x == x1) && ((*GraphSearch::theGraph)[i][0].y == y1))
     	{
     		(*GraphSearch::theGraph)[i].push_back(*p);
-    	}		
+    	}
 	}
 }
 
 void GraphSearch::defineEdge(string name1, string name2)
 {
 	point *p = getPoint(name2);
-	
+
 	if (!p) return;
-	
+
 	for (int i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
     	if (((*GraphSearch::theGraph)[i][0].name.compare(name1) == 0))
     	{
     		(*GraphSearch::theGraph)[i].push_back(*p);
-    	}		
+    	}
 	}
 }
 
 void GraphSearch::defineEdge(string name1, double x, double y)
 {
 	point *p = getPoint(name1);
-	
+
 	if (!p) return;
-	
+
 	for (int i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
     	if (((*GraphSearch::theGraph)[i][0].x == x) && ((*GraphSearch::theGraph)[i][0].y == y))
     	{
     		(*GraphSearch::theGraph)[i].push_back(*p);
-    	}		
+    	}
 	}
 }
 vector<GraphSearch::point> GraphSearch::getPath(string name1, string name2)
 {
 	point *p1 = getPoint(name1);
-	point *p2 = getPoint(name2);	
-	return getPath(p1->x,p1->y,p2->x,p2->y);	
+	point *p2 = getPoint(name2);
+	return getPath(p1->x,p1->y,p2->x,p2->y);
 }
 vector<GraphSearch::point> GraphSearch::getPath(string name1, double x, double y)
 {
 	point *p1 = getPoint(name1);
-	return getPath(p1->x,p1->y,x,y);	
+	return getPath(p1->x,p1->y,x,y);
 }
 
 bool GraphSearch::checkIfInList(point *p, vector<point> *list)
 {
 	if (!p) return false;
-	
+
 	for (int i = 0; i < list->size(); i++)
 	{
-		cout << "f\n";
 		if ((*list)[i].x == p->x && (*list)[i].y == p->y)
 		{
-			cout << "g\n";
 			return true;
 		}
 	}
@@ -249,7 +248,7 @@ vector<GraphSearch::edge>* GraphSearch::getAdjacentEdges(point *t)
     {
       point *p1 = &(*GraphSearch::theGraph)[i][0];
       point *p2 = &(*GraphSearch::theGraph)[i][j];
-      
+
       if (comparePointer(p1, t))
       {
         edge e;
@@ -281,7 +280,7 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
 		point *p;
 		backPointer *previous;
 	};
-  
+
 	backPointer *bp = NULL;
 	backPointer *prev_bp = NULL;
 
@@ -304,14 +303,11 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
 	while (!Q->empty())
 	{
 		t = &Q->front();
-		Q->pop();  
+		ROS_INFO("Now looking at %s",t->name.c_str());
+		Q->pop();
 		if (comparePointer(t, f))
-		{	
+		{
                   // maintain the backPointer
-                 
-                    bp = new backPointer;
-                    bp->p = t;
-                    bp->previous = prev_bp;
                     break;
 		}
 		vector<edge> *E = getAdjacentEdges(t);
@@ -322,35 +318,28 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
 			if (!checkIfInList(u, V) && (u != NULL))
 			{
 				addPointToSeen(u, V);
+				u->previous = t;
 				Q->push(*u);
-                                
-				// maintain the backPointer
-				if (bp != NULL)
-				{
-					prev_bp = bp;
-				}
-				else
-				{
-					prev_bp == NULL;
-				}
-				bp = new backPointer;
-				bp->p = u;
-				bp->previous = prev_bp;
 			}
 		}
 	}
-	
-	
+
+
 	vector<point> path;
-
-	while (bp->previous != NULL)
+	point *next;
+	next = t;
+	while (next->previous != NULL)
 	{
-		path.push_back(*bp->p);
-		bp = bp->previous;
+		ROS_INFO_STREAM("foo");
+		path.push_back(*next);
+		next = next->previous;
+		if (comparePointer(next,v)){
+			path.push_back(*v);
+			break;
+		}
 	}
-
+	ROS_INFO_STREAM("finished");
 	reverse(path.begin(), path.end());
-
 	return path;
 }
 
@@ -368,7 +357,7 @@ GraphSearch::point* GraphSearch::getPoint(string name)
     	if (((*GraphSearch::theGraph)[i][0].name.compare(name) == 0))
     	{
     		return &(*GraphSearch::theGraph)[i][0];
-    	}		
+    	}
 	}
 }
 
@@ -400,9 +389,9 @@ GraphSearch::point* GraphSearch::findClosestPoint(double x, double y)
     		best = &(*GraphSearch::theGraph)[i][0];
     	}
 
-    		
+
 	}
-	
+
 
 	return best;
 }

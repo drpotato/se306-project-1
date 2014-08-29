@@ -443,6 +443,10 @@ bool Actor::goToNode(string nodeName) {
         path = GraphSearch::getPath(pStart->x,pStart->y,pDestination->x,pDestination->y);
         ROS_INFO("GOTONODE CALLED FIRST LOOP 3");
         firstGoToNode = false;
+				for (int i=0;i<path.size();i++){
+					ROS_INFO("Node %d is called %s (my name is %s)",i,path[i].name.c_str(),rosName.c_str());
+				}
+
     }
 
     if (gotoPosition(path[pathIndex].x, path[pathIndex].y))

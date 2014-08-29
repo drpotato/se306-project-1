@@ -11,13 +11,14 @@ class GraphSearch
 {
 public:
   static void setupNodes();
-  
+
   struct point {
           double x;
           double y;
           string name;
+          point *previous;
   };
-      
+
   struct edge {
     point *p1;
     point *p2;
