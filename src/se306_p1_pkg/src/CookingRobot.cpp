@@ -37,7 +37,7 @@ void CookingRobot::doExecuteLoop()
   	}
   	else if (givingFood)
   	{
-  		if(!(CookingRobot::goToNode("Caregiver")))
+  		if(!(CookingRobot::goToNode("Resident")))
 		{
 			givingFood = false;
 			returningHome = true;

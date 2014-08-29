@@ -34,7 +34,7 @@ void EntertainmentRobot::doExecuteLoop()
 {
 	if (y++ >= 200)
 	{
-		goToNode("Doctor4");
+		goToNode("nodeKitchenStove");
 	}
 	
 	// if (RCmode == "entertainmentRobot")

@@ -16,7 +16,7 @@ void GraphSearch::setupNodes()
 
 	defineNode(-2.5, 3, "nodeBedroomCentre");
 
-    defineNode(-2.5, -0, "nodeHallwayByBedroom");
+    defineNode(-2.5, 0, "nodeHallwayByBedroom");
     defineNode(3.1, 0, "nodeHallwayByLivingRoom");
     defineNode(-2.5, -3, "nodeGuestBedroomCentre");
     defineNode(2.8, 5, "nodeHouseDoor");
@@ -41,92 +41,89 @@ void GraphSearch::setupNodes()
 
     //BED
     defineNode(-6.33, 3.01, "nodeMasterBed");
-    cout << "a\n";
-    defineEdge("nodeMasterBed", "nodeGuestBedroomCentre");
-    cout << "b\n";
-    defineEdge("nodeGuestBedroomCentre", "nodeMasterBed");
+   
+    defineEdge("nodeMasterBed", "nodeBedroomCentre");
+    
+    defineEdge("nodeBedroomCentre", "nodeMasterBed");
 
-cout << "c\n";
+
     defineEdge("nodeLivingRoomByCouch", "nodeLivingRoomByCouchHallway");
-    cout << "d\n";
+    
     defineEdge("nodeLivingRoomByCouchHallway", "nodeLivingRoomByCouch");
-cout << "e\n";
+
 
     defineEdge("nodeLivingRoomByCouchHallway", "nodeLivingRoomByHallwayDoor");
-    cout << "f\n";
+    
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeLivingRoomByCouchHallway");
-    cout << "g\n";
+   
 
     defineEdge("nodeKitchenStove", "nodeLivingRoomMidwayPoint");
-    cout << "h\n";
+    
     defineEdge("nodeLivingRoomMidwayPoint", "nodeKitchenStove");
-    cout << "i\n";
+    
 
     defineEdge("nodeLivingRoomMidwayPoint", "nodeLivingRoomFeedingPlace");
-    cout << "j\n";
+    
     defineEdge("nodeLivingRoomFeedingPlace", "nodeLivingRoomMidwayPoint");
-    cout << "k\n";
+    
 
     defineEdge("nodeLivingRoomFeedingPlace", "nodeLivingRoomByHallwayDoor");
-    cout << "l\n";
+    
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeLivingRoomFeedingPlace");
-    cout << "m\n";
+    
 
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeHallwayByLivingRoom");
-    cout << "n\n";
+   
     defineEdge("nodeHallwayByLivingRoom", "nodeLivingRoomByHallwayDoor");
-    cout << "o\n";
+    
 
     defineEdge("nodeShowerUnderHead", "nodeInShowerNextToDoor");
-    cout << "p\n";
+    
     defineEdge("nodeInShowerNextToDoor", "nodeShowerUnderHead");
-    cout << "q\n";
-
+    
     defineEdge("nodeInShowerNextToDoor", "nodeOutShowerNextToDoor");
-    cout << "r\n";
+    
     defineEdge("nodeOutShowerNextToDoor", "nodeInShowerNextToDoor");
-cout << "s\n";
+
     defineEdge("nodeBathroomDoorInBathroom", "nodeOutShowerNextToDoor");
-    cout << "t\n";
+    
     defineEdge("nodeOutShowerNextToDoor","nodeBathroomDoorInBathroom");
-cout << "u\n";
+
     defineEdge("nodeBathroomDoorInBathroom", "nodeBathroomDoorHallway");
-    cout << "v\n";
     defineEdge("nodeBathroomDoorHallway", "nodeBathroomDoorInBathroom");
 
     defineEdge("nodeBathroomDoorInBathroom", "nodeMedicationRobotHome");
     defineEdge("nodeMedicationRobotHome", "nodeBathroomDoorInBathroom");
 
-cout << "w\n";
+
     defineEdge("nodeBathroomDoorHallway", "nodeHallwayByBedroom");
-    cout << "x\n";
+    
     defineEdge("nodeHallwayByBedroom", "nodeBathroomDoorHallway");
-    cout << "y\n";
+    
 
     defineEdge("nodeBathroomDoorHallway", "nodeHallwayByLivingRoom");
-    cout << "z\n";
+    
     defineEdge("nodeHallwayByLivingRoom", "nodeBathroomDoorHallway");
-cout << "aa\n";
+
     defineEdge("nodeBedroomCentre", "nodeHallwayByBedroom");
-    cout << "bb\n";
     defineEdge("nodeHallwayByBedroom", "nodeBedroomCentre");
-cout << "cc\n";
+
     defineEdge("nodeBedroomCentre", "nodeGuestBedroomCentre");
-    cout << "dd\n";
+    
     defineEdge("nodeGuestBedroomCentre", "nodeBedroomCentre");
-cout << "ee\n";
+
     defineEdge("nodeHallwayByBedroom", "nodeHallwayByLivingRoom");
-    cout << "ff\n";
+    
     defineEdge("nodeHallwayByLivingRoom", "nodeHallwayByBedroom");
-cout << "gg\n";
+
     defineEdge("nodeHallwayByBedroom", "nodeGuestBedroomCentre");
-    cout << "hh\n";
+    
     defineEdge("nodeGuestBedroomCentre", "nodeHallwayByBedroom");
-cout << "ii\n";
+
     defineEdge("nodeHallwayByLivingRoom", "nodeHouseDoor");
-    cout << "jj\n";
+    
     defineEdge("nodeHouseDoor", "nodeHallwayByLivingRoom");  
-cout << "kk\n";
+
 }
 
 void GraphSearch::defineNode(double x, double y)

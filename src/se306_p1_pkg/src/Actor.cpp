@@ -447,6 +447,7 @@ bool Actor::goToNode(string nodeName) {
 
     if (gotoPosition(path[pathIndex].x, path[pathIndex].y))
     {
+        ROS_INFO("COOKING %f %f", path[pathIndex].x, path[pathIndex].y);
         pathIndex++;
         if (pathIndex == path.size())
         {
