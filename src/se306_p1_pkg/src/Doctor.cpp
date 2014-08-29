@@ -24,7 +24,9 @@ void Doctor::doInitialSetup()
  	publisherNurse1 = nodeHandle->advertise<msg_pkg::Nurse>("nurse1", 1000);
  	publisherNurse2 = nodeHandle->advertise<msg_pkg::Nurse>("nurse2", 1000);
  	first = true;
- 	healthLevel = 100;    
+ 	healthLevel = 100;  
+ 	treating = false;  
+ 	counterHealthTimes=0;
 }
 
 
@@ -44,7 +46,7 @@ void Doctor::doExecuteLoop()
 
 	if (goHome)
 	{
-		//TODO: go home
+		goToNode("nodeHouseDoor");
 	}
 
 }
@@ -86,7 +88,7 @@ void Doctor::attendPatient()
 		//This is here so that it will compile. Get rid of when uncommenting goToNode()
 		
 		//bool temp = 
-		if (!goToNode("Resident0"))
+		if (goToNode("Resident0"))
 		{
 			travellingToResident = false;
 			treating = true;
@@ -95,7 +97,7 @@ void Doctor::attendPatient()
 		return;
 	}
 
-	if (treating)
+	else if (treating)
 	{
 		//Send message to patient to rise health stats
 		if (first)
@@ -109,7 +111,14 @@ void Doctor::attendPatient()
 			//Treat resident
 			if (!(healthLevel >= 99))
 			{
+
 				doResponse("health");
+				counterHealthTimes++;
+				if (counterHealthTimes > 35){
+					goHome = true;
+					treating = false;
+					homeVisit = false;
+				}
 			} else 
 			{
 				goHome = true;

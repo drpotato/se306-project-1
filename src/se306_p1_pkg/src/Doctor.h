@@ -32,6 +32,7 @@ protected:
   bool first;
   bool goHome;
   int8_t healthLevel;
+  int counterHealthTimes;
 
 };
 
