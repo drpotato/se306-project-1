@@ -5,12 +5,17 @@
 #include <algorithm>
 #include <iostream>
 
+
 vector< vector<GraphSearch::point> >* GraphSearch::theGraph = NULL;
 
 void GraphSearch::setupNodes()
 {  
+
 	GraphSearch::theGraph = new vector< vector<point> > ();
+
+
 	defineNode(-2.5, 3, "nodeBedroomCentre");
+
     defineNode(-2.5, -0, "nodeHallwayByBedroom");
     defineNode(3.1, 0, "nodeHallwayByLivingRoom");
     defineNode(-2.5, -3, "nodeGuestBedroomCentre");
@@ -22,6 +27,7 @@ void GraphSearch::setupNodes()
     defineNode(-0.5, 1.1, "nodeOutShowerNextToDoor");
     defineNode(1, 0, "nodeBathroomDoorHallway");
     defineNode(1, 1, "nodeBathroomDoorInBathroom");
+    defineNode(-1, 3, "nodeMedicationRobotHome");
 
     //KITCHEN NODES
     defineNode(5.8, 3, "nodeKitchenStove");
@@ -35,96 +41,124 @@ void GraphSearch::setupNodes()
 
     //BED
     defineNode(-6.33, 3.01, "nodeMasterBed");
-
+    cout << "a\n";
     defineEdge("nodeMasterBed", "nodeGuestBedroomCentre");
+    cout << "b\n";
     defineEdge("nodeGuestBedroomCentre", "nodeMasterBed");
 
-
+cout << "c\n";
     defineEdge("nodeLivingRoomByCouch", "nodeLivingRoomByCouchHallway");
+    cout << "d\n";
     defineEdge("nodeLivingRoomByCouchHallway", "nodeLivingRoomByCouch");
+cout << "e\n";
 
     defineEdge("nodeLivingRoomByCouchHallway", "nodeLivingRoomByHallwayDoor");
+    cout << "f\n";
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeLivingRoomByCouchHallway");
+    cout << "g\n";
 
     defineEdge("nodeKitchenStove", "nodeLivingRoomMidwayPoint");
+    cout << "h\n";
     defineEdge("nodeLivingRoomMidwayPoint", "nodeKitchenStove");
+    cout << "i\n";
 
     defineEdge("nodeLivingRoomMidwayPoint", "nodeLivingRoomFeedingPlace");
+    cout << "j\n";
     defineEdge("nodeLivingRoomFeedingPlace", "nodeLivingRoomMidwayPoint");
+    cout << "k\n";
 
     defineEdge("nodeLivingRoomFeedingPlace", "nodeLivingRoomByHallwayDoor");
+    cout << "l\n";
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeLivingRoomFeedingPlace");
+    cout << "m\n";
 
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeHallwayByLivingRoom");
+    cout << "n\n";
     defineEdge("nodeHallwayByLivingRoom", "nodeLivingRoomByHallwayDoor");
-
+    cout << "o\n";
 
     defineEdge("nodeShowerUnderHead", "nodeInShowerNextToDoor");
+    cout << "p\n";
     defineEdge("nodeInShowerNextToDoor", "nodeShowerUnderHead");
+    cout << "q\n";
 
     defineEdge("nodeInShowerNextToDoor", "nodeOutShowerNextToDoor");
+    cout << "r\n";
     defineEdge("nodeOutShowerNextToDoor", "nodeInShowerNextToDoor");
-
+cout << "s\n";
     defineEdge("nodeBathroomDoorInBathroom", "nodeOutShowerNextToDoor");
+    cout << "t\n";
     defineEdge("nodeOutShowerNextToDoor","nodeBathroomDoorInBathroom");
-
+cout << "u\n";
     defineEdge("nodeBathroomDoorInBathroom", "nodeBathroomDoorHallway");
+    cout << "v\n";
     defineEdge("nodeBathroomDoorHallway", "nodeBathroomDoorInBathroom");
 
-    defineEdge("nodeBathroomDoorHallway", "nodeHallwayBedroom");
-    defineEdge("nodeHallwayBedroom", "nodeBathroomDoorHallway");
+    defineEdge("nodeBathroomDoorInBathroom", "nodeMedicationRobotHome");
+    defineEdge("nodeMedicationRobotHome", "nodeBathroomDoorInBathroom");
+
+cout << "w\n";
+    defineEdge("nodeBathroomDoorHallway", "nodeHallwayByBedroom");
+    cout << "x\n";
+    defineEdge("nodeHallwayByBedroom", "nodeBathroomDoorHallway");
+    cout << "y\n";
 
     defineEdge("nodeBathroomDoorHallway", "nodeHallwayByLivingRoom");
+    cout << "z\n";
     defineEdge("nodeHallwayByLivingRoom", "nodeBathroomDoorHallway");
-
-    defineEdge("nodeBedroomCentre", "nodeHallwayBedroom");
-    defineEdge("nodeHallwayBedroom", "nodeBedroomCentre");
-
+cout << "aa\n";
+    defineEdge("nodeBedroomCentre", "nodeHallwayByBedroom");
+    cout << "bb\n";
+    defineEdge("nodeHallwayByBedroom", "nodeBedroomCentre");
+cout << "cc\n";
     defineEdge("nodeBedroomCentre", "nodeGuestBedroomCentre");
+    cout << "dd\n";
     defineEdge("nodeGuestBedroomCentre", "nodeBedroomCentre");
-
-    defineEdge("nodeHallwayBedroom", "nodeHallwayByLivingRoom");
-    defineEdge("nodeHallwayByLivingRoom", "nodeHallwayBedroom");
-
-    defineEdge("nodeHallwayBedroom", "nodeGuestBedroomCentre");
-    defineEdge("nodeGuestBedroomCentre", "nodeHallwayBedroom");
-
+cout << "ee\n";
+    defineEdge("nodeHallwayByBedroom", "nodeHallwayByLivingRoom");
+    cout << "ff\n";
+    defineEdge("nodeHallwayByLivingRoom", "nodeHallwayByBedroom");
+cout << "gg\n";
+    defineEdge("nodeHallwayByBedroom", "nodeGuestBedroomCentre");
+    cout << "hh\n";
+    defineEdge("nodeGuestBedroomCentre", "nodeHallwayByBedroom");
+cout << "ii\n";
     defineEdge("nodeHallwayByLivingRoom", "nodeHouseDoor");
-    defineEdge("nodeHouseDoor", "nodeHallwayByLivingRoom");   
+    cout << "jj\n";
+    defineEdge("nodeHouseDoor", "nodeHallwayByLivingRoom");  
+cout << "kk\n";
 }
 
 void GraphSearch::defineNode(double x, double y)
 {
-	point *p = new point; //(point*)malloc(sizeof(point));
-	p->x = x;
-	p->y = y;
-	p->name = "";
-	vector<point> *temp = new vector<point>();
-	temp->push_back(*p);
-	GraphSearch::theGraph->push_back(*temp);
+	GraphSearch::defineNode(x, y, "");
 }
+
 void GraphSearch::defineNode(double x, double y, string name)
 {
-	point *p = new point; //(point*)malloc(sizeof(point));
-	p->x = x;
-	p->y = y;
-	p->name = name;
-	vector<point> *temp = new vector<point>();
-	temp->push_back(*p);
-	GraphSearch::theGraph->push_back(*temp);
+	point p;
+	p.x = x;
+	p.y = y;
+	p.name = name;
+	vector<point> temp;
+	temp.push_back(p);
+	GraphSearch::theGraph->push_back(temp);
 }
+
 void GraphSearch::defineEdge(double x1, double y1, double x2, double y2)
 {
-	point *p = new point; //(point*)malloc(sizeof(point));
-	int i;
-	for (i = 0; i < GraphSearch::theGraph->size(); i++)
+	point *p = 0;
+	for (int i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
     	if (((*GraphSearch::theGraph)[i][0].x == x2) && ((*GraphSearch::theGraph)[i][0].y == y2))
     	{
     		p = &(*GraphSearch::theGraph)[i][0];
     	}		
 	}
-	for (i = 0; i < GraphSearch::theGraph->size(); i++)
+	
+	if (!p) return;
+	
+	for (int i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
     	if (((*GraphSearch::theGraph)[i][0].x == x1) && ((*GraphSearch::theGraph)[i][0].y == y1))
     	{
@@ -132,12 +166,14 @@ void GraphSearch::defineEdge(double x1, double y1, double x2, double y2)
     	}		
 	}
 }
+
 void GraphSearch::defineEdge(string name1, string name2)
 {
-	point *p = new point; //(point*)malloc(sizeof(point));
-	p = getPoint(name2);
-	int i;
-	for (i = 0; i < GraphSearch::theGraph->size(); i++)
+	point *p = getPoint(name2);
+	
+	if (!p) return;
+	
+	for (int i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
     	if (((*GraphSearch::theGraph)[i][0].name.compare(name1) == 0))
     	{
@@ -145,12 +181,14 @@ void GraphSearch::defineEdge(string name1, string name2)
     	}		
 	}
 }
+
 void GraphSearch::defineEdge(string name1, double x, double y)
 {
-	point *p = new point; //(point*)malloc(sizeof(point));
-	p = getPoint(name1);
-	int i;
-	for (i = 0; i < GraphSearch::theGraph->size(); i++)
+	point *p = getPoint(name1);
+	
+	if (!p) return;
+	
+	for (int i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
     	if (((*GraphSearch::theGraph)[i][0].x == x) && ((*GraphSearch::theGraph)[i][0].y == y))
     	{
@@ -158,39 +196,44 @@ void GraphSearch::defineEdge(string name1, double x, double y)
     	}		
 	}
 }
-vector<GraphSearch::point>* GraphSearch::getPath(string name1, string name2)
+vector<GraphSearch::point> GraphSearch::getPath(string name1, string name2)
 {
-	point *p1 = new point; //(point*)malloc(sizeof(point));
-	p1 = getPoint(name1);
-	point *p2 = new point; //(point*)malloc(sizeof(point));
-	p2 = getPoint(name2);	
+	point *p1 = getPoint(name1);
+	point *p2 = getPoint(name2);	
 	return getPath(p1->x,p1->y,p2->x,p2->y);	
 }
-vector<GraphSearch::point>* GraphSearch::getPath(string name1, double x, double y)
+vector<GraphSearch::point> GraphSearch::getPath(string name1, double x, double y)
 {
-	point *p1 = new point; //(point*)malloc(sizeof(point));
-	p1 = getPoint(name1);
+	point *p1 = getPoint(name1);
 	return getPath(p1->x,p1->y,x,y);	
 }
 
 bool GraphSearch::checkIfInList(point *p, vector<point> *list)
 {
-  int i;
-  for(i = 0; i < list->size(); i++)
-  {
-    if ((*list)[i].x == p->x && (*list)[i].y == p->y)
-    {
-      return true;
-    }
-  }
+	if (!p) return false;
+	
+	for (int i = 0; i < list->size(); i++)
+	{
+		cout << "f\n";
+		if ((*list)[i].x == p->x && (*list)[i].y == p->y)
+		{
+			cout << "g\n";
+			return true;
+		}
+	}
   return false;
 }
 
 void GraphSearch::addPointToSeen(point *p, vector<point> *list)
 {
-  if (!checkIfInList(p, list)) {
-    list->push_back(*p);
-  }
+	if(p == NULL)
+	{
+		return;
+	}
+	if (!checkIfInList(p, list))
+	{
+		list->push_back(*p);
+	}
 }
 
 bool GraphSearch::comparePointer(point *a, point *b)
@@ -210,10 +253,12 @@ vector<GraphSearch::edge>* GraphSearch::getAdjacentEdges(point *t)
       point *p1 = &(*GraphSearch::theGraph)[i][0];
       point *p2 = &(*GraphSearch::theGraph)[i][j];
       
-      if (comparePointer(p1, t) || comparePointer(p2, t))
+      if (comparePointer(p1, t))
       {
-        edge *e = (edge*) malloc(sizeof(edge));
-        listEdges->push_back(*e);
+        edge e;
+		e.p1 = p1;
+		e.p2 = p2;
+        listEdges->push_back(e);
       }
     }
   }
@@ -226,92 +271,116 @@ GraphSearch::point* GraphSearch::getAdjacentVertex(point *t, edge *e)
   {
     return e->p2;
   }
-  else// if (comparePointer(e->p2, t))
+  else if (comparePointer(e->p2, t))
   {
     return e->p1;
   }
+  return NULL;
 }
 
-vector<GraphSearch::point>* GraphSearch::getPath(double x1, double y1, double x2, double y2)
+vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2, double y2)
 {
-  struct backPointer {
-    point *p;
-    backPointer *previous;
-  };
+	cout << "+GraphSearch::getPath" << endl;
+	struct backPointer {
+		point *p;
+		backPointer *previous;
+	};
   
-  backPointer *bp = NULL;
-  backPointer *prev_bp = NULL;
-  
-  
-  bool foundVertex = false;
-  
+	backPointer *bp = NULL;
+	backPointer *prev_bp = NULL;
+
+	bool foundVertex = false;
 	queue<point> *Q = new queue<point>();
 	vector<point> *V = new vector<point>();
-        
-        // Starting point
-        point *v = new point; //(point*) malloc(sizeof(point));
-        v->x = x1;
-        v->y = y1;
-        
-        // Finish point
-        point *f = new point; //(point*) malloc(sizeof(point));
-        f->x = x2;
-        f->y = y2;
-        
-        // temporary pointer
-        point *t;
-        
-        addPointToSeen(v, V);
-        Q->push(*v);
-        
-        while (!Q->empty()) {
-          t = &Q->front();
-          Q->pop();  
-          
-          if (comparePointer(t, f))
-          {
-            
-            break;
-          }
-          
-          vector<edge> *E = getAdjacentEdges(t);
-          int i;
-          for (i = 0; i < E->size(); i++)
-          {
-            point *u = getAdjacentVertex(t, &(*E)[i]);
-            if (checkIfInList(u, V))
-            {
-              addPointToSeen(u, V);
-              Q->push(*u);
-              // maintain the backPointer
-              if (bp != NULL) {
-                prev_bp = bp;
-              }
-              
-              bp = new backPointer; //(backPointer*) malloc(sizeof(backPointer));
-              bp->p = u;
-              bp->previous = prev_bp;
-            }          
-          }
-        }
-        
-        // Build path
-        vector<point> *path = new vector<point>();
-        while (bp->previous != NULL)
-        {
-          path->push_back(*bp->p);
-          bp = bp->previous;
-        }
-        reverse(path->begin(), path->end());
-        
-        return path;
+
+	// Starting point
+	point *v = new point; //(point*) malloc(sizeof(point));
+	cout << "10\n";
+	v->x = x1;
+	cout << "11\n";
+	v->y = y1;
+	cout << "12\n";
+	// Finish point
+	point *f = new point; //(point*) malloc(sizeof(point));
+	cout << "13\n";
+	f->x = x2;
+	cout << "14\n";
+	f->y = y2;
+	cout << "15\n";
+	// temporary pointer
+	point *t;
+	cout << "16\n";
+	addPointToSeen(v, V);
+	cout << "17\n";
+	Q->push(*v);
+	cout << "18\n";
+	while (!Q->empty())
+	{
+		cout << "19\n";
+		t = &Q->front();
+		cout << "20\n";
+		Q->pop();  
+		cout << "21\n";
+		if (comparePointer(t, f))
+		{
+			cout << "22\n";
+			break;
+		}
+		cout << "23\n";
+		vector<edge> *E = getAdjacentEdges(t);
+		cout << "24\n";
+		int i;
+		cout << "25\n";
+		for (i = 0; i < E->size(); i++)
+		{
+			cout << "26\n";
+			point *u = getAdjacentVertex(t, &(*E)[i]);
+			cout << "27\n";
+			if (!checkIfInList(u, V) && (u != NULL))
+			{
+				cout << "28\n";
+				addPointToSeen(u, V);
+				cout << "29\n";
+				Q->push(*u);
+				cout << "30\n";
+				// maintain the backPointer
+				if (bp != NULL)
+				{
+					cout << "301\n";
+					prev_bp = bp;
+				}
+				else
+				{
+					cout << "3012\n";
+					prev_bp == NULL;
+				}
+				cout << "302\n";
+				bp = new backPointer;
+				cout << "303\n";
+				bp->p = u;
+				cout << "304\n";
+				bp->previous = prev_bp;
+			}
+		}
+	}
+	vector<point> path;
+
+	while (bp->previous != NULL)
+	{
+		path.push_back(*bp->p);
+		bp = bp->previous;
+	}
+
+	reverse(path.begin(), path.end());
+
+	cout << "-GraphSearch::getPath" << endl;
+	return path;
 }
 
-vector<GraphSearch::point>* GraphSearch::getPath(double x, double y, string name1)
+vector<GraphSearch::point> GraphSearch::getPath(double x, double y, string name1)
 {
-	point *p1 = new point; //(point*)malloc(sizeof(point));
-	p1 = getPoint(name1);
-	return getPath(x,y,p1->x,p1->y);
+	point *p1 = getPoint(name1);
+	return getPath(x, y, p1->x, p1->y);
 }
 
 GraphSearch::point* GraphSearch::getPoint(string name)
@@ -342,6 +411,7 @@ GraphSearch::point* GraphSearch::findClosestPoint(double x, double y)
 	double bestDist = 100.0;
 	for (i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
+		cout << "findClosestPointLoop ---------------------------------------";
     	double tempx = (*GraphSearch::theGraph)[i][0].x;
     	double tempy = (*GraphSearch::theGraph)[i][0].y;
 
@@ -355,6 +425,7 @@ GraphSearch::point* GraphSearch::findClosestPoint(double x, double y)
 
     		
 	}
+	
 
 	return best;
 }

@@ -34,63 +34,59 @@ void MedicationRobot::doExecuteLoop()
 	if (RCmode == "medicationRobot")
   	{
     	MedicationRobot::controlRobot();
-  	}
+  	} else {
 
-	if (travellingToResident)
-	{
-		//This is here so that it will compile. Get rid of when uncommenting goToNode()
-		bool temp;
-		//bool temp = goToNode("RosNode0");
-		if (!temp)
-		{
-			travellingToResident = false;
-			healing = true;
-			first = true;
-		}
-		return;
-	}
-
-	if (healing)
-	{
-		//Send message to patient to rise health stats
-		if (first)
-		{
-			requestLock("MedicationRobot");
+  		if (first)
+  		{
+  			requestLock("MedicationRobot");
 			first = false;
-		}
+  		}
 
-		if (haveLock)
-		{
-			//Treat resident
-			if (!(healing >= 99))
+  		if (haveLock)
+  		{
+  			if (healing)
 			{
-				doResponse("mend");
-			} else 
-			{
-				returningHome = true;
-				healing = false;
-			}
-		} else if (deniedLock)
-		{
+				if(!(MedicationRobot::goToNode("Resident")))
+					{
+						healing = false;
+						returningHome = true;
+					}
+			 } else if (returningHome)
+			 {
+					if(!(MedicationRobot::goToNode("nodeMedicationRobotHome")))
+					{
+						returningHome = false;
+						first = true;
+					}
+			 } else if (healing) {
+					if (x == 100)
+					{
+						//Add do last response call that kurt implimented
+						MedicationRobot::stopResponse("mend");
+						healing = false;
+					}
+					else
+					{
+						if (y == 50)
+						{
+							x += 10;
+							MedicationRobot::doResponse("mend");
+							y=0;
+						}
+						else
+						{
+							y++;
+						}
+					}
+				}
+		} else if (deniedLock) {
 			if (otherUnlocked)
 			{
 				requestLock("MedicationRobot");
 				deniedLock = false;
 				otherUnlocked = false;
 			}
-		}
-	}
-
-	if (returningHome){
-
-		if (returningHome_first){
-			returningHome_first = false;
-			//TODO: Matt fix this shit (Target node reset upon reach destination)
-			//targetNode = 0;
-		}
-
-        return;
-
+		}	
 	}
 }
 
@@ -100,7 +96,15 @@ void MedicationRobot::healthCallback(msg_pkg::Health msg)
  	MedicationRobot* temp = dynamic_cast<MedicationRobot*>( ActorSpawner::getInstance().getActor());
 
  	temp->healthLevel = msg.level;
- 	//ROS_INFO("Changed value");
+
+ 	ROS_INFO("Health: %d", msg.level);
+
+ 	if (!msg.level >= 50)
+ 	{
+ 		//COOK
+ 		temp->healing  = true;
+ 	}
+ 	
 }
 
 bool MedicationRobot::checkHealthLevel()

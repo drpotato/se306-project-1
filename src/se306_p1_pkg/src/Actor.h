@@ -5,6 +5,7 @@
 #include <msg_pkg/Location.h>
 #include <msg_pkg/Unlock.h>
 #include <msg_pkg/LockStatus.h>
+#include "GraphSearch.h"
 
 #include "ros/ros.h"
 #include <vector>
@@ -12,8 +13,6 @@
 #include <map>
 #include "std_msgs/String.h"
 #include "ActorLocation.h"
-#include "PathPlanner.h"
-#include "PathPlannerNode.h"
 
 /* Macros */
 #define CRITICAL_LEVEL 20
@@ -55,11 +54,13 @@ public:
 	//The rate at which ros will loop - used to calculate time of day
     const static int LOOP_RATE = 10;
     bool gotoPosition(double x,double y);
-    enum ActorType {Doctor=3, Nurse=2, Caregiver=2, Visitor=1, Robot=0};
+    enum ActorType {Doctor=4, Nurse=3, Caregiver=2, Visitor=1, Robot=0};
 
     bool haveLock;
     bool deniedLock;
     bool otherUnlocked;
+
+    bool firstGoToNode;
 
     struct NodeLocation {
     	int x;
@@ -112,8 +113,6 @@ protected:
 	std::string rosName;
 	std::string stageName;
 
-    //Path Planner
-	//Path Planner
     bool goToNode(string);
 
     bool movingToResident;
@@ -124,11 +123,14 @@ protected:
 private:
     
     double faceDirection(double,double);
+
+    vector<GraphSearch::point> path;
+    GraphSearch::point *pDestination;
+    GraphSearch::point *pStart;
     
-	PathPlanner pathPlanner;
 	string currentNode;
 	int currentNodeIndex;
-
+	int pathIndex;
     void checkKeyboardPress();
     bool modeSet();
     bool inMode(string mode);

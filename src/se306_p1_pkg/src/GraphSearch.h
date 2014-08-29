@@ -35,10 +35,10 @@ public:
   static void defineEdge(double x1, double y1, double x2, double y2);
   static void defineEdge(string name1, string name2);
   static void defineEdge(string name1, double x, double y);
-  static vector<point>* getPath(string name1, string name2);
-  static vector<point>* getPath(string name1, double x, double y);
-  static vector<point>* getPath(double x1, double y1, double x2, double y2);
-  static vector<point>* getPath(double x, double y, string name1);
+  static vector<point> getPath(string name1, string name2);
+  static vector<point> getPath(string name1, double x, double y);
+  static vector<point> getPath(double x1, double y1, double x2, double y2);
+  static vector<point> getPath(double x, double y, string name1);
   static point* findClosestPoint(double x, double y);
 
   static point* getNewPoint(string name, double x, double y);
