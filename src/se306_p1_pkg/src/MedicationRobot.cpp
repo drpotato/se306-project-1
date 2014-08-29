@@ -19,80 +19,54 @@ void MedicationRobot::doInitialSetup()
 	healthLevel = 5;
 	healing = false;
 	active = false;
-	residentName = "RobotNode2";
 	subscriberHealth = nodeHandle->subscribe("health", 1000, MedicationRobot::healthCallback);
-	y = 0;
-	x = 0;
 	first = true;
 	first_call = true;
 	returningHome = false;
 	returningHome_first = true;
+	residentName = "Resident0";
 }
 
 void MedicationRobot::doExecuteLoop()
 {
-
-	if (RCmode == "medicationRobot")
-  	{
+	if (RCmode == "medicationRobot") {
     	MedicationRobot::controlRobot();
   	} else if (active) {
-
-  		if (first)
-  		{
+  		if (first) {
   			requestLock("MedicationRobot");
 			first = false;
   		}
 
-  		if (haveLock)
-  		{
-  			if (travellingToResident)
-			{
-				if(!(MedicationRobot::goToNode("Resident")))
-					{
-						travellingToResident = false;
-						healing = true;
-					}
-			 } else if (returningHome)
-			 {
-					if(!(MedicationRobot::goToNode("nodeMedicationRobotHome")))
-					{
-						returningHome = false;
-						first = true;
-						active = false;
-					}
-			 } else if (healing) {
-					if (x == 100)
-					{
-						//Add do last response call that kurt implimented
-						MedicationRobot::stopResponse("health");
-						healing = false;
-					}
-					else
-					{
-						if (y == 50)
-						{
-							x += 10;
-							MedicationRobot::doResponse("health");
-							y=0;
-						}
-						else
-						{
-							y++;
-						}
-					}
+  		if (haveLock) {
+  			if (travellingToResident) {
+				if(MedicationRobot::goToNode("Resident")) {
+					travellingToResident = false;
+					healing = true;
 				}
+			 } else if (returningHome) {
+				if(MedicationRobot::goToNode("nodeMedicationRobotHome")) {
+					returningHome = false;
+					first = true;
+					active = false;
+				}
+			 } else if (healing) {
+				if (healthLevel == 100) {
+					MedicationRobot::stopResponse("health");
+					healing = false;
+				} else {
+					healthLevel += 10;
+					MedicationRobot::doResponse("health");
+				}
+			}
 		} else if (deniedLock) {
-
-			if (otherUnlocked)
-			{
+			if (otherUnlocked) {
 				requestLock("MedicationRobot");
 				deniedLock = false;
 				otherUnlocked = false;
 			}
-		}	
+		}
 	}
 }
-
 
 void MedicationRobot::healthCallback(msg_pkg::Health msg)
 {
@@ -100,21 +74,9 @@ void MedicationRobot::healthCallback(msg_pkg::Health msg)
 
  	temp->healthLevel = msg.level;
 
- 	if (msg.level < 70)
- 	{
-
+ 	if (msg.level < 70)	{
  		// Give medicine
  		temp->travellingToResident = true;
  		temp->active = true;
  	}
- 	
-}
-
-bool MedicationRobot::checkHealthLevel()
-{
-	if (healthLevel>=2 )
-	{
-		return true;
-	}
-	return false;
 }
