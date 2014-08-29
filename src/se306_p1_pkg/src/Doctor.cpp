@@ -109,7 +109,7 @@ void Doctor::attendPatient()
 			//Treat resident
 			if (!(healthLevel >= 99))
 			{
-				doResponse("mend");
+				doResponse("health");
 			} else 
 			{
 				goHome = true;
