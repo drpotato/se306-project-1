@@ -21,8 +21,8 @@ ups::Context &ups::Context::getContext()
 }
 
 ups::Context::Context():
-	_w(64),
-	_h(64)
+	_w(512),
+	_h(512)
 {
 	GLint windowAttributes[] = {GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None}; // {GLX_RGBA, None}
 	Window rootWindow;

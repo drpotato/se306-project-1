@@ -6,14 +6,11 @@
 #include <iostream>
 #include <ros/console.h>
 
-
 vector< vector<GraphSearch::point> >* GraphSearch::theGraph = NULL;
 
 void GraphSearch::setupNodes()
 {
-
 	GraphSearch::theGraph = new vector< vector<point> > ();
-
 
 	defineNode(-2.5, 3, "nodeBedroomCentre");
 
@@ -43,51 +40,36 @@ void GraphSearch::setupNodes()
     //BED
     defineNode(-6.33, 3.01, "nodeMasterBed");
 
-    defineEdge("nodeMasterBed", "nodeBedroomCentre");
 
+
+    defineEdge("nodeMasterBed", "nodeBedroomCentre");
     defineEdge("nodeBedroomCentre", "nodeMasterBed");
 
-
     defineEdge("nodeLivingRoomByCouch", "nodeLivingRoomByCouchHallway");
-
     defineEdge("nodeLivingRoomByCouchHallway", "nodeLivingRoomByCouch");
 
-
     defineEdge("nodeLivingRoomByCouchHallway", "nodeLivingRoomByHallwayDoor");
-
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeLivingRoomByCouchHallway");
 
-
     defineEdge("nodeKitchenStove", "nodeLivingRoomMidwayPoint");
-
     defineEdge("nodeLivingRoomMidwayPoint", "nodeKitchenStove");
 
-
     defineEdge("nodeLivingRoomMidwayPoint", "nodeLivingRoomFeedingPlace");
-
     defineEdge("nodeLivingRoomFeedingPlace", "nodeLivingRoomMidwayPoint");
 
-
     defineEdge("nodeLivingRoomFeedingPlace", "nodeLivingRoomByHallwayDoor");
-
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeLivingRoomFeedingPlace");
 
-
     defineEdge("nodeLivingRoomByHallwayDoor", "nodeHallwayByLivingRoom");
-
     defineEdge("nodeHallwayByLivingRoom", "nodeLivingRoomByHallwayDoor");
 
-
     defineEdge("nodeShowerUnderHead", "nodeInShowerNextToDoor");
-
     defineEdge("nodeInShowerNextToDoor", "nodeShowerUnderHead");
 
     defineEdge("nodeInShowerNextToDoor", "nodeOutShowerNextToDoor");
-
     defineEdge("nodeOutShowerNextToDoor", "nodeInShowerNextToDoor");
 
     defineEdge("nodeBathroomDoorInBathroom", "nodeOutShowerNextToDoor");
-
     defineEdge("nodeOutShowerNextToDoor","nodeBathroomDoorInBathroom");
 
     defineEdge("nodeBathroomDoorInBathroom", "nodeBathroomDoorHallway");
@@ -96,35 +78,26 @@ void GraphSearch::setupNodes()
     defineEdge("nodeBathroomDoorInBathroom", "nodeMedicationRobotHome");
     defineEdge("nodeMedicationRobotHome", "nodeBathroomDoorInBathroom");
 
-
     defineEdge("nodeBathroomDoorHallway", "nodeHallwayByBedroom");
-
     defineEdge("nodeHallwayByBedroom", "nodeBathroomDoorHallway");
 
-
     defineEdge("nodeBathroomDoorHallway", "nodeHallwayByLivingRoom");
-
     defineEdge("nodeHallwayByLivingRoom", "nodeBathroomDoorHallway");
 
     defineEdge("nodeBedroomCentre", "nodeHallwayByBedroom");
     defineEdge("nodeHallwayByBedroom", "nodeBedroomCentre");
 
     defineEdge("nodeBedroomCentre", "nodeGuestBedroomCentre");
-
     defineEdge("nodeGuestBedroomCentre", "nodeBedroomCentre");
 
     defineEdge("nodeHallwayByBedroom", "nodeHallwayByLivingRoom");
-
     defineEdge("nodeHallwayByLivingRoom", "nodeHallwayByBedroom");
 
     defineEdge("nodeHallwayByBedroom", "nodeGuestBedroomCentre");
-
     defineEdge("nodeGuestBedroomCentre", "nodeHallwayByBedroom");
 
     defineEdge("nodeHallwayByLivingRoom", "nodeHouseDoor");
-
     defineEdge("nodeHouseDoor", "nodeHallwayByLivingRoom");
-
 }
 
 void GraphSearch::defineNode(double x, double y)
@@ -290,18 +263,28 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
 
 	// Starting point
 	point *v = new point; //(point*) malloc(sizeof(point));
+
 	v->x = x1;
+
 	v->y = y1;
+
 	// Finish point
 	point *f = new point; //(point*) malloc(sizeof(point));
+
 	f->x = x2;
+
 	f->y = y2;
+
 	// temporary pointer
 	point *t;
+
 	addPointToSeen(v, V);
+
 	Q->push(*v);
+
 	while (!Q->empty())
 	{
+
 		t = &Q->front();
 		ROS_INFO("Now looking at %s",t->name.c_str());
 		Q->pop();
@@ -310,13 +293,19 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
                   // maintain the backPointer
                     break;
 		}
+
 		vector<edge> *E = getAdjacentEdges(t);
+
 		int i;
+
 		for (i = 0; i < E->size(); i++)
 		{
+
 			point *u = getAdjacentVertex(t, &(*E)[i]);
+
 			if (!checkIfInList(u, V) && (u != NULL))
 			{
+
 				addPointToSeen(u, V);
 				u->previous = t;
 				Q->push(*u);

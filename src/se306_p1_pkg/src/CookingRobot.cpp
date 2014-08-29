@@ -41,22 +41,27 @@ void CookingRobot::doExecuteLoop()
 		{
 			givingFood = false;
 			returningHome = true;
+			velRotational = 0.0;
+  			velLinear = 0.0;
 		}
   	}
 	else if (returningHome){
 		if(!(CookingRobot::goToNode("nodeLivingRoomByCouch")))
 		{
 			returningHome = false;
+			velLinear = 0.0;
+			velRotational = 0.0;
 		}
 	}
 	else if (moving_to_stove)
 	{
 		if(!(CookingRobot::goToNode("nodeKitchenStove")))
 		{
-    		ROS_INFO("CHANGED TO cooking");
     		moving_to_stove = false;
     		cooking=true;
     		first = false;
+    		velRotational = 0.0;
+  			velLinear = 0.0;
 		}
 	}
 	else if (cooking)
@@ -64,17 +69,21 @@ void CookingRobot::doExecuteLoop()
 		if (x == 5)
 		{
 			//Add do last response call that kurt implimented
-			CookingRobot::stopResponse("cooking");
 			cooking = false;
 			givingFood = true;
+			velRotational = 0.0;
+  			velLinear = 0.0;
 		}
 		else
 		{
 			if (y == 40)
 			{
-				x += 1;
-				CookingRobot::doResponse("cooking");
 				y=0;
+				x = x + 1;
+				ROS_INFO("Cooking robot is cooking up a feast!");
+				// Spin for visual feedback
+				velRotational = 1.0;
+				velLinear = 0.0;
 			}
 			else
 			{

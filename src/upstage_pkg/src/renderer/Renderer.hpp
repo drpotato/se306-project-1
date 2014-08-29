@@ -1,13 +1,16 @@
 #ifndef SE306P1_UPSTAGE_RENDERER_HPP_DEFINED
 #define SE306P1_UPSTAGE_RENDERER_HPP_DEFINED
 
+#include "Types.hpp"
 #include "RenderTask.hpp"
+#include "../Context.hpp"
 #include "../StackAllocator.hpp"
+#include <string>
 #include <vector>
 
 namespace ups
 {
-	class Context;
+	class Texture;
 	class Renderer
 	{
 	public:
@@ -17,7 +20,15 @@ namespace ups
 		void render();
 		
 		// Functionality
-		void setEnvClearColour(float r, float g, float b);
+		void setEnvClearColour(const Colour &colour);
+		void drawTestQuad(const Colour &colour, float x, float y, float w, float h);
+		void drawTexQuad(const Colour &colour, const std::string &texName, float x, float y, float w, float h);
+		void drawTexQuad(const std::string &texName, float x, float y, float w, float h);
+		void drawTextGlyph(const Colour &colour, const std::string &texName, float x, float y, float w, float h, float u, float v);
+		TexHandle makeTexHandle(Texture &tex);
+		
+		int getWidth() const;
+		int getHeight() const;
 	protected:
 		
 		
@@ -36,6 +47,9 @@ namespace ups
 		void doRenderAfter();
 		void doTask(RenderTask *task);
 		
+		void setUpMatrix2D();
+		void setUpMatrix3D();
+		
 		void addToTaskList(RenderTask *task, TaskListSlot slot);
 		
 		Context *_context;
@@ -48,6 +62,17 @@ namespace ups
 	inline void Renderer::addToTaskList(RenderTask *task, TaskListSlot slot)
 	{
 		_renderTaskSlots[slot].push_back(task);
+	}
+	
+	
+	inline int Renderer::getWidth() const
+	{
+		return _context->getWidth();
+	}
+	
+	inline int Renderer::getHeight() const
+	{
+		return _context->getHeight();
 	}
 }
 #endif // #ifndef SE306P1_UPSTAGE_RENDERER_HPP_DEFINED

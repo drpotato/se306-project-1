@@ -25,8 +25,10 @@ protected:
 	int x;
 	bool first;
 	bool first_call;
+	bool active;
 	bool returningHome;
 	bool returningHome_first;
+	bool travellingToResident;
 };
 
 #endif
