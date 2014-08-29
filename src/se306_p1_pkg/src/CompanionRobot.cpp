@@ -44,39 +44,25 @@ void CompanionRobot::doExecuteLoop()
 
   		if (haveLock)
   		{
-  			if (travellingToResident)
-			{
-				if(!(CompanionRobot::goToNode("Resident")))
-					{
+  			if (travellingToResident) {
+
+				if(CompanionRobot::goToNode("nodeBedroomCentre")) {
 						travellingToResident = false;
 						giving_morale = true;
 					}
-			 } else if (returningHome)
-			 {
-					if(!(CompanionRobot::goToNode("nodecompanionRobotHome")))
-					{
+			 } else if (returningHome) {
+
+					if(CompanionRobot::goToNode("nodeMedicineRobotHome")) {
 						returningHome = false;
 						first = true;
 						active = false;
 					}
 			 } else if (giving_morale) {
-					if (x == 100)
-					{
-						CompanionRobot::stopResponse("morale");
+					if (moraleLevel < 100) {
+						CompanionRobot::doResponse("morale");
 						giving_morale = false;
-					}
-					else
-					{
-						if (y == 50)
-						{
-							x += 10;
-							CompanionRobot::doResponse("morale");
-							y=0;
-						}
-						else
-						{
-							y++;
-						}
+					} else {
+						CompanionRobot::stopResponse("morale");
 					}
 				}
 		} else if (deniedLock) {
