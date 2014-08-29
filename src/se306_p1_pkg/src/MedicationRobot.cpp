@@ -106,7 +106,7 @@ void MedicationRobot::healthCallback(msg_pkg::Health msg)
 
  	temp->healthLevel = msg.level;
 
- 	if (!msg.level >= 50)
+ 	if (msg.level < 50)
  	{
 
  		ROS_INFO("Starting to heal.");
