@@ -104,3 +104,18 @@ TEST(ResidentTestSuite, test_interaction_msg_add_zero)
 	
 	ASSERT_EQ(expectedLevel, resident->hygiene_level_);
 }
+
+// Test locking functionality
+TEST(ResidentTestSuite, test_locking)
+{
+	Resident *resident = new Resident();
+	resident->doInitialSetup();
+	ASSERT_EQ(resident->isLocked(), false);
+
+	resident->lock(Resident::Doctor, "doctor1");
+	ASSERT_EQ(resident->isLocked(), true);
+	ASSERT_EQ(resident->lock_type_, Resident::Doctor);
+	resident->unlock("doctor1");
+	ASSERT_EQ(resident->lock_, false);
+}
+
