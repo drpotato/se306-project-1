@@ -18,6 +18,7 @@ void MedicationRobot::doInitialSetup()
 	velRotational = 0.0;
 	healthLevel = 5;
 	healing = false;
+	active = false;
 	residentName = "RobotNode2";
 	subscriberHealth = nodeHandle->subscribe("health", 1000, MedicationRobot::healthCallback);
 	y = 0;
@@ -34,29 +35,33 @@ void MedicationRobot::doExecuteLoop()
 	if (RCmode == "medicationRobot")
   	{
     	MedicationRobot::controlRobot();
-  	} else {
+  	} else if (active) {
 
   		if (first)
   		{
+  			ROS_INFO("Requesting the lock");
   			requestLock("MedicationRobot");
 			first = false;
   		}
 
   		if (haveLock)
   		{
-  			if (healing)
+  			if (travellingToResident)
 			{
 				if(!(MedicationRobot::goToNode("Resident")))
 					{
-						healing = false;
-						returningHome = true;
+						ROS_INFO("Moving to resident");
+						travellingToResident = false;
+						healing = true;
 					}
 			 } else if (returningHome)
 			 {
 					if(!(MedicationRobot::goToNode("nodeMedicationRobotHome")))
 					{
+						ROS_INFO("Going home");
 						returningHome = false;
 						first = true;
+						active = false;
 					}
 			 } else if (healing) {
 					if (x == 100)
@@ -80,6 +85,9 @@ void MedicationRobot::doExecuteLoop()
 					}
 				}
 		} else if (deniedLock) {
+
+			ROS_INFO("Can't get lock.");
+
 			if (otherUnlocked)
 			{
 				requestLock("MedicationRobot");
@@ -93,14 +101,19 @@ void MedicationRobot::doExecuteLoop()
 
 void MedicationRobot::healthCallback(msg_pkg::Health msg)
 {
+	ROS_INFO("Health Callback: %d", msg.level);
  	MedicationRobot* temp = dynamic_cast<MedicationRobot*>( ActorSpawner::getInstance().getActor());
 
  	temp->healthLevel = msg.level;
 
  	if (!msg.level >= 50)
  	{
- 		//COOK
- 		temp->healing  = true;
+
+ 		ROS_INFO("Starting to heal.");
+
+ 		// Give medicine
+ 		temp->travellingToResident = true;
+ 		temp->active = true;
  	}
  	
 }
