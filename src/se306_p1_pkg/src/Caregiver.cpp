@@ -68,11 +68,24 @@ void Caregiver::doInitialSetup()
 
 void Caregiver::doExecuteLoop()
 {
-  if (RCmode == "Caregiver")
+  if(caregiverId == 1)
+    {
+       if (RCmode == "caregiver1")
+        {
+            controlRobot();
+            return;
+        } 
+    }
+
+  if(caregiverId == 2)
   {
-    Caregiver::controlRobot();
+     if (RCmode == "caregiver2")
+      {
+          controlRobot();
+          return;
+      } 
   }
-  else if ((caregiverId == 1) && (odd))
+  if ((caregiverId == 1) && (odd))
   {
     if ((hour > 6 && hour < 22) || (caring))
     {

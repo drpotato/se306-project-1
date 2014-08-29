@@ -37,6 +37,12 @@ void Friend::doInitialSetup()
 
 void Friend::doExecuteLoop()
 {
+
+  if (RCmode == "Friend1")
+    {
+      Friend::controlRobot();
+        return;
+    }
   if (returningHome)
   {
     if (returningHome_first)
