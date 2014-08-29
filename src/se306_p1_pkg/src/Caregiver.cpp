@@ -68,27 +68,58 @@ void Caregiver::doInitialSetup()
 
 void Caregiver::doExecuteLoop()
 {
-  if (RCmode == "Caregiver")
-  {
-    Caregiver::controlRobot();
-  }
-  else if ((caregiverId == 1) && (odd))
-  {
-    if ((hour > 6 && hour < 22) || (caring))
+    if(caregiverId == 1)
     {
-      if (!homeVisit)
-      {
-        homeVisit = true;
-        movingToResident = true;
-        // Move to resident            
-      }
-      
-      if (!goToNode("Resident0"))
-      {
-        lookafter();
-      }
+       if (RCmode == "caregiver1")
+        {
+            controlRobot();
+            return;
+        } 
+        if (odd)
+        {
+            if ((hour > 6 && hour < 22) || (caring))
+            {
+              if (!homeVisit)
+              {
+                homeVisit = true;
+                movingToResident = true;
+                // Move to resident            
+              }
+              
+              if (!goToNode("Resident0"))
+              {
+                lookafter();
+              }
+            }
+        }
     }
-    else
+
+  else if(caregiverId == 2)
+  {
+     if (RCmode == "caregiver2")
+      {
+          controlRobot();
+          return;
+      } 
+      if (!odd)
+      {
+          if ((hour > 6 && hour < 22) || (caring))
+          {
+            if (!homeVisit)
+            {
+              homeVisit = true;
+              movingToResident = true;
+              // Move to resident            
+            }
+            
+            if (!goToNode("Resident0"))
+            {
+              lookafter();
+            }
+          }
+      }
+  }
+  else
     {
       if (homeVisit)
       {
@@ -96,32 +127,6 @@ void Caregiver::doExecuteLoop()
         // Back to initial location
       }
     }
-  }
-  else if ((caregiverId == 2) && (!odd))
-  {
-    if ((hour > 6 && hour < 22) || (caring))
-    {
-      if (!homeVisit)
-      {
-        homeVisit = true;
-        movingToResident = true;
-        // Move to resident            
-      }
-      
-      if (!goToNode("Resident0"))
-      {
-        lookafter();
-      }
-    }
-    else
-    {
-      if (homeVisit)
-      {
-        homeVisit = false;
-        // Back to initial location
-      }
-    }
-  }
 }
 
 void Caregiver::fitnessCallback(msg_pkg::Fitness msg)

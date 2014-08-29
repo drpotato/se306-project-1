@@ -19,14 +19,18 @@ void Doctor::doInitialSetup()
     subscriberHealth = nodeHandle->subscribe("health", 1000, Doctor::healthCallback);
     homeVisit = false;
     travellingToResident = false;
-    
+
     // Set up publishers.
  	publisherNurse1 = nodeHandle->advertise<msg_pkg::Nurse>("nurse1", 1000);
  	publisherNurse2 = nodeHandle->advertise<msg_pkg::Nurse>("nurse2", 1000);
  	first = true;
+<<<<<<< HEAD
  	healthLevel = 100;  
  	treating = false;  
  	counterHealthTimes=0;
+=======
+ 	healthLevel = 100;
+>>>>>>> 64c99645ecff0c0828c1fe8faf1921da06cf49d7
 }
 
 
@@ -86,9 +90,15 @@ void Doctor::attendPatient()
 	if (travellingToResident)
 	{
 		//This is here so that it will compile. Get rid of when uncommenting goToNode()
+<<<<<<< HEAD
 		
 		//bool temp = 
 		if (goToNode("Resident0"))
+=======
+
+		//bool temp =
+		if (!goToNode("Resident0"))
+>>>>>>> 64c99645ecff0c0828c1fe8faf1921da06cf49d7
 		{
 			travellingToResident = false;
 			treating = true;
@@ -113,6 +123,7 @@ void Doctor::attendPatient()
 			{
 
 				doResponse("health");
+<<<<<<< HEAD
 				counterHealthTimes++;
 				if (counterHealthTimes > 35){
 					goHome = true;
@@ -120,6 +131,9 @@ void Doctor::attendPatient()
 					homeVisit = false;
 				}
 			} else 
+=======
+			} else
+>>>>>>> 64c99645ecff0c0828c1fe8faf1921da06cf49d7
 			{
 				goHome = true;
 				treating = false;
@@ -147,7 +161,7 @@ void Doctor::callNurses()
 	nurseMessage.follow = true;
 
 	// Publish the message.
-	
+
 	float num = rand() % 3;
     if (num < 1){
     	return;
@@ -160,6 +174,6 @@ void Doctor::callNurses()
     	publisherNurse1.publish(nurseMessage);
     }
 
-	ROS_DEBUG("Called Nurse");
+	
 
 }

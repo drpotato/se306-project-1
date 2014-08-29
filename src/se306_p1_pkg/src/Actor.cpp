@@ -410,7 +410,7 @@ bool Actor::gotoPosition(double x,double y)
     if (faceDirection(x,y) < 0.1) {
         double distance = sqrt((x-this->px)*(x-this->px) + (y-this->py)*(y-this->py));
 
-        ROS_DEBUG("Distance is %f",distance);
+
 
         if (distance > 0.01) {
             faceDirection(x,y);
@@ -418,10 +418,11 @@ bool Actor::gotoPosition(double x,double y)
             return false;
         } else {
             this->velLinear = 0;
+						this->velRotational = 0;
             return true;
         }
     } else {
-        ROS_DEBUG("Target: %f",faceDirection(x,y));
+
         this->velLinear = 0;
         return false;
     }
@@ -434,11 +435,11 @@ bool Actor::goToNode(string nodeName) {
     if (firstGoToNode)
     {
         pDestination = GraphSearch::findClosestPoint(nodelocation.x, nodelocation.y);
-        
+
         pStart = GraphSearch::findClosestPoint(px, py);
-        
+
         path = GraphSearch::getPath(pStart->x,pStart->y,pDestination->x,pDestination->y);
-        
+
         firstGoToNode = false;
 				for (int i=0;i<path.size();i++){
 					ROS_INFO("Node %d is called %s (my name is %s)",i,path[i].name.c_str(),rosName.c_str());
