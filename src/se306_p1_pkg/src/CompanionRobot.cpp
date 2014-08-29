@@ -24,6 +24,7 @@ void CompanionRobot::doInitialSetup()
 	x = 0;
 	first = true;
 	first_call = true;
+	active = false;
 	returningHome = false;
 	returningHome_first = true;
 }
@@ -33,73 +34,76 @@ void CompanionRobot::doExecuteLoop()
 	if (RCmode == "companionRobot")
   	{
     	CompanionRobot::controlRobot();
-  	}
-	if (returningHome){
-		//ROS_INFO("MOVEING TO HOME");
+  	} else if (active) {
 
-		if (returningHome_first){
-			returningHome_first = false;
-			//TODO: Matt fix this shit (Target node reset upon reach destination)
-			//targetNode = 0;
-		}
+  		if (first)
+  		{
+  			requestLock("companionRobot");
+			first = false;
+  		}
 
-        return;
-	}
-
-	if (!giving_morale)
-	{
-		if (!checkMoraleLevel())
-		{
-			if (first_call)
+  		if (haveLock)
+  		{
+  			if (travellingToResident)
 			{
-				//this->activeNode = &node5;
-				//TODO: go to resident
-				first_call = false;
-			}
-	    	if (!(this->movingToResident) )
-	    	{
-	    		//CompanionRobot::doResponse("socialising");
-	    		ROS_INFO("CHANGED TO socialising");
-	    		giving_morale=true;
-	    		first = false;
-	    	}
+				if(!(CompanionRobot::goToNode("Resident")))
+					{
+						travellingToResident = false;
+						giving_morale = true;
+					}
+			 } else if (returningHome)
+			 {
+					if(!(CompanionRobot::goToNode("nodecompanionRobotHome")))
+					{
+						returningHome = false;
+						first = true;
+						active = false;
+					}
+			 } else if (giving_morale) {
+					if (x == 100)
+					{
+						CompanionRobot::stopResponse("morale");
+						giving_morale = false;
+					}
+					else
+					{
+						if (y == 50)
+						{
+							x += 10;
+							CompanionRobot::doResponse("morale");
+							y=0;
+						}
+						else
+						{
+							y++;
+						}
+					}
+				}
+		} else if (deniedLock) {
 
-			//After finished socialising set socialising to flase
-
-		}
-	}
-	else
-	{
-		if (moraleLevel == 5)
-		{
-			//Add do last desponse call that kurt implimented
-			CompanionRobot::stopResponse("giving morale");
-			giving_morale = false;
-			returningHome = true;
-
-		}
-		else
-		{
-
-			if (y == 40)
+			if (otherUnlocked)
 			{
-				CompanionRobot::doResponse("socialising");
-				y=0;
+				requestLock("companionRobot");
+				deniedLock = false;
+				otherUnlocked = false;
 			}
-			else
-			{
-				y++;
-			}
-		}
+		}	
 	}
 }
 
 // TODO: SHOULD BE COMPANIONSHIP/LONELINESS ########################################################################################################
 void CompanionRobot::moraleCallback(msg_pkg::Morale msg)
 {
+
  	CompanionRobot* temp = dynamic_cast<CompanionRobot*>( ActorSpawner::getInstance().getActor());
 
  	temp->moraleLevel = msg.level;
+
+ 	if (msg.level < 70) {
+ 		temp->active = true;
+ 		temp->travellingToResident = true;
+ 	}
+
  	//ROS_INFO("Changed value");
 }
 
