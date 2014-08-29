@@ -430,7 +430,7 @@ int Resident::changeLevel(float change, Level level) {
 
 		msg_pkg::Morale moraleMessage;
 		moraleMessage.level = residentInstance->morale_level_;
-		residentInstance->publisherMorale.publish(moraleMessage);	
+		residentInstance->publisherMorale.publish(moraleMessage);
 
 		#ifdef DEBUG_CHANGE_LEVEL
 		ROS_INFO("Morale: %d", residentInstance->morale_level_);

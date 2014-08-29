@@ -147,5 +147,4 @@ public:
   string getStringFromActorType(ActorType actorType);
 };
 
-
 #endif
