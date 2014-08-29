@@ -27,6 +27,7 @@ protected:
 	bool first;
 	bool first_call;
     bool healing;
+    bool active;
 	bool returningHome;
 	bool returningHome_first;
 	bool travellingToResident;
