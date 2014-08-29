@@ -263,50 +263,68 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
 
 	// Starting point
 	point *v = new point; //(point*) malloc(sizeof(point));
+	
 	v->x = x1;
+	
 	v->y = y1;
+	
 	// Finish point
 	point *f = new point; //(point*) malloc(sizeof(point));
+	
 	f->x = x2;
+	
 	f->y = y2;
+	
 	// temporary pointer
 	point *t;
+	
 	addPointToSeen(v, V);
+	
 	Q->push(*v);
+	
 	while (!Q->empty())
 	{
+		
 		t = &Q->front();
+		
 		Q->pop();  
+		
 		if (comparePointer(t, f))
-		{	
-                  // maintain the backPointer
-                 
-                    bp = new backPointer;
-                    bp->p = t;
-                    bp->previous = prev_bp;
-                    break;
+		{
+			
+			break;
 		}
+		
 		vector<edge> *E = getAdjacentEdges(t);
+		
 		int i;
+		
 		for (i = 0; i < E->size(); i++)
 		{
+			
 			point *u = getAdjacentVertex(t, &(*E)[i]);
+			
 			if (!checkIfInList(u, V) && (u != NULL))
 			{
+				
 				addPointToSeen(u, V);
+				
 				Q->push(*u);
-                                
+				
 				// maintain the backPointer
 				if (bp != NULL)
 				{
 					prev_bp = bp;
 				}
 				else
-				{
+				{					
 					prev_bp == NULL;
 				}
+				
 				bp = new backPointer;
+				
 				bp->p = u;
+				
 				bp->previous = prev_bp;
 			}
 		}
