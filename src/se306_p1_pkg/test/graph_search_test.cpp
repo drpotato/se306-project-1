@@ -8,6 +8,21 @@
 // Bring in gtest
 #include <gtest/gtest.h>
 
+// ===== Testing involving definition-type methods
+// Test defineNode(double, double)
+TEST(GraphSearchTestSuite, test_graphsearch_findclosest_nodeHallwayByLivingRoom)
+{
+  GraphSearch &gs = GraphSearch::getInstance();
+  GraphSearch::point *p0 = gs.findClosestPoint(3.1, 0.1);
+  
+  // Wrap these in std::strings so that ASSERT_EQ can do a proper comparison.
+  ASSERT_EQ(std::string(p0->name), std::string("nodeHallwayByLivingRoom"));
+}
+
+
+
+
+
 
 // ===== Testing involving HALLWAY nodes
 // Test that closest node to 3.1, 0.1 is 'nodeHallwayByLivingRoom"
