@@ -87,7 +87,7 @@ void Doctor::attendPatient()
 	if (travellingToResident)
 	{
 		//This is here so that it will compile. Get rid of when uncommenting goToNode()
-= 
+ 
 		if (goToNode("Resident0"))
 
 		{
