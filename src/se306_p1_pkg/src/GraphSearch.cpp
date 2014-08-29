@@ -286,7 +286,6 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
 	{
 
 		t = &Q->front();
-		ROS_INFO("Now looking at %s",t->name.c_str());
 		Q->pop();
 		if (comparePointer(t, f))
 		{
@@ -319,7 +318,6 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
 	next = t;
 	while (next->previous != NULL)
 	{
-		ROS_INFO_STREAM("foo");
 		path.push_back(*next);
 		next = next->previous;
 		if (comparePointer(next,v)){
@@ -327,7 +325,6 @@ vector<GraphSearch::point> GraphSearch::getPath(double x1, double y1, double x2,
 			break;
 		}
 	}
-	ROS_INFO_STREAM("finished");
 	reverse(path.begin(), path.end());
 	return path;
 }
@@ -366,7 +363,6 @@ GraphSearch::point* GraphSearch::findClosestPoint(double x, double y)
 	double bestDist = 100.0;
 	for (i = 0; i < GraphSearch::theGraph->size(); i++)
 	{
-		cout << "findClosestPointLoop ---------------------------------------";
     	double tempx = (*GraphSearch::theGraph)[i][0].x;
     	double tempy = (*GraphSearch::theGraph)[i][0].y;
 
