@@ -44,6 +44,7 @@ public:
   int changeLevel(float, Level); 
 	void randomLevelChange(float, float, Level);
   void randomEventLoop();
+	void actOnCriticalNeeds(Level);
 
 	unsigned int seed;
 	FILE *urandom;

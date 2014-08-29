@@ -163,7 +163,7 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
   if (attribute == "socialising")
   {
     // Get new level
-    residentInstance->changeLevel(amount,  SOCIALNESS);
+    residentInstance->changeLevel(amount, SOCIALNESS);
 
     if (residentInstance->socialness_level_ == LEVEL_MAX)
     {
@@ -215,6 +215,10 @@ void Resident::interactionCallback(msg_pkg::Interaction msg)
       residentInstance->stopRobotSpinning();
     }
   }
+	else if (attribute =="go_to_bath")
+	{
+		// Make resident walk to bathroom door node
+	}
 }
 
 
@@ -252,6 +256,46 @@ void Resident::stopRobotSpinning()
   Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
   residentInstance->velRotational = 0.0; // Stop rotation to show interaction finished
 }
+
+
+
+
+void Resident::actOnCriticalNeeds(Level level)
+{
+	Resident* residentInstance = dynamic_cast<Resident*>(ActorSpawner::getInstance().getActor());
+
+	// Stop the resident
+	residentInstance->velRotational = 0.0;
+	residentInstance->velLinear = 0.0;
+	// Lock?
+
+	if (level == SOCIALNESS) {
+		if (!called_friend_today_) {
+			// Get a number between 0 and 100.
+			randNum = getRandom(0, 100);
+			// If 0-25, call first relative
+			if (randNum <= 25) {
+				call("relative");
+			} else if (randNum <= 50) {
+				// If 25-50, call second relative
+				call("relative");
+			} else if (randNum <= 75) {
+				// If 50-75, call first friend
+				call("friend");
+			} else {
+				// If 75-100, call second friend
+				call("friend");
+			} 
+
+		} // else relies on companion robot for socialness
+
+	} else if (level == HEALTH) {
+		call("doctor");
+	}
+}
+		
+
+
 
 
 // Function called for each iteration of 'doExecuteLoop()'; emulates random
