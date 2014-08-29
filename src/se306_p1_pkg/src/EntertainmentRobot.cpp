@@ -32,9 +32,9 @@ void EntertainmentRobot::doInitialSetup()
 
 void EntertainmentRobot::doExecuteLoop()
 {
-	if (y++ >= 100)
+	if (y++ >= 200)
 	{
-		gotoPosition(6.0,6.0);
+		goToNode("Doctor4");
 	}
 	
 	// if (RCmode == "entertainmentRobot")

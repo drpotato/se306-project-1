@@ -58,6 +58,8 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 {
 	rosName = generateNodeName(robotID, getActorName());
 	stageName = generateStageName(robotID, getActorName());
+    GraphSearch::setupNodes();
+    
 	pxInitial = px;
 	pyInitial = py;
 	thetaInitial = theta;
@@ -88,6 +90,8 @@ void Actor::initialSetup(unsigned int robotID, double px, double py, double thet
 	KeyboardListener::init();
 	initialSetupStage();
 	doInitialSetup();
+    firstGoToNode = true;
+    pathIndex = 0;
 
     RCmode = "";
     
@@ -305,6 +309,7 @@ void Actor::toggleMode(string mode)
 // Only call this method from the subclass IF it is in your corresponding mode (RCmode)
 void Actor::controlRobot()
 {
+
     KeyboardListener &keyboardListener = KeyboardListener::getInstance();
     velRotational = 0.0;
     velLinear = 0.0;
@@ -427,11 +432,31 @@ bool Actor::gotoPosition(double x,double y)
 
 // Returns false when it has arrived at the target node, and true when in transit.
 bool Actor::goToNode(string nodeName) {
+    ROS_INFO("BEFORE NODE LOCATION IN ROS_NODE");
 	NodeLocation nodelocation = nodeLocations[nodeName];
+    ROS_INFO("GOTONODE CALLED");
 
-    //point *pDestination = EGraphSearch::findClosestPoint(nodelocation.x, nodelocation.y);
-    //point *pStart = GraphSearch::findClosestPoint(px, py);
-    //vector<point> *path = GraphSearch::getPath(pStart->x,pStart->y,pDestination->x,pDestination->y);
+    if (firstGoToNode)
+    {
+        ROS_INFO("GOTONODE CALLED FIRST LOOP");
+        pDestination = GraphSearch::findClosestPoint(nodelocation.x, nodelocation.y);
+        ROS_INFO("GOTONODE CALLED FIRST LOOP 1");
+        pStart = GraphSearch::findClosestPoint(px, py);
+        ROS_INFO("GOTONODE CALLED FIRST LOOP 2");
+        path = GraphSearch::getPath(pStart->x,pStart->y,pDestination->x,pDestination->y);
+        ROS_INFO("GOTONODE CALLED FIRST LOOP 3");
+        firstGoToNode = false;
+    }
+
+    if (gotoPosition((*path)[pathIndex].x, (*path)[pathIndex].y))
+    {
+        pathIndex++;
+        if (pathIndex == path->size())
+        {
+            firstGoToNode = true;
+            pathIndex = 0;
+        }
+    }
 }
 
 ros::NodeHandle &Actor::getNodeHandle() const

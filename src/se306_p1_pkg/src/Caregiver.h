@@ -19,7 +19,7 @@ protected:
   virtual void doInitialSetup();
   virtual void doExecuteLoop();
   string getActorName();
-  void caring();
+  void lookafter();
 
   ros::Subscriber subscriberFitness;
   ros::Subscriber subscriberHunger;
@@ -39,14 +39,15 @@ protected:
   bool movingToResident;
   string nodename;
   int caregiverId;
+  bool odd;
   int hour;
   int y;
 
-  bool fitnessLevel, hungerLevel, hygieneLevel, moraleLevel, socialnessLevel;
-  bool exercising, eating, showering, entertaining, socialising;
+  bool fitnessLevel, hygieneLevel, moraleLevel, socialnessLevel, hungerLevel;
+  bool exercising, showering, entertaining, socialising, eating;
+  int caring;
 
   bool checkFitnessLevel();
-  bool checkHungerLevel();
   bool checkHygieneLevel();
   bool checkMoraleLevel();
   bool checkSocialnessLevel();
